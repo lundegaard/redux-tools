@@ -1,0 +1,11 @@
+{
+	"name": "@lnd/utils",
+	"version": "0.1.0",
+	"license": "MIT",
+	"main": "src/index.js",
+	"description": "React adapters for @lnd/redux-extensible-store",
+	"dependencies": {
+		"ramda": "^0.25.0",
+		"ramda-extension": "^0.6.1"
+	}
+}

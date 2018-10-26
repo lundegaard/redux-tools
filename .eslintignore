@@ -1,0 +1,9 @@
+node_modules/*
+build/*
+stats.json
+packages/*/node_modules/*
+packages/*/build/*
+packages/*/dist/*
+packages/*/es/*
+packages/*/lib/*
+

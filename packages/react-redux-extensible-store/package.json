@@ -1,0 +1,35 @@
+{
+	"name": "@lnd/react-redux-extensible-store",
+	"version": "0.1.0",
+	"license": "MIT",
+	"main": "src/index.js",
+	"description": "React adapters for @lnd/redux-extensible-store",
+	"dependencies": {
+		"@lnd/redux-actions": "0.1.0",
+		"@lnd/utils": "0.1.0",
+		"invariant": "^2.2.4",
+		"ramda": "^0.25.0",
+		"prop-types": "^15.6.1",
+		"react-union": "^0.8.1",
+		"ramda-extension": "^0.6.1"
+	},
+	"devDependencies": {
+		"enzyme": "^3.3.0",
+		"@lnd/redux-extensible-store": "0.1.0",
+		"react": "^16.4.1",
+		"react-dom": "^16.4.1",
+		"react-redux": "^5.0.7",
+		"redux": "^4.0.0",
+		"redux-observable": "^1.0.0",
+		"rxjs": "^6.2.1"
+	},
+	"peerDependencies": {
+		"@lnd/redux-extensible-store": "0.1.0",
+		"react": "^16.4.1",
+		"react-dom": "^16.4.1",
+		"react-redux": "^5.0.7",
+		"redux": "^4.0.0",
+		"redux-observable": "^1.0.0",
+		"rxjs": "^6.2.1"
+	}
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@lnd/redux-extensible-store",
+  "private": true,
+  "version": "0.1.0",
+  "license": "UNLICENSED",
+  "description": "Redux extensible store built on redux-observable.",
+  "main": "src/index.js",
+  "dependencies": {
+    "@lnd/redux-actions": "0.1.0",
+    "@lnd/utils": "0.1.0",
+    "invariant": "^2.2.4",
+    "ramda": "^0.25.0",
+    "ramda-extension": "^0.6.1"
+  },
+  "peerDependencies": {
+    "redux": "^4.0.0",
+    "redux-observable": "^1.0.0",
+    "rxjs": "^6.2.1"
+  },
+  "devDependencies": {
+    "enzyme": "^3.6.0",
+    "rxjs-marbles": "4.3.0",
+    "redux": "^4.0.0",
+    "redux-observable": "^1.0.0",
+    "rxjs": "^6.2.1"
+  }
+}

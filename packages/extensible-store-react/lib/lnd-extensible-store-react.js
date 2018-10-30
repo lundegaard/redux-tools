@@ -1,51 +1,57 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', { value: true });
+Object.defineProperty(exports, "__esModule", { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+function _interopDefault(ex) {
+	return ex && typeof ex === "object" && "default" in ex ? ex["default"] : ex;
+}
 
-var React = require('react');
+var React = require("react");
 var React__default = _interopDefault(React);
-var reactRedux = require('react-redux');
-var ReactDOM = require('react-dom');
+var reactRedux = require("react-redux");
+var ReactDOM = require("react-dom");
 var ReactDOM__default = _interopDefault(ReactDOM);
-var reduxExtensibleStore = require('@lnd/redux-extensible-store');
+var extensibleStore = require("@redux-tools/extensible-store");
 
 function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
+	_extends =
+		Object.assign ||
+		function(target) {
+			for (var i = 1; i < arguments.length; i++) {
+				var source = arguments[i];
 
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
+				for (var key in source) {
+					if (Object.prototype.hasOwnProperty.call(source, key)) {
+						target[key] = source[key];
+					}
+				}
+			}
 
-    return target;
-  };
+			return target;
+		};
 
-  return _extends.apply(this, arguments);
+	return _extends.apply(this, arguments);
 }
 
 function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
+	if (source == null) return {};
+	var target = {};
+	var sourceKeys = Object.keys(source);
+	var key, i;
 
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
+	for (i = 0; i < sourceKeys.length; i++) {
+		key = sourceKeys[i];
+		if (excluded.indexOf(key) >= 0) continue;
+		target[key] = source[key];
+	}
 
-  return target;
+	return target;
 }
 
 function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
+	return (
+		(module = { exports: {} }), fn(module, module.exports), module.exports
+	);
 }
 
 /*
@@ -60,88 +66,92 @@ var hasOwnProperty = Object.prototype.hasOwnProperty;
 var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
 function toObject(val) {
-  if (val === null || val === undefined) {
-    throw new TypeError('Object.assign cannot be called with null or undefined');
-  }
+	if (val === null || val === undefined) {
+		throw new TypeError(
+			"Object.assign cannot be called with null or undefined"
+		);
+	}
 
-  return Object(val);
+	return Object(val);
 }
 
 function shouldUseNative() {
-  try {
-    if (!Object.assign) {
-      return false;
-    } // Detect buggy property enumeration order in older V8 versions.
-    // https://bugs.chromium.org/p/v8/issues/detail?id=4118
+	try {
+		if (!Object.assign) {
+			return false;
+		} // Detect buggy property enumeration order in older V8 versions.
+		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
 
+		var test1 = new String("abc"); // eslint-disable-line no-new-wrappers
 
-    var test1 = new String('abc'); // eslint-disable-line no-new-wrappers
+		test1[5] = "de";
 
-    test1[5] = 'de';
+		if (Object.getOwnPropertyNames(test1)[0] === "5") {
+			return false;
+		} // https://bugs.chromium.org/p/v8/issues/detail?id=3056
 
-    if (Object.getOwnPropertyNames(test1)[0] === '5') {
-      return false;
-    } // https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test2 = {};
 
+		for (var i = 0; i < 10; i++) {
+			test2["_" + String.fromCharCode(i)] = i;
+		}
 
-    var test2 = {};
+		var order2 = Object.getOwnPropertyNames(test2).map(function(n) {
+			return test2[n];
+		});
 
-    for (var i = 0; i < 10; i++) {
-      test2['_' + String.fromCharCode(i)] = i;
-    }
+		if (order2.join("") !== "0123456789") {
+			return false;
+		} // https://bugs.chromium.org/p/v8/issues/detail?id=3056
 
-    var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
-      return test2[n];
-    });
+		var test3 = {};
+		"abcdefghijklmnopqrst".split("").forEach(function(letter) {
+			test3[letter] = letter;
+		});
 
-    if (order2.join('') !== '0123456789') {
-      return false;
-    } // https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		if (
+			Object.keys(Object.assign({}, test3)).join("") !==
+			"abcdefghijklmnopqrst"
+		) {
+			return false;
+		}
 
-
-    var test3 = {};
-    'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
-      test3[letter] = letter;
-    });
-
-    if (Object.keys(Object.assign({}, test3)).join('') !== 'abcdefghijklmnopqrst') {
-      return false;
-    }
-
-    return true;
-  } catch (err) {
-    // We don't expect any of the above to throw, but better to be safe.
-    return false;
-  }
+		return true;
+	} catch (err) {
+		// We don't expect any of the above to throw, but better to be safe.
+		return false;
+	}
 }
 
-var objectAssign = shouldUseNative() ? Object.assign : function (target, source) {
-  var from;
-  var to = toObject(target);
-  var symbols;
+var objectAssign = shouldUseNative()
+	? Object.assign
+	: function(target, source) {
+			var from;
+			var to = toObject(target);
+			var symbols;
 
-  for (var s = 1; s < arguments.length; s++) {
-    from = Object(arguments[s]);
+			for (var s = 1; s < arguments.length; s++) {
+				from = Object(arguments[s]);
 
-    for (var key in from) {
-      if (hasOwnProperty.call(from, key)) {
-        to[key] = from[key];
-      }
-    }
+				for (var key in from) {
+					if (hasOwnProperty.call(from, key)) {
+						to[key] = from[key];
+					}
+				}
 
-    if (getOwnPropertySymbols) {
-      symbols = getOwnPropertySymbols(from);
+				if (getOwnPropertySymbols) {
+					symbols = getOwnPropertySymbols(from);
 
-      for (var i = 0; i < symbols.length; i++) {
-        if (propIsEnumerable.call(from, symbols[i])) {
-          to[symbols[i]] = from[symbols[i]];
-        }
-      }
-    }
-  }
+					for (var i = 0; i < symbols.length; i++) {
+						if (propIsEnumerable.call(from, symbols[i])) {
+							to[symbols[i]] = from[symbols[i]];
+						}
+					}
+				}
+			}
 
-  return to;
-};
+			return to;
+	  };
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -150,30 +160,30 @@ var objectAssign = shouldUseNative() ? Object.assign : function (target, source)
  * LICENSE file in the root directory of this source tree.
  */
 
-var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+var ReactPropTypesSecret = "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";
 var ReactPropTypesSecret_1 = ReactPropTypesSecret;
 
 var printWarning = function printWarning() {};
 
-if (process.env.NODE_ENV !== 'production') {
-  var ReactPropTypesSecret$1 = ReactPropTypesSecret_1;
+if (process.env.NODE_ENV !== "production") {
+	var ReactPropTypesSecret$1 = ReactPropTypesSecret_1;
 
-  var loggedTypeFailures = {};
+	var loggedTypeFailures = {};
 
-  printWarning = function printWarning(text) {
-    var message = 'Warning: ' + text;
+	printWarning = function printWarning(text) {
+		var message = "Warning: " + text;
 
-    if (typeof console !== 'undefined') {
-      console.error(message);
-    }
+		if (typeof console !== "undefined") {
+			console.error(message);
+		}
 
-    try {
-      // --- Welcome to debugging React ---
-      // This error was thrown as a convenience so that you can use this stack
-      // to find the callsite that caused this warning to fire.
-      throw new Error(message);
-    } catch (x) {}
-  };
+		try {
+			// --- Welcome to debugging React ---
+			// This error was thrown as a convenience so that you can use this stack
+			// to find the callsite that caused this warning to fire.
+			throw new Error(message);
+		} catch (x) {}
+	};
 }
 /**
  * Assert that the values match with the type specs.
@@ -187,730 +197,1093 @@ if (process.env.NODE_ENV !== 'production') {
  * @private
  */
 
-
 function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
-  if (process.env.NODE_ENV !== 'production') {
-    for (var typeSpecName in typeSpecs) {
-      if (typeSpecs.hasOwnProperty(typeSpecName)) {
-        var error; // Prop type validation may throw. In case they do, we don't want to
-        // fail the render phase where it didn't fail before. So we log it.
-        // After these have been cleaned up, we'll let them throw.
+	if (process.env.NODE_ENV !== "production") {
+		for (var typeSpecName in typeSpecs) {
+			if (typeSpecs.hasOwnProperty(typeSpecName)) {
+				var error; // Prop type validation may throw. In case they do, we don't want to
+				// fail the render phase where it didn't fail before. So we log it.
+				// After these have been cleaned up, we'll let them throw.
 
-        try {
-          // This is intentionally an invariant that gets caught. It's the same
-          // behavior as without this statement except with a better message.
-          if (typeof typeSpecs[typeSpecName] !== 'function') {
-            var err = Error((componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' + 'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.');
-            err.name = 'Invariant Violation';
-            throw err;
-          }
+				try {
+					// This is intentionally an invariant that gets caught. It's the same
+					// behavior as without this statement except with a better message.
+					if (typeof typeSpecs[typeSpecName] !== "function") {
+						var err = Error(
+							(componentName || "React class") +
+								": " +
+								location +
+								" type `" +
+								typeSpecName +
+								"` is invalid; " +
+								"it must be a function, usually from the `prop-types` package, but received `" +
+								typeof typeSpecs[typeSpecName] +
+								"`."
+						);
+						err.name = "Invariant Violation";
+						throw err;
+					}
 
-          error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret$1);
-        } catch (ex) {
-          error = ex;
-        }
+					error = typeSpecs[typeSpecName](
+						values,
+						typeSpecName,
+						componentName,
+						location,
+						null,
+						ReactPropTypesSecret$1
+					);
+				} catch (ex) {
+					error = ex;
+				}
 
-        if (error && !(error instanceof Error)) {
-          printWarning((componentName || 'React class') + ': type specification of ' + location + ' `' + typeSpecName + '` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a ' + typeof error + '. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).');
-        }
+				if (error && !(error instanceof Error)) {
+					printWarning(
+						(componentName || "React class") +
+							": type specification of " +
+							location +
+							" `" +
+							typeSpecName +
+							"` is invalid; the type checker " +
+							"function must return `null` or an `Error` but returned a " +
+							typeof error +
+							". " +
+							"You may have forgotten to pass an argument to the type checker " +
+							"creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and " +
+							"shape all require an argument)."
+					);
+				}
 
-        if (error instanceof Error && !(error.message in loggedTypeFailures)) {
-          // Only monitor this failure once because there tends to be a lot of the
-          // same error.
-          loggedTypeFailures[error.message] = true;
-          var stack = getStack ? getStack() : '';
-          printWarning('Failed ' + location + ' type: ' + error.message + (stack != null ? stack : ''));
-        }
-      }
-    }
-  }
+				if (
+					error instanceof Error &&
+					!(error.message in loggedTypeFailures)
+				) {
+					// Only monitor this failure once because there tends to be a lot of the
+					// same error.
+					loggedTypeFailures[error.message] = true;
+					var stack = getStack ? getStack() : "";
+					printWarning(
+						"Failed " +
+							location +
+							" type: " +
+							error.message +
+							(stack != null ? stack : "")
+					);
+				}
+			}
+		}
+	}
 }
 
 var checkPropTypes_1 = checkPropTypes;
 
 var printWarning$1 = function printWarning() {};
 
-if (process.env.NODE_ENV !== 'production') {
-  printWarning$1 = function printWarning(text) {
-    var message = 'Warning: ' + text;
+if (process.env.NODE_ENV !== "production") {
+	printWarning$1 = function printWarning(text) {
+		var message = "Warning: " + text;
 
-    if (typeof console !== 'undefined') {
-      console.error(message);
-    }
+		if (typeof console !== "undefined") {
+			console.error(message);
+		}
 
-    try {
-      // --- Welcome to debugging React ---
-      // This error was thrown as a convenience so that you can use this stack
-      // to find the callsite that caused this warning to fire.
-      throw new Error(message);
-    } catch (x) {}
-  };
+		try {
+			// --- Welcome to debugging React ---
+			// This error was thrown as a convenience so that you can use this stack
+			// to find the callsite that caused this warning to fire.
+			throw new Error(message);
+		} catch (x) {}
+	};
 }
 
 function emptyFunctionThatReturnsNull() {
-  return null;
+	return null;
 }
 
-var factoryWithTypeCheckers = function (isValidElement, throwOnDirectAccess) {
-  /* global Symbol */
-  var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
-  var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
-
-  /**
-   * Returns the iterator method function contained on the iterable object.
-   *
-   * Be sure to invoke the function with the iterable as context:
-   *
-   *     var iteratorFn = getIteratorFn(myIterable);
-   *     if (iteratorFn) {
-   *       var iterator = iteratorFn.call(myIterable);
-   *       ...
-   *     }
-   *
-   * @param {?object} maybeIterable
-   * @return {?function}
-   */
-
-  function getIteratorFn(maybeIterable) {
-    var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
-
-    if (typeof iteratorFn === 'function') {
-      return iteratorFn;
-    }
-  }
-  /**
-   * Collection of methods that allow declaration and validation of props that are
-   * supplied to React components. Example usage:
-   *
-   *   var Props = require('ReactPropTypes');
-   *   var MyArticle = React.createClass({
-   *     propTypes: {
-   *       // An optional string prop named "description".
-   *       description: Props.string,
-   *
-   *       // A required enum prop named "category".
-   *       category: Props.oneOf(['News','Photos']).isRequired,
-   *
-   *       // A prop named "dialog" that requires an instance of Dialog.
-   *       dialog: Props.instanceOf(Dialog).isRequired
-   *     },
-   *     render: function() { ... }
-   *   });
-   *
-   * A more formal specification of how these methods are used:
-   *
-   *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
-   *   decl := ReactPropTypes.{type}(.isRequired)?
-   *
-   * Each and every declaration produces a function with the same signature. This
-   * allows the creation of custom validation functions. For example:
-   *
-   *  var MyLink = React.createClass({
-   *    propTypes: {
-   *      // An optional string or URI prop named "href".
-   *      href: function(props, propName, componentName) {
-   *        var propValue = props[propName];
-   *        if (propValue != null && typeof propValue !== 'string' &&
-   *            !(propValue instanceof URI)) {
-   *          return new Error(
-   *            'Expected a string or an URI for ' + propName + ' in ' +
-   *            componentName
-   *          );
-   *        }
-   *      }
-   *    },
-   *    render: function() {...}
-   *  });
-   *
-   * @internal
-   */
-
-
-  var ANONYMOUS = '<<anonymous>>'; // Important!
-  // Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
-
-  var ReactPropTypes = {
-    array: createPrimitiveTypeChecker('array'),
-    bool: createPrimitiveTypeChecker('boolean'),
-    func: createPrimitiveTypeChecker('function'),
-    number: createPrimitiveTypeChecker('number'),
-    object: createPrimitiveTypeChecker('object'),
-    string: createPrimitiveTypeChecker('string'),
-    symbol: createPrimitiveTypeChecker('symbol'),
-    any: createAnyTypeChecker(),
-    arrayOf: createArrayOfTypeChecker,
-    element: createElementTypeChecker(),
-    instanceOf: createInstanceTypeChecker,
-    node: createNodeChecker(),
-    objectOf: createObjectOfTypeChecker,
-    oneOf: createEnumTypeChecker,
-    oneOfType: createUnionTypeChecker,
-    shape: createShapeTypeChecker,
-    exact: createStrictShapeTypeChecker
-  };
-  /**
-   * inlined Object.is polyfill to avoid requiring consumers ship their own
-   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
-   */
-
-  /*eslint-disable no-self-compare*/
-
-  function is(x, y) {
-    // SameValue algorithm
-    if (x === y) {
-      // Steps 1-5, 7-10
-      // Steps 6.b-6.e: +0 != -0
-      return x !== 0 || 1 / x === 1 / y;
-    } else {
-      // Step 6.a: NaN == NaN
-      return x !== x && y !== y;
-    }
-  }
-  /*eslint-enable no-self-compare*/
-
-  /**
-   * We use an Error-like object for backward compatibility as people may call
-   * PropTypes directly and inspect their output. However, we don't use real
-   * Errors anymore. We don't inspect their stack anyway, and creating them
-   * is prohibitively expensive if they are created too often, such as what
-   * happens in oneOfType() for any type before the one that matched.
-   */
-
-
-  function PropTypeError(message) {
-    this.message = message;
-    this.stack = '';
-  } // Make `instanceof Error` still work for returned errors.
-
-
-  PropTypeError.prototype = Error.prototype;
-
-  function createChainableTypeChecker(validate) {
-    if (process.env.NODE_ENV !== 'production') {
-      var manualPropTypeCallCache = {};
-      var manualPropTypeWarningCount = 0;
-    }
-
-    function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
-      componentName = componentName || ANONYMOUS;
-      propFullName = propFullName || propName;
-
-      if (secret !== ReactPropTypesSecret_1) {
-        if (throwOnDirectAccess) {
-          // New behavior only for users of `prop-types` package
-          var err = new Error('Calling PropTypes validators directly is not supported by the `prop-types` package. ' + 'Use `PropTypes.checkPropTypes()` to call them. ' + 'Read more at http://fb.me/use-check-prop-types');
-          err.name = 'Invariant Violation';
-          throw err;
-        } else if (process.env.NODE_ENV !== 'production' && typeof console !== 'undefined') {
-          // Old behavior for people using React.PropTypes
-          var cacheKey = componentName + ':' + propName;
-
-          if (!manualPropTypeCallCache[cacheKey] && // Avoid spamming the console because they are often not actionable except for lib authors
-          manualPropTypeWarningCount < 3) {
-            printWarning$1('You are manually calling a React.PropTypes validation ' + 'function for the `' + propFullName + '` prop on `' + componentName + '`. This is deprecated ' + 'and will throw in the standalone `prop-types` package. ' + 'You may be seeing this warning due to a third-party PropTypes ' + 'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.');
-            manualPropTypeCallCache[cacheKey] = true;
-            manualPropTypeWarningCount++;
-          }
-        }
-      }
-
-      if (props[propName] == null) {
-        if (isRequired) {
-          if (props[propName] === null) {
-            return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required ' + ('in `' + componentName + '`, but its value is `null`.'));
-          }
-
-          return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required in ' + ('`' + componentName + '`, but its value is `undefined`.'));
-        }
-
-        return null;
-      } else {
-        return validate(props, propName, componentName, location, propFullName);
-      }
-    }
-
-    var chainedCheckType = checkType.bind(null, false);
-    chainedCheckType.isRequired = checkType.bind(null, true);
-    return chainedCheckType;
-  }
-
-  function createPrimitiveTypeChecker(expectedType) {
-    function validate(props, propName, componentName, location, propFullName, secret) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-
-      if (propType !== expectedType) {
-        // `propValue` being instance of, say, date/regexp, pass the 'object'
-        // check, but we can offer a more precise error message here rather than
-        // 'of type `object`'.
-        var preciseType = getPreciseType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + preciseType + '` supplied to `' + componentName + '`, expected ') + ('`' + expectedType + '`.'));
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createAnyTypeChecker() {
-    return createChainableTypeChecker(emptyFunctionThatReturnsNull);
-  }
-
-  function createArrayOfTypeChecker(typeChecker) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (typeof typeChecker !== 'function') {
-        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside arrayOf.');
-      }
-
-      var propValue = props[propName];
-
-      if (!Array.isArray(propValue)) {
-        var propType = getPropType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an array.'));
-      }
-
-      for (var i = 0; i < propValue.length; i++) {
-        var error = typeChecker(propValue, i, componentName, location, propFullName + '[' + i + ']', ReactPropTypesSecret_1);
-
-        if (error instanceof Error) {
-          return error;
-        }
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createElementTypeChecker() {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-
-      if (!isValidElement(propValue)) {
-        var propType = getPropType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement.'));
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createInstanceTypeChecker(expectedClass) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (!(props[propName] instanceof expectedClass)) {
-        var expectedClassName = expectedClass.name || ANONYMOUS;
-        var actualClassName = getClassName(props[propName]);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + actualClassName + '` supplied to `' + componentName + '`, expected ') + ('instance of `' + expectedClassName + '`.'));
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createEnumTypeChecker(expectedValues) {
-    if (!Array.isArray(expectedValues)) {
-      process.env.NODE_ENV !== 'production' ? printWarning$1('Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
-      return emptyFunctionThatReturnsNull;
-    }
-
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-
-      for (var i = 0; i < expectedValues.length; i++) {
-        if (is(propValue, expectedValues[i])) {
-          return null;
-        }
-      }
-
-      var valuesString = JSON.stringify(expectedValues);
-      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + propValue + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createObjectOfTypeChecker(typeChecker) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (typeof typeChecker !== 'function') {
-        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside objectOf.');
-      }
-
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an object.'));
-      }
-
-      for (var key in propValue) {
-        if (propValue.hasOwnProperty(key)) {
-          var error = typeChecker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret_1);
-
-          if (error instanceof Error) {
-            return error;
-          }
-        }
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createUnionTypeChecker(arrayOfTypeCheckers) {
-    if (!Array.isArray(arrayOfTypeCheckers)) {
-      process.env.NODE_ENV !== 'production' ? printWarning$1('Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
-      return emptyFunctionThatReturnsNull;
-    }
-
-    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
-      var checker = arrayOfTypeCheckers[i];
-
-      if (typeof checker !== 'function') {
-        printWarning$1('Invalid argument supplied to oneOfType. Expected an array of check functions, but ' + 'received ' + getPostfixForTypeWarning(checker) + ' at index ' + i + '.');
-        return emptyFunctionThatReturnsNull;
-      }
-    }
-
-    function validate(props, propName, componentName, location, propFullName) {
-      for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
-        var checker = arrayOfTypeCheckers[i];
-
-        if (checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret_1) == null) {
-          return null;
-        }
-      }
-
-      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`.'));
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createNodeChecker() {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (!isNode(props[propName])) {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`, expected a ReactNode.'));
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createShapeTypeChecker(shapeTypes) {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
-      }
-
-      for (var key in shapeTypes) {
-        var checker = shapeTypes[key];
-
-        if (!checker) {
-          continue;
-        }
-
-        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret_1);
-
-        if (error) {
-          return error;
-        }
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createStrictShapeTypeChecker(shapeTypes) {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
-      } // We need to check all keys in case some are required but missing from
-      // props.
-
-
-      var allKeys = objectAssign({}, props[propName], shapeTypes);
-
-      for (var key in allKeys) {
-        var checker = shapeTypes[key];
-
-        if (!checker) {
-          return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` key `' + key + '` supplied to `' + componentName + '`.' + '\nBad object: ' + JSON.stringify(props[propName], null, '  ') + '\nValid keys: ' + JSON.stringify(Object.keys(shapeTypes), null, '  '));
-        }
-
-        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret_1);
-
-        if (error) {
-          return error;
-        }
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function isNode(propValue) {
-    switch (typeof propValue) {
-      case 'number':
-      case 'string':
-      case 'undefined':
-        return true;
-
-      case 'boolean':
-        return !propValue;
-
-      case 'object':
-        if (Array.isArray(propValue)) {
-          return propValue.every(isNode);
-        }
-
-        if (propValue === null || isValidElement(propValue)) {
-          return true;
-        }
-
-        var iteratorFn = getIteratorFn(propValue);
-
-        if (iteratorFn) {
-          var iterator = iteratorFn.call(propValue);
-          var step;
-
-          if (iteratorFn !== propValue.entries) {
-            while (!(step = iterator.next()).done) {
-              if (!isNode(step.value)) {
-                return false;
-              }
-            }
-          } else {
-            // Iterator will provide entry [k,v] tuples rather than values.
-            while (!(step = iterator.next()).done) {
-              var entry = step.value;
-
-              if (entry) {
-                if (!isNode(entry[1])) {
-                  return false;
-                }
-              }
-            }
-          }
-        } else {
-          return false;
-        }
-
-        return true;
-
-      default:
-        return false;
-    }
-  }
-
-  function isSymbol(propType, propValue) {
-    // Native Symbol.
-    if (propType === 'symbol') {
-      return true;
-    } // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
-
-
-    if (propValue['@@toStringTag'] === 'Symbol') {
-      return true;
-    } // Fallback for non-spec compliant Symbols which are polyfilled.
-
-
-    if (typeof Symbol === 'function' && propValue instanceof Symbol) {
-      return true;
-    }
-
-    return false;
-  } // Equivalent of `typeof` but with special handling for array and regexp.
-
-
-  function getPropType(propValue) {
-    var propType = typeof propValue;
-
-    if (Array.isArray(propValue)) {
-      return 'array';
-    }
-
-    if (propValue instanceof RegExp) {
-      // Old webkits (at least until Android 4.0) return 'function' rather than
-      // 'object' for typeof a RegExp. We'll normalize this here so that /bla/
-      // passes PropTypes.object.
-      return 'object';
-    }
-
-    if (isSymbol(propType, propValue)) {
-      return 'symbol';
-    }
-
-    return propType;
-  } // This handles more types than `getPropType`. Only used for error messages.
-  // See `createPrimitiveTypeChecker`.
-
-
-  function getPreciseType(propValue) {
-    if (typeof propValue === 'undefined' || propValue === null) {
-      return '' + propValue;
-    }
-
-    var propType = getPropType(propValue);
-
-    if (propType === 'object') {
-      if (propValue instanceof Date) {
-        return 'date';
-      } else if (propValue instanceof RegExp) {
-        return 'regexp';
-      }
-    }
-
-    return propType;
-  } // Returns a string that is postfixed to a warning about an invalid type.
-  // For example, "undefined" or "of type array"
-
-
-  function getPostfixForTypeWarning(value) {
-    var type = getPreciseType(value);
-
-    switch (type) {
-      case 'array':
-      case 'object':
-        return 'an ' + type;
-
-      case 'boolean':
-      case 'date':
-      case 'regexp':
-        return 'a ' + type;
-
-      default:
-        return type;
-    }
-  } // Returns class name of the object, if any.
-
-
-  function getClassName(propValue) {
-    if (!propValue.constructor || !propValue.constructor.name) {
-      return ANONYMOUS;
-    }
-
-    return propValue.constructor.name;
-  }
-
-  ReactPropTypes.checkPropTypes = checkPropTypes_1;
-  ReactPropTypes.PropTypes = ReactPropTypes;
-  return ReactPropTypes;
+var factoryWithTypeCheckers = function(isValidElement, throwOnDirectAccess) {
+	/* global Symbol */
+	var ITERATOR_SYMBOL = typeof Symbol === "function" && Symbol.iterator;
+	var FAUX_ITERATOR_SYMBOL = "@@iterator"; // Before Symbol spec.
+
+	/**
+	 * Returns the iterator method function contained on the iterable object.
+	 *
+	 * Be sure to invoke the function with the iterable as context:
+	 *
+	 *     var iteratorFn = getIteratorFn(myIterable);
+	 *     if (iteratorFn) {
+	 *       var iterator = iteratorFn.call(myIterable);
+	 *       ...
+	 *     }
+	 *
+	 * @param {?object} maybeIterable
+	 * @return {?function}
+	 */
+
+	function getIteratorFn(maybeIterable) {
+		var iteratorFn =
+			maybeIterable &&
+			((ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL]) ||
+				maybeIterable[FAUX_ITERATOR_SYMBOL]);
+
+		if (typeof iteratorFn === "function") {
+			return iteratorFn;
+		}
+	}
+	/**
+	 * Collection of methods that allow declaration and validation of props that are
+	 * supplied to React components. Example usage:
+	 *
+	 *   var Props = require('ReactPropTypes');
+	 *   var MyArticle = React.createClass({
+	 *     propTypes: {
+	 *       // An optional string prop named "description".
+	 *       description: Props.string,
+	 *
+	 *       // A required enum prop named "category".
+	 *       category: Props.oneOf(['News','Photos']).isRequired,
+	 *
+	 *       // A prop named "dialog" that requires an instance of Dialog.
+	 *       dialog: Props.instanceOf(Dialog).isRequired
+	 *     },
+	 *     render: function() { ... }
+	 *   });
+	 *
+	 * A more formal specification of how these methods are used:
+	 *
+	 *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
+	 *   decl := ReactPropTypes.{type}(.isRequired)?
+	 *
+	 * Each and every declaration produces a function with the same signature. This
+	 * allows the creation of custom validation functions. For example:
+	 *
+	 *  var MyLink = React.createClass({
+	 *    propTypes: {
+	 *      // An optional string or URI prop named "href".
+	 *      href: function(props, propName, componentName) {
+	 *        var propValue = props[propName];
+	 *        if (propValue != null && typeof propValue !== 'string' &&
+	 *            !(propValue instanceof URI)) {
+	 *          return new Error(
+	 *            'Expected a string or an URI for ' + propName + ' in ' +
+	 *            componentName
+	 *          );
+	 *        }
+	 *      }
+	 *    },
+	 *    render: function() {...}
+	 *  });
+	 *
+	 * @internal
+	 */
+
+	var ANONYMOUS = "<<anonymous>>"; // Important!
+	// Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
+
+	var ReactPropTypes = {
+		array: createPrimitiveTypeChecker("array"),
+		bool: createPrimitiveTypeChecker("boolean"),
+		func: createPrimitiveTypeChecker("function"),
+		number: createPrimitiveTypeChecker("number"),
+		object: createPrimitiveTypeChecker("object"),
+		string: createPrimitiveTypeChecker("string"),
+		symbol: createPrimitiveTypeChecker("symbol"),
+		any: createAnyTypeChecker(),
+		arrayOf: createArrayOfTypeChecker,
+		element: createElementTypeChecker(),
+		instanceOf: createInstanceTypeChecker,
+		node: createNodeChecker(),
+		objectOf: createObjectOfTypeChecker,
+		oneOf: createEnumTypeChecker,
+		oneOfType: createUnionTypeChecker,
+		shape: createShapeTypeChecker,
+		exact: createStrictShapeTypeChecker
+	};
+	/**
+	 * inlined Object.is polyfill to avoid requiring consumers ship their own
+	 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+	 */
+
+	/*eslint-disable no-self-compare*/
+
+	function is(x, y) {
+		// SameValue algorithm
+		if (x === y) {
+			// Steps 1-5, 7-10
+			// Steps 6.b-6.e: +0 != -0
+			return x !== 0 || 1 / x === 1 / y;
+		} else {
+			// Step 6.a: NaN == NaN
+			return x !== x && y !== y;
+		}
+	}
+	/*eslint-enable no-self-compare*/
+
+	/**
+	 * We use an Error-like object for backward compatibility as people may call
+	 * PropTypes directly and inspect their output. However, we don't use real
+	 * Errors anymore. We don't inspect their stack anyway, and creating them
+	 * is prohibitively expensive if they are created too often, such as what
+	 * happens in oneOfType() for any type before the one that matched.
+	 */
+
+	function PropTypeError(message) {
+		this.message = message;
+		this.stack = "";
+	} // Make `instanceof Error` still work for returned errors.
+
+	PropTypeError.prototype = Error.prototype;
+
+	function createChainableTypeChecker(validate) {
+		if (process.env.NODE_ENV !== "production") {
+			var manualPropTypeCallCache = {};
+			var manualPropTypeWarningCount = 0;
+		}
+
+		function checkType(
+			isRequired,
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName,
+			secret
+		) {
+			componentName = componentName || ANONYMOUS;
+			propFullName = propFullName || propName;
+
+			if (secret !== ReactPropTypesSecret_1) {
+				if (throwOnDirectAccess) {
+					// New behavior only for users of `prop-types` package
+					var err = new Error(
+						"Calling PropTypes validators directly is not supported by the `prop-types` package. " +
+							"Use `PropTypes.checkPropTypes()` to call them. " +
+							"Read more at http://fb.me/use-check-prop-types"
+					);
+					err.name = "Invariant Violation";
+					throw err;
+				} else if (
+					process.env.NODE_ENV !== "production" &&
+					typeof console !== "undefined"
+				) {
+					// Old behavior for people using React.PropTypes
+					var cacheKey = componentName + ":" + propName;
+
+					if (
+						!manualPropTypeCallCache[cacheKey] && // Avoid spamming the console because they are often not actionable except for lib authors
+						manualPropTypeWarningCount < 3
+					) {
+						printWarning$1(
+							"You are manually calling a React.PropTypes validation " +
+								"function for the `" +
+								propFullName +
+								"` prop on `" +
+								componentName +
+								"`. This is deprecated " +
+								"and will throw in the standalone `prop-types` package. " +
+								"You may be seeing this warning due to a third-party PropTypes " +
+								"library. See https://fb.me/react-warning-dont-call-proptypes " +
+								"for details."
+						);
+						manualPropTypeCallCache[cacheKey] = true;
+						manualPropTypeWarningCount++;
+					}
+				}
+			}
+
+			if (props[propName] == null) {
+				if (isRequired) {
+					if (props[propName] === null) {
+						return new PropTypeError(
+							"The " +
+								location +
+								" `" +
+								propFullName +
+								"` is marked as required " +
+								("in `" +
+									componentName +
+									"`, but its value is `null`.")
+						);
+					}
+
+					return new PropTypeError(
+						"The " +
+							location +
+							" `" +
+							propFullName +
+							"` is marked as required in " +
+							("`" +
+								componentName +
+								"`, but its value is `undefined`.")
+					);
+				}
+
+				return null;
+			} else {
+				return validate(
+					props,
+					propName,
+					componentName,
+					location,
+					propFullName
+				);
+			}
+		}
+
+		var chainedCheckType = checkType.bind(null, false);
+		chainedCheckType.isRequired = checkType.bind(null, true);
+		return chainedCheckType;
+	}
+
+	function createPrimitiveTypeChecker(expectedType) {
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName,
+			secret
+		) {
+			var propValue = props[propName];
+			var propType = getPropType(propValue);
+
+			if (propType !== expectedType) {
+				// `propValue` being instance of, say, date/regexp, pass the 'object'
+				// check, but we can offer a more precise error message here rather than
+				// 'of type `object`'.
+				var preciseType = getPreciseType(propValue);
+				return new PropTypeError(
+					"Invalid " +
+						location +
+						" `" +
+						propFullName +
+						"` of type " +
+						("`" +
+							preciseType +
+							"` supplied to `" +
+							componentName +
+							"`, expected ") +
+						("`" + expectedType + "`.")
+				);
+			}
+
+			return null;
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createAnyTypeChecker() {
+		return createChainableTypeChecker(emptyFunctionThatReturnsNull);
+	}
+
+	function createArrayOfTypeChecker(typeChecker) {
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			if (typeof typeChecker !== "function") {
+				return new PropTypeError(
+					"Property `" +
+						propFullName +
+						"` of component `" +
+						componentName +
+						"` has invalid PropType notation inside arrayOf."
+				);
+			}
+
+			var propValue = props[propName];
+
+			if (!Array.isArray(propValue)) {
+				var propType = getPropType(propValue);
+				return new PropTypeError(
+					"Invalid " +
+						location +
+						" `" +
+						propFullName +
+						"` of type " +
+						("`" +
+							propType +
+							"` supplied to `" +
+							componentName +
+							"`, expected an array.")
+				);
+			}
+
+			for (var i = 0; i < propValue.length; i++) {
+				var error = typeChecker(
+					propValue,
+					i,
+					componentName,
+					location,
+					propFullName + "[" + i + "]",
+					ReactPropTypesSecret_1
+				);
+
+				if (error instanceof Error) {
+					return error;
+				}
+			}
+
+			return null;
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createElementTypeChecker() {
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			var propValue = props[propName];
+
+			if (!isValidElement(propValue)) {
+				var propType = getPropType(propValue);
+				return new PropTypeError(
+					"Invalid " +
+						location +
+						" `" +
+						propFullName +
+						"` of type " +
+						("`" +
+							propType +
+							"` supplied to `" +
+							componentName +
+							"`, expected a single ReactElement.")
+				);
+			}
+
+			return null;
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createInstanceTypeChecker(expectedClass) {
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			if (!(props[propName] instanceof expectedClass)) {
+				var expectedClassName = expectedClass.name || ANONYMOUS;
+				var actualClassName = getClassName(props[propName]);
+				return new PropTypeError(
+					"Invalid " +
+						location +
+						" `" +
+						propFullName +
+						"` of type " +
+						("`" +
+							actualClassName +
+							"` supplied to `" +
+							componentName +
+							"`, expected ") +
+						("instance of `" + expectedClassName + "`.")
+				);
+			}
+
+			return null;
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createEnumTypeChecker(expectedValues) {
+		if (!Array.isArray(expectedValues)) {
+			process.env.NODE_ENV !== "production"
+				? printWarning$1(
+						"Invalid argument supplied to oneOf, expected an instance of array."
+				  )
+				: void 0;
+			return emptyFunctionThatReturnsNull;
+		}
+
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			var propValue = props[propName];
+
+			for (var i = 0; i < expectedValues.length; i++) {
+				if (is(propValue, expectedValues[i])) {
+					return null;
+				}
+			}
+
+			var valuesString = JSON.stringify(expectedValues);
+			return new PropTypeError(
+				"Invalid " +
+					location +
+					" `" +
+					propFullName +
+					"` of value `" +
+					propValue +
+					"` " +
+					("supplied to `" +
+						componentName +
+						"`, expected one of " +
+						valuesString +
+						".")
+			);
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createObjectOfTypeChecker(typeChecker) {
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			if (typeof typeChecker !== "function") {
+				return new PropTypeError(
+					"Property `" +
+						propFullName +
+						"` of component `" +
+						componentName +
+						"` has invalid PropType notation inside objectOf."
+				);
+			}
+
+			var propValue = props[propName];
+			var propType = getPropType(propValue);
+
+			if (propType !== "object") {
+				return new PropTypeError(
+					"Invalid " +
+						location +
+						" `" +
+						propFullName +
+						"` of type " +
+						("`" +
+							propType +
+							"` supplied to `" +
+							componentName +
+							"`, expected an object.")
+				);
+			}
+
+			for (var key in propValue) {
+				if (propValue.hasOwnProperty(key)) {
+					var error = typeChecker(
+						propValue,
+						key,
+						componentName,
+						location,
+						propFullName + "." + key,
+						ReactPropTypesSecret_1
+					);
+
+					if (error instanceof Error) {
+						return error;
+					}
+				}
+			}
+
+			return null;
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createUnionTypeChecker(arrayOfTypeCheckers) {
+		if (!Array.isArray(arrayOfTypeCheckers)) {
+			process.env.NODE_ENV !== "production"
+				? printWarning$1(
+						"Invalid argument supplied to oneOfType, expected an instance of array."
+				  )
+				: void 0;
+			return emptyFunctionThatReturnsNull;
+		}
+
+		for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+			var checker = arrayOfTypeCheckers[i];
+
+			if (typeof checker !== "function") {
+				printWarning$1(
+					"Invalid argument supplied to oneOfType. Expected an array of check functions, but " +
+						"received " +
+						getPostfixForTypeWarning(checker) +
+						" at index " +
+						i +
+						"."
+				);
+				return emptyFunctionThatReturnsNull;
+			}
+		}
+
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+				var checker = arrayOfTypeCheckers[i];
+
+				if (
+					checker(
+						props,
+						propName,
+						componentName,
+						location,
+						propFullName,
+						ReactPropTypesSecret_1
+					) == null
+				) {
+					return null;
+				}
+			}
+
+			return new PropTypeError(
+				"Invalid " +
+					location +
+					" `" +
+					propFullName +
+					"` supplied to " +
+					("`" + componentName + "`.")
+			);
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createNodeChecker() {
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			if (!isNode(props[propName])) {
+				return new PropTypeError(
+					"Invalid " +
+						location +
+						" `" +
+						propFullName +
+						"` supplied to " +
+						("`" + componentName + "`, expected a ReactNode.")
+				);
+			}
+
+			return null;
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createShapeTypeChecker(shapeTypes) {
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			var propValue = props[propName];
+			var propType = getPropType(propValue);
+
+			if (propType !== "object") {
+				return new PropTypeError(
+					"Invalid " +
+						location +
+						" `" +
+						propFullName +
+						"` of type `" +
+						propType +
+						"` " +
+						("supplied to `" +
+							componentName +
+							"`, expected `object`.")
+				);
+			}
+
+			for (var key in shapeTypes) {
+				var checker = shapeTypes[key];
+
+				if (!checker) {
+					continue;
+				}
+
+				var error = checker(
+					propValue,
+					key,
+					componentName,
+					location,
+					propFullName + "." + key,
+					ReactPropTypesSecret_1
+				);
+
+				if (error) {
+					return error;
+				}
+			}
+
+			return null;
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createStrictShapeTypeChecker(shapeTypes) {
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			var propValue = props[propName];
+			var propType = getPropType(propValue);
+
+			if (propType !== "object") {
+				return new PropTypeError(
+					"Invalid " +
+						location +
+						" `" +
+						propFullName +
+						"` of type `" +
+						propType +
+						"` " +
+						("supplied to `" +
+							componentName +
+							"`, expected `object`.")
+				);
+			} // We need to check all keys in case some are required but missing from
+			// props.
+
+			var allKeys = objectAssign({}, props[propName], shapeTypes);
+
+			for (var key in allKeys) {
+				var checker = shapeTypes[key];
+
+				if (!checker) {
+					return new PropTypeError(
+						"Invalid " +
+							location +
+							" `" +
+							propFullName +
+							"` key `" +
+							key +
+							"` supplied to `" +
+							componentName +
+							"`." +
+							"\nBad object: " +
+							JSON.stringify(props[propName], null, "  ") +
+							"\nValid keys: " +
+							JSON.stringify(Object.keys(shapeTypes), null, "  ")
+					);
+				}
+
+				var error = checker(
+					propValue,
+					key,
+					componentName,
+					location,
+					propFullName + "." + key,
+					ReactPropTypesSecret_1
+				);
+
+				if (error) {
+					return error;
+				}
+			}
+
+			return null;
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function isNode(propValue) {
+		switch (typeof propValue) {
+			case "number":
+			case "string":
+			case "undefined":
+				return true;
+
+			case "boolean":
+				return !propValue;
+
+			case "object":
+				if (Array.isArray(propValue)) {
+					return propValue.every(isNode);
+				}
+
+				if (propValue === null || isValidElement(propValue)) {
+					return true;
+				}
+
+				var iteratorFn = getIteratorFn(propValue);
+
+				if (iteratorFn) {
+					var iterator = iteratorFn.call(propValue);
+					var step;
+
+					if (iteratorFn !== propValue.entries) {
+						while (!(step = iterator.next()).done) {
+							if (!isNode(step.value)) {
+								return false;
+							}
+						}
+					} else {
+						// Iterator will provide entry [k,v] tuples rather than values.
+						while (!(step = iterator.next()).done) {
+							var entry = step.value;
+
+							if (entry) {
+								if (!isNode(entry[1])) {
+									return false;
+								}
+							}
+						}
+					}
+				} else {
+					return false;
+				}
+
+				return true;
+
+			default:
+				return false;
+		}
+	}
+
+	function isSymbol(propType, propValue) {
+		// Native Symbol.
+		if (propType === "symbol") {
+			return true;
+		} // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
+
+		if (propValue["@@toStringTag"] === "Symbol") {
+			return true;
+		} // Fallback for non-spec compliant Symbols which are polyfilled.
+
+		if (typeof Symbol === "function" && propValue instanceof Symbol) {
+			return true;
+		}
+
+		return false;
+	} // Equivalent of `typeof` but with special handling for array and regexp.
+
+	function getPropType(propValue) {
+		var propType = typeof propValue;
+
+		if (Array.isArray(propValue)) {
+			return "array";
+		}
+
+		if (propValue instanceof RegExp) {
+			// Old webkits (at least until Android 4.0) return 'function' rather than
+			// 'object' for typeof a RegExp. We'll normalize this here so that /bla/
+			// passes PropTypes.object.
+			return "object";
+		}
+
+		if (isSymbol(propType, propValue)) {
+			return "symbol";
+		}
+
+		return propType;
+	} // This handles more types than `getPropType`. Only used for error messages.
+	// See `createPrimitiveTypeChecker`.
+
+	function getPreciseType(propValue) {
+		if (typeof propValue === "undefined" || propValue === null) {
+			return "" + propValue;
+		}
+
+		var propType = getPropType(propValue);
+
+		if (propType === "object") {
+			if (propValue instanceof Date) {
+				return "date";
+			} else if (propValue instanceof RegExp) {
+				return "regexp";
+			}
+		}
+
+		return propType;
+	} // Returns a string that is postfixed to a warning about an invalid type.
+	// For example, "undefined" or "of type array"
+
+	function getPostfixForTypeWarning(value) {
+		var type = getPreciseType(value);
+
+		switch (type) {
+			case "array":
+			case "object":
+				return "an " + type;
+
+			case "boolean":
+			case "date":
+			case "regexp":
+				return "a " + type;
+
+			default:
+				return type;
+		}
+	} // Returns class name of the object, if any.
+
+	function getClassName(propValue) {
+		if (!propValue.constructor || !propValue.constructor.name) {
+			return ANONYMOUS;
+		}
+
+		return propValue.constructor.name;
+	}
+
+	ReactPropTypes.checkPropTypes = checkPropTypes_1;
+	ReactPropTypes.PropTypes = ReactPropTypes;
+	return ReactPropTypes;
 };
 
 function emptyFunction() {}
 
-var factoryWithThrowingShims = function () {
-  function shim(props, propName, componentName, location, propFullName, secret) {
-    if (secret === ReactPropTypesSecret_1) {
-      // It is still safe when called from React.
-      return;
-    }
+var factoryWithThrowingShims = function() {
+	function shim(
+		props,
+		propName,
+		componentName,
+		location,
+		propFullName,
+		secret
+	) {
+		if (secret === ReactPropTypesSecret_1) {
+			// It is still safe when called from React.
+			return;
+		}
 
-    var err = new Error('Calling PropTypes validators directly is not supported by the `prop-types` package. ' + 'Use PropTypes.checkPropTypes() to call them. ' + 'Read more at http://fb.me/use-check-prop-types');
-    err.name = 'Invariant Violation';
-    throw err;
-  }
-  shim.isRequired = shim;
+		var err = new Error(
+			"Calling PropTypes validators directly is not supported by the `prop-types` package. " +
+				"Use PropTypes.checkPropTypes() to call them. " +
+				"Read more at http://fb.me/use-check-prop-types"
+		);
+		err.name = "Invariant Violation";
+		throw err;
+	}
+	shim.isRequired = shim;
 
-  function getShim() {
-    return shim;
-  }
-  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
+	function getShim() {
+		return shim;
+	}
+	// Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
 
-  var ReactPropTypes = {
-    array: shim,
-    bool: shim,
-    func: shim,
-    number: shim,
-    object: shim,
-    string: shim,
-    symbol: shim,
-    any: shim,
-    arrayOf: getShim,
-    element: shim,
-    instanceOf: getShim,
-    node: shim,
-    objectOf: getShim,
-    oneOf: getShim,
-    oneOfType: getShim,
-    shape: getShim,
-    exact: getShim
-  };
-  ReactPropTypes.checkPropTypes = emptyFunction;
-  ReactPropTypes.PropTypes = ReactPropTypes;
-  return ReactPropTypes;
+	var ReactPropTypes = {
+		array: shim,
+		bool: shim,
+		func: shim,
+		number: shim,
+		object: shim,
+		string: shim,
+		symbol: shim,
+		any: shim,
+		arrayOf: getShim,
+		element: shim,
+		instanceOf: getShim,
+		node: shim,
+		objectOf: getShim,
+		oneOf: getShim,
+		oneOfType: getShim,
+		shape: getShim,
+		exact: getShim
+	};
+	ReactPropTypes.checkPropTypes = emptyFunction;
+	ReactPropTypes.PropTypes = ReactPropTypes;
+	return ReactPropTypes;
 };
 
-var propTypes = createCommonjsModule(function (module) {
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-if (process.env.NODE_ENV !== 'production') {
-  var REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol.for && Symbol.for('react.element') || 0xeac7;
+var propTypes = createCommonjsModule(function(module) {
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 */
+	if (process.env.NODE_ENV !== "production") {
+		var REACT_ELEMENT_TYPE =
+			(typeof Symbol === "function" &&
+				Symbol.for &&
+				Symbol.for("react.element")) ||
+			0xeac7;
 
-  var isValidElement = function isValidElement(object) {
-    return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
-  }; // By explicitly using `prop-types` you are opting into new development behavior.
-  // http://fb.me/prop-types-in-prod
+		var isValidElement = function isValidElement(object) {
+			return (
+				typeof object === "object" &&
+				object !== null &&
+				object.$$typeof === REACT_ELEMENT_TYPE
+			);
+		}; // By explicitly using `prop-types` you are opting into new development behavior.
+		// http://fb.me/prop-types-in-prod
 
-
-  var throwOnDirectAccess = true;
-  module.exports = factoryWithTypeCheckers(isValidElement, throwOnDirectAccess);
-} else {
-  // By explicitly using `prop-types` you are opting into new production behavior.
-  // http://fb.me/prop-types-in-prod
-  module.exports = factoryWithThrowingShims();
-}
+		var throwOnDirectAccess = true;
+		module.exports = factoryWithTypeCheckers(
+			isValidElement,
+			throwOnDirectAccess
+		);
+	} else {
+		// By explicitly using `prop-types` you are opting into new production behavior.
+		// http://fb.me/prop-types-in-prod
+		module.exports = factoryWithThrowingShims();
+	}
 });
 
 var StoreContext = React__default.createContext();
 
 var Provider = function Provider(_ref) {
-  var store = _ref.store,
-      otherProps = _objectWithoutPropertiesLoose(_ref, ["store"]);
+	var store = _ref.store,
+		otherProps = _objectWithoutPropertiesLoose(_ref, ["store"]);
 
-  return React__default.createElement(StoreContext.Provider, {
-    value: store
-  }, React__default.createElement(reactRedux.Provider, _extends({
-    store: store
-  }, otherProps)));
+	return React__default.createElement(
+		StoreContext.Provider,
+		{
+			value: store
+		},
+		React__default.createElement(
+			reactRedux.Provider,
+			_extends(
+				{
+					store: store
+				},
+				otherProps
+			)
+		)
+	);
 };
 
 Provider.propTypes = {
-  store: propTypes.object.isRequired
+	store: propTypes.object.isRequired
 };
 
 function _inheritsLoose(subClass, superClass) {
-  subClass.prototype = Object.create(superClass.prototype);
-  subClass.prototype.constructor = subClass;
-  subClass.__proto__ = superClass;
+	subClass.prototype = Object.create(superClass.prototype);
+	subClass.prototype.constructor = subClass;
+	subClass.__proto__ = superClass;
 }
 
 function _isPlaceholder(a) {
-  return a != null && typeof a === 'object' && a['@@functional/placeholder'] === true;
+	return (
+		a != null &&
+		typeof a === "object" &&
+		a["@@functional/placeholder"] === true
+	);
 }
 
 /**
@@ -923,13 +1296,13 @@ function _isPlaceholder(a) {
  */
 
 function _curry1(fn) {
-  return function f1(a) {
-    if (arguments.length === 0 || _isPlaceholder(a)) {
-      return f1;
-    } else {
-      return fn.apply(this, arguments);
-    }
-  };
+	return function f1(a) {
+		if (arguments.length === 0 || _isPlaceholder(a)) {
+			return f1;
+		} else {
+			return fn.apply(this, arguments);
+		}
+	};
 }
 
 /**
@@ -953,12 +1326,12 @@ function _curry1(fn) {
  */
 
 var always =
-/*#__PURE__*/
-_curry1(function always(val) {
-  return function () {
-    return val;
-  };
-});
+	/*#__PURE__*/
+	_curry1(function always(val) {
+		return function() {
+			return val;
+		};
+	});
 
 /**
  * A function that always returns `false`. Any passed in parameters are ignored.
@@ -977,8 +1350,8 @@ _curry1(function always(val) {
  */
 
 var F =
-/*#__PURE__*/
-always(false);
+	/*#__PURE__*/
+	always(false);
 
 /**
  * A function that always returns `true`. Any passed in parameters are ignored.
@@ -997,8 +1370,8 @@ always(false);
  */
 
 var T =
-/*#__PURE__*/
-always(true);
+	/*#__PURE__*/
+	always(true);
 
 /**
  * A special placeholder value used to specify "gaps" within curried functions,
@@ -1027,7 +1400,7 @@ always(true);
  *      greet('Alice'); //=> 'Hello, Alice!'
  */
 var __ = {
-  '@@functional/placeholder': true
+	"@@functional/placeholder": true
 };
 
 /**
@@ -1040,24 +1413,32 @@ var __ = {
  */
 
 function _curry2(fn) {
-  return function f2(a, b) {
-    switch (arguments.length) {
-      case 0:
-        return f2;
+	return function f2(a, b) {
+		switch (arguments.length) {
+			case 0:
+				return f2;
 
-      case 1:
-        return _isPlaceholder(a) ? f2 : _curry1(function (_b) {
-          return fn(a, _b);
-        });
+			case 1:
+				return _isPlaceholder(a)
+					? f2
+					: _curry1(function(_b) {
+							return fn(a, _b);
+					  });
 
-      default:
-        return _isPlaceholder(a) && _isPlaceholder(b) ? f2 : _isPlaceholder(a) ? _curry1(function (_a) {
-          return fn(_a, b);
-        }) : _isPlaceholder(b) ? _curry1(function (_b) {
-          return fn(a, _b);
-        }) : fn(a, b);
-    }
-  };
+			default:
+				return _isPlaceholder(a) && _isPlaceholder(b)
+					? f2
+					: _isPlaceholder(a)
+						? _curry1(function(_a) {
+								return fn(_a, b);
+						  })
+						: _isPlaceholder(b)
+							? _curry1(function(_b) {
+									return fn(a, _b);
+							  })
+							: fn(a, b);
+		}
+	};
 }
 
 /**
@@ -1079,10 +1460,10 @@ function _curry2(fn) {
  */
 
 var add =
-/*#__PURE__*/
-_curry2(function add(a, b) {
-  return Number(a) + Number(b);
-});
+	/*#__PURE__*/
+	_curry2(function add(a, b) {
+		return Number(a) + Number(b);
+	});
 
 /**
  * Private `concat` function to merge two array-like objects.
@@ -1096,90 +1477,92 @@ _curry2(function add(a, b) {
  *      _concat([4, 5, 6], [1, 2, 3]); //=> [4, 5, 6, 1, 2, 3]
  */
 function _concat(set1, set2) {
-  set1 = set1 || [];
-  set2 = set2 || [];
-  var idx;
-  var len1 = set1.length;
-  var len2 = set2.length;
-  var result = [];
-  idx = 0;
+	set1 = set1 || [];
+	set2 = set2 || [];
+	var idx;
+	var len1 = set1.length;
+	var len2 = set2.length;
+	var result = [];
+	idx = 0;
 
-  while (idx < len1) {
-    result[result.length] = set1[idx];
-    idx += 1;
-  }
+	while (idx < len1) {
+		result[result.length] = set1[idx];
+		idx += 1;
+	}
 
-  idx = 0;
+	idx = 0;
 
-  while (idx < len2) {
-    result[result.length] = set2[idx];
-    idx += 1;
-  }
+	while (idx < len2) {
+		result[result.length] = set2[idx];
+		idx += 1;
+	}
 
-  return result;
+	return result;
 }
 
 function _arity(n, fn) {
-  /* eslint-disable no-unused-vars */
-  switch (n) {
-    case 0:
-      return function () {
-        return fn.apply(this, arguments);
-      };
+	/* eslint-disable no-unused-vars */
+	switch (n) {
+		case 0:
+			return function() {
+				return fn.apply(this, arguments);
+			};
 
-    case 1:
-      return function (a0) {
-        return fn.apply(this, arguments);
-      };
+		case 1:
+			return function(a0) {
+				return fn.apply(this, arguments);
+			};
 
-    case 2:
-      return function (a0, a1) {
-        return fn.apply(this, arguments);
-      };
+		case 2:
+			return function(a0, a1) {
+				return fn.apply(this, arguments);
+			};
 
-    case 3:
-      return function (a0, a1, a2) {
-        return fn.apply(this, arguments);
-      };
+		case 3:
+			return function(a0, a1, a2) {
+				return fn.apply(this, arguments);
+			};
 
-    case 4:
-      return function (a0, a1, a2, a3) {
-        return fn.apply(this, arguments);
-      };
+		case 4:
+			return function(a0, a1, a2, a3) {
+				return fn.apply(this, arguments);
+			};
 
-    case 5:
-      return function (a0, a1, a2, a3, a4) {
-        return fn.apply(this, arguments);
-      };
+		case 5:
+			return function(a0, a1, a2, a3, a4) {
+				return fn.apply(this, arguments);
+			};
 
-    case 6:
-      return function (a0, a1, a2, a3, a4, a5) {
-        return fn.apply(this, arguments);
-      };
+		case 6:
+			return function(a0, a1, a2, a3, a4, a5) {
+				return fn.apply(this, arguments);
+			};
 
-    case 7:
-      return function (a0, a1, a2, a3, a4, a5, a6) {
-        return fn.apply(this, arguments);
-      };
+		case 7:
+			return function(a0, a1, a2, a3, a4, a5, a6) {
+				return fn.apply(this, arguments);
+			};
 
-    case 8:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7) {
-        return fn.apply(this, arguments);
-      };
+		case 8:
+			return function(a0, a1, a2, a3, a4, a5, a6, a7) {
+				return fn.apply(this, arguments);
+			};
 
-    case 9:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8) {
-        return fn.apply(this, arguments);
-      };
+		case 9:
+			return function(a0, a1, a2, a3, a4, a5, a6, a7, a8) {
+				return fn.apply(this, arguments);
+			};
 
-    case 10:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
-        return fn.apply(this, arguments);
-      };
+		case 10:
+			return function(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
+				return fn.apply(this, arguments);
+			};
 
-    default:
-      throw new Error('First argument to _arity must be a non-negative integer no greater than ten');
-  }
+		default:
+			throw new Error(
+				"First argument to _arity must be a non-negative integer no greater than ten"
+			);
+	}
 }
 
 /**
@@ -1194,33 +1577,39 @@ function _arity(n, fn) {
  */
 
 function _curryN(length, received, fn) {
-  return function () {
-    var combined = [];
-    var argsIdx = 0;
-    var left = length;
-    var combinedIdx = 0;
+	return function() {
+		var combined = [];
+		var argsIdx = 0;
+		var left = length;
+		var combinedIdx = 0;
 
-    while (combinedIdx < received.length || argsIdx < arguments.length) {
-      var result;
+		while (combinedIdx < received.length || argsIdx < arguments.length) {
+			var result;
 
-      if (combinedIdx < received.length && (!_isPlaceholder(received[combinedIdx]) || argsIdx >= arguments.length)) {
-        result = received[combinedIdx];
-      } else {
-        result = arguments[argsIdx];
-        argsIdx += 1;
-      }
+			if (
+				combinedIdx < received.length &&
+				(!_isPlaceholder(received[combinedIdx]) ||
+					argsIdx >= arguments.length)
+			) {
+				result = received[combinedIdx];
+			} else {
+				result = arguments[argsIdx];
+				argsIdx += 1;
+			}
 
-      combined[combinedIdx] = result;
+			combined[combinedIdx] = result;
 
-      if (!_isPlaceholder(result)) {
-        left -= 1;
-      }
+			if (!_isPlaceholder(result)) {
+				left -= 1;
+			}
 
-      combinedIdx += 1;
-    }
+			combinedIdx += 1;
+		}
 
-    return left <= 0 ? fn.apply(this, combined) : _arity(left, _curryN(length, combined, fn));
-  };
+		return left <= 0
+			? fn.apply(this, combined)
+			: _arity(left, _curryN(length, combined, fn));
+	};
 }
 
 /**
@@ -1267,14 +1656,14 @@ function _curryN(length, received, fn) {
  */
 
 var curryN =
-/*#__PURE__*/
-_curry2(function curryN(length, fn) {
-  if (length === 1) {
-    return _curry1(fn);
-  }
+	/*#__PURE__*/
+	_curry2(function curryN(length, fn) {
+		if (length === 1) {
+			return _curry1(fn);
+		}
 
-  return _arity(length, _curryN(length, [], fn));
-});
+		return _arity(length, _curryN(length, [], fn));
+	});
 
 /**
  * Creates a new list iteration function from an existing one by adding two new
@@ -1302,23 +1691,26 @@ _curry2(function curryN(length, fn) {
  */
 
 var addIndex =
-/*#__PURE__*/
-_curry1(function addIndex(fn) {
-  return curryN(fn.length, function () {
-    var idx = 0;
-    var origFn = arguments[0];
-    var list = arguments[arguments.length - 1];
-    var args = Array.prototype.slice.call(arguments, 0);
+	/*#__PURE__*/
+	_curry1(function addIndex(fn) {
+		return curryN(fn.length, function() {
+			var idx = 0;
+			var origFn = arguments[0];
+			var list = arguments[arguments.length - 1];
+			var args = Array.prototype.slice.call(arguments, 0);
 
-    args[0] = function () {
-      var result = origFn.apply(this, _concat(arguments, [idx, list]));
-      idx += 1;
-      return result;
-    };
+			args[0] = function() {
+				var result = origFn.apply(
+					this,
+					_concat(arguments, [idx, list])
+				);
+				idx += 1;
+				return result;
+			};
 
-    return fn.apply(this, args);
-  });
-});
+			return fn.apply(this, args);
+		});
+	});
 
 /**
  * Optimized internal three-arity curry function.
@@ -1330,41 +1722,65 @@ _curry1(function addIndex(fn) {
  */
 
 function _curry3(fn) {
-  return function f3(a, b, c) {
-    switch (arguments.length) {
-      case 0:
-        return f3;
+	return function f3(a, b, c) {
+		switch (arguments.length) {
+			case 0:
+				return f3;
 
-      case 1:
-        return _isPlaceholder(a) ? f3 : _curry2(function (_b, _c) {
-          return fn(a, _b, _c);
-        });
+			case 1:
+				return _isPlaceholder(a)
+					? f3
+					: _curry2(function(_b, _c) {
+							return fn(a, _b, _c);
+					  });
 
-      case 2:
-        return _isPlaceholder(a) && _isPlaceholder(b) ? f3 : _isPlaceholder(a) ? _curry2(function (_a, _c) {
-          return fn(_a, b, _c);
-        }) : _isPlaceholder(b) ? _curry2(function (_b, _c) {
-          return fn(a, _b, _c);
-        }) : _curry1(function (_c) {
-          return fn(a, b, _c);
-        });
+			case 2:
+				return _isPlaceholder(a) && _isPlaceholder(b)
+					? f3
+					: _isPlaceholder(a)
+						? _curry2(function(_a, _c) {
+								return fn(_a, b, _c);
+						  })
+						: _isPlaceholder(b)
+							? _curry2(function(_b, _c) {
+									return fn(a, _b, _c);
+							  })
+							: _curry1(function(_c) {
+									return fn(a, b, _c);
+							  });
 
-      default:
-        return _isPlaceholder(a) && _isPlaceholder(b) && _isPlaceholder(c) ? f3 : _isPlaceholder(a) && _isPlaceholder(b) ? _curry2(function (_a, _b) {
-          return fn(_a, _b, c);
-        }) : _isPlaceholder(a) && _isPlaceholder(c) ? _curry2(function (_a, _c) {
-          return fn(_a, b, _c);
-        }) : _isPlaceholder(b) && _isPlaceholder(c) ? _curry2(function (_b, _c) {
-          return fn(a, _b, _c);
-        }) : _isPlaceholder(a) ? _curry1(function (_a) {
-          return fn(_a, b, c);
-        }) : _isPlaceholder(b) ? _curry1(function (_b) {
-          return fn(a, _b, c);
-        }) : _isPlaceholder(c) ? _curry1(function (_c) {
-          return fn(a, b, _c);
-        }) : fn(a, b, c);
-    }
-  };
+			default:
+				return _isPlaceholder(a) &&
+					_isPlaceholder(b) &&
+					_isPlaceholder(c)
+					? f3
+					: _isPlaceholder(a) && _isPlaceholder(b)
+						? _curry2(function(_a, _b) {
+								return fn(_a, _b, c);
+						  })
+						: _isPlaceholder(a) && _isPlaceholder(c)
+							? _curry2(function(_a, _c) {
+									return fn(_a, b, _c);
+							  })
+							: _isPlaceholder(b) && _isPlaceholder(c)
+								? _curry2(function(_b, _c) {
+										return fn(a, _b, _c);
+								  })
+								: _isPlaceholder(a)
+									? _curry1(function(_a) {
+											return fn(_a, b, c);
+									  })
+									: _isPlaceholder(b)
+										? _curry1(function(_b) {
+												return fn(a, _b, c);
+										  })
+										: _isPlaceholder(c)
+											? _curry1(function(_c) {
+													return fn(a, b, _c);
+											  })
+											: fn(a, b, c);
+		}
+	};
 }
 
 /**
@@ -1394,21 +1810,21 @@ function _curry3(fn) {
  */
 
 var adjust =
-/*#__PURE__*/
-_curry3(function adjust(fn, idx, list) {
-  if (idx >= list.length || idx < -list.length) {
-    return list;
-  }
+	/*#__PURE__*/
+	_curry3(function adjust(fn, idx, list) {
+		if (idx >= list.length || idx < -list.length) {
+			return list;
+		}
 
-  var start = idx < 0 ? list.length : 0;
+		var start = idx < 0 ? list.length : 0;
 
-  var _idx = start + idx;
+		var _idx = start + idx;
 
-  var _list = _concat(list);
+		var _list = _concat(list);
 
-  _list[_idx] = fn(list[_idx]);
-  return _list;
-});
+		_list[_idx] = fn(list[_idx]);
+		return _list;
+	});
 
 /**
  * Tests whether or not an object is an array.
@@ -1422,12 +1838,18 @@ _curry3(function adjust(fn, idx, list) {
  *      _isArray(null); //=> false
  *      _isArray({}); //=> false
  */
-var _isArray = Array.isArray || function _isArray(val) {
-  return val != null && val.length >= 0 && Object.prototype.toString.call(val) === '[object Array]';
-};
+var _isArray =
+	Array.isArray ||
+	function _isArray(val) {
+		return (
+			val != null &&
+			val.length >= 0 &&
+			Object.prototype.toString.call(val) === "[object Array]"
+		);
+	};
 
 function _isTransformer(obj) {
-  return typeof obj['@@transducer/step'] === 'function';
+	return typeof obj["@@transducer/step"] === "function";
 }
 
 /**
@@ -1446,49 +1868,51 @@ function _isTransformer(obj) {
  */
 
 function _dispatchable(methodNames, xf, fn) {
-  return function () {
-    if (arguments.length === 0) {
-      return fn();
-    }
+	return function() {
+		if (arguments.length === 0) {
+			return fn();
+		}
 
-    var args = Array.prototype.slice.call(arguments, 0);
-    var obj = args.pop();
+		var args = Array.prototype.slice.call(arguments, 0);
+		var obj = args.pop();
 
-    if (!_isArray(obj)) {
-      var idx = 0;
+		if (!_isArray(obj)) {
+			var idx = 0;
 
-      while (idx < methodNames.length) {
-        if (typeof obj[methodNames[idx]] === 'function') {
-          return obj[methodNames[idx]].apply(obj, args);
-        }
+			while (idx < methodNames.length) {
+				if (typeof obj[methodNames[idx]] === "function") {
+					return obj[methodNames[idx]].apply(obj, args);
+				}
 
-        idx += 1;
-      }
+				idx += 1;
+			}
 
-      if (_isTransformer(obj)) {
-        var transducer = xf.apply(null, args);
-        return transducer(obj);
-      }
-    }
+			if (_isTransformer(obj)) {
+				var transducer = xf.apply(null, args);
+				return transducer(obj);
+			}
+		}
 
-    return fn.apply(this, arguments);
-  };
+		return fn.apply(this, arguments);
+	};
 }
 
 function _reduced(x) {
-  return x && x['@@transducer/reduced'] ? x : {
-    '@@transducer/value': x,
-    '@@transducer/reduced': true
-  };
+	return x && x["@@transducer/reduced"]
+		? x
+		: {
+				"@@transducer/value": x,
+				"@@transducer/reduced": true
+		  };
 }
 
 var _xfBase = {
-  init: function init() {
-    return this.xf['@@transducer/init']();
-  },
-  result: function result(_result) {
-    return this.xf['@@transducer/result'](_result);
-  }
+	init: function init() {
+		return this.xf["@@transducer/init"]();
+	},
+	result: function result(_result) {
+		return this.xf["@@transducer/result"](_result);
+	}
 };
 
 /**
@@ -1510,26 +1934,26 @@ var _xfBase = {
  */
 
 var max =
-/*#__PURE__*/
-_curry2(function max(a, b) {
-  return b > a ? b : a;
-});
+	/*#__PURE__*/
+	_curry2(function max(a, b) {
+		return b > a ? b : a;
+	});
 
 function _map(fn, functor) {
-  var idx = 0;
-  var len = functor.length;
-  var result = Array(len);
+	var idx = 0;
+	var len = functor.length;
+	var result = Array(len);
 
-  while (idx < len) {
-    result[idx] = fn(functor[idx]);
-    idx += 1;
-  }
+	while (idx < len) {
+		result[idx] = fn(functor[idx]);
+		idx += 1;
+	}
 
-  return result;
+	return result;
 }
 
 function _isString(x) {
-  return Object.prototype.toString.call(x) === '[object String]';
+	return Object.prototype.toString.call(x) === "[object String]";
 }
 
 /**
@@ -1551,63 +1975,63 @@ function _isString(x) {
  */
 
 var _isArrayLike =
-/*#__PURE__*/
-_curry1(function isArrayLike(x) {
-  if (_isArray(x)) {
-    return true;
-  }
+	/*#__PURE__*/
+	_curry1(function isArrayLike(x) {
+		if (_isArray(x)) {
+			return true;
+		}
 
-  if (!x) {
-    return false;
-  }
+		if (!x) {
+			return false;
+		}
 
-  if (typeof x !== 'object') {
-    return false;
-  }
+		if (typeof x !== "object") {
+			return false;
+		}
 
-  if (_isString(x)) {
-    return false;
-  }
+		if (_isString(x)) {
+			return false;
+		}
 
-  if (x.nodeType === 1) {
-    return !!x.length;
-  }
+		if (x.nodeType === 1) {
+			return !!x.length;
+		}
 
-  if (x.length === 0) {
-    return true;
-  }
+		if (x.length === 0) {
+			return true;
+		}
 
-  if (x.length > 0) {
-    return x.hasOwnProperty(0) && x.hasOwnProperty(x.length - 1);
-  }
+		if (x.length > 0) {
+			return x.hasOwnProperty(0) && x.hasOwnProperty(x.length - 1);
+		}
 
-  return false;
-});
+		return false;
+	});
 
 var XWrap =
-/*#__PURE__*/
-function () {
-  function XWrap(fn) {
-    this.f = fn;
-  }
+	/*#__PURE__*/
+	(function() {
+		function XWrap(fn) {
+			this.f = fn;
+		}
 
-  XWrap.prototype['@@transducer/init'] = function () {
-    throw new Error('init not implemented on XWrap');
-  };
+		XWrap.prototype["@@transducer/init"] = function() {
+			throw new Error("init not implemented on XWrap");
+		};
 
-  XWrap.prototype['@@transducer/result'] = function (acc) {
-    return acc;
-  };
+		XWrap.prototype["@@transducer/result"] = function(acc) {
+			return acc;
+		};
 
-  XWrap.prototype['@@transducer/step'] = function (acc, x) {
-    return this.f(acc, x);
-  };
+		XWrap.prototype["@@transducer/step"] = function(acc, x) {
+			return this.f(acc, x);
+		};
 
-  return XWrap;
-}();
+		return XWrap;
+	})();
 
 function _xwrap(fn) {
-  return new XWrap(fn);
+	return new XWrap(fn);
 }
 
 /**
@@ -1634,145 +2058,156 @@ function _xwrap(fn) {
  */
 
 var bind =
-/*#__PURE__*/
-_curry2(function bind(fn, thisObj) {
-  return _arity(fn.length, function () {
-    return fn.apply(thisObj, arguments);
-  });
-});
+	/*#__PURE__*/
+	_curry2(function bind(fn, thisObj) {
+		return _arity(fn.length, function() {
+			return fn.apply(thisObj, arguments);
+		});
+	});
 
 function _arrayReduce(xf, acc, list) {
-  var idx = 0;
-  var len = list.length;
+	var idx = 0;
+	var len = list.length;
 
-  while (idx < len) {
-    acc = xf['@@transducer/step'](acc, list[idx]);
+	while (idx < len) {
+		acc = xf["@@transducer/step"](acc, list[idx]);
 
-    if (acc && acc['@@transducer/reduced']) {
-      acc = acc['@@transducer/value'];
-      break;
-    }
+		if (acc && acc["@@transducer/reduced"]) {
+			acc = acc["@@transducer/value"];
+			break;
+		}
 
-    idx += 1;
-  }
+		idx += 1;
+	}
 
-  return xf['@@transducer/result'](acc);
+	return xf["@@transducer/result"](acc);
 }
 
 function _iterableReduce(xf, acc, iter) {
-  var step = iter.next();
+	var step = iter.next();
 
-  while (!step.done) {
-    acc = xf['@@transducer/step'](acc, step.value);
+	while (!step.done) {
+		acc = xf["@@transducer/step"](acc, step.value);
 
-    if (acc && acc['@@transducer/reduced']) {
-      acc = acc['@@transducer/value'];
-      break;
-    }
+		if (acc && acc["@@transducer/reduced"]) {
+			acc = acc["@@transducer/value"];
+			break;
+		}
 
-    step = iter.next();
-  }
+		step = iter.next();
+	}
 
-  return xf['@@transducer/result'](acc);
+	return xf["@@transducer/result"](acc);
 }
 
 function _methodReduce(xf, acc, obj, methodName) {
-  return xf['@@transducer/result'](obj[methodName](bind(xf['@@transducer/step'], xf), acc));
+	return xf["@@transducer/result"](
+		obj[methodName](bind(xf["@@transducer/step"], xf), acc)
+	);
 }
 
-var symIterator = typeof Symbol !== 'undefined' ? Symbol.iterator : '@@iterator';
+var symIterator =
+	typeof Symbol !== "undefined" ? Symbol.iterator : "@@iterator";
 function _reduce(fn, acc, list) {
-  if (typeof fn === 'function') {
-    fn = _xwrap(fn);
-  }
+	if (typeof fn === "function") {
+		fn = _xwrap(fn);
+	}
 
-  if (_isArrayLike(list)) {
-    return _arrayReduce(fn, acc, list);
-  }
+	if (_isArrayLike(list)) {
+		return _arrayReduce(fn, acc, list);
+	}
 
-  if (typeof list['fantasy-land/reduce'] === 'function') {
-    return _methodReduce(fn, acc, list, 'fantasy-land/reduce');
-  }
+	if (typeof list["fantasy-land/reduce"] === "function") {
+		return _methodReduce(fn, acc, list, "fantasy-land/reduce");
+	}
 
-  if (list[symIterator] != null) {
-    return _iterableReduce(fn, acc, list[symIterator]());
-  }
+	if (list[symIterator] != null) {
+		return _iterableReduce(fn, acc, list[symIterator]());
+	}
 
-  if (typeof list.next === 'function') {
-    return _iterableReduce(fn, acc, list);
-  }
+	if (typeof list.next === "function") {
+		return _iterableReduce(fn, acc, list);
+	}
 
-  if (typeof list.reduce === 'function') {
-    return _methodReduce(fn, acc, list, 'reduce');
-  }
+	if (typeof list.reduce === "function") {
+		return _methodReduce(fn, acc, list, "reduce");
+	}
 
-  throw new TypeError('reduce: list must be array or iterable');
+	throw new TypeError("reduce: list must be array or iterable");
 }
 
 var XMap =
-/*#__PURE__*/
-function () {
-  function XMap(f, xf) {
-    this.xf = xf;
-    this.f = f;
-  }
+	/*#__PURE__*/
+	(function() {
+		function XMap(f, xf) {
+			this.xf = xf;
+			this.f = f;
+		}
 
-  XMap.prototype['@@transducer/init'] = _xfBase.init;
-  XMap.prototype['@@transducer/result'] = _xfBase.result;
+		XMap.prototype["@@transducer/init"] = _xfBase.init;
+		XMap.prototype["@@transducer/result"] = _xfBase.result;
 
-  XMap.prototype['@@transducer/step'] = function (result, input) {
-    return this.xf['@@transducer/step'](result, this.f(input));
-  };
+		XMap.prototype["@@transducer/step"] = function(result, input) {
+			return this.xf["@@transducer/step"](result, this.f(input));
+		};
 
-  return XMap;
-}();
+		return XMap;
+	})();
 
 var _xmap =
-/*#__PURE__*/
-_curry2(function _xmap(f, xf) {
-  return new XMap(f, xf);
-});
+	/*#__PURE__*/
+	_curry2(function _xmap(f, xf) {
+		return new XMap(f, xf);
+	});
 
 function _has(prop, obj) {
-  return Object.prototype.hasOwnProperty.call(obj, prop);
+	return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
 var toString = Object.prototype.toString;
 
 var _isArguments = function _isArguments() {
-  return toString.call(arguments) === '[object Arguments]' ? function _isArguments(x) {
-    return toString.call(x) === '[object Arguments]';
-  } : function _isArguments(x) {
-    return _has('callee', x);
-  };
+	return toString.call(arguments) === "[object Arguments]"
+		? function _isArguments(x) {
+				return toString.call(x) === "[object Arguments]";
+		  }
+		: function _isArguments(x) {
+				return _has("callee", x);
+		  };
 };
 
-var hasEnumBug = !
-/*#__PURE__*/
+var hasEnumBug = !/*#__PURE__*/
 {
-  toString: null
-}.propertyIsEnumerable('toString');
-var nonEnumerableProps = ['constructor', 'valueOf', 'isPrototypeOf', 'toString', 'propertyIsEnumerable', 'hasOwnProperty', 'toLocaleString']; // Safari bug
+	toString: null
+}.propertyIsEnumerable("toString");
+var nonEnumerableProps = [
+	"constructor",
+	"valueOf",
+	"isPrototypeOf",
+	"toString",
+	"propertyIsEnumerable",
+	"hasOwnProperty",
+	"toLocaleString"
+]; // Safari bug
 
 var hasArgsEnumBug =
-/*#__PURE__*/
-function () {
-
-  return arguments.propertyIsEnumerable('length');
-}();
+	/*#__PURE__*/
+	(function() {
+		return arguments.propertyIsEnumerable("length");
+	})();
 
 var contains = function contains(list, item) {
-  var idx = 0;
+	var idx = 0;
 
-  while (idx < list.length) {
-    if (list[idx] === item) {
-      return true;
-    }
+	while (idx < list.length) {
+		if (list[idx] === item) {
+			return true;
+		}
 
-    idx += 1;
-  }
+		idx += 1;
+	}
 
-  return false;
+	return false;
 };
 /**
  * Returns a list containing the names of all the enumerable own properties of
@@ -1793,45 +2228,50 @@ var contains = function contains(list, item) {
  *      R.keys({a: 1, b: 2, c: 3}); //=> ['a', 'b', 'c']
  */
 
+var _keys =
+	typeof Object.keys === "function" && !hasArgsEnumBug
+		? function keys(obj) {
+				return Object(obj) !== obj ? [] : Object.keys(obj);
+		  }
+		: function keys(obj) {
+				if (Object(obj) !== obj) {
+					return [];
+				}
 
-var _keys = typeof Object.keys === 'function' && !hasArgsEnumBug ? function keys(obj) {
-  return Object(obj) !== obj ? [] : Object.keys(obj);
-} : function keys(obj) {
-  if (Object(obj) !== obj) {
-    return [];
-  }
+				var prop, nIdx;
+				var ks = [];
 
-  var prop, nIdx;
-  var ks = [];
+				var checkArgsLength = hasArgsEnumBug && _isArguments(obj);
 
-  var checkArgsLength = hasArgsEnumBug && _isArguments(obj);
+				for (prop in obj) {
+					if (
+						_has(prop, obj) &&
+						(!checkArgsLength || prop !== "length")
+					) {
+						ks[ks.length] = prop;
+					}
+				}
 
-  for (prop in obj) {
-    if (_has(prop, obj) && (!checkArgsLength || prop !== 'length')) {
-      ks[ks.length] = prop;
-    }
-  }
+				if (hasEnumBug) {
+					nIdx = nonEnumerableProps.length - 1;
 
-  if (hasEnumBug) {
-    nIdx = nonEnumerableProps.length - 1;
+					while (nIdx >= 0) {
+						prop = nonEnumerableProps[nIdx];
 
-    while (nIdx >= 0) {
-      prop = nonEnumerableProps[nIdx];
+						if (_has(prop, obj) && !contains(ks, prop)) {
+							ks[ks.length] = prop;
+						}
 
-      if (_has(prop, obj) && !contains(ks, prop)) {
-        ks[ks.length] = prop;
-      }
+						nIdx -= 1;
+					}
+				}
 
-      nIdx -= 1;
-    }
-  }
-
-  return ks;
-};
+				return ks;
+		  };
 
 var keys =
-/*#__PURE__*/
-_curry1(_keys);
+	/*#__PURE__*/
+	_curry1(_keys);
 
 /**
  * Takes a function and
@@ -1870,26 +2310,34 @@ _curry1(_keys);
  */
 
 var map =
-/*#__PURE__*/
-_curry2(
-/*#__PURE__*/
-_dispatchable(['fantasy-land/map', 'map'], _xmap, function map(fn, functor) {
-  switch (Object.prototype.toString.call(functor)) {
-    case '[object Function]':
-      return curryN(functor.length, function () {
-        return fn.call(this, functor.apply(this, arguments));
-      });
+	/*#__PURE__*/
+	_curry2(
+		/*#__PURE__*/
+		_dispatchable(["fantasy-land/map", "map"], _xmap, function map(
+			fn,
+			functor
+		) {
+			switch (Object.prototype.toString.call(functor)) {
+				case "[object Function]":
+					return curryN(functor.length, function() {
+						return fn.call(this, functor.apply(this, arguments));
+					});
 
-    case '[object Object]':
-      return _reduce(function (acc, key) {
-        acc[key] = fn(functor[key]);
-        return acc;
-      }, {}, keys(functor));
+				case "[object Object]":
+					return _reduce(
+						function(acc, key) {
+							acc[key] = fn(functor[key]);
+							return acc;
+						},
+						{},
+						keys(functor)
+					);
 
-    default:
-      return _map(fn, functor);
-  }
-}));
+				default:
+					return _map(fn, functor);
+			}
+		})
+	);
 
 /**
  * Retrieve the value at a given path.
@@ -1911,22 +2359,22 @@ _dispatchable(['fantasy-land/map', 'map'], _xmap, function map(fn, functor) {
  */
 
 var path =
-/*#__PURE__*/
-_curry2(function path(paths, obj) {
-  var val = obj;
-  var idx = 0;
+	/*#__PURE__*/
+	_curry2(function path(paths, obj) {
+		var val = obj;
+		var idx = 0;
 
-  while (idx < paths.length) {
-    if (val == null) {
-      return;
-    }
+		while (idx < paths.length) {
+			if (val == null) {
+				return;
+			}
 
-    val = val[paths[idx]];
-    idx += 1;
-  }
+			val = val[paths[idx]];
+			idx += 1;
+		}
 
-  return val;
-});
+		return val;
+	});
 
 /**
  * Returns a function that when supplied an object returns the indicated
@@ -1948,10 +2396,10 @@ _curry2(function path(paths, obj) {
  */
 
 var prop =
-/*#__PURE__*/
-_curry2(function prop(p, obj) {
-  return path([p], obj);
-});
+	/*#__PURE__*/
+	_curry2(function prop(p, obj) {
+		return path([p], obj);
+	});
 
 /**
  * Returns a new list by plucking the same named property off all objects in
@@ -1980,10 +2428,10 @@ _curry2(function prop(p, obj) {
  */
 
 var pluck =
-/*#__PURE__*/
-_curry2(function pluck(p, list) {
-  return map(prop(p), list);
-});
+	/*#__PURE__*/
+	_curry2(function pluck(p, list) {
+		return map(prop(p), list);
+	});
 
 /**
  * Returns a single item by iterating through the list, successively calling
@@ -2033,8 +2481,8 @@ _curry2(function pluck(p, list) {
  */
 
 var reduce =
-/*#__PURE__*/
-_curry3(_reduce);
+	/*#__PURE__*/
+	_curry3(_reduce);
 
 /**
  * Takes a list of predicates and returns a predicate that returns true for a
@@ -2063,23 +2511,23 @@ _curry3(_reduce);
  */
 
 var allPass =
-/*#__PURE__*/
-_curry1(function allPass(preds) {
-  return curryN(reduce(max, 0, pluck('length', preds)), function () {
-    var idx = 0;
-    var len = preds.length;
+	/*#__PURE__*/
+	_curry1(function allPass(preds) {
+		return curryN(reduce(max, 0, pluck("length", preds)), function() {
+			var idx = 0;
+			var len = preds.length;
 
-    while (idx < len) {
-      if (!preds[idx].apply(this, arguments)) {
-        return false;
-      }
+			while (idx < len) {
+				if (!preds[idx].apply(this, arguments)) {
+					return false;
+				}
 
-      idx += 1;
-    }
+				idx += 1;
+			}
 
-    return true;
-  });
-});
+			return true;
+		});
+	});
 
 /**
  * Takes a list of predicates and returns a predicate that returns true for a
@@ -2109,23 +2557,23 @@ _curry1(function allPass(preds) {
  */
 
 var anyPass =
-/*#__PURE__*/
-_curry1(function anyPass(preds) {
-  return curryN(reduce(max, 0, pluck('length', preds)), function () {
-    var idx = 0;
-    var len = preds.length;
+	/*#__PURE__*/
+	_curry1(function anyPass(preds) {
+		return curryN(reduce(max, 0, pluck("length", preds)), function() {
+			var idx = 0;
+			var len = preds.length;
 
-    while (idx < len) {
-      if (preds[idx].apply(this, arguments)) {
-        return true;
-      }
+			while (idx < len) {
+				if (preds[idx].apply(this, arguments)) {
+					return true;
+				}
 
-      idx += 1;
-    }
+				idx += 1;
+			}
 
-    return false;
-  });
-});
+			return false;
+		});
+	});
 
 /**
  * ap applies a list of functions to a list of values.
@@ -2155,15 +2603,24 @@ _curry1(function anyPass(preds) {
  */
 
 var ap =
-/*#__PURE__*/
-_curry2(function ap(applyF, applyX) {
-  return typeof applyX['fantasy-land/ap'] === 'function' ? applyX['fantasy-land/ap'](applyF) : typeof applyF.ap === 'function' ? applyF.ap(applyX) : typeof applyF === 'function' ? function (x) {
-    return applyF(x)(applyX(x));
-  } : // else
-  _reduce(function (acc, f) {
-    return _concat(acc, map(f, applyX));
-  }, [], applyF);
-});
+	/*#__PURE__*/
+	_curry2(function ap(applyF, applyX) {
+		return typeof applyX["fantasy-land/ap"] === "function"
+			? applyX["fantasy-land/ap"](applyF)
+			: typeof applyF.ap === "function"
+				? applyF.ap(applyX)
+				: typeof applyF === "function"
+					? function(x) {
+							return applyF(x)(applyX(x));
+					  } // else
+					: _reduce(
+							function(acc, f) {
+								return _concat(acc, map(f, applyX));
+							},
+							[],
+							applyF
+					  );
+	});
 
 /**
  * Applies function `fn` to the argument list `args`. This is useful for
@@ -2187,10 +2644,10 @@ _curry2(function ap(applyF, applyX) {
  */
 
 var apply =
-/*#__PURE__*/
-_curry2(function apply(fn, args) {
-  return fn.apply(this, args);
-});
+	/*#__PURE__*/
+	_curry2(function apply(fn, args) {
+		return fn.apply(this, args);
+	});
 
 /**
  * Returns a list of all the enumerable own properties of the supplied object.
@@ -2211,20 +2668,20 @@ _curry2(function apply(fn, args) {
  */
 
 var values =
-/*#__PURE__*/
-_curry1(function values(obj) {
-  var props = keys(obj);
-  var len = props.length;
-  var vals = [];
-  var idx = 0;
+	/*#__PURE__*/
+	_curry1(function values(obj) {
+		var props = keys(obj);
+		var len = props.length;
+		var vals = [];
+		var idx = 0;
 
-  while (idx < len) {
-    vals[idx] = obj[props[idx]];
-    idx += 1;
-  }
+		while (idx < len) {
+			vals[idx] = obj[props[idx]];
+			idx += 1;
+		}
 
-  return vals;
-});
+		return vals;
+	});
 
 /**
  * Makes a shallow clone of an object, setting or overriding the specified
@@ -2248,17 +2705,17 @@ _curry1(function values(obj) {
  */
 
 var assoc =
-/*#__PURE__*/
-_curry3(function assoc(prop, val, obj) {
-  var result = {};
+	/*#__PURE__*/
+	_curry3(function assoc(prop, val, obj) {
+		var result = {};
 
-  for (var p in obj) {
-    result[p] = obj[p];
-  }
+		for (var p in obj) {
+			result[p] = obj[p];
+		}
 
-  result[prop] = val;
-  return result;
-});
+		result[prop] = val;
+		return result;
+	});
 
 /**
  * Determine if the passed argument is an integer.
@@ -2268,9 +2725,11 @@ _curry3(function assoc(prop, val, obj) {
  * @category Type
  * @return {Boolean}
  */
-var _isInteger = Number.isInteger || function _isInteger(n) {
-  return n << 0 === n;
-};
+var _isInteger =
+	Number.isInteger ||
+	function _isInteger(n) {
+		return n << 0 === n;
+	};
 
 /**
  * Checks if the input value is `null` or `undefined`.
@@ -2291,10 +2750,10 @@ var _isInteger = Number.isInteger || function _isInteger(n) {
  */
 
 var isNil =
-/*#__PURE__*/
-_curry1(function isNil(x) {
-  return x == null;
-});
+	/*#__PURE__*/
+	_curry1(function isNil(x) {
+		return x == null;
+	});
 
 /**
  * Makes a shallow clone of an object, setting or overriding the nodes required
@@ -2322,27 +2781,32 @@ _curry1(function isNil(x) {
  */
 
 var assocPath =
-/*#__PURE__*/
-_curry3(function assocPath(path, val, obj) {
-  if (path.length === 0) {
-    return val;
-  }
+	/*#__PURE__*/
+	_curry3(function assocPath(path, val, obj) {
+		if (path.length === 0) {
+			return val;
+		}
 
-  var idx = path[0];
+		var idx = path[0];
 
-  if (path.length > 1) {
-    var nextObj = !isNil(obj) && _has(idx, obj) ? obj[idx] : _isInteger(path[1]) ? [] : {};
-    val = assocPath(Array.prototype.slice.call(path, 1), val, nextObj);
-  }
+		if (path.length > 1) {
+			var nextObj =
+				!isNil(obj) && _has(idx, obj)
+					? obj[idx]
+					: _isInteger(path[1])
+						? []
+						: {};
+			val = assocPath(Array.prototype.slice.call(path, 1), val, nextObj);
+		}
 
-  if (_isInteger(idx) && _isArray(obj)) {
-    var arr = [].concat(obj);
-    arr[idx] = val;
-    return arr;
-  } else {
-    return assoc(idx, val, obj);
-  }
-});
+		if (_isInteger(idx) && _isArray(obj)) {
+			var arr = [].concat(obj);
+			arr[idx] = val;
+			return arr;
+		} else {
+			return assoc(idx, val, obj);
+		}
+	});
 
 /**
  * Wraps a function of any arity (including nullary) in a function that accepts
@@ -2376,68 +2840,82 @@ _curry3(function assocPath(path, val, obj) {
  */
 
 var nAry =
-/*#__PURE__*/
-_curry2(function nAry(n, fn) {
-  switch (n) {
-    case 0:
-      return function () {
-        return fn.call(this);
-      };
+	/*#__PURE__*/
+	_curry2(function nAry(n, fn) {
+		switch (n) {
+			case 0:
+				return function() {
+					return fn.call(this);
+				};
 
-    case 1:
-      return function (a0) {
-        return fn.call(this, a0);
-      };
+			case 1:
+				return function(a0) {
+					return fn.call(this, a0);
+				};
 
-    case 2:
-      return function (a0, a1) {
-        return fn.call(this, a0, a1);
-      };
+			case 2:
+				return function(a0, a1) {
+					return fn.call(this, a0, a1);
+				};
 
-    case 3:
-      return function (a0, a1, a2) {
-        return fn.call(this, a0, a1, a2);
-      };
+			case 3:
+				return function(a0, a1, a2) {
+					return fn.call(this, a0, a1, a2);
+				};
 
-    case 4:
-      return function (a0, a1, a2, a3) {
-        return fn.call(this, a0, a1, a2, a3);
-      };
+			case 4:
+				return function(a0, a1, a2, a3) {
+					return fn.call(this, a0, a1, a2, a3);
+				};
 
-    case 5:
-      return function (a0, a1, a2, a3, a4) {
-        return fn.call(this, a0, a1, a2, a3, a4);
-      };
+			case 5:
+				return function(a0, a1, a2, a3, a4) {
+					return fn.call(this, a0, a1, a2, a3, a4);
+				};
 
-    case 6:
-      return function (a0, a1, a2, a3, a4, a5) {
-        return fn.call(this, a0, a1, a2, a3, a4, a5);
-      };
+			case 6:
+				return function(a0, a1, a2, a3, a4, a5) {
+					return fn.call(this, a0, a1, a2, a3, a4, a5);
+				};
 
-    case 7:
-      return function (a0, a1, a2, a3, a4, a5, a6) {
-        return fn.call(this, a0, a1, a2, a3, a4, a5, a6);
-      };
+			case 7:
+				return function(a0, a1, a2, a3, a4, a5, a6) {
+					return fn.call(this, a0, a1, a2, a3, a4, a5, a6);
+				};
 
-    case 8:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7) {
-        return fn.call(this, a0, a1, a2, a3, a4, a5, a6, a7);
-      };
+			case 8:
+				return function(a0, a1, a2, a3, a4, a5, a6, a7) {
+					return fn.call(this, a0, a1, a2, a3, a4, a5, a6, a7);
+				};
 
-    case 9:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8) {
-        return fn.call(this, a0, a1, a2, a3, a4, a5, a6, a7, a8);
-      };
+			case 9:
+				return function(a0, a1, a2, a3, a4, a5, a6, a7, a8) {
+					return fn.call(this, a0, a1, a2, a3, a4, a5, a6, a7, a8);
+				};
 
-    case 10:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
-        return fn.call(this, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9);
-      };
+			case 10:
+				return function(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
+					return fn.call(
+						this,
+						a0,
+						a1,
+						a2,
+						a3,
+						a4,
+						a5,
+						a6,
+						a7,
+						a8,
+						a9
+					);
+				};
 
-    default:
-      throw new Error('First argument to nAry must be a non-negative integer no greater than ten');
-  }
-});
+			default:
+				throw new Error(
+					"First argument to nAry must be a non-negative integer no greater than ten"
+				);
+		}
+	});
 
 /**
  * Wraps a function of any arity (including nullary) in a function that accepts
@@ -2469,13 +2947,13 @@ _curry2(function nAry(n, fn) {
  */
 
 var binary =
-/*#__PURE__*/
-_curry1(function binary(fn) {
-  return nAry(2, fn);
-});
+	/*#__PURE__*/
+	_curry1(function binary(fn) {
+		return nAry(2, fn);
+	});
 
 function _isFunction(x) {
-  return Object.prototype.toString.call(x) === '[object Function]';
+	return Object.prototype.toString.call(x) === "[object Function]";
 }
 
 /**
@@ -2497,13 +2975,17 @@ function _isFunction(x) {
  */
 
 var liftN =
-/*#__PURE__*/
-_curry2(function liftN(arity, fn) {
-  var lifted = curryN(arity, fn);
-  return curryN(arity, function () {
-    return _reduce(ap, map(lifted, arguments[0]), Array.prototype.slice.call(arguments, 1));
-  });
-});
+	/*#__PURE__*/
+	_curry2(function liftN(arity, fn) {
+		var lifted = curryN(arity, fn);
+		return curryN(arity, function() {
+			return _reduce(
+				ap,
+				map(lifted, arguments[0]),
+				Array.prototype.slice.call(arguments, 1)
+			);
+		});
+	});
 
 /**
  * "lifts" a function of arity > 1 so that it may "map over" a list, Function or other
@@ -2529,10 +3011,10 @@ _curry2(function liftN(arity, fn) {
  */
 
 var lift =
-/*#__PURE__*/
-_curry1(function lift(fn) {
-  return liftN(fn.length, fn);
-});
+	/*#__PURE__*/
+	_curry1(function lift(fn) {
+		return liftN(fn.length, fn);
+	});
 
 /**
  * Returns a curried equivalent of the provided function. The curried function
@@ -2577,10 +3059,10 @@ _curry1(function lift(fn) {
  */
 
 var curry =
-/*#__PURE__*/
-_curry1(function curry(fn) {
-  return curryN(fn.length, fn);
-});
+	/*#__PURE__*/
+	_curry1(function curry(fn) {
+		return curryN(fn.length, fn);
+	});
 
 /**
  * Returns the result of calling its first argument with the remaining
@@ -2616,10 +3098,10 @@ _curry1(function curry(fn) {
  */
 
 var call =
-/*#__PURE__*/
-curry(function call(fn) {
-  return fn.apply(this, Array.prototype.slice.call(arguments, 1));
-});
+	/*#__PURE__*/
+	curry(function call(fn) {
+		return fn.apply(this, Array.prototype.slice.call(arguments, 1));
+	});
 
 /**
  * `_makeFlat` is a helper function that returns a one-level or fully recursive
@@ -2629,71 +3111,73 @@ curry(function call(fn) {
  */
 
 function _makeFlat(recursive) {
-  return function flatt(list) {
-    var value, jlen, j;
-    var result = [];
-    var idx = 0;
-    var ilen = list.length;
+	return function flatt(list) {
+		var value, jlen, j;
+		var result = [];
+		var idx = 0;
+		var ilen = list.length;
 
-    while (idx < ilen) {
-      if (_isArrayLike(list[idx])) {
-        value = recursive ? flatt(list[idx]) : list[idx];
-        j = 0;
-        jlen = value.length;
+		while (idx < ilen) {
+			if (_isArrayLike(list[idx])) {
+				value = recursive ? flatt(list[idx]) : list[idx];
+				j = 0;
+				jlen = value.length;
 
-        while (j < jlen) {
-          result[result.length] = value[j];
-          j += 1;
-        }
-      } else {
-        result[result.length] = list[idx];
-      }
+				while (j < jlen) {
+					result[result.length] = value[j];
+					j += 1;
+				}
+			} else {
+				result[result.length] = list[idx];
+			}
 
-      idx += 1;
-    }
+			idx += 1;
+		}
 
-    return result;
-  };
+		return result;
+	};
 }
 
 function _forceReduced(x) {
-  return {
-    '@@transducer/value': x,
-    '@@transducer/reduced': true
-  };
+	return {
+		"@@transducer/value": x,
+		"@@transducer/reduced": true
+	};
 }
 
 var preservingReduced = function preservingReduced(xf) {
-  return {
-    '@@transducer/init': _xfBase.init,
-    '@@transducer/result': function transducerResult(result) {
-      return xf['@@transducer/result'](result);
-    },
-    '@@transducer/step': function transducerStep(result, input) {
-      var ret = xf['@@transducer/step'](result, input);
-      return ret['@@transducer/reduced'] ? _forceReduced(ret) : ret;
-    }
-  };
+	return {
+		"@@transducer/init": _xfBase.init,
+		"@@transducer/result": function transducerResult(result) {
+			return xf["@@transducer/result"](result);
+		},
+		"@@transducer/step": function transducerStep(result, input) {
+			var ret = xf["@@transducer/step"](result, input);
+			return ret["@@transducer/reduced"] ? _forceReduced(ret) : ret;
+		}
+	};
 };
 
 var _flatCat = function _xcat(xf) {
-  var rxf = preservingReduced(xf);
-  return {
-    '@@transducer/init': _xfBase.init,
-    '@@transducer/result': function transducerResult(result) {
-      return rxf['@@transducer/result'](result);
-    },
-    '@@transducer/step': function transducerStep(result, input) {
-      return !_isArrayLike(input) ? _reduce(rxf, result, [input]) : _reduce(rxf, result, input);
-    }
-  };
+	var rxf = preservingReduced(xf);
+	return {
+		"@@transducer/init": _xfBase.init,
+		"@@transducer/result": function transducerResult(result) {
+			return rxf["@@transducer/result"](result);
+		},
+		"@@transducer/step": function transducerStep(result, input) {
+			return !_isArrayLike(input)
+				? _reduce(rxf, result, [input])
+				: _reduce(rxf, result, input);
+		}
+	};
 };
 
 var _xchain =
-/*#__PURE__*/
-_curry2(function _xchain(f, xf) {
-  return map(f, _flatCat(xf));
-});
+	/*#__PURE__*/
+	_curry2(function _xchain(f, xf) {
+		return map(f, _flatCat(xf));
+	});
 
 /**
  * `chain` maps a function over a list and concatenates the results. `chain`
@@ -2719,21 +3203,32 @@ _curry2(function _xchain(f, xf) {
  */
 
 var chain =
-/*#__PURE__*/
-_curry2(
-/*#__PURE__*/
-_dispatchable(['fantasy-land/chain', 'chain'], _xchain, function chain(fn, monad) {
-  if (typeof monad === 'function') {
-    return function (x) {
-      return fn(monad(x))(x);
-    };
-  }
+	/*#__PURE__*/
+	_curry2(
+		/*#__PURE__*/
+		_dispatchable(["fantasy-land/chain", "chain"], _xchain, function chain(
+			fn,
+			monad
+		) {
+			if (typeof monad === "function") {
+				return function(x) {
+					return fn(monad(x))(x);
+				};
+			}
 
-  return _makeFlat(false)(map(fn, monad));
-}));
+			return _makeFlat(false)(map(fn, monad));
+		})
+	);
 
 function _cloneRegExp(pattern) {
-  return new RegExp(pattern.source, (pattern.global ? 'g' : '') + (pattern.ignoreCase ? 'i' : '') + (pattern.multiline ? 'm' : '') + (pattern.sticky ? 'y' : '') + (pattern.unicode ? 'u' : ''));
+	return new RegExp(
+		pattern.source,
+		(pattern.global ? "g" : "") +
+			(pattern.ignoreCase ? "i" : "") +
+			(pattern.multiline ? "m" : "") +
+			(pattern.sticky ? "y" : "") +
+			(pattern.unicode ? "u" : "")
+	);
 }
 
 /**
@@ -2763,10 +3258,14 @@ function _cloneRegExp(pattern) {
  */
 
 var type =
-/*#__PURE__*/
-_curry1(function type(val) {
-  return val === null ? 'Null' : val === undefined ? 'Undefined' : Object.prototype.toString.call(val).slice(8, -1);
-});
+	/*#__PURE__*/
+	_curry1(function type(val) {
+		return val === null
+			? "Null"
+			: val === undefined
+				? "Undefined"
+				: Object.prototype.toString.call(val).slice(8, -1);
+	});
 
 /**
  * Copies an object.
@@ -2780,44 +3279,46 @@ _curry1(function type(val) {
  */
 
 function _clone(value, refFrom, refTo, deep) {
-  var copy = function copy(copiedValue) {
-    var len = refFrom.length;
-    var idx = 0;
+	var copy = function copy(copiedValue) {
+		var len = refFrom.length;
+		var idx = 0;
 
-    while (idx < len) {
-      if (value === refFrom[idx]) {
-        return refTo[idx];
-      }
+		while (idx < len) {
+			if (value === refFrom[idx]) {
+				return refTo[idx];
+			}
 
-      idx += 1;
-    }
+			idx += 1;
+		}
 
-    refFrom[idx + 1] = value;
-    refTo[idx + 1] = copiedValue;
+		refFrom[idx + 1] = value;
+		refTo[idx + 1] = copiedValue;
 
-    for (var key in value) {
-      copiedValue[key] = deep ? _clone(value[key], refFrom, refTo, true) : value[key];
-    }
+		for (var key in value) {
+			copiedValue[key] = deep
+				? _clone(value[key], refFrom, refTo, true)
+				: value[key];
+		}
 
-    return copiedValue;
-  };
+		return copiedValue;
+	};
 
-  switch (type(value)) {
-    case 'Object':
-      return copy({});
+	switch (type(value)) {
+		case "Object":
+			return copy({});
 
-    case 'Array':
-      return copy([]);
+		case "Array":
+			return copy([]);
 
-    case 'Date':
-      return new Date(value.valueOf());
+		case "Date":
+			return new Date(value.valueOf());
 
-    case 'RegExp':
-      return _cloneRegExp(value);
+		case "RegExp":
+			return _cloneRegExp(value);
 
-    default:
-      return value;
-  }
+		default:
+			return value;
+	}
 }
 
 /**
@@ -2843,10 +3344,12 @@ function _clone(value, refFrom, refTo, deep) {
  */
 
 var clone =
-/*#__PURE__*/
-_curry1(function clone(value) {
-  return value != null && typeof value.clone === 'function' ? value.clone() : _clone(value, [], [], true);
-});
+	/*#__PURE__*/
+	_curry1(function clone(value) {
+		return value != null && typeof value.clone === "function"
+			? value.clone()
+			: _clone(value, [], [], true);
+	});
 
 /**
  * A function that returns the `!` of its argument. It will return `true` when
@@ -2869,10 +3372,10 @@ _curry1(function clone(value) {
  */
 
 var not =
-/*#__PURE__*/
-_curry1(function not(a) {
-  return !a;
-});
+	/*#__PURE__*/
+	_curry1(function not(a) {
+		return !a;
+	});
 
 /**
  * Takes a function `f` and returns a function `g` such that if called with the same arguments
@@ -2898,13 +3401,13 @@ _curry1(function not(a) {
  */
 
 var complement =
-/*#__PURE__*/
-lift(not);
+	/*#__PURE__*/
+	lift(not);
 
 function _pipe(f, g) {
-  return function () {
-    return g.call(this, f.apply(this, arguments));
-  };
+	return function() {
+		return g.call(this, f.apply(this, arguments));
+	};
 }
 
 /**
@@ -2919,16 +3422,21 @@ function _pipe(f, g) {
  */
 
 function _checkForMethod(methodname, fn) {
-  return function () {
-    var length = arguments.length;
+	return function() {
+		var length = arguments.length;
 
-    if (length === 0) {
-      return fn();
-    }
+		if (length === 0) {
+			return fn();
+		}
 
-    var obj = arguments[length - 1];
-    return _isArray(obj) || typeof obj[methodname] !== 'function' ? fn.apply(this, arguments) : obj[methodname].apply(obj, Array.prototype.slice.call(arguments, 0, length - 1));
-  };
+		var obj = arguments[length - 1];
+		return _isArray(obj) || typeof obj[methodname] !== "function"
+			? fn.apply(this, arguments)
+			: obj[methodname].apply(
+					obj,
+					Array.prototype.slice.call(arguments, 0, length - 1)
+			  );
+	};
 }
 
 /**
@@ -2957,12 +3465,13 @@ function _checkForMethod(methodname, fn) {
  */
 
 var slice =
-/*#__PURE__*/
-_curry3(
-/*#__PURE__*/
-_checkForMethod('slice', function slice(fromIndex, toIndex, list) {
-  return Array.prototype.slice.call(list, fromIndex, toIndex);
-}));
+	/*#__PURE__*/
+	_curry3(
+		/*#__PURE__*/
+		_checkForMethod("slice", function slice(fromIndex, toIndex, list) {
+			return Array.prototype.slice.call(list, fromIndex, toIndex);
+		})
+	);
 
 /**
  * Returns all but the first element of the given list or string (or object
@@ -2993,12 +3502,15 @@ _checkForMethod('slice', function slice(fromIndex, toIndex, list) {
  */
 
 var tail =
-/*#__PURE__*/
-_curry1(
-/*#__PURE__*/
-_checkForMethod('tail',
-/*#__PURE__*/
-slice(1, Infinity)));
+	/*#__PURE__*/
+	_curry1(
+		/*#__PURE__*/
+		_checkForMethod(
+			"tail",
+			/*#__PURE__*/
+			slice(1, Infinity)
+		)
+	);
 
 /**
  * Performs left-to-right function composition. The leftmost function may have
@@ -3025,11 +3537,14 @@ slice(1, Infinity)));
  */
 
 function pipe() {
-  if (arguments.length === 0) {
-    throw new Error('pipe requires at least one argument');
-  }
+	if (arguments.length === 0) {
+		throw new Error("pipe requires at least one argument");
+	}
 
-  return _arity(arguments[0].length, reduce(_pipe, arguments[0], tail(arguments)));
+	return _arity(
+		arguments[0].length,
+		reduce(_pipe, arguments[0], tail(arguments))
+	);
 }
 
 /**
@@ -3058,10 +3573,15 @@ function pipe() {
  */
 
 var reverse =
-/*#__PURE__*/
-_curry1(function reverse(list) {
-  return _isString(list) ? list.split('').reverse().join('') : Array.prototype.slice.call(list, 0).reverse();
-});
+	/*#__PURE__*/
+	_curry1(function reverse(list) {
+		return _isString(list)
+			? list
+					.split("")
+					.reverse()
+					.join("")
+			: Array.prototype.slice.call(list, 0).reverse();
+	});
 
 /**
  * Performs right-to-left function composition. The rightmost function may have
@@ -3089,43 +3609,43 @@ _curry1(function reverse(list) {
  */
 
 function compose() {
-  if (arguments.length === 0) {
-    throw new Error('compose requires at least one argument');
-  }
+	if (arguments.length === 0) {
+		throw new Error("compose requires at least one argument");
+	}
 
-  return pipe.apply(this, reverse(arguments));
+	return pipe.apply(this, reverse(arguments));
 }
 
 function _arrayFromIterator(iter) {
-  var list = [];
-  var next;
+	var list = [];
+	var next;
 
-  while (!(next = iter.next()).done) {
-    list.push(next.value);
-  }
+	while (!(next = iter.next()).done) {
+		list.push(next.value);
+	}
 
-  return list;
+	return list;
 }
 
 function _containsWith(pred, x, list) {
-  var idx = 0;
-  var len = list.length;
+	var idx = 0;
+	var len = list.length;
 
-  while (idx < len) {
-    if (pred(x, list[idx])) {
-      return true;
-    }
+	while (idx < len) {
+		if (pred(x, list[idx])) {
+			return true;
+		}
 
-    idx += 1;
-  }
+		idx += 1;
+	}
 
-  return false;
+	return false;
 }
 
 function _functionName(f) {
-  // String(x => x) evaluates to "x => x", so the pattern may not match.
-  var match = String(f).match(/^function (\w*)/);
-  return match == null ? '' : match[1];
+	// String(x => x) evaluates to "x => x", so the pattern may not match.
+	var match = String(f).match(/^function (\w*)/);
+	return match == null ? "" : match[1];
 }
 
 /**
@@ -3153,18 +3673,18 @@ function _functionName(f) {
  */
 
 var identical =
-/*#__PURE__*/
-_curry2(function identical(a, b) {
-  // SameValue algorithm
-  if (a === b) {
-    // Steps 1-5, 7-10
-    // Steps 6.b-6.e: +0 != -0
-    return a !== 0 || 1 / a === 1 / b;
-  } else {
-    // Step 6.a: NaN == NaN
-    return a !== a && b !== b;
-  }
-});
+	/*#__PURE__*/
+	_curry2(function identical(a, b) {
+		// SameValue algorithm
+		if (a === b) {
+			// Steps 1-5, 7-10
+			// Steps 6.b-6.e: +0 != -0
+			return a !== 0 || 1 / a === 1 / b;
+		} else {
+			// Step 6.a: NaN == NaN
+			return a !== a && b !== b;
+		}
+	});
 
 /**
  * private _uniqContentEquals function.
@@ -3178,152 +3698,197 @@ _curry2(function identical(a, b) {
  * */
 
 function _uniqContentEquals(aIterator, bIterator, stackA, stackB) {
-  var a = _arrayFromIterator(aIterator);
+	var a = _arrayFromIterator(aIterator);
 
-  var b = _arrayFromIterator(bIterator);
+	var b = _arrayFromIterator(bIterator);
 
-  function eq(_a, _b) {
-    return _equals(_a, _b, stackA.slice(), stackB.slice());
-  } // if *a* array contains any element that is not included in *b*
+	function eq(_a, _b) {
+		return _equals(_a, _b, stackA.slice(), stackB.slice());
+	} // if *a* array contains any element that is not included in *b*
 
-
-  return !_containsWith(function (b, aItem) {
-    return !_containsWith(eq, aItem, b);
-  }, b, a);
+	return !_containsWith(
+		function(b, aItem) {
+			return !_containsWith(eq, aItem, b);
+		},
+		b,
+		a
+	);
 }
 
 function _equals(a, b, stackA, stackB) {
-  if (identical(a, b)) {
-    return true;
-  }
+	if (identical(a, b)) {
+		return true;
+	}
 
-  var typeA = type(a);
+	var typeA = type(a);
 
-  if (typeA !== type(b)) {
-    return false;
-  }
+	if (typeA !== type(b)) {
+		return false;
+	}
 
-  if (a == null || b == null) {
-    return false;
-  }
+	if (a == null || b == null) {
+		return false;
+	}
 
-  if (typeof a['fantasy-land/equals'] === 'function' || typeof b['fantasy-land/equals'] === 'function') {
-    return typeof a['fantasy-land/equals'] === 'function' && a['fantasy-land/equals'](b) && typeof b['fantasy-land/equals'] === 'function' && b['fantasy-land/equals'](a);
-  }
+	if (
+		typeof a["fantasy-land/equals"] === "function" ||
+		typeof b["fantasy-land/equals"] === "function"
+	) {
+		return (
+			typeof a["fantasy-land/equals"] === "function" &&
+			a["fantasy-land/equals"](b) &&
+			typeof b["fantasy-land/equals"] === "function" &&
+			b["fantasy-land/equals"](a)
+		);
+	}
 
-  if (typeof a.equals === 'function' || typeof b.equals === 'function') {
-    return typeof a.equals === 'function' && a.equals(b) && typeof b.equals === 'function' && b.equals(a);
-  }
+	if (typeof a.equals === "function" || typeof b.equals === "function") {
+		return (
+			typeof a.equals === "function" &&
+			a.equals(b) &&
+			typeof b.equals === "function" &&
+			b.equals(a)
+		);
+	}
 
-  switch (typeA) {
-    case 'Arguments':
-    case 'Array':
-    case 'Object':
-      if (typeof a.constructor === 'function' && _functionName(a.constructor) === 'Promise') {
-        return a === b;
-      }
+	switch (typeA) {
+		case "Arguments":
+		case "Array":
+		case "Object":
+			if (
+				typeof a.constructor === "function" &&
+				_functionName(a.constructor) === "Promise"
+			) {
+				return a === b;
+			}
 
-      break;
+			break;
 
-    case 'Boolean':
-    case 'Number':
-    case 'String':
-      if (!(typeof a === typeof b && identical(a.valueOf(), b.valueOf()))) {
-        return false;
-      }
+		case "Boolean":
+		case "Number":
+		case "String":
+			if (
+				!(typeof a === typeof b && identical(a.valueOf(), b.valueOf()))
+			) {
+				return false;
+			}
 
-      break;
+			break;
 
-    case 'Date':
-      if (!identical(a.valueOf(), b.valueOf())) {
-        return false;
-      }
+		case "Date":
+			if (!identical(a.valueOf(), b.valueOf())) {
+				return false;
+			}
 
-      break;
+			break;
 
-    case 'Error':
-      return a.name === b.name && a.message === b.message;
+		case "Error":
+			return a.name === b.name && a.message === b.message;
 
-    case 'RegExp':
-      if (!(a.source === b.source && a.global === b.global && a.ignoreCase === b.ignoreCase && a.multiline === b.multiline && a.sticky === b.sticky && a.unicode === b.unicode)) {
-        return false;
-      }
+		case "RegExp":
+			if (
+				!(
+					a.source === b.source &&
+					a.global === b.global &&
+					a.ignoreCase === b.ignoreCase &&
+					a.multiline === b.multiline &&
+					a.sticky === b.sticky &&
+					a.unicode === b.unicode
+				)
+			) {
+				return false;
+			}
 
-      break;
-  }
+			break;
+	}
 
-  var idx = stackA.length - 1;
+	var idx = stackA.length - 1;
 
-  while (idx >= 0) {
-    if (stackA[idx] === a) {
-      return stackB[idx] === b;
-    }
+	while (idx >= 0) {
+		if (stackA[idx] === a) {
+			return stackB[idx] === b;
+		}
 
-    idx -= 1;
-  }
+		idx -= 1;
+	}
 
-  switch (typeA) {
-    case 'Map':
-      if (a.size !== b.size) {
-        return false;
-      }
+	switch (typeA) {
+		case "Map":
+			if (a.size !== b.size) {
+				return false;
+			}
 
-      return _uniqContentEquals(a.entries(), b.entries(), stackA.concat([a]), stackB.concat([b]));
+			return _uniqContentEquals(
+				a.entries(),
+				b.entries(),
+				stackA.concat([a]),
+				stackB.concat([b])
+			);
 
-    case 'Set':
-      if (a.size !== b.size) {
-        return false;
-      }
+		case "Set":
+			if (a.size !== b.size) {
+				return false;
+			}
 
-      return _uniqContentEquals(a.values(), b.values(), stackA.concat([a]), stackB.concat([b]));
+			return _uniqContentEquals(
+				a.values(),
+				b.values(),
+				stackA.concat([a]),
+				stackB.concat([b])
+			);
 
-    case 'Arguments':
-    case 'Array':
-    case 'Object':
-    case 'Boolean':
-    case 'Number':
-    case 'String':
-    case 'Date':
-    case 'Error':
-    case 'RegExp':
-    case 'Int8Array':
-    case 'Uint8Array':
-    case 'Uint8ClampedArray':
-    case 'Int16Array':
-    case 'Uint16Array':
-    case 'Int32Array':
-    case 'Uint32Array':
-    case 'Float32Array':
-    case 'Float64Array':
-    case 'ArrayBuffer':
-      break;
+		case "Arguments":
+		case "Array":
+		case "Object":
+		case "Boolean":
+		case "Number":
+		case "String":
+		case "Date":
+		case "Error":
+		case "RegExp":
+		case "Int8Array":
+		case "Uint8Array":
+		case "Uint8ClampedArray":
+		case "Int16Array":
+		case "Uint16Array":
+		case "Int32Array":
+		case "Uint32Array":
+		case "Float32Array":
+		case "Float64Array":
+		case "ArrayBuffer":
+			break;
 
-    default:
-      // Values of other types are only equal if identical.
-      return false;
-  }
+		default:
+			// Values of other types are only equal if identical.
+			return false;
+	}
 
-  var keysA = keys(a);
+	var keysA = keys(a);
 
-  if (keysA.length !== keys(b).length) {
-    return false;
-  }
+	if (keysA.length !== keys(b).length) {
+		return false;
+	}
 
-  var extendedStackA = stackA.concat([a]);
-  var extendedStackB = stackB.concat([b]);
-  idx = keysA.length - 1;
+	var extendedStackA = stackA.concat([a]);
+	var extendedStackB = stackB.concat([b]);
+	idx = keysA.length - 1;
 
-  while (idx >= 0) {
-    var key = keysA[idx];
+	while (idx >= 0) {
+		var key = keysA[idx];
 
-    if (!(_has(key, b) && _equals(b[key], a[key], extendedStackA, extendedStackB))) {
-      return false;
-    }
+		if (
+			!(
+				_has(key, b) &&
+				_equals(b[key], a[key], extendedStackA, extendedStackB)
+			)
+		) {
+			return false;
+		}
 
-    idx -= 1;
-  }
+		idx -= 1;
+	}
 
-  return true;
+	return true;
 }
 
 /**
@@ -3353,150 +3918,174 @@ function _equals(a, b, stackA, stackB) {
  */
 
 var equals =
-/*#__PURE__*/
-_curry2(function equals(a, b) {
-  return _equals(a, b, [], []);
-});
+	/*#__PURE__*/
+	_curry2(function equals(a, b) {
+		return _equals(a, b, [], []);
+	});
 
 function _indexOf(list, a, idx) {
-  var inf, item; // Array.prototype.indexOf doesn't exist below IE9
+	var inf, item; // Array.prototype.indexOf doesn't exist below IE9
 
-  if (typeof list.indexOf === 'function') {
-    switch (typeof a) {
-      case 'number':
-        if (a === 0) {
-          // manually crawl the list to distinguish between +0 and -0
-          inf = 1 / a;
+	if (typeof list.indexOf === "function") {
+		switch (typeof a) {
+			case "number":
+				if (a === 0) {
+					// manually crawl the list to distinguish between +0 and -0
+					inf = 1 / a;
 
-          while (idx < list.length) {
-            item = list[idx];
+					while (idx < list.length) {
+						item = list[idx];
 
-            if (item === 0 && 1 / item === inf) {
-              return idx;
-            }
+						if (item === 0 && 1 / item === inf) {
+							return idx;
+						}
 
-            idx += 1;
-          }
+						idx += 1;
+					}
 
-          return -1;
-        } else if (a !== a) {
-          // NaN
-          while (idx < list.length) {
-            item = list[idx];
+					return -1;
+				} else if (a !== a) {
+					// NaN
+					while (idx < list.length) {
+						item = list[idx];
 
-            if (typeof item === 'number' && item !== item) {
-              return idx;
-            }
+						if (typeof item === "number" && item !== item) {
+							return idx;
+						}
 
-            idx += 1;
-          }
+						idx += 1;
+					}
 
-          return -1;
-        } // non-zero numbers can utilise Set
+					return -1;
+				} // non-zero numbers can utilise Set
 
+				return list.indexOf(a, idx);
+			// all these types can utilise Set
 
-        return list.indexOf(a, idx);
-      // all these types can utilise Set
+			case "string":
+			case "boolean":
+			case "function":
+			case "undefined":
+				return list.indexOf(a, idx);
 
-      case 'string':
-      case 'boolean':
-      case 'function':
-      case 'undefined':
-        return list.indexOf(a, idx);
+			case "object":
+				if (a === null) {
+					// null can utilise Set
+					return list.indexOf(a, idx);
+				}
+		}
+	} // anything else not covered above, defer to R.equals
 
-      case 'object':
-        if (a === null) {
-          // null can utilise Set
-          return list.indexOf(a, idx);
-        }
+	while (idx < list.length) {
+		if (equals(list[idx], a)) {
+			return idx;
+		}
 
-    }
-  } // anything else not covered above, defer to R.equals
+		idx += 1;
+	}
 
-
-  while (idx < list.length) {
-    if (equals(list[idx], a)) {
-      return idx;
-    }
-
-    idx += 1;
-  }
-
-  return -1;
+	return -1;
 }
 
 function _contains(a, list) {
-  return _indexOf(list, a, 0) >= 0;
+	return _indexOf(list, a, 0) >= 0;
 }
 
 function _quote(s) {
-  var escaped = s.replace(/\\/g, '\\\\').replace(/[\b]/g, '\\b') // \b matches word boundary; [\b] matches backspace
-  .replace(/\f/g, '\\f').replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t').replace(/\v/g, '\\v').replace(/\0/g, '\\0');
-  return '"' + escaped.replace(/"/g, '\\"') + '"';
+	var escaped = s
+		.replace(/\\/g, "\\\\")
+		.replace(/[\b]/g, "\\b") // \b matches word boundary; [\b] matches backspace
+		.replace(/\f/g, "\\f")
+		.replace(/\n/g, "\\n")
+		.replace(/\r/g, "\\r")
+		.replace(/\t/g, "\\t")
+		.replace(/\v/g, "\\v")
+		.replace(/\0/g, "\\0");
+	return '"' + escaped.replace(/"/g, '\\"') + '"';
 }
 
 /**
  * Polyfill from <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString>.
  */
 var pad = function pad(n) {
-  return (n < 10 ? '0' : '') + n;
+	return (n < 10 ? "0" : "") + n;
 };
 
-var _toISOString = typeof Date.prototype.toISOString === 'function' ? function _toISOString(d) {
-  return d.toISOString();
-} : function _toISOString(d) {
-  return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()) + 'T' + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ':' + pad(d.getUTCSeconds()) + '.' + (d.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) + 'Z';
-};
+var _toISOString =
+	typeof Date.prototype.toISOString === "function"
+		? function _toISOString(d) {
+				return d.toISOString();
+		  }
+		: function _toISOString(d) {
+				return (
+					d.getUTCFullYear() +
+					"-" +
+					pad(d.getUTCMonth() + 1) +
+					"-" +
+					pad(d.getUTCDate()) +
+					"T" +
+					pad(d.getUTCHours()) +
+					":" +
+					pad(d.getUTCMinutes()) +
+					":" +
+					pad(d.getUTCSeconds()) +
+					"." +
+					(d.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) +
+					"Z"
+				);
+		  };
 
 function _complement(f) {
-  return function () {
-    return !f.apply(this, arguments);
-  };
+	return function() {
+		return !f.apply(this, arguments);
+	};
 }
 
 function _filter(fn, list) {
-  var idx = 0;
-  var len = list.length;
-  var result = [];
+	var idx = 0;
+	var len = list.length;
+	var result = [];
 
-  while (idx < len) {
-    if (fn(list[idx])) {
-      result[result.length] = list[idx];
-    }
+	while (idx < len) {
+		if (fn(list[idx])) {
+			result[result.length] = list[idx];
+		}
 
-    idx += 1;
-  }
+		idx += 1;
+	}
 
-  return result;
+	return result;
 }
 
 function _isObject(x) {
-  return Object.prototype.toString.call(x) === '[object Object]';
+	return Object.prototype.toString.call(x) === "[object Object]";
 }
 
 var XFilter =
-/*#__PURE__*/
-function () {
-  function XFilter(f, xf) {
-    this.xf = xf;
-    this.f = f;
-  }
+	/*#__PURE__*/
+	(function() {
+		function XFilter(f, xf) {
+			this.xf = xf;
+			this.f = f;
+		}
 
-  XFilter.prototype['@@transducer/init'] = _xfBase.init;
-  XFilter.prototype['@@transducer/result'] = _xfBase.result;
+		XFilter.prototype["@@transducer/init"] = _xfBase.init;
+		XFilter.prototype["@@transducer/result"] = _xfBase.result;
 
-  XFilter.prototype['@@transducer/step'] = function (result, input) {
-    return this.f(input) ? this.xf['@@transducer/step'](result, input) : result;
-  };
+		XFilter.prototype["@@transducer/step"] = function(result, input) {
+			return this.f(input)
+				? this.xf["@@transducer/step"](result, input)
+				: result;
+		};
 
-  return XFilter;
-}();
+		return XFilter;
+	})();
 
 var _xfilter =
-/*#__PURE__*/
-_curry2(function _xfilter(f, xf) {
-  return new XFilter(f, xf);
-});
+	/*#__PURE__*/
+	_curry2(function _xfilter(f, xf) {
+		return new XFilter(f, xf);
+	});
 
 /**
  * Takes a predicate and a `Filterable`, and returns a new filterable of the
@@ -3527,19 +4116,25 @@ _curry2(function _xfilter(f, xf) {
  */
 
 var filter =
-/*#__PURE__*/
-_curry2(
-/*#__PURE__*/
-_dispatchable(['filter'], _xfilter, function (pred, filterable) {
-  return _isObject(filterable) ? _reduce(function (acc, key) {
-    if (pred(filterable[key])) {
-      acc[key] = filterable[key];
-    }
+	/*#__PURE__*/
+	_curry2(
+		/*#__PURE__*/
+		_dispatchable(["filter"], _xfilter, function(pred, filterable) {
+			return _isObject(filterable)
+				? _reduce(
+						function(acc, key) {
+							if (pred(filterable[key])) {
+								acc[key] = filterable[key];
+							}
 
-    return acc;
-  }, {}, keys(filterable)) : // else
-  _filter(pred, filterable);
-}));
+							return acc;
+						},
+						{},
+						keys(filterable)
+				  ) // else
+				: _filter(pred, filterable);
+		})
+	);
 
 /**
  * The complement of [`filter`](#filter).
@@ -3567,62 +4162,88 @@ _dispatchable(['filter'], _xfilter, function (pred, filterable) {
  */
 
 var reject =
-/*#__PURE__*/
-_curry2(function reject(pred, filterable) {
-  return filter(_complement(pred), filterable);
-});
+	/*#__PURE__*/
+	_curry2(function reject(pred, filterable) {
+		return filter(_complement(pred), filterable);
+	});
 
 function _toString(x, seen) {
-  var recur = function recur(y) {
-    var xs = seen.concat([x]);
-    return _contains(y, xs) ? '<Circular>' : _toString(y, xs);
-  }; //  mapPairs :: (Object, [String]) -> [String]
+	var recur = function recur(y) {
+		var xs = seen.concat([x]);
+		return _contains(y, xs) ? "<Circular>" : _toString(y, xs);
+	}; //  mapPairs :: (Object, [String]) -> [String]
 
+	var mapPairs = function mapPairs(obj, keys$$1) {
+		return _map(function(k) {
+			return _quote(k) + ": " + recur(obj[k]);
+		}, keys$$1.slice().sort());
+	};
 
-  var mapPairs = function mapPairs(obj, keys$$1) {
-    return _map(function (k) {
-      return _quote(k) + ': ' + recur(obj[k]);
-    }, keys$$1.slice().sort());
-  };
+	switch (Object.prototype.toString.call(x)) {
+		case "[object Arguments]":
+			return (
+				"(function() { return arguments; }(" +
+				_map(recur, x).join(", ") +
+				"))"
+			);
 
-  switch (Object.prototype.toString.call(x)) {
-    case '[object Arguments]':
-      return '(function() { return arguments; }(' + _map(recur, x).join(', ') + '))';
+		case "[object Array]":
+			return (
+				"[" +
+				_map(recur, x)
+					.concat(
+						mapPairs(
+							x,
+							reject(function(k) {
+								return /^\d+$/.test(k);
+							}, keys(x))
+						)
+					)
+					.join(", ") +
+				"]"
+			);
 
-    case '[object Array]':
-      return '[' + _map(recur, x).concat(mapPairs(x, reject(function (k) {
-        return /^\d+$/.test(k);
-      }, keys(x)))).join(', ') + ']';
+		case "[object Boolean]":
+			return typeof x === "object"
+				? "new Boolean(" + recur(x.valueOf()) + ")"
+				: x.toString();
 
-    case '[object Boolean]':
-      return typeof x === 'object' ? 'new Boolean(' + recur(x.valueOf()) + ')' : x.toString();
+		case "[object Date]":
+			return (
+				"new Date(" +
+				(isNaN(x.valueOf()) ? recur(NaN) : _quote(_toISOString(x))) +
+				")"
+			);
 
-    case '[object Date]':
-      return 'new Date(' + (isNaN(x.valueOf()) ? recur(NaN) : _quote(_toISOString(x))) + ')';
+		case "[object Null]":
+			return "null";
 
-    case '[object Null]':
-      return 'null';
+		case "[object Number]":
+			return typeof x === "object"
+				? "new Number(" + recur(x.valueOf()) + ")"
+				: 1 / x === -Infinity
+					? "-0"
+					: x.toString(10);
 
-    case '[object Number]':
-      return typeof x === 'object' ? 'new Number(' + recur(x.valueOf()) + ')' : 1 / x === -Infinity ? '-0' : x.toString(10);
+		case "[object String]":
+			return typeof x === "object"
+				? "new String(" + recur(x.valueOf()) + ")"
+				: _quote(x);
 
-    case '[object String]':
-      return typeof x === 'object' ? 'new String(' + recur(x.valueOf()) + ')' : _quote(x);
+		case "[object Undefined]":
+			return "undefined";
 
-    case '[object Undefined]':
-      return 'undefined';
+		default:
+			if (typeof x.toString === "function") {
+				var repr = x.toString();
 
-    default:
-      if (typeof x.toString === 'function') {
-        var repr = x.toString();
+				if (repr !== "[object Object]") {
+					return repr;
+				}
+			}
 
-        if (repr !== '[object Object]') {
-          return repr;
-        }
-      }
-
-      return '{' + mapPairs(x, keys(x)).join(', ') + '}';
-  }
+			return "{" + mapPairs(x, keys(x)).join(", ") + "}";
+	}
 }
 
 /**
@@ -3663,10 +4284,10 @@ function _toString(x, seen) {
  */
 
 var toString$1 =
-/*#__PURE__*/
-_curry1(function toString(val) {
-  return _toString(val, []);
-});
+	/*#__PURE__*/
+	_curry1(function toString(val) {
+		return _toString(val, []);
+	});
 
 /**
  * Returns the result of concatenating the given lists or strings.
@@ -3698,34 +4319,37 @@ _curry1(function toString(val) {
  */
 
 var concat =
-/*#__PURE__*/
-_curry2(function concat(a, b) {
-  if (_isArray(a)) {
-    if (_isArray(b)) {
-      return a.concat(b);
-    }
+	/*#__PURE__*/
+	_curry2(function concat(a, b) {
+		if (_isArray(a)) {
+			if (_isArray(b)) {
+				return a.concat(b);
+			}
 
-    throw new TypeError(toString$1(b) + ' is not an array');
-  }
+			throw new TypeError(toString$1(b) + " is not an array");
+		}
 
-  if (_isString(a)) {
-    if (_isString(b)) {
-      return a + b;
-    }
+		if (_isString(a)) {
+			if (_isString(b)) {
+				return a + b;
+			}
 
-    throw new TypeError(toString$1(b) + ' is not a string');
-  }
+			throw new TypeError(toString$1(b) + " is not a string");
+		}
 
-  if (a != null && _isFunction(a['fantasy-land/concat'])) {
-    return a['fantasy-land/concat'](b);
-  }
+		if (a != null && _isFunction(a["fantasy-land/concat"])) {
+			return a["fantasy-land/concat"](b);
+		}
 
-  if (a != null && _isFunction(a.concat)) {
-    return a.concat(b);
-  }
+		if (a != null && _isFunction(a.concat)) {
+			return a.concat(b);
+		}
 
-  throw new TypeError(toString$1(a) + ' does not have a method named "concat" or "fantasy-land/concat"');
-});
+		throw new TypeError(
+			toString$1(a) +
+				' does not have a method named "concat" or "fantasy-land/concat"'
+		);
+	});
 
 /**
  * Returns a function, `fn`, which encapsulates `if/else, if/else, ...` logic.
@@ -3755,23 +4379,27 @@ _curry2(function concat(a, b) {
  */
 
 var cond =
-/*#__PURE__*/
-_curry1(function cond(pairs) {
-  var arity = reduce(max, 0, map(function (pair) {
-    return pair[0].length;
-  }, pairs));
-  return _arity(arity, function () {
-    var idx = 0;
+	/*#__PURE__*/
+	_curry1(function cond(pairs) {
+		var arity = reduce(
+			max,
+			0,
+			map(function(pair) {
+				return pair[0].length;
+			}, pairs)
+		);
+		return _arity(arity, function() {
+			var idx = 0;
 
-    while (idx < pairs.length) {
-      if (pairs[idx][0].apply(this, arguments)) {
-        return pairs[idx][1].apply(this, arguments);
-      }
+			while (idx < pairs.length) {
+				if (pairs[idx][0].apply(this, arguments)) {
+					return pairs[idx][1].apply(this, arguments);
+				}
 
-      idx += 1;
-    }
-  });
-});
+				idx += 1;
+			}
+		});
+	});
 
 /**
  * Wraps a constructor function inside a curried function that can be called
@@ -3810,52 +4438,54 @@ _curry1(function cond(pairs) {
  */
 
 var constructN =
-/*#__PURE__*/
-_curry2(function constructN(n, Fn) {
-  if (n > 10) {
-    throw new Error('Constructor with greater than ten arguments');
-  }
+	/*#__PURE__*/
+	_curry2(function constructN(n, Fn) {
+		if (n > 10) {
+			throw new Error("Constructor with greater than ten arguments");
+		}
 
-  if (n === 0) {
-    return function () {
-      return new Fn();
-    };
-  }
+		if (n === 0) {
+			return function() {
+				return new Fn();
+			};
+		}
 
-  return curry(nAry(n, function ($0, $1, $2, $3, $4, $5, $6, $7, $8, $9) {
-    switch (arguments.length) {
-      case 1:
-        return new Fn($0);
+		return curry(
+			nAry(n, function($0, $1, $2, $3, $4, $5, $6, $7, $8, $9) {
+				switch (arguments.length) {
+					case 1:
+						return new Fn($0);
 
-      case 2:
-        return new Fn($0, $1);
+					case 2:
+						return new Fn($0, $1);
 
-      case 3:
-        return new Fn($0, $1, $2);
+					case 3:
+						return new Fn($0, $1, $2);
 
-      case 4:
-        return new Fn($0, $1, $2, $3);
+					case 4:
+						return new Fn($0, $1, $2, $3);
 
-      case 5:
-        return new Fn($0, $1, $2, $3, $4);
+					case 5:
+						return new Fn($0, $1, $2, $3, $4);
 
-      case 6:
-        return new Fn($0, $1, $2, $3, $4, $5);
+					case 6:
+						return new Fn($0, $1, $2, $3, $4, $5);
 
-      case 7:
-        return new Fn($0, $1, $2, $3, $4, $5, $6);
+					case 7:
+						return new Fn($0, $1, $2, $3, $4, $5, $6);
 
-      case 8:
-        return new Fn($0, $1, $2, $3, $4, $5, $6, $7);
+					case 8:
+						return new Fn($0, $1, $2, $3, $4, $5, $6, $7);
 
-      case 9:
-        return new Fn($0, $1, $2, $3, $4, $5, $6, $7, $8);
+					case 9:
+						return new Fn($0, $1, $2, $3, $4, $5, $6, $7, $8);
 
-      case 10:
-        return new Fn($0, $1, $2, $3, $4, $5, $6, $7, $8, $9);
-    }
-  }));
-});
+					case 10:
+						return new Fn($0, $1, $2, $3, $4, $5, $6, $7, $8, $9);
+				}
+			})
+		);
+	});
 
 /**
  * Returns `true` if the specified value is equal, in [`R.equals`](#equals)
@@ -3879,8 +4509,8 @@ _curry2(function constructN(n, Fn) {
  */
 
 var contains$1 =
-/*#__PURE__*/
-_curry2(_contains);
+	/*#__PURE__*/
+	_curry2(_contains);
 
 /**
  * Accepts a converging function and a list of branching functions and returns
@@ -3911,63 +4541,69 @@ _curry2(_contains);
  */
 
 var converge =
-/*#__PURE__*/
-_curry2(function converge(after, fns) {
-  return curryN(reduce(max, 0, pluck('length', fns)), function () {
-    var args = arguments;
-    var context = this;
-    return after.apply(context, _map(function (fn) {
-      return fn.apply(context, args);
-    }, fns));
-  });
-});
+	/*#__PURE__*/
+	_curry2(function converge(after, fns) {
+		return curryN(reduce(max, 0, pluck("length", fns)), function() {
+			var args = arguments;
+			var context = this;
+			return after.apply(
+				context,
+				_map(function(fn) {
+					return fn.apply(context, args);
+				}, fns)
+			);
+		});
+	});
 
 var XReduceBy =
-/*#__PURE__*/
-function () {
-  function XReduceBy(valueFn, valueAcc, keyFn, xf) {
-    this.valueFn = valueFn;
-    this.valueAcc = valueAcc;
-    this.keyFn = keyFn;
-    this.xf = xf;
-    this.inputs = {};
-  }
+	/*#__PURE__*/
+	(function() {
+		function XReduceBy(valueFn, valueAcc, keyFn, xf) {
+			this.valueFn = valueFn;
+			this.valueAcc = valueAcc;
+			this.keyFn = keyFn;
+			this.xf = xf;
+			this.inputs = {};
+		}
 
-  XReduceBy.prototype['@@transducer/init'] = _xfBase.init;
+		XReduceBy.prototype["@@transducer/init"] = _xfBase.init;
 
-  XReduceBy.prototype['@@transducer/result'] = function (result) {
-    var key;
+		XReduceBy.prototype["@@transducer/result"] = function(result) {
+			var key;
 
-    for (key in this.inputs) {
-      if (_has(key, this.inputs)) {
-        result = this.xf['@@transducer/step'](result, this.inputs[key]);
+			for (key in this.inputs) {
+				if (_has(key, this.inputs)) {
+					result = this.xf["@@transducer/step"](
+						result,
+						this.inputs[key]
+					);
 
-        if (result['@@transducer/reduced']) {
-          result = result['@@transducer/value'];
-          break;
-        }
-      }
-    }
+					if (result["@@transducer/reduced"]) {
+						result = result["@@transducer/value"];
+						break;
+					}
+				}
+			}
 
-    this.inputs = null;
-    return this.xf['@@transducer/result'](result);
-  };
+			this.inputs = null;
+			return this.xf["@@transducer/result"](result);
+		};
 
-  XReduceBy.prototype['@@transducer/step'] = function (result, input) {
-    var key = this.keyFn(input);
-    this.inputs[key] = this.inputs[key] || [key, this.valueAcc];
-    this.inputs[key][1] = this.valueFn(this.inputs[key][1], input);
-    return result;
-  };
+		XReduceBy.prototype["@@transducer/step"] = function(result, input) {
+			var key = this.keyFn(input);
+			this.inputs[key] = this.inputs[key] || [key, this.valueAcc];
+			this.inputs[key][1] = this.valueFn(this.inputs[key][1], input);
+			return result;
+		};
 
-  return XReduceBy;
-}();
+		return XReduceBy;
+	})();
 
 var _xreduceBy =
-/*#__PURE__*/
-_curryN(4, [], function _xreduceBy(valueFn, valueAcc, keyFn, xf) {
-  return new XReduceBy(valueFn, valueAcc, keyFn, xf);
-});
+	/*#__PURE__*/
+	_curryN(4, [], function _xreduceBy(valueFn, valueAcc, keyFn, xf) {
+		return new XReduceBy(valueFn, valueAcc, keyFn, xf);
+	});
 
 /**
  * Groups the elements of the list according to the result of calling
@@ -4015,16 +4651,31 @@ _curryN(4, [], function _xreduceBy(valueFn, valueAcc, keyFn, xf) {
  */
 
 var reduceBy =
-/*#__PURE__*/
-_curryN(4, [],
-/*#__PURE__*/
-_dispatchable([], _xreduceBy, function reduceBy(valueFn, valueAcc, keyFn, list) {
-  return _reduce(function (acc, elt) {
-    var key = keyFn(elt);
-    acc[key] = valueFn(_has(key, acc) ? acc[key] : valueAcc, elt);
-    return acc;
-  }, {}, list);
-}));
+	/*#__PURE__*/
+	_curryN(
+		4,
+		[],
+		/*#__PURE__*/
+		_dispatchable([], _xreduceBy, function reduceBy(
+			valueFn,
+			valueAcc,
+			keyFn,
+			list
+		) {
+			return _reduce(
+				function(acc, elt) {
+					var key = keyFn(elt);
+					acc[key] = valueFn(
+						_has(key, acc) ? acc[key] : valueAcc,
+						elt
+					);
+					return acc;
+				},
+				{},
+				list
+			);
+		})
+	);
 
 /**
  * Counts the elements of a list according to how many match each value of a
@@ -4052,10 +4703,10 @@ _dispatchable([], _xreduceBy, function reduceBy(valueFn, valueAcc, keyFn, list) 
  */
 
 var countBy =
-/*#__PURE__*/
-reduceBy(function (acc, elem) {
-  return acc + 1;
-}, 0);
+	/*#__PURE__*/
+	reduceBy(function(acc, elem) {
+		return acc + 1;
+	}, 0);
 
 /**
  * Decrements its argument.
@@ -4074,8 +4725,8 @@ reduceBy(function (acc, elem) {
  */
 
 var dec =
-/*#__PURE__*/
-add(-1);
+	/*#__PURE__*/
+	add(-1);
 
 /**
  * Returns the second argument if it is not `null`, `undefined` or `NaN`;
@@ -4101,10 +4752,10 @@ add(-1);
  */
 
 var defaultTo =
-/*#__PURE__*/
-_curry2(function defaultTo(d, v) {
-  return v == null || v !== v ? d : v;
-});
+	/*#__PURE__*/
+	_curry2(function defaultTo(d, v) {
+		return v == null || v !== v ? d : v;
+	});
 
 /**
  * Finds the set (i.e. no duplicates) of all elements in the first list not
@@ -4128,22 +4779,22 @@ _curry2(function defaultTo(d, v) {
  */
 
 var difference =
-/*#__PURE__*/
-_curry2(function difference(first, second) {
-  var out = [];
-  var idx = 0;
-  var firstLen = first.length;
+	/*#__PURE__*/
+	_curry2(function difference(first, second) {
+		var out = [];
+		var idx = 0;
+		var firstLen = first.length;
 
-  while (idx < firstLen) {
-    if (!_contains(first[idx], second) && !_contains(first[idx], out)) {
-      out[out.length] = first[idx];
-    }
+		while (idx < firstLen) {
+			if (!_contains(first[idx], second) && !_contains(first[idx], out)) {
+				out[out.length] = first[idx];
+			}
 
-    idx += 1;
-  }
+			idx += 1;
+		}
 
-  return out;
-});
+		return out;
+	});
 
 /**
  * Returns a new object that does not contain a `prop` property.
@@ -4163,17 +4814,17 @@ _curry2(function difference(first, second) {
  */
 
 var dissoc =
-/*#__PURE__*/
-_curry2(function dissoc(prop, obj) {
-  var result = {};
+	/*#__PURE__*/
+	_curry2(function dissoc(prop, obj) {
+		var result = {};
 
-  for (var p in obj) {
-    result[p] = obj[p];
-  }
+		for (var p in obj) {
+			result[p] = obj[p];
+		}
 
-  delete result[prop];
-  return result;
-});
+		delete result[prop];
+		return result;
+	});
 
 /**
  * Removes the sub-list of `list` starting at index `start` and containing
@@ -4196,12 +4847,12 @@ _curry2(function dissoc(prop, obj) {
  */
 
 var remove =
-/*#__PURE__*/
-_curry3(function remove(start, count, list) {
-  var result = Array.prototype.slice.call(list, 0);
-  result.splice(start, count);
-  return result;
-});
+	/*#__PURE__*/
+	_curry3(function remove(start, count, list) {
+		var result = Array.prototype.slice.call(list, 0);
+		result.splice(start, count);
+		return result;
+	});
 
 /**
  * Returns a new copy of the array with the element at the provided index
@@ -4227,10 +4878,10 @@ _curry3(function remove(start, count, list) {
  */
 
 var update =
-/*#__PURE__*/
-_curry3(function update(idx, x, list) {
-  return adjust(always(x), idx, list);
-});
+	/*#__PURE__*/
+	_curry3(function update(idx, x, list) {
+		return adjust(always(x), idx, list);
+	});
 
 /**
  * Makes a shallow clone of an object, omitting the property at the given path.
@@ -4253,58 +4904,59 @@ _curry3(function update(idx, x, list) {
  */
 
 var dissocPath =
-/*#__PURE__*/
-_curry2(function dissocPath(path, obj) {
-  switch (path.length) {
-    case 0:
-      return obj;
+	/*#__PURE__*/
+	_curry2(function dissocPath(path, obj) {
+		switch (path.length) {
+			case 0:
+				return obj;
 
-    case 1:
-      return _isInteger(path[0]) ? remove(path[0], 1, obj) : dissoc(path[0], obj);
+			case 1:
+				return _isInteger(path[0])
+					? remove(path[0], 1, obj)
+					: dissoc(path[0], obj);
 
-    default:
-      var head = path[0];
-      var tail = Array.prototype.slice.call(path, 1);
+			default:
+				var head = path[0];
+				var tail = Array.prototype.slice.call(path, 1);
 
-      if (obj[head] == null) {
-        return obj;
-      } else if (_isInteger(path[0])) {
-        return update(head, dissocPath(tail, obj[head]), obj);
-      } else {
-        return assoc(head, dissocPath(tail, obj[head]), obj);
-      }
-
-  }
-});
+				if (obj[head] == null) {
+					return obj;
+				} else if (_isInteger(path[0])) {
+					return update(head, dissocPath(tail, obj[head]), obj);
+				} else {
+					return assoc(head, dissocPath(tail, obj[head]), obj);
+				}
+		}
+	});
 
 var XDrop =
-/*#__PURE__*/
-function () {
-  function XDrop(n, xf) {
-    this.xf = xf;
-    this.n = n;
-  }
+	/*#__PURE__*/
+	(function() {
+		function XDrop(n, xf) {
+			this.xf = xf;
+			this.n = n;
+		}
 
-  XDrop.prototype['@@transducer/init'] = _xfBase.init;
-  XDrop.prototype['@@transducer/result'] = _xfBase.result;
+		XDrop.prototype["@@transducer/init"] = _xfBase.init;
+		XDrop.prototype["@@transducer/result"] = _xfBase.result;
 
-  XDrop.prototype['@@transducer/step'] = function (result, input) {
-    if (this.n > 0) {
-      this.n -= 1;
-      return result;
-    }
+		XDrop.prototype["@@transducer/step"] = function(result, input) {
+			if (this.n > 0) {
+				this.n -= 1;
+				return result;
+			}
 
-    return this.xf['@@transducer/step'](result, input);
-  };
+			return this.xf["@@transducer/step"](result, input);
+		};
 
-  return XDrop;
-}();
+		return XDrop;
+	})();
 
 var _xdrop =
-/*#__PURE__*/
-_curry2(function _xdrop(n, xf) {
-  return new XDrop(n, xf);
-});
+	/*#__PURE__*/
+	_curry2(function _xdrop(n, xf) {
+		return new XDrop(n, xf);
+	});
 
 /**
  * Returns all but the first `n` elements of the given list, string, or
@@ -4332,39 +4984,43 @@ _curry2(function _xdrop(n, xf) {
  */
 
 var drop =
-/*#__PURE__*/
-_curry2(
-/*#__PURE__*/
-_dispatchable(['drop'], _xdrop, function drop(n, xs) {
-  return slice(Math.max(0, n), Infinity, xs);
-}));
+	/*#__PURE__*/
+	_curry2(
+		/*#__PURE__*/
+		_dispatchable(["drop"], _xdrop, function drop(n, xs) {
+			return slice(Math.max(0, n), Infinity, xs);
+		})
+	);
 
 var XTake =
-/*#__PURE__*/
-function () {
-  function XTake(n, xf) {
-    this.xf = xf;
-    this.n = n;
-    this.i = 0;
-  }
+	/*#__PURE__*/
+	(function() {
+		function XTake(n, xf) {
+			this.xf = xf;
+			this.n = n;
+			this.i = 0;
+		}
 
-  XTake.prototype['@@transducer/init'] = _xfBase.init;
-  XTake.prototype['@@transducer/result'] = _xfBase.result;
+		XTake.prototype["@@transducer/init"] = _xfBase.init;
+		XTake.prototype["@@transducer/result"] = _xfBase.result;
 
-  XTake.prototype['@@transducer/step'] = function (result, input) {
-    this.i += 1;
-    var ret = this.n === 0 ? result : this.xf['@@transducer/step'](result, input);
-    return this.n >= 0 && this.i >= this.n ? _reduced(ret) : ret;
-  };
+		XTake.prototype["@@transducer/step"] = function(result, input) {
+			this.i += 1;
+			var ret =
+				this.n === 0
+					? result
+					: this.xf["@@transducer/step"](result, input);
+			return this.n >= 0 && this.i >= this.n ? _reduced(ret) : ret;
+		};
 
-  return XTake;
-}();
+		return XTake;
+	})();
 
 var _xtake =
-/*#__PURE__*/
-_curry2(function _xtake(n, xf) {
-  return new XTake(n, xf);
-});
+	/*#__PURE__*/
+	_curry2(function _xtake(n, xf) {
+		return new XTake(n, xf);
+	});
 
 /**
  * Returns the first `n` elements of the given list, string, or
@@ -4411,47 +5067,53 @@ _curry2(function _xtake(n, xf) {
  */
 
 var take =
-/*#__PURE__*/
-_curry2(
-/*#__PURE__*/
-_dispatchable(['take'], _xtake, function take(n, xs) {
-  return slice(0, n < 0 ? Infinity : n, xs);
-}));
+	/*#__PURE__*/
+	_curry2(
+		/*#__PURE__*/
+		_dispatchable(["take"], _xtake, function take(n, xs) {
+			return slice(0, n < 0 ? Infinity : n, xs);
+		})
+	);
 
 var XDropRepeatsWith =
-/*#__PURE__*/
-function () {
-  function XDropRepeatsWith(pred, xf) {
-    this.xf = xf;
-    this.pred = pred;
-    this.lastValue = undefined;
-    this.seenFirstValue = false;
-  }
+	/*#__PURE__*/
+	(function() {
+		function XDropRepeatsWith(pred, xf) {
+			this.xf = xf;
+			this.pred = pred;
+			this.lastValue = undefined;
+			this.seenFirstValue = false;
+		}
 
-  XDropRepeatsWith.prototype['@@transducer/init'] = _xfBase.init;
-  XDropRepeatsWith.prototype['@@transducer/result'] = _xfBase.result;
+		XDropRepeatsWith.prototype["@@transducer/init"] = _xfBase.init;
+		XDropRepeatsWith.prototype["@@transducer/result"] = _xfBase.result;
 
-  XDropRepeatsWith.prototype['@@transducer/step'] = function (result, input) {
-    var sameAsLast = false;
+		XDropRepeatsWith.prototype["@@transducer/step"] = function(
+			result,
+			input
+		) {
+			var sameAsLast = false;
 
-    if (!this.seenFirstValue) {
-      this.seenFirstValue = true;
-    } else if (this.pred(this.lastValue, input)) {
-      sameAsLast = true;
-    }
+			if (!this.seenFirstValue) {
+				this.seenFirstValue = true;
+			} else if (this.pred(this.lastValue, input)) {
+				sameAsLast = true;
+			}
 
-    this.lastValue = input;
-    return sameAsLast ? result : this.xf['@@transducer/step'](result, input);
-  };
+			this.lastValue = input;
+			return sameAsLast
+				? result
+				: this.xf["@@transducer/step"](result, input);
+		};
 
-  return XDropRepeatsWith;
-}();
+		return XDropRepeatsWith;
+	})();
 
 var _xdropRepeatsWith =
-/*#__PURE__*/
-_curry2(function _xdropRepeatsWith(pred, xf) {
-  return new XDropRepeatsWith(pred, xf);
-});
+	/*#__PURE__*/
+	_curry2(function _xdropRepeatsWith(pred, xf) {
+		return new XDropRepeatsWith(pred, xf);
+	});
 
 /**
  * Returns the nth element of the given list or string. If n is negative the
@@ -4481,11 +5143,11 @@ _curry2(function _xdropRepeatsWith(pred, xf) {
  */
 
 var nth =
-/*#__PURE__*/
-_curry2(function nth(offset, list) {
-  var idx = offset < 0 ? list.length + offset : offset;
-  return _isString(list) ? list.charAt(idx) : list[idx];
-});
+	/*#__PURE__*/
+	_curry2(function nth(offset, list) {
+		var idx = offset < 0 ? list.length + offset : offset;
+		return _isString(list) ? list.charAt(idx) : list[idx];
+	});
 
 /**
  * Returns the last element of the given list or string.
@@ -4509,8 +5171,8 @@ _curry2(function nth(offset, list) {
  */
 
 var last =
-/*#__PURE__*/
-nth(-1);
+	/*#__PURE__*/
+	nth(-1);
 
 /**
  * Returns a new list without any consecutively repeating elements. Equality is
@@ -4535,28 +5197,32 @@ nth(-1);
  */
 
 var dropRepeatsWith =
-/*#__PURE__*/
-_curry2(
-/*#__PURE__*/
-_dispatchable([], _xdropRepeatsWith, function dropRepeatsWith(pred, list) {
-  var result = [];
-  var idx = 1;
-  var len = list.length;
+	/*#__PURE__*/
+	_curry2(
+		/*#__PURE__*/
+		_dispatchable([], _xdropRepeatsWith, function dropRepeatsWith(
+			pred,
+			list
+		) {
+			var result = [];
+			var idx = 1;
+			var len = list.length;
 
-  if (len !== 0) {
-    result[0] = list[0];
+			if (len !== 0) {
+				result[0] = list[0];
 
-    while (idx < len) {
-      if (!pred(last(result), list[idx])) {
-        result[result.length] = list[idx];
-      }
+				while (idx < len) {
+					if (!pred(last(result), list[idx])) {
+						result[result.length] = list[idx];
+					}
 
-      idx += 1;
-    }
-  }
+					idx += 1;
+				}
+			}
 
-  return result;
-}));
+			return result;
+		})
+	);
 
 /**
  * Returns a new list without any consecutively repeating elements.
@@ -4578,14 +5244,17 @@ _dispatchable([], _xdropRepeatsWith, function dropRepeatsWith(pred, list) {
  */
 
 var dropRepeats =
-/*#__PURE__*/
-_curry1(
-/*#__PURE__*/
-_dispatchable([],
-/*#__PURE__*/
-_xdropRepeatsWith(equals),
-/*#__PURE__*/
-dropRepeatsWith(equals)));
+	/*#__PURE__*/
+	_curry1(
+		/*#__PURE__*/
+		_dispatchable(
+			[],
+			/*#__PURE__*/
+			_xdropRepeatsWith(equals),
+			/*#__PURE__*/
+			dropRepeatsWith(equals)
+		)
+	);
 
 /**
  * Returns `true` if one or both of its arguments are `true`. Returns `false`
@@ -4609,10 +5278,10 @@ dropRepeatsWith(equals)));
  */
 
 var or =
-/*#__PURE__*/
-_curry2(function or(a, b) {
-  return a || b;
-});
+	/*#__PURE__*/
+	_curry2(function or(a, b) {
+		return a || b;
+	});
 
 /**
  * A function wrapping calls to the two functions in an `||` operation,
@@ -4643,12 +5312,14 @@ _curry2(function or(a, b) {
  */
 
 var either =
-/*#__PURE__*/
-_curry2(function either(f, g) {
-  return _isFunction(f) ? function _either() {
-    return f.apply(this, arguments) || g.apply(this, arguments);
-  } : lift(or)(f, g);
-});
+	/*#__PURE__*/
+	_curry2(function either(f, g) {
+		return _isFunction(f)
+			? function _either() {
+					return f.apply(this, arguments) || g.apply(this, arguments);
+			  }
+			: lift(or)(f, g);
+	});
 
 /**
  * Returns the empty value of its argument's type. Ramda defines the empty
@@ -4675,13 +5346,32 @@ _curry2(function either(f, g) {
  */
 
 var empty =
-/*#__PURE__*/
-_curry1(function empty(x) {
-  return x != null && typeof x['fantasy-land/empty'] === 'function' ? x['fantasy-land/empty']() : x != null && x.constructor != null && typeof x.constructor['fantasy-land/empty'] === 'function' ? x.constructor['fantasy-land/empty']() : x != null && typeof x.empty === 'function' ? x.empty() : x != null && x.constructor != null && typeof x.constructor.empty === 'function' ? x.constructor.empty() : _isArray(x) ? [] : _isString(x) ? '' : _isObject(x) ? {} : _isArguments(x) ? function () {
-    return arguments;
-  }() : // else
-  void 0;
-});
+	/*#__PURE__*/
+	_curry1(function empty(x) {
+		return x != null && typeof x["fantasy-land/empty"] === "function"
+			? x["fantasy-land/empty"]()
+			: x != null &&
+			  x.constructor != null &&
+			  typeof x.constructor["fantasy-land/empty"] === "function"
+				? x.constructor["fantasy-land/empty"]()
+				: x != null && typeof x.empty === "function"
+					? x.empty()
+					: x != null &&
+					  x.constructor != null &&
+					  typeof x.constructor.empty === "function"
+						? x.constructor.empty()
+						: _isArray(x)
+							? []
+							: _isString(x)
+								? ""
+								: _isObject(x)
+									? {}
+									: _isArguments(x)
+										? (function() {
+												return arguments;
+										  })() // else
+										: void 0;
+	});
 
 /**
  * Returns a new list containing the last `n` elements of the given list.
@@ -4707,10 +5397,10 @@ _curry1(function empty(x) {
  */
 
 var takeLast =
-/*#__PURE__*/
-_curry2(function takeLast(n, xs) {
-  return drop(n >= 0 ? xs.length - n : 0, xs);
-});
+	/*#__PURE__*/
+	_curry2(function takeLast(n, xs) {
+		return drop(n >= 0 ? xs.length - n : 0, xs);
+	});
 
 /**
  * Checks if a list ends with the provided values
@@ -4733,47 +5423,47 @@ _curry2(function takeLast(n, xs) {
  */
 
 var endsWith =
-/*#__PURE__*/
-_curry2(function (suffix, list) {
-  return equals(takeLast(suffix.length, list), suffix);
-});
+	/*#__PURE__*/
+	_curry2(function(suffix, list) {
+		return equals(takeLast(suffix.length, list), suffix);
+	});
 
 var XFind =
-/*#__PURE__*/
-function () {
-  function XFind(f, xf) {
-    this.xf = xf;
-    this.f = f;
-    this.found = false;
-  }
+	/*#__PURE__*/
+	(function() {
+		function XFind(f, xf) {
+			this.xf = xf;
+			this.f = f;
+			this.found = false;
+		}
 
-  XFind.prototype['@@transducer/init'] = _xfBase.init;
+		XFind.prototype["@@transducer/init"] = _xfBase.init;
 
-  XFind.prototype['@@transducer/result'] = function (result) {
-    if (!this.found) {
-      result = this.xf['@@transducer/step'](result, void 0);
-    }
+		XFind.prototype["@@transducer/result"] = function(result) {
+			if (!this.found) {
+				result = this.xf["@@transducer/step"](result, void 0);
+			}
 
-    return this.xf['@@transducer/result'](result);
-  };
+			return this.xf["@@transducer/result"](result);
+		};
 
-  XFind.prototype['@@transducer/step'] = function (result, input) {
-    if (this.f(input)) {
-      this.found = true;
-      result = _reduced(this.xf['@@transducer/step'](result, input));
-    }
+		XFind.prototype["@@transducer/step"] = function(result, input) {
+			if (this.f(input)) {
+				this.found = true;
+				result = _reduced(this.xf["@@transducer/step"](result, input));
+			}
 
-    return result;
-  };
+			return result;
+		};
 
-  return XFind;
-}();
+		return XFind;
+	})();
 
 var _xfind =
-/*#__PURE__*/
-_curry2(function _xfind(f, xf) {
-  return new XFind(f, xf);
-});
+	/*#__PURE__*/
+	_curry2(function _xfind(f, xf) {
+		return new XFind(f, xf);
+	});
 
 /**
  * Returns the first element of the list which matches the predicate, or
@@ -4801,21 +5491,22 @@ _curry2(function _xfind(f, xf) {
  */
 
 var find =
-/*#__PURE__*/
-_curry2(
-/*#__PURE__*/
-_dispatchable(['find'], _xfind, function find(fn, list) {
-  var idx = 0;
-  var len = list.length;
+	/*#__PURE__*/
+	_curry2(
+		/*#__PURE__*/
+		_dispatchable(["find"], _xfind, function find(fn, list) {
+			var idx = 0;
+			var len = list.length;
 
-  while (idx < len) {
-    if (fn(list[idx])) {
-      return list[idx];
-    }
+			while (idx < len) {
+				if (fn(list[idx])) {
+					return list[idx];
+				}
 
-    idx += 1;
-  }
-}));
+				idx += 1;
+			}
+		})
+	);
 
 /**
  * Returns a new list by pulling every item out of it (and all its sub-arrays)
@@ -4836,10 +5527,11 @@ _dispatchable(['find'], _xfind, function find(fn, list) {
  */
 
 var flatten =
-/*#__PURE__*/
-_curry1(
-/*#__PURE__*/
-_makeFlat(true));
+	/*#__PURE__*/
+	_curry1(
+		/*#__PURE__*/
+		_makeFlat(true)
+	);
 
 /**
  * Returns a new function much like the supplied one, except that the first two
@@ -4863,15 +5555,15 @@ _makeFlat(true));
  */
 
 var flip =
-/*#__PURE__*/
-_curry1(function flip(fn) {
-  return curryN(fn.length, function (a, b) {
-    var args = Array.prototype.slice.call(arguments, 0);
-    args[0] = b;
-    args[1] = a;
-    return fn.apply(this, args);
-  });
-});
+	/*#__PURE__*/
+	_curry1(function flip(fn) {
+		return curryN(fn.length, function(a, b) {
+			var args = Array.prototype.slice.call(arguments, 0);
+			args[0] = b;
+			args[1] = a;
+			return fn.apply(this, args);
+		});
+	});
 
 /**
  * Creates a new object from a list key-value pairs. If a key appears in
@@ -4891,18 +5583,18 @@ _curry1(function flip(fn) {
  */
 
 var fromPairs =
-/*#__PURE__*/
-_curry1(function fromPairs(pairs) {
-  var result = {};
-  var idx = 0;
+	/*#__PURE__*/
+	_curry1(function fromPairs(pairs) {
+		var result = {};
+		var idx = 0;
 
-  while (idx < pairs.length) {
-    result[pairs[idx][0]] = pairs[idx][1];
-    idx += 1;
-  }
+		while (idx < pairs.length) {
+			result[pairs[idx][0]] = pairs[idx][1];
+			idx += 1;
+		}
 
-  return result;
-});
+		return result;
+	});
 
 /**
  * Splits a list into sub-lists stored in an object, based on the result of
@@ -4946,19 +5638,22 @@ _curry1(function fromPairs(pairs) {
  */
 
 var groupBy =
-/*#__PURE__*/
-_curry2(
-/*#__PURE__*/
-_checkForMethod('groupBy',
-/*#__PURE__*/
-reduceBy(function (acc, item) {
-  if (acc == null) {
-    acc = [];
-  }
+	/*#__PURE__*/
+	_curry2(
+		/*#__PURE__*/
+		_checkForMethod(
+			"groupBy",
+			/*#__PURE__*/
+			reduceBy(function(acc, item) {
+				if (acc == null) {
+					acc = [];
+				}
 
-  acc.push(item);
-  return acc;
-}, null)));
+				acc.push(item);
+				return acc;
+			}, null)
+		)
+	);
 
 /**
  * Returns `true` if the first argument is greater than the second; `false`
@@ -4983,10 +5678,10 @@ reduceBy(function (acc, item) {
  */
 
 var gt =
-/*#__PURE__*/
-_curry2(function gt(a, b) {
-  return a > b;
-});
+	/*#__PURE__*/
+	_curry2(function gt(a, b) {
+		return a > b;
+	});
 
 /**
  * Returns `true` if the first argument is greater than or equal to the second;
@@ -5011,10 +5706,10 @@ _curry2(function gt(a, b) {
  */
 
 var gte =
-/*#__PURE__*/
-_curry2(function gte(a, b) {
-  return a >= b;
-});
+	/*#__PURE__*/
+	_curry2(function gte(a, b) {
+		return a >= b;
+	});
 
 /**
  * Returns the first element of the given list or string. In some libraries
@@ -5039,11 +5734,11 @@ _curry2(function gte(a, b) {
  */
 
 var head =
-/*#__PURE__*/
-nth(0);
+	/*#__PURE__*/
+	nth(0);
 
 function _identity(x) {
-  return x;
+	return x;
 }
 
 /**
@@ -5067,8 +5762,8 @@ function _identity(x) {
  */
 
 var identity =
-/*#__PURE__*/
-_curry1(_identity);
+	/*#__PURE__*/
+	_curry1(_identity);
 
 /**
  * Creates a function that will process either the `onTrue` or the `onFalse`
@@ -5097,12 +5792,17 @@ _curry1(_identity);
  */
 
 var ifElse =
-/*#__PURE__*/
-_curry3(function ifElse(condition, onTrue, onFalse) {
-  return curryN(Math.max(condition.length, onTrue.length, onFalse.length), function _ifElse() {
-    return condition.apply(this, arguments) ? onTrue.apply(this, arguments) : onFalse.apply(this, arguments);
-  });
-});
+	/*#__PURE__*/
+	_curry3(function ifElse(condition, onTrue, onFalse) {
+		return curryN(
+			Math.max(condition.length, onTrue.length, onFalse.length),
+			function _ifElse() {
+				return condition.apply(this, arguments)
+					? onTrue.apply(this, arguments)
+					: onFalse.apply(this, arguments);
+			}
+		);
+	});
 
 /**
  * Increments its argument.
@@ -5121,8 +5821,8 @@ _curry3(function ifElse(condition, onTrue, onFalse) {
  */
 
 var inc =
-/*#__PURE__*/
-add(1);
+	/*#__PURE__*/
+	add(1);
 
 /**
  * Given a function that generates a key, turns a list of objects into an
@@ -5148,10 +5848,10 @@ add(1);
  */
 
 var indexBy =
-/*#__PURE__*/
-reduceBy(function (acc, elem) {
-  return elem;
-}, null);
+	/*#__PURE__*/
+	reduceBy(function(acc, elem) {
+		return elem;
+	}, null);
 
 /**
  * Returns all but the last element of the given list or string.
@@ -5179,204 +5879,199 @@ reduceBy(function (acc, elem) {
  */
 
 var init =
-/*#__PURE__*/
-slice(0, -1);
+	/*#__PURE__*/
+	slice(0, -1);
 
 var _Set =
-/*#__PURE__*/
-function () {
-  function _Set() {
-    /* globals Set */
-    this._nativeSet = typeof Set === 'function' ? new Set() : null;
-    this._items = {};
-  } // until we figure out why jsdoc chokes on this
-  // @param item The item to add to the Set
-  // @returns {boolean} true if the item did not exist prior, otherwise false
-  //
+	/*#__PURE__*/
+	(function() {
+		function _Set() {
+			/* globals Set */
+			this._nativeSet = typeof Set === "function" ? new Set() : null;
+			this._items = {};
+		} // until we figure out why jsdoc chokes on this
+		// @param item The item to add to the Set
+		// @returns {boolean} true if the item did not exist prior, otherwise false
+		//
 
+		_Set.prototype.add = function(item) {
+			return !hasOrAdd(item, true, this);
+		}; //
+		// @param item The item to check for existence in the Set
+		// @returns {boolean} true if the item exists in the Set, otherwise false
+		//
 
-  _Set.prototype.add = function (item) {
-    return !hasOrAdd(item, true, this);
-  }; //
-  // @param item The item to check for existence in the Set
-  // @returns {boolean} true if the item exists in the Set, otherwise false
-  //
+		_Set.prototype.has = function(item) {
+			return hasOrAdd(item, false, this);
+		}; //
+		// Combines the logic for checking whether an item is a member of the set and
+		// for adding a new item to the set.
+		//
+		// @param item       The item to check or add to the Set instance.
+		// @param shouldAdd  If true, the item will be added to the set if it doesn't
+		//                   already exist.
+		// @param set        The set instance to check or add to.
+		// @return {boolean} true if the item already existed, otherwise false.
+		//
 
-
-  _Set.prototype.has = function (item) {
-    return hasOrAdd(item, false, this);
-  }; //
-  // Combines the logic for checking whether an item is a member of the set and
-  // for adding a new item to the set.
-  //
-  // @param item       The item to check or add to the Set instance.
-  // @param shouldAdd  If true, the item will be added to the set if it doesn't
-  //                   already exist.
-  // @param set        The set instance to check or add to.
-  // @return {boolean} true if the item already existed, otherwise false.
-  //
-
-
-  return _Set;
-}();
+		return _Set;
+	})();
 
 function hasOrAdd(item, shouldAdd, set) {
-  var type = typeof item;
-  var prevSize, newSize;
+	var type = typeof item;
+	var prevSize, newSize;
 
-  switch (type) {
-    case 'string':
-    case 'number':
-      // distinguish between +0 and -0
-      if (item === 0 && 1 / item === -Infinity) {
-        if (set._items['-0']) {
-          return true;
-        } else {
-          if (shouldAdd) {
-            set._items['-0'] = true;
-          }
+	switch (type) {
+		case "string":
+		case "number":
+			// distinguish between +0 and -0
+			if (item === 0 && 1 / item === -Infinity) {
+				if (set._items["-0"]) {
+					return true;
+				} else {
+					if (shouldAdd) {
+						set._items["-0"] = true;
+					}
 
-          return false;
-        }
-      } // these types can all utilise the native Set
+					return false;
+				}
+			} // these types can all utilise the native Set
 
+			if (set._nativeSet !== null) {
+				if (shouldAdd) {
+					prevSize = set._nativeSet.size;
 
-      if (set._nativeSet !== null) {
-        if (shouldAdd) {
-          prevSize = set._nativeSet.size;
+					set._nativeSet.add(item);
 
-          set._nativeSet.add(item);
+					newSize = set._nativeSet.size;
+					return newSize === prevSize;
+				} else {
+					return set._nativeSet.has(item);
+				}
+			} else {
+				if (!(type in set._items)) {
+					if (shouldAdd) {
+						set._items[type] = {};
+						set._items[type][item] = true;
+					}
 
-          newSize = set._nativeSet.size;
-          return newSize === prevSize;
-        } else {
-          return set._nativeSet.has(item);
-        }
-      } else {
-        if (!(type in set._items)) {
-          if (shouldAdd) {
-            set._items[type] = {};
-            set._items[type][item] = true;
-          }
+					return false;
+				} else if (item in set._items[type]) {
+					return true;
+				} else {
+					if (shouldAdd) {
+						set._items[type][item] = true;
+					}
 
-          return false;
-        } else if (item in set._items[type]) {
-          return true;
-        } else {
-          if (shouldAdd) {
-            set._items[type][item] = true;
-          }
+					return false;
+				}
+			}
 
-          return false;
-        }
-      }
+		case "boolean":
+			// set._items['boolean'] holds a two element array
+			// representing [ falseExists, trueExists ]
+			if (type in set._items) {
+				var bIdx = item ? 1 : 0;
 
-    case 'boolean':
-      // set._items['boolean'] holds a two element array
-      // representing [ falseExists, trueExists ]
-      if (type in set._items) {
-        var bIdx = item ? 1 : 0;
+				if (set._items[type][bIdx]) {
+					return true;
+				} else {
+					if (shouldAdd) {
+						set._items[type][bIdx] = true;
+					}
 
-        if (set._items[type][bIdx]) {
-          return true;
-        } else {
-          if (shouldAdd) {
-            set._items[type][bIdx] = true;
-          }
+					return false;
+				}
+			} else {
+				if (shouldAdd) {
+					set._items[type] = item ? [false, true] : [true, false];
+				}
 
-          return false;
-        }
-      } else {
-        if (shouldAdd) {
-          set._items[type] = item ? [false, true] : [true, false];
-        }
+				return false;
+			}
 
-        return false;
-      }
+		case "function":
+			// compare functions for reference equality
+			if (set._nativeSet !== null) {
+				if (shouldAdd) {
+					prevSize = set._nativeSet.size;
 
-    case 'function':
-      // compare functions for reference equality
-      if (set._nativeSet !== null) {
-        if (shouldAdd) {
-          prevSize = set._nativeSet.size;
+					set._nativeSet.add(item);
 
-          set._nativeSet.add(item);
+					newSize = set._nativeSet.size;
+					return newSize === prevSize;
+				} else {
+					return set._nativeSet.has(item);
+				}
+			} else {
+				if (!(type in set._items)) {
+					if (shouldAdd) {
+						set._items[type] = [item];
+					}
 
-          newSize = set._nativeSet.size;
-          return newSize === prevSize;
-        } else {
-          return set._nativeSet.has(item);
-        }
-      } else {
-        if (!(type in set._items)) {
-          if (shouldAdd) {
-            set._items[type] = [item];
-          }
+					return false;
+				}
 
-          return false;
-        }
+				if (!_contains(item, set._items[type])) {
+					if (shouldAdd) {
+						set._items[type].push(item);
+					}
 
-        if (!_contains(item, set._items[type])) {
-          if (shouldAdd) {
-            set._items[type].push(item);
-          }
+					return false;
+				}
 
-          return false;
-        }
+				return true;
+			}
 
-        return true;
-      }
+		case "undefined":
+			if (set._items[type]) {
+				return true;
+			} else {
+				if (shouldAdd) {
+					set._items[type] = true;
+				}
 
-    case 'undefined':
-      if (set._items[type]) {
-        return true;
-      } else {
-        if (shouldAdd) {
-          set._items[type] = true;
-        }
+				return false;
+			}
 
-        return false;
-      }
+		case "object":
+			if (item === null) {
+				if (!set._items["null"]) {
+					if (shouldAdd) {
+						set._items["null"] = true;
+					}
 
-    case 'object':
-      if (item === null) {
-        if (!set._items['null']) {
-          if (shouldAdd) {
-            set._items['null'] = true;
-          }
+					return false;
+				}
 
-          return false;
-        }
+				return true;
+			}
 
-        return true;
-      }
+		/* falls through */
 
-    /* falls through */
+		default:
+			// reduce the search size of heterogeneous sets by creating buckets
+			// for each type.
+			type = Object.prototype.toString.call(item);
 
-    default:
-      // reduce the search size of heterogeneous sets by creating buckets
-      // for each type.
-      type = Object.prototype.toString.call(item);
+			if (!(type in set._items)) {
+				if (shouldAdd) {
+					set._items[type] = [item];
+				}
 
-      if (!(type in set._items)) {
-        if (shouldAdd) {
-          set._items[type] = [item];
-        }
+				return false;
+			} // scan through all previously applied items
 
-        return false;
-      } // scan through all previously applied items
+			if (!_contains(item, set._items[type])) {
+				if (shouldAdd) {
+					set._items[type].push(item);
+				}
 
+				return false;
+			}
 
-      if (!_contains(item, set._items[type])) {
-        if (shouldAdd) {
-          set._items[type].push(item);
-        }
-
-        return false;
-      }
-
-      return true;
-  }
+			return true;
+	}
 } // A simple Set type that honours R.equals semantics
 
 /**
@@ -5399,26 +6094,26 @@ function hasOrAdd(item, shouldAdd, set) {
  */
 
 var uniqBy =
-/*#__PURE__*/
-_curry2(function uniqBy(fn, list) {
-  var set = new _Set();
-  var result = [];
-  var idx = 0;
-  var appliedItem, item;
+	/*#__PURE__*/
+	_curry2(function uniqBy(fn, list) {
+		var set = new _Set();
+		var result = [];
+		var idx = 0;
+		var appliedItem, item;
 
-  while (idx < list.length) {
-    item = list[idx];
-    appliedItem = fn(item);
+		while (idx < list.length) {
+			item = list[idx];
+			appliedItem = fn(item);
 
-    if (set.add(appliedItem)) {
-      result.push(item);
-    }
+			if (set.add(appliedItem)) {
+				result.push(item);
+			}
 
-    idx += 1;
-  }
+			idx += 1;
+		}
 
-  return result;
-});
+		return result;
+	});
 
 /**
  * Returns a new list containing only one copy of each element in the original
@@ -5439,8 +6134,8 @@ _curry2(function uniqBy(fn, list) {
  */
 
 var uniq =
-/*#__PURE__*/
-uniqBy(identity);
+	/*#__PURE__*/
+	uniqBy(identity);
 
 /**
  * Combines two lists into a set (i.e. no duplicates) composed of those
@@ -5461,48 +6156,49 @@ uniqBy(identity);
  */
 
 var intersection =
-/*#__PURE__*/
-_curry2(function intersection(list1, list2) {
-  var lookupList, filteredList;
+	/*#__PURE__*/
+	_curry2(function intersection(list1, list2) {
+		var lookupList, filteredList;
 
-  if (list1.length > list2.length) {
-    lookupList = list1;
-    filteredList = list2;
-  } else {
-    lookupList = list2;
-    filteredList = list1;
-  }
+		if (list1.length > list2.length) {
+			lookupList = list1;
+			filteredList = list2;
+		} else {
+			lookupList = list2;
+			filteredList = list1;
+		}
 
-  return uniq(_filter(flip(_contains)(lookupList), filteredList));
-});
+		return uniq(_filter(flip(_contains)(lookupList), filteredList));
+	});
 
 function _objectAssign(target) {
-  if (target == null) {
-    throw new TypeError('Cannot convert undefined or null to object');
-  }
+	if (target == null) {
+		throw new TypeError("Cannot convert undefined or null to object");
+	}
 
-  var output = Object(target);
-  var idx = 1;
-  var length = arguments.length;
+	var output = Object(target);
+	var idx = 1;
+	var length = arguments.length;
 
-  while (idx < length) {
-    var source = arguments[idx];
+	while (idx < length) {
+		var source = arguments[idx];
 
-    if (source != null) {
-      for (var nextKey in source) {
-        if (_has(nextKey, source)) {
-          output[nextKey] = source[nextKey];
-        }
-      }
-    }
+		if (source != null) {
+			for (var nextKey in source) {
+				if (_has(nextKey, source)) {
+					output[nextKey] = source[nextKey];
+				}
+			}
+		}
 
-    idx += 1;
-  }
+		idx += 1;
+	}
 
-  return output;
+	return output;
 }
 
-var _assign = typeof Object.assign === 'function' ? Object.assign : _objectAssign;
+var _assign =
+	typeof Object.assign === "function" ? Object.assign : _objectAssign;
 
 /**
  * Creates an object containing a single key:value pair.
@@ -5526,53 +6222,56 @@ var _assign = typeof Object.assign === 'function' ? Object.assign : _objectAssig
  */
 
 var objOf =
-/*#__PURE__*/
-_curry2(function objOf(key, val) {
-  var obj = {};
-  obj[key] = val;
-  return obj;
-});
+	/*#__PURE__*/
+	_curry2(function objOf(key, val) {
+		var obj = {};
+		obj[key] = val;
+		return obj;
+	});
 
 var _stepCatArray = {
-  '@@transducer/init': Array,
-  '@@transducer/step': function transducerStep(xs, x) {
-    xs.push(x);
-    return xs;
-  },
-  '@@transducer/result': _identity
+	"@@transducer/init": Array,
+	"@@transducer/step": function transducerStep(xs, x) {
+		xs.push(x);
+		return xs;
+	},
+	"@@transducer/result": _identity
 };
 var _stepCatString = {
-  '@@transducer/init': String,
-  '@@transducer/step': function transducerStep(a, b) {
-    return a + b;
-  },
-  '@@transducer/result': _identity
+	"@@transducer/init": String,
+	"@@transducer/step": function transducerStep(a, b) {
+		return a + b;
+	},
+	"@@transducer/result": _identity
 };
 var _stepCatObject = {
-  '@@transducer/init': Object,
-  '@@transducer/step': function transducerStep(result, input) {
-    return _assign(result, _isArrayLike(input) ? objOf(input[0], input[1]) : input);
-  },
-  '@@transducer/result': _identity
+	"@@transducer/init": Object,
+	"@@transducer/step": function transducerStep(result, input) {
+		return _assign(
+			result,
+			_isArrayLike(input) ? objOf(input[0], input[1]) : input
+		);
+	},
+	"@@transducer/result": _identity
 };
 function _stepCat(obj) {
-  if (_isTransformer(obj)) {
-    return obj;
-  }
+	if (_isTransformer(obj)) {
+		return obj;
+	}
 
-  if (_isArrayLike(obj)) {
-    return _stepCatArray;
-  }
+	if (_isArrayLike(obj)) {
+		return _stepCatArray;
+	}
 
-  if (typeof obj === 'string') {
-    return _stepCatString;
-  }
+	if (typeof obj === "string") {
+		return _stepCatString;
+	}
 
-  if (typeof obj === 'object') {
-    return _stepCatObject;
-  }
+	if (typeof obj === "object") {
+		return _stepCatObject;
+	}
 
-  throw new Error('Cannot create transformer for ' + obj);
+	throw new Error("Cannot create transformer for " + obj);
 }
 
 /**
@@ -5615,10 +6314,12 @@ function _stepCat(obj) {
  */
 
 var into =
-/*#__PURE__*/
-_curry3(function into(acc, xf, list) {
-  return _isTransformer(acc) ? _reduce(xf(acc), acc['@@transducer/init'](), list) : _reduce(xf(_stepCat(acc)), _clone(acc, [], [], false), list);
-});
+	/*#__PURE__*/
+	_curry3(function into(acc, xf, list) {
+		return _isTransformer(acc)
+			? _reduce(xf(acc), acc["@@transducer/init"](), list)
+			: _reduce(xf(_stepCat(acc)), _clone(acc, [], [], false), list);
+	});
 
 /**
  * Turns a named method with a specified arity into a function that can be
@@ -5649,18 +6350,26 @@ _curry3(function into(acc, xf, list) {
  */
 
 var invoker =
-/*#__PURE__*/
-_curry2(function invoker(arity, method) {
-  return curryN(arity + 1, function () {
-    var target = arguments[arity];
+	/*#__PURE__*/
+	_curry2(function invoker(arity, method) {
+		return curryN(arity + 1, function() {
+			var target = arguments[arity];
 
-    if (target != null && _isFunction(target[method])) {
-      return target[method].apply(target, Array.prototype.slice.call(arguments, 0, arity));
-    }
+			if (target != null && _isFunction(target[method])) {
+				return target[method].apply(
+					target,
+					Array.prototype.slice.call(arguments, 0, arity)
+				);
+			}
 
-    throw new TypeError(toString$1(target) + ' does not have a method named "' + method + '"');
-  });
-});
+			throw new TypeError(
+				toString$1(target) +
+					' does not have a method named "' +
+					method +
+					'"'
+			);
+		});
+	});
 
 /**
  * See if an object (`val`) is an instance of the supplied constructor. This
@@ -5687,10 +6396,10 @@ _curry2(function invoker(arity, method) {
  */
 
 var is =
-/*#__PURE__*/
-_curry2(function is(Ctor, val) {
-  return val != null && val.constructor === Ctor || val instanceof Ctor;
-});
+	/*#__PURE__*/
+	_curry2(function is(Ctor, val) {
+		return (val != null && val.constructor === Ctor) || val instanceof Ctor;
+	});
 
 /**
  * Returns `true` if the given value is its type's empty value; `false`
@@ -5715,10 +6424,10 @@ _curry2(function is(Ctor, val) {
  */
 
 var isEmpty =
-/*#__PURE__*/
-_curry1(function isEmpty(x) {
-  return x != null && equals(x, empty(x));
-});
+	/*#__PURE__*/
+	_curry1(function isEmpty(x) {
+		return x != null && equals(x, empty(x));
+	});
 
 /**
  * Returns a string made by inserting the `separator` between each element and
@@ -5741,8 +6450,8 @@ _curry1(function isEmpty(x) {
  */
 
 var join =
-/*#__PURE__*/
-invoker(1, 'join');
+	/*#__PURE__*/
+	invoker(1, "join");
 
 /**
  * juxt applies a list of functions to a list of values.
@@ -5763,15 +6472,15 @@ invoker(1, 'join');
  */
 
 var juxt =
-/*#__PURE__*/
-_curry1(function juxt(fns) {
-  return converge(function () {
-    return Array.prototype.slice.call(arguments, 0);
-  }, fns);
-});
+	/*#__PURE__*/
+	_curry1(function juxt(fns) {
+		return converge(function() {
+			return Array.prototype.slice.call(arguments, 0);
+		}, fns);
+	});
 
 function _isNumber(x) {
-  return Object.prototype.toString.call(x) === '[object Number]';
+	return Object.prototype.toString.call(x) === "[object Number]";
 }
 
 /**
@@ -5791,10 +6500,10 @@ function _isNumber(x) {
  */
 
 var length =
-/*#__PURE__*/
-_curry1(function length(list) {
-  return list != null && _isNumber(list.length) ? list.length : NaN;
-});
+	/*#__PURE__*/
+	_curry1(function length(list) {
+		return list != null && _isNumber(list.length) ? list.length : NaN;
+	});
 
 /**
  * Returns a lens for the given getter and setter functions. The getter "gets"
@@ -5821,16 +6530,16 @@ _curry1(function length(list) {
  */
 
 var lens =
-/*#__PURE__*/
-_curry2(function lens(getter, setter) {
-  return function (toFunctorFn) {
-    return function (target) {
-      return map(function (focus) {
-        return setter(focus, target);
-      }, toFunctorFn(getter(target)));
-    };
-  };
-});
+	/*#__PURE__*/
+	_curry2(function lens(getter, setter) {
+		return function(toFunctorFn) {
+			return function(target) {
+				return map(function(focus) {
+					return setter(focus, target);
+				}, toFunctorFn(getter(target)));
+			};
+		};
+	});
 
 /**
  * Returns a lens whose focus is the specified index.
@@ -5854,10 +6563,10 @@ _curry2(function lens(getter, setter) {
  */
 
 var lensIndex =
-/*#__PURE__*/
-_curry1(function lensIndex(n) {
-  return lens(nth(n), update(n));
-});
+	/*#__PURE__*/
+	_curry1(function lensIndex(n) {
+		return lens(nth(n), update(n));
+	});
 
 /**
  * Returns `true` if the first argument is less than the second; `false`
@@ -5882,10 +6591,10 @@ _curry1(function lensIndex(n) {
  */
 
 var lt =
-/*#__PURE__*/
-_curry2(function lt(a, b) {
-  return a < b;
-});
+	/*#__PURE__*/
+	_curry2(function lt(a, b) {
+		return a < b;
+	});
 
 /**
  * Returns `true` if the first argument is less than or equal to the second;
@@ -5910,10 +6619,10 @@ _curry2(function lt(a, b) {
  */
 
 var lte =
-/*#__PURE__*/
-_curry2(function lte(a, b) {
-  return a <= b;
-});
+	/*#__PURE__*/
+	_curry2(function lte(a, b) {
+		return a <= b;
+	});
 
 /**
  * An Object-specific version of [`map`](#map). The function is applied to three
@@ -5938,13 +6647,17 @@ _curry2(function lte(a, b) {
  */
 
 var mapObjIndexed =
-/*#__PURE__*/
-_curry2(function mapObjIndexed(fn, obj) {
-  return _reduce(function (acc, key) {
-    acc[key] = fn(obj[key], key, obj);
-    return acc;
-  }, {}, keys(obj));
-});
+	/*#__PURE__*/
+	_curry2(function mapObjIndexed(fn, obj) {
+		return _reduce(
+			function(acc, key) {
+				acc[key] = fn(obj[key], key, obj);
+				return acc;
+			},
+			{},
+			keys(obj)
+		);
+	});
 
 /**
  * Adds together all the elements of a list.
@@ -5963,8 +6676,8 @@ _curry2(function mapObjIndexed(fn, obj) {
  */
 
 var sum =
-/*#__PURE__*/
-reduce(add, 0);
+	/*#__PURE__*/
+	reduce(add, 0);
 
 /**
  * A customisable version of [`R.memoize`](#memoize). `memoizeWith` takes an
@@ -5997,19 +6710,19 @@ reduce(add, 0);
  */
 
 var memoizeWith =
-/*#__PURE__*/
-_curry2(function memoizeWith(mFn, fn) {
-  var cache = {};
-  return _arity(fn.length, function () {
-    var key = mFn.apply(this, arguments);
+	/*#__PURE__*/
+	_curry2(function memoizeWith(mFn, fn) {
+		var cache = {};
+		return _arity(fn.length, function() {
+			var key = mFn.apply(this, arguments);
 
-    if (!_has(key, cache)) {
-      cache[key] = fn.apply(this, arguments);
-    }
+			if (!_has(key, cache)) {
+				cache[key] = fn.apply(this, arguments);
+			}
 
-    return cache[key];
-  });
-});
+			return cache[key];
+		});
+	});
 
 /**
  * Creates a new function that, when invoked, caches the result of calling `fn`
@@ -6041,10 +6754,10 @@ _curry2(function memoizeWith(mFn, fn) {
  */
 
 var memoize =
-/*#__PURE__*/
-memoizeWith(function () {
-  return toString$1(arguments);
-});
+	/*#__PURE__*/
+	memoizeWith(function() {
+		return toString$1(arguments);
+	});
 
 /**
  * Merges a list of objects together into one object.
@@ -6065,10 +6778,10 @@ memoizeWith(function () {
  */
 
 var mergeAll =
-/*#__PURE__*/
-_curry1(function mergeAll(list) {
-  return _assign.apply(null, [{}].concat(list));
-});
+	/*#__PURE__*/
+	_curry1(function mergeAll(list) {
+		return _assign.apply(null, [{}].concat(list));
+	});
 
 /**
  * Creates a new object with the own properties of the two provided objects. If
@@ -6097,25 +6810,25 @@ _curry1(function mergeAll(list) {
  */
 
 var mergeWithKey =
-/*#__PURE__*/
-_curry3(function mergeWithKey(fn, l, r) {
-  var result = {};
-  var k;
+	/*#__PURE__*/
+	_curry3(function mergeWithKey(fn, l, r) {
+		var result = {};
+		var k;
 
-  for (k in l) {
-    if (_has(k, l)) {
-      result[k] = _has(k, r) ? fn(k, l[k], r[k]) : l[k];
-    }
-  }
+		for (k in l) {
+			if (_has(k, l)) {
+				result[k] = _has(k, r) ? fn(k, l[k], r[k]) : l[k];
+			}
+		}
 
-  for (k in r) {
-    if (_has(k, r) && !_has(k, result)) {
-      result[k] = r[k];
-    }
-  }
+		for (k in r) {
+			if (_has(k, r) && !_has(k, result)) {
+				result[k] = r[k];
+			}
+		}
 
-  return result;
-});
+		return result;
+	});
 
 /**
  * Creates a new object with the own properties of the two provided objects.
@@ -6147,16 +6860,20 @@ _curry3(function mergeWithKey(fn, l, r) {
  */
 
 var mergeDeepWithKey =
-/*#__PURE__*/
-_curry3(function mergeDeepWithKey(fn, lObj, rObj) {
-  return mergeWithKey(function (k, lVal, rVal) {
-    if (_isObject(lVal) && _isObject(rVal)) {
-      return mergeDeepWithKey(fn, lVal, rVal);
-    } else {
-      return fn(k, lVal, rVal);
-    }
-  }, lObj, rObj);
-});
+	/*#__PURE__*/
+	_curry3(function mergeDeepWithKey(fn, lObj, rObj) {
+		return mergeWithKey(
+			function(k, lVal, rVal) {
+				if (_isObject(lVal) && _isObject(rVal)) {
+					return mergeDeepWithKey(fn, lVal, rVal);
+				} else {
+					return fn(k, lVal, rVal);
+				}
+			},
+			lObj,
+			rObj
+		);
+	});
 
 /**
  * Creates a new object with the own properties of the first object merged with
@@ -6181,12 +6898,16 @@ _curry3(function mergeDeepWithKey(fn, lObj, rObj) {
  */
 
 var mergeDeepLeft =
-/*#__PURE__*/
-_curry2(function mergeDeepLeft(lObj, rObj) {
-  return mergeDeepWithKey(function (k, lVal, rVal) {
-    return lVal;
-  }, lObj, rObj);
-});
+	/*#__PURE__*/
+	_curry2(function mergeDeepLeft(lObj, rObj) {
+		return mergeDeepWithKey(
+			function(k, lVal, rVal) {
+				return lVal;
+			},
+			lObj,
+			rObj
+		);
+	});
 
 /**
  * Creates a new object with the own properties of the first object merged with
@@ -6211,12 +6932,16 @@ _curry2(function mergeDeepLeft(lObj, rObj) {
  */
 
 var mergeDeepRight =
-/*#__PURE__*/
-_curry2(function mergeDeepRight(lObj, rObj) {
-  return mergeDeepWithKey(function (k, lVal, rVal) {
-    return rVal;
-  }, lObj, rObj);
-});
+	/*#__PURE__*/
+	_curry2(function mergeDeepRight(lObj, rObj) {
+		return mergeDeepWithKey(
+			function(k, lVal, rVal) {
+				return rVal;
+			},
+			lObj,
+			rObj
+		);
+	});
 
 /**
  * Creates a new object with the own properties of the two provided objects.
@@ -6247,12 +6972,16 @@ _curry2(function mergeDeepRight(lObj, rObj) {
  */
 
 var mergeDeepWith =
-/*#__PURE__*/
-_curry3(function mergeDeepWith(fn, lObj, rObj) {
-  return mergeDeepWithKey(function (k, lVal, rVal) {
-    return fn(lVal, rVal);
-  }, lObj, rObj);
-});
+	/*#__PURE__*/
+	_curry3(function mergeDeepWith(fn, lObj, rObj) {
+		return mergeDeepWithKey(
+			function(k, lVal, rVal) {
+				return fn(lVal, rVal);
+			},
+			lObj,
+			rObj
+		);
+	});
 
 /**
  * Multiplies two numbers. Equivalent to `a * b` but curried.
@@ -6276,10 +7005,10 @@ _curry3(function mergeDeepWith(fn, lObj, rObj) {
  */
 
 var multiply =
-/*#__PURE__*/
-_curry2(function multiply(a, b) {
-  return a * b;
-});
+	/*#__PURE__*/
+	_curry2(function multiply(a, b) {
+		return a * b;
+	});
 
 /**
  * Returns a function which returns its nth argument.
@@ -6301,13 +7030,13 @@ _curry2(function multiply(a, b) {
  */
 
 var nthArg =
-/*#__PURE__*/
-_curry1(function nthArg(n) {
-  var arity = n < 0 ? 1 : n + 1;
-  return curryN(arity, function () {
-    return nth(n, arguments);
-  });
-});
+	/*#__PURE__*/
+	_curry1(function nthArg(n) {
+		var arity = n < 0 ? 1 : n + 1;
+		return curryN(arity, function() {
+			return nth(n, arguments);
+		});
+	});
 
 /**
  * `o` is a curried composition function that returns a unary function.
@@ -6336,13 +7065,13 @@ _curry1(function nthArg(n) {
  */
 
 var o =
-/*#__PURE__*/
-_curry3(function o(f, g, x) {
-  return f(g(x));
-});
+	/*#__PURE__*/
+	_curry3(function o(f, g, x) {
+		return f(g(x));
+	});
 
 function _of(x) {
-  return [x];
+	return [x];
 }
 
 /**
@@ -6365,18 +7094,18 @@ function _of(x) {
  */
 
 var of =
-/*#__PURE__*/
-_curry1(_of);
+	/*#__PURE__*/
+	_curry1(_of);
 
 // transforms the held value with the provided function.
 
 var Identity = function Identity(x) {
-  return {
-    value: x,
-    map: function map(f) {
-      return Identity(f(x));
-    }
-  };
+	return {
+		value: x,
+		map: function map(f) {
+			return Identity(f(x));
+		}
+	};
 };
 /**
  * Returns the result of "setting" the portion of the given data structure
@@ -6401,24 +7130,23 @@ var Identity = function Identity(x) {
  *      R.over(headLens, R.toUpper, ['foo', 'bar', 'baz']); //=> ['FOO', 'bar', 'baz']
  */
 
-
 var over =
-/*#__PURE__*/
-_curry3(function over(lens, f, x) {
-  // The value returned by the getter function is first transformed with `f`,
-  // then set as the value of an `Identity`. This is then mapped over with the
-  // setter function of the lens.
-  return lens(function (y) {
-    return Identity(f(y));
-  })(x).value;
-});
+	/*#__PURE__*/
+	_curry3(function over(lens, f, x) {
+		// The value returned by the getter function is first transformed with `f`,
+		// then set as the value of an `Identity`. This is then mapped over with the
+		// setter function of the lens.
+		return lens(function(y) {
+			return Identity(f(y));
+		})(x).value;
+	});
 
 function _createPartialApplicator(concat) {
-  return _curry2(function (fn, args) {
-    return _arity(Math.max(0, fn.length - args.length), function () {
-      return fn.apply(this, concat(args, arguments));
-    });
-  });
+	return _curry2(function(fn, args) {
+		return _arity(Math.max(0, fn.length - args.length), function() {
+			return fn.apply(this, concat(args, arguments));
+		});
+	});
 }
 
 /**
@@ -6447,10 +7175,11 @@ function _createPartialApplicator(concat) {
  */
 
 var partialRight =
-/*#__PURE__*/
-_createPartialApplicator(
-/*#__PURE__*/
-flip(_concat));
+	/*#__PURE__*/
+	_createPartialApplicator(
+		/*#__PURE__*/
+		flip(_concat)
+	);
 
 /**
  * Takes a predicate and a list or other `Filterable` object and returns the
@@ -6478,8 +7207,8 @@ flip(_concat));
  */
 
 var partition =
-/*#__PURE__*/
-juxt([filter, reject]);
+	/*#__PURE__*/
+	juxt([filter, reject]);
 
 /**
  * Determines whether a nested path on an object has a specific value, in
@@ -6507,10 +7236,10 @@ juxt([filter, reject]);
  */
 
 var pathEq =
-/*#__PURE__*/
-_curry3(function pathEq(_path, val, obj) {
-  return equals(path(_path, obj), val);
-});
+	/*#__PURE__*/
+	_curry3(function pathEq(_path, val, obj) {
+		return equals(path(_path, obj), val);
+	});
 
 /**
  * If the given, non-null object has a value at the given path, returns the
@@ -6533,10 +7262,10 @@ _curry3(function pathEq(_path, val, obj) {
  */
 
 var pathOr =
-/*#__PURE__*/
-_curry3(function pathOr(d, p, obj) {
-  return defaultTo(d, path(p, obj));
-});
+	/*#__PURE__*/
+	_curry3(function pathOr(d, p, obj) {
+		return defaultTo(d, path(p, obj));
+	});
 
 /**
  * Returns `true` if the specified object property at given path satisfies the
@@ -6559,10 +7288,10 @@ _curry3(function pathOr(d, p, obj) {
  */
 
 var pathSatisfies =
-/*#__PURE__*/
-_curry3(function pathSatisfies(pred, propPath, obj) {
-  return propPath.length > 0 && pred(path(propPath, obj));
-});
+	/*#__PURE__*/
+	_curry3(function pathSatisfies(pred, propPath, obj) {
+		return propPath.length > 0 && pred(path(propPath, obj));
+	});
 
 /**
  * Similar to `pick` except that this one includes a `key: undefined` pair for
@@ -6584,20 +7313,20 @@ _curry3(function pathSatisfies(pred, propPath, obj) {
  */
 
 var pickAll =
-/*#__PURE__*/
-_curry2(function pickAll(names, obj) {
-  var result = {};
-  var idx = 0;
-  var len = names.length;
+	/*#__PURE__*/
+	_curry2(function pickAll(names, obj) {
+		var result = {};
+		var idx = 0;
+		var len = names.length;
 
-  while (idx < len) {
-    var name = names[idx];
-    result[name] = obj[name];
-    idx += 1;
-  }
+		while (idx < len) {
+			var name = names[idx];
+			result[name] = obj[name];
+			idx += 1;
+		}
 
-  return result;
-});
+		return result;
+	});
 
 /**
  * Returns a new list with the given element at the front, followed by the
@@ -6618,10 +7347,10 @@ _curry2(function pickAll(names, obj) {
  */
 
 var prepend =
-/*#__PURE__*/
-_curry2(function prepend(el, list) {
-  return _concat([el], list);
-});
+	/*#__PURE__*/
+	_curry2(function prepend(el, list) {
+		return _concat([el], list);
+	});
 
 /**
  * Multiplies together all the elements of a list.
@@ -6640,8 +7369,8 @@ _curry2(function prepend(el, list) {
  */
 
 var product =
-/*#__PURE__*/
-reduce(multiply, 1);
+	/*#__PURE__*/
+	reduce(multiply, 1);
 
 /**
  * Accepts a function `fn` and a list of transformer functions and returns a
@@ -6674,20 +7403,25 @@ reduce(multiply, 1);
  */
 
 var useWith =
-/*#__PURE__*/
-_curry2(function useWith(fn, transformers) {
-  return curryN(transformers.length, function () {
-    var args = [];
-    var idx = 0;
+	/*#__PURE__*/
+	_curry2(function useWith(fn, transformers) {
+		return curryN(transformers.length, function() {
+			var args = [];
+			var idx = 0;
 
-    while (idx < transformers.length) {
-      args.push(transformers[idx].call(this, arguments[idx]));
-      idx += 1;
-    }
+			while (idx < transformers.length) {
+				args.push(transformers[idx].call(this, arguments[idx]));
+				idx += 1;
+			}
 
-    return fn.apply(this, args.concat(Array.prototype.slice.call(arguments, transformers.length)));
-  });
-});
+			return fn.apply(
+				this,
+				args.concat(
+					Array.prototype.slice.call(arguments, transformers.length)
+				)
+			);
+		});
+	});
 
 /**
  * Reasonable analog to SQL `select` statement.
@@ -6710,8 +7444,8 @@ _curry2(function useWith(fn, transformers) {
  */
 
 var project =
-/*#__PURE__*/
-useWith(_map, [pickAll, identity]); // passing `identity` gives correct arity
+	/*#__PURE__*/
+	useWith(_map, [pickAll, identity]); // passing `identity` gives correct arity
 
 /**
  * Returns `true` if the specified object property is equal, in
@@ -6740,10 +7474,10 @@ useWith(_map, [pickAll, identity]); // passing `identity` gives correct arity
  */
 
 var propEq =
-/*#__PURE__*/
-_curry3(function propEq(name, val, obj) {
-  return equals(val, obj[name]);
-});
+	/*#__PURE__*/
+	_curry3(function propEq(name, val, obj) {
+		return equals(val, obj[name]);
+	});
 
 /**
  * Returns `true` if the specified object property satisfies the given
@@ -6766,10 +7500,10 @@ _curry3(function propEq(name, val, obj) {
  */
 
 var propSatisfies =
-/*#__PURE__*/
-_curry3(function propSatisfies(pred, name, obj) {
-  return pred(obj[name]);
-});
+	/*#__PURE__*/
+	_curry3(function propSatisfies(pred, name, obj) {
+		return pred(obj[name]);
+	});
 
 /**
  * Calls an input function `n` times, returning an array containing the results
@@ -6796,25 +7530,25 @@ _curry3(function propSatisfies(pred, name, obj) {
  */
 
 var times =
-/*#__PURE__*/
-_curry2(function times(fn, n) {
-  var len = Number(n);
-  var idx = 0;
-  var list;
+	/*#__PURE__*/
+	_curry2(function times(fn, n) {
+		var len = Number(n);
+		var idx = 0;
+		var list;
 
-  if (len < 0 || isNaN(len)) {
-    throw new RangeError('n must be a non-negative number');
-  }
+		if (len < 0 || isNaN(len)) {
+			throw new RangeError("n must be a non-negative number");
+		}
 
-  list = new Array(len);
+		list = new Array(len);
 
-  while (idx < len) {
-    list[idx] = fn(idx);
-    idx += 1;
-  }
+		while (idx < len) {
+			list[idx] = fn(idx);
+			idx += 1;
+		}
 
-  return list;
-});
+		return list;
+	});
 
 /**
  * Returns a fixed list of size `n` containing a specified identical value.
@@ -6841,10 +7575,10 @@ _curry2(function times(fn, n) {
  */
 
 var repeat =
-/*#__PURE__*/
-_curry2(function repeat(value, n) {
-  return times(always(value), n);
-});
+	/*#__PURE__*/
+	_curry2(function repeat(value, n) {
+		return times(always(value), n);
+	});
 
 /**
  * Returns the result of "setting" the portion of the given data structure
@@ -6870,10 +7604,10 @@ _curry2(function repeat(value, n) {
  */
 
 var set =
-/*#__PURE__*/
-_curry3(function set(lens, v, x) {
-  return over(lens, always(v), x);
-});
+	/*#__PURE__*/
+	_curry3(function set(lens, v, x) {
+		return over(lens, always(v), x);
+	});
 
 /**
  * Splits a string into an array of strings based on the given
@@ -6897,8 +7631,8 @@ _curry3(function set(lens, v, x) {
  */
 
 var split =
-/*#__PURE__*/
-invoker(1, 'split');
+	/*#__PURE__*/
+	invoker(1, "split");
 
 /**
  * Checks if a list starts with the provided values
@@ -6921,35 +7655,35 @@ invoker(1, 'split');
  */
 
 var startsWith =
-/*#__PURE__*/
-_curry2(function (prefix, list) {
-  return equals(take(prefix.length, list), prefix);
-});
+	/*#__PURE__*/
+	_curry2(function(prefix, list) {
+		return equals(take(prefix.length, list), prefix);
+	});
 
 var XTap =
-/*#__PURE__*/
-function () {
-  function XTap(f, xf) {
-    this.xf = xf;
-    this.f = f;
-  }
+	/*#__PURE__*/
+	(function() {
+		function XTap(f, xf) {
+			this.xf = xf;
+			this.f = f;
+		}
 
-  XTap.prototype['@@transducer/init'] = _xfBase.init;
-  XTap.prototype['@@transducer/result'] = _xfBase.result;
+		XTap.prototype["@@transducer/init"] = _xfBase.init;
+		XTap.prototype["@@transducer/result"] = _xfBase.result;
 
-  XTap.prototype['@@transducer/step'] = function (result, input) {
-    this.f(input);
-    return this.xf['@@transducer/step'](result, input);
-  };
+		XTap.prototype["@@transducer/step"] = function(result, input) {
+			this.f(input);
+			return this.xf["@@transducer/step"](result, input);
+		};
 
-  return XTap;
-}();
+		return XTap;
+	})();
 
 var _xtap =
-/*#__PURE__*/
-_curry2(function _xtap(f, xf) {
-  return new XTap(f, xf);
-});
+	/*#__PURE__*/
+	_curry2(function _xtap(f, xf) {
+		return new XTap(f, xf);
+	});
 
 /**
  * Runs the given function with the supplied object, then returns the object.
@@ -6973,16 +7707,17 @@ _curry2(function _xtap(f, xf) {
  */
 
 var tap =
-/*#__PURE__*/
-_curry2(
-/*#__PURE__*/
-_dispatchable([], _xtap, function tap(fn, x) {
-  fn(x);
-  return x;
-}));
+	/*#__PURE__*/
+	_curry2(
+		/*#__PURE__*/
+		_dispatchable([], _xtap, function tap(fn, x) {
+			fn(x);
+			return x;
+		})
+	);
 
 function _isRegExp(x) {
-  return Object.prototype.toString.call(x) === '[object RegExp]';
+	return Object.prototype.toString.call(x) === "[object RegExp]";
 }
 
 /**
@@ -7004,14 +7739,17 @@ function _isRegExp(x) {
  */
 
 var test =
-/*#__PURE__*/
-_curry2(function test(pattern, str) {
-  if (!_isRegExp(pattern)) {
-    throw new TypeError('‘test’ requires a value of type RegExp as its first argument; received ' + toString$1(pattern));
-  }
+	/*#__PURE__*/
+	_curry2(function test(pattern, str) {
+		if (!_isRegExp(pattern)) {
+			throw new TypeError(
+				"‘test’ requires a value of type RegExp as its first argument; received " +
+					toString$1(pattern)
+			);
+		}
 
-  return _cloneRegExp(pattern).test(str);
-});
+		return _cloneRegExp(pattern).test(str);
+	});
 
 /**
  * The lower case version of a string.
@@ -7030,8 +7768,8 @@ _curry2(function test(pattern, str) {
  */
 
 var toLower =
-/*#__PURE__*/
-invoker(0, 'toLowerCase');
+	/*#__PURE__*/
+	invoker(0, "toLowerCase");
 
 /**
  * Converts an object into an array of key, value arrays. Only the object's
@@ -7053,18 +7791,18 @@ invoker(0, 'toLowerCase');
  */
 
 var toPairs =
-/*#__PURE__*/
-_curry1(function toPairs(obj) {
-  var pairs = [];
+	/*#__PURE__*/
+	_curry1(function toPairs(obj) {
+		var pairs = [];
 
-  for (var prop in obj) {
-    if (_has(prop, obj)) {
-      pairs[pairs.length] = [prop, obj[prop]];
-    }
-  }
+		for (var prop in obj) {
+			if (_has(prop, obj)) {
+				pairs[pairs.length] = [prop, obj[prop]];
+			}
+		}
 
-  return pairs;
-});
+		return pairs;
+	});
 
 /**
  * The upper case version of a string.
@@ -7083,8 +7821,8 @@ _curry1(function toPairs(obj) {
  */
 
 var toUpper =
-/*#__PURE__*/
-invoker(0, 'toUpperCase');
+	/*#__PURE__*/
+	invoker(0, "toUpperCase");
 
 /**
  * Initializes a transducer using supplied iterator function. Returns a single
@@ -7135,14 +7873,21 @@ invoker(0, 'toUpperCase');
  */
 
 var transduce =
-/*#__PURE__*/
-curryN(4, function transduce(xf, fn, acc, list) {
-  return _reduce(xf(typeof fn === 'function' ? _xwrap(fn) : fn), acc, list);
-});
+	/*#__PURE__*/
+	curryN(4, function transduce(xf, fn, acc, list) {
+		return _reduce(
+			xf(typeof fn === "function" ? _xwrap(fn) : fn),
+			acc,
+			list
+		);
+	});
 
-var ws = "\t\n\x0B\f\r \xA0\u1680\u180E\u2000\u2001\u2002\u2003" + "\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028" + "\u2029\uFEFF";
+var ws =
+	"\t\n\x0B\f\r \xA0\u1680\u180E\u2000\u2001\u2002\u2003" +
+	"\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028" +
+	"\u2029\uFEFF";
 var zeroWidth = "\u200B";
-var hasProtoTrim = typeof String.prototype.trim === 'function';
+var hasProtoTrim = typeof String.prototype.trim === "function";
 /**
  * Removes (strips) whitespace from both ends of the string.
  *
@@ -7159,17 +7904,20 @@ var hasProtoTrim = typeof String.prototype.trim === 'function';
  *      R.map(R.trim, R.split(',', 'x, y, z')); //=> ['x', 'y', 'z']
  */
 
-var _trim = !hasProtoTrim ||
-/*#__PURE__*/
-ws.trim() || !
-/*#__PURE__*/
-zeroWidth.trim() ? function trim(str) {
-  var beginRx = new RegExp('^[' + ws + '][' + ws + ']*');
-  var endRx = new RegExp('[' + ws + '][' + ws + ']*$');
-  return str.replace(beginRx, '').replace(endRx, '');
-} : function trim(str) {
-  return str.trim();
-};
+var _trim =
+	!hasProtoTrim ||
+	/*#__PURE__*/
+	ws.trim() ||
+	!/*#__PURE__*/
+	zeroWidth.trim()
+		? function trim(str) {
+				var beginRx = new RegExp("^[" + ws + "][" + ws + "]*");
+				var endRx = new RegExp("[" + ws + "][" + ws + "]*$");
+				return str.replace(beginRx, "").replace(endRx, "");
+		  }
+		: function trim(str) {
+				return str.trim();
+		  };
 
 /**
  * Takes a function `fn`, which takes a single array argument, and returns a
@@ -7197,12 +7945,12 @@ zeroWidth.trim() ? function trim(str) {
  */
 
 var unapply =
-/*#__PURE__*/
-_curry1(function unapply(fn) {
-  return function () {
-    return fn(Array.prototype.slice.call(arguments, 0));
-  };
-});
+	/*#__PURE__*/
+	_curry1(function unapply(fn) {
+		return function() {
+			return fn(Array.prototype.slice.call(arguments, 0));
+		};
+	});
 
 /**
  * Combines two lists into a set (i.e. no duplicates) composed of the elements
@@ -7223,10 +7971,14 @@ _curry1(function unapply(fn) {
  */
 
 var union =
-/*#__PURE__*/
-_curry2(
-/*#__PURE__*/
-compose(uniq, _concat));
+	/*#__PURE__*/
+	_curry2(
+		/*#__PURE__*/
+		compose(
+			uniq,
+			_concat
+		)
+	);
 
 /**
  * Shorthand for `R.chain(R.identity)`, which removes one level of nesting from
@@ -7247,8 +7999,8 @@ compose(uniq, _concat));
  */
 
 var unnest =
-/*#__PURE__*/
-chain(_identity);
+	/*#__PURE__*/
+	chain(_identity);
 
 /**
  * Takes a predicate, a transformation function, and an initial value,
@@ -7271,24 +8023,24 @@ chain(_identity);
  */
 
 var until =
-/*#__PURE__*/
-_curry3(function until(pred, fn, init) {
-  var val = init;
+	/*#__PURE__*/
+	_curry3(function until(pred, fn, init) {
+		var val = init;
 
-  while (!pred(val)) {
-    val = fn(val);
-  }
+		while (!pred(val)) {
+			val = fn(val);
+		}
 
-  return val;
-});
+		return val;
+	});
 
 var Const = function Const(x) {
-  return {
-    value: x,
-    'fantasy-land/map': function fantasyLandMap() {
-      return this;
-    }
-  };
+	return {
+		value: x,
+		"fantasy-land/map": function fantasyLandMap() {
+			return this;
+		}
+	};
 };
 /**
  * Returns a "view" of the given data structure, determined by the given lens.
@@ -7312,14 +8064,13 @@ var Const = function Const(x) {
  *      R.view(xLens, {x: 4, y: 2});  //=> 4
  */
 
-
 var view =
-/*#__PURE__*/
-_curry2(function view(lens, x) {
-  // Using `Const` effectively ignores the setter function of the `lens`,
-  // leaving the value returned by the getter function unmodified.
-  return lens(Const)(x).value;
-});
+	/*#__PURE__*/
+	_curry2(function view(lens, x) {
+		// Using `Const` effectively ignores the setter function of the `lens`,
+		// leaving the value returned by the getter function unmodified.
+		return lens(Const)(x).value;
+	});
 
 /**
  * Tests the final argument by passing it to the given predicate function. If
@@ -7351,10 +8102,10 @@ _curry2(function view(lens, x) {
  */
 
 var when =
-/*#__PURE__*/
-_curry3(function when(pred, whenTrueFn, x) {
-  return pred(x) ? whenTrueFn(x) : x;
-});
+	/*#__PURE__*/
+	_curry3(function when(pred, whenTrueFn, x) {
+		return pred(x) ? whenTrueFn(x) : x;
+	});
 
 /**
  * Creates a new list out of the two supplied by creating each possible pair
@@ -7376,33 +8127,37 @@ _curry3(function when(pred, whenTrueFn, x) {
  */
 
 var xprod =
-/*#__PURE__*/
-_curry2(function xprod(a, b) {
-  // = xprodWith(prepend); (takes about 3 times as long...)
-  var idx = 0;
-  var ilen = a.length;
-  var j;
-  var jlen = b.length;
-  var result = [];
+	/*#__PURE__*/
+	_curry2(function xprod(a, b) {
+		// = xprodWith(prepend); (takes about 3 times as long...)
+		var idx = 0;
+		var ilen = a.length;
+		var j;
+		var jlen = b.length;
+		var result = [];
 
-  while (idx < ilen) {
-    j = 0;
+		while (idx < ilen) {
+			j = 0;
 
-    while (j < jlen) {
-      result[result.length] = [a[idx], b[j]];
-      j += 1;
-    }
+			while (j < jlen) {
+				result[result.length] = [a[idx], b[j]];
+				j += 1;
+			}
 
-    idx += 1;
-  }
+			idx += 1;
+		}
 
-  return result;
-});
+		return result;
+	});
 
 function createCommonjsModule$1(fn, module) {
-  return module = {
-    exports: {}
-  }, fn(module, module.exports), module.exports;
+	return (
+		(module = {
+			exports: {}
+		}),
+		fn(module, module.exports),
+		module.exports
+	);
 }
 /*
 object-assign
@@ -7412,94 +8167,97 @@ object-assign
 
 /* eslint-disable no-unused-vars */
 
-
 var getOwnPropertySymbols$1 = Object.getOwnPropertySymbols;
 var hasOwnProperty$1 = Object.prototype.hasOwnProperty;
 var propIsEnumerable$1 = Object.prototype.propertyIsEnumerable;
 
 function toObject$1(val) {
-  if (val === null || val === undefined) {
-    throw new TypeError('Object.assign cannot be called with null or undefined');
-  }
+	if (val === null || val === undefined) {
+		throw new TypeError(
+			"Object.assign cannot be called with null or undefined"
+		);
+	}
 
-  return Object(val);
+	return Object(val);
 }
 
 function shouldUseNative$1() {
-  try {
-    if (!Object.assign) {
-      return false;
-    } // Detect buggy property enumeration order in older V8 versions.
-    // https://bugs.chromium.org/p/v8/issues/detail?id=4118
+	try {
+		if (!Object.assign) {
+			return false;
+		} // Detect buggy property enumeration order in older V8 versions.
+		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
 
+		var test1 = new String("abc"); // eslint-disable-line no-new-wrappers
 
-    var test1 = new String('abc'); // eslint-disable-line no-new-wrappers
+		test1[5] = "de";
 
-    test1[5] = 'de';
+		if (Object.getOwnPropertyNames(test1)[0] === "5") {
+			return false;
+		} // https://bugs.chromium.org/p/v8/issues/detail?id=3056
 
-    if (Object.getOwnPropertyNames(test1)[0] === '5') {
-      return false;
-    } // https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test2 = {};
 
+		for (var i = 0; i < 10; i++) {
+			test2["_" + String.fromCharCode(i)] = i;
+		}
 
-    var test2 = {};
+		var order2 = Object.getOwnPropertyNames(test2).map(function(n) {
+			return test2[n];
+		});
 
-    for (var i = 0; i < 10; i++) {
-      test2['_' + String.fromCharCode(i)] = i;
-    }
+		if (order2.join("") !== "0123456789") {
+			return false;
+		} // https://bugs.chromium.org/p/v8/issues/detail?id=3056
 
-    var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
-      return test2[n];
-    });
+		var test3 = {};
+		"abcdefghijklmnopqrst".split("").forEach(function(letter) {
+			test3[letter] = letter;
+		});
 
-    if (order2.join('') !== '0123456789') {
-      return false;
-    } // https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		if (
+			Object.keys(Object.assign({}, test3)).join("") !==
+			"abcdefghijklmnopqrst"
+		) {
+			return false;
+		}
 
-
-    var test3 = {};
-    'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
-      test3[letter] = letter;
-    });
-
-    if (Object.keys(Object.assign({}, test3)).join('') !== 'abcdefghijklmnopqrst') {
-      return false;
-    }
-
-    return true;
-  } catch (err) {
-    // We don't expect any of the above to throw, but better to be safe.
-    return false;
-  }
+		return true;
+	} catch (err) {
+		// We don't expect any of the above to throw, but better to be safe.
+		return false;
+	}
 }
 
-var objectAssign$1 = shouldUseNative$1() ? Object.assign : function (target, source) {
-  var from;
-  var to = toObject$1(target);
-  var symbols;
+var objectAssign$1 = shouldUseNative$1()
+	? Object.assign
+	: function(target, source) {
+			var from;
+			var to = toObject$1(target);
+			var symbols;
 
-  for (var s = 1; s < arguments.length; s++) {
-    from = Object(arguments[s]);
+			for (var s = 1; s < arguments.length; s++) {
+				from = Object(arguments[s]);
 
-    for (var key in from) {
-      if (hasOwnProperty$1.call(from, key)) {
-        to[key] = from[key];
-      }
-    }
+				for (var key in from) {
+					if (hasOwnProperty$1.call(from, key)) {
+						to[key] = from[key];
+					}
+				}
 
-    if (getOwnPropertySymbols$1) {
-      symbols = getOwnPropertySymbols$1(from);
+				if (getOwnPropertySymbols$1) {
+					symbols = getOwnPropertySymbols$1(from);
 
-      for (var i = 0; i < symbols.length; i++) {
-        if (propIsEnumerable$1.call(from, symbols[i])) {
-          to[symbols[i]] = from[symbols[i]];
-        }
-      }
-    }
-  }
+					for (var i = 0; i < symbols.length; i++) {
+						if (propIsEnumerable$1.call(from, symbols[i])) {
+							to[symbols[i]] = from[symbols[i]];
+						}
+					}
+				}
+			}
 
-  return to;
-};
+			return to;
+	  };
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -7507,29 +8265,29 @@ var objectAssign$1 = shouldUseNative$1() ? Object.assign : function (target, sou
  * LICENSE file in the root directory of this source tree.
  */
 
-var ReactPropTypesSecret$2 = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+var ReactPropTypesSecret$2 = "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";
 var ReactPropTypesSecret_1$1 = ReactPropTypesSecret$2;
 
 var printWarning$2 = function printWarning() {};
 
-if (process.env.NODE_ENV !== 'production') {
-  var ReactPropTypesSecret$1$1 = ReactPropTypesSecret_1$1;
-  var loggedTypeFailures$1 = {};
+if (process.env.NODE_ENV !== "production") {
+	var ReactPropTypesSecret$1$1 = ReactPropTypesSecret_1$1;
+	var loggedTypeFailures$1 = {};
 
-  printWarning$2 = function printWarning(text) {
-    var message = 'Warning: ' + text;
+	printWarning$2 = function printWarning(text) {
+		var message = "Warning: " + text;
 
-    if (typeof console !== 'undefined') {
-      console.error(message);
-    }
+		if (typeof console !== "undefined") {
+			console.error(message);
+		}
 
-    try {
-      // --- Welcome to debugging React ---
-      // This error was thrown as a convenience so that you can use this stack
-      // to find the callsite that caused this warning to fire.
-      throw new Error(message);
-    } catch (x) {}
-  };
+		try {
+			// --- Welcome to debugging React ---
+			// This error was thrown as a convenience so that you can use this stack
+			// to find the callsite that caused this warning to fire.
+			throw new Error(message);
+		} catch (x) {}
+	};
 }
 /**
  * Assert that the values match with the type specs.
@@ -7543,722 +8301,1083 @@ if (process.env.NODE_ENV !== 'production') {
  * @private
  */
 
+function checkPropTypes$1(
+	typeSpecs,
+	values,
+	location,
+	componentName,
+	getStack
+) {
+	if (process.env.NODE_ENV !== "production") {
+		for (var typeSpecName in typeSpecs) {
+			if (typeSpecs.hasOwnProperty(typeSpecName)) {
+				var error; // Prop type validation may throw. In case they do, we don't want to
+				// fail the render phase where it didn't fail before. So we log it.
+				// After these have been cleaned up, we'll let them throw.
 
-function checkPropTypes$1(typeSpecs, values, location, componentName, getStack) {
-  if (process.env.NODE_ENV !== 'production') {
-    for (var typeSpecName in typeSpecs) {
-      if (typeSpecs.hasOwnProperty(typeSpecName)) {
-        var error; // Prop type validation may throw. In case they do, we don't want to
-        // fail the render phase where it didn't fail before. So we log it.
-        // After these have been cleaned up, we'll let them throw.
+				try {
+					// This is intentionally an invariant that gets caught. It's the same
+					// behavior as without this statement except with a better message.
+					if (typeof typeSpecs[typeSpecName] !== "function") {
+						var err = Error(
+							(componentName || "React class") +
+								": " +
+								location +
+								" type `" +
+								typeSpecName +
+								"` is invalid; " +
+								"it must be a function, usually from the `prop-types` package, but received `" +
+								typeof typeSpecs[typeSpecName] +
+								"`."
+						);
+						err.name = "Invariant Violation";
+						throw err;
+					}
 
-        try {
-          // This is intentionally an invariant that gets caught. It's the same
-          // behavior as without this statement except with a better message.
-          if (typeof typeSpecs[typeSpecName] !== 'function') {
-            var err = Error((componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' + 'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.');
-            err.name = 'Invariant Violation';
-            throw err;
-          }
+					error = typeSpecs[typeSpecName](
+						values,
+						typeSpecName,
+						componentName,
+						location,
+						null,
+						ReactPropTypesSecret$1$1
+					);
+				} catch (ex) {
+					error = ex;
+				}
 
-          error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret$1$1);
-        } catch (ex) {
-          error = ex;
-        }
+				if (error && !(error instanceof Error)) {
+					printWarning$2(
+						(componentName || "React class") +
+							": type specification of " +
+							location +
+							" `" +
+							typeSpecName +
+							"` is invalid; the type checker " +
+							"function must return `null` or an `Error` but returned a " +
+							typeof error +
+							". " +
+							"You may have forgotten to pass an argument to the type checker " +
+							"creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and " +
+							"shape all require an argument)."
+					);
+				}
 
-        if (error && !(error instanceof Error)) {
-          printWarning$2((componentName || 'React class') + ': type specification of ' + location + ' `' + typeSpecName + '` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a ' + typeof error + '. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).');
-        }
-
-        if (error instanceof Error && !(error.message in loggedTypeFailures$1)) {
-          // Only monitor this failure once because there tends to be a lot of the
-          // same error.
-          loggedTypeFailures$1[error.message] = true;
-          var stack = getStack ? getStack() : '';
-          printWarning$2('Failed ' + location + ' type: ' + error.message + (stack != null ? stack : ''));
-        }
-      }
-    }
-  }
+				if (
+					error instanceof Error &&
+					!(error.message in loggedTypeFailures$1)
+				) {
+					// Only monitor this failure once because there tends to be a lot of the
+					// same error.
+					loggedTypeFailures$1[error.message] = true;
+					var stack = getStack ? getStack() : "";
+					printWarning$2(
+						"Failed " +
+							location +
+							" type: " +
+							error.message +
+							(stack != null ? stack : "")
+					);
+				}
+			}
+		}
+	}
 }
 
 var checkPropTypes_1$1 = checkPropTypes$1;
 
 var printWarning$1$1 = function printWarning$1() {};
 
-if (process.env.NODE_ENV !== 'production') {
-  printWarning$1$1 = function printWarning$1(text) {
-    var message = 'Warning: ' + text;
+if (process.env.NODE_ENV !== "production") {
+	printWarning$1$1 = function printWarning$1(text) {
+		var message = "Warning: " + text;
 
-    if (typeof console !== 'undefined') {
-      console.error(message);
-    }
+		if (typeof console !== "undefined") {
+			console.error(message);
+		}
 
-    try {
-      // --- Welcome to debugging React ---
-      // This error was thrown as a convenience so that you can use this stack
-      // to find the callsite that caused this warning to fire.
-      throw new Error(message);
-    } catch (x) {}
-  };
+		try {
+			// --- Welcome to debugging React ---
+			// This error was thrown as a convenience so that you can use this stack
+			// to find the callsite that caused this warning to fire.
+			throw new Error(message);
+		} catch (x) {}
+	};
 }
 
 function emptyFunctionThatReturnsNull$1() {
-  return null;
+	return null;
 }
 
-var factoryWithTypeCheckers$1 = function factoryWithTypeCheckers(isValidElement, throwOnDirectAccess) {
-  /* global Symbol */
-  var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
-  var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
-
-  /**
-   * Returns the iterator method function contained on the iterable object.
-   *
-   * Be sure to invoke the function with the iterable as context:
-   *
-   *     var iteratorFn = getIteratorFn(myIterable);
-   *     if (iteratorFn) {
-   *       var iterator = iteratorFn.call(myIterable);
-   *       ...
-   *     }
-   *
-   * @param {?object} maybeIterable
-   * @return {?function}
-   */
-
-  function getIteratorFn(maybeIterable) {
-    var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
-
-    if (typeof iteratorFn === 'function') {
-      return iteratorFn;
-    }
-  }
-  /**
-   * Collection of methods that allow declaration and validation of props that are
-   * supplied to React components. Example usage:
-   *
-   *   var Props = require('ReactPropTypes');
-   *   var MyArticle = React.createClass({
-   *     propTypes: {
-   *       // An optional string prop named "description".
-   *       description: Props.string,
-   *
-   *       // A required enum prop named "category".
-   *       category: Props.oneOf(['News','Photos']).isRequired,
-   *
-   *       // A prop named "dialog" that requires an instance of Dialog.
-   *       dialog: Props.instanceOf(Dialog).isRequired
-   *     },
-   *     render: function() { ... }
-   *   });
-   *
-   * A more formal specification of how these methods are used:
-   *
-   *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
-   *   decl := ReactPropTypes.{type}(.isRequired)?
-   *
-   * Each and every declaration produces a function with the same signature. This
-   * allows the creation of custom validation functions. For example:
-   *
-   *  var MyLink = React.createClass({
-   *    propTypes: {
-   *      // An optional string or URI prop named "href".
-   *      href: function(props, propName, componentName) {
-   *        var propValue = props[propName];
-   *        if (propValue != null && typeof propValue !== 'string' &&
-   *            !(propValue instanceof URI)) {
-   *          return new Error(
-   *            'Expected a string or an URI for ' + propName + ' in ' +
-   *            componentName
-   *          );
-   *        }
-   *      }
-   *    },
-   *    render: function() {...}
-   *  });
-   *
-   * @internal
-   */
-
-
-  var ANONYMOUS = '<<anonymous>>'; // Important!
-  // Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
-
-  var ReactPropTypes = {
-    array: createPrimitiveTypeChecker('array'),
-    bool: createPrimitiveTypeChecker('boolean'),
-    func: createPrimitiveTypeChecker('function'),
-    number: createPrimitiveTypeChecker('number'),
-    object: createPrimitiveTypeChecker('object'),
-    string: createPrimitiveTypeChecker('string'),
-    symbol: createPrimitiveTypeChecker('symbol'),
-    any: createAnyTypeChecker(),
-    arrayOf: createArrayOfTypeChecker,
-    element: createElementTypeChecker(),
-    instanceOf: createInstanceTypeChecker,
-    node: createNodeChecker(),
-    objectOf: createObjectOfTypeChecker,
-    oneOf: createEnumTypeChecker,
-    oneOfType: createUnionTypeChecker,
-    shape: createShapeTypeChecker,
-    exact: createStrictShapeTypeChecker
-  };
-  /**
-   * inlined Object.is polyfill to avoid requiring consumers ship their own
-   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
-   */
-
-  /*eslint-disable no-self-compare*/
-
-  function is(x, y) {
-    // SameValue algorithm
-    if (x === y) {
-      // Steps 1-5, 7-10
-      // Steps 6.b-6.e: +0 != -0
-      return x !== 0 || 1 / x === 1 / y;
-    } else {
-      // Step 6.a: NaN == NaN
-      return x !== x && y !== y;
-    }
-  }
-  /*eslint-enable no-self-compare*/
-
-  /**
-   * We use an Error-like object for backward compatibility as people may call
-   * PropTypes directly and inspect their output. However, we don't use real
-   * Errors anymore. We don't inspect their stack anyway, and creating them
-   * is prohibitively expensive if they are created too often, such as what
-   * happens in oneOfType() for any type before the one that matched.
-   */
-
-
-  function PropTypeError(message) {
-    this.message = message;
-    this.stack = '';
-  } // Make `instanceof Error` still work for returned errors.
-
-
-  PropTypeError.prototype = Error.prototype;
-
-  function createChainableTypeChecker(validate) {
-    if (process.env.NODE_ENV !== 'production') {
-      var manualPropTypeCallCache = {};
-      var manualPropTypeWarningCount = 0;
-    }
-
-    function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
-      componentName = componentName || ANONYMOUS;
-      propFullName = propFullName || propName;
-
-      if (secret !== ReactPropTypesSecret_1$1) {
-        if (throwOnDirectAccess) {
-          // New behavior only for users of `prop-types` package
-          var err = new Error('Calling PropTypes validators directly is not supported by the `prop-types` package. ' + 'Use `PropTypes.checkPropTypes()` to call them. ' + 'Read more at http://fb.me/use-check-prop-types');
-          err.name = 'Invariant Violation';
-          throw err;
-        } else if (process.env.NODE_ENV !== 'production' && typeof console !== 'undefined') {
-          // Old behavior for people using React.PropTypes
-          var cacheKey = componentName + ':' + propName;
-
-          if (!manualPropTypeCallCache[cacheKey] && // Avoid spamming the console because they are often not actionable except for lib authors
-          manualPropTypeWarningCount < 3) {
-            printWarning$1$1('You are manually calling a React.PropTypes validation ' + 'function for the `' + propFullName + '` prop on `' + componentName + '`. This is deprecated ' + 'and will throw in the standalone `prop-types` package. ' + 'You may be seeing this warning due to a third-party PropTypes ' + 'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.');
-            manualPropTypeCallCache[cacheKey] = true;
-            manualPropTypeWarningCount++;
-          }
-        }
-      }
-
-      if (props[propName] == null) {
-        if (isRequired) {
-          if (props[propName] === null) {
-            return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required ' + ('in `' + componentName + '`, but its value is `null`.'));
-          }
-
-          return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required in ' + ('`' + componentName + '`, but its value is `undefined`.'));
-        }
-
-        return null;
-      } else {
-        return validate(props, propName, componentName, location, propFullName);
-      }
-    }
-
-    var chainedCheckType = checkType.bind(null, false);
-    chainedCheckType.isRequired = checkType.bind(null, true);
-    return chainedCheckType;
-  }
-
-  function createPrimitiveTypeChecker(expectedType) {
-    function validate(props, propName, componentName, location, propFullName, secret) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-
-      if (propType !== expectedType) {
-        // `propValue` being instance of, say, date/regexp, pass the 'object'
-        // check, but we can offer a more precise error message here rather than
-        // 'of type `object`'.
-        var preciseType = getPreciseType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + preciseType + '` supplied to `' + componentName + '`, expected ') + ('`' + expectedType + '`.'));
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createAnyTypeChecker() {
-    return createChainableTypeChecker(emptyFunctionThatReturnsNull$1);
-  }
-
-  function createArrayOfTypeChecker(typeChecker) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (typeof typeChecker !== 'function') {
-        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside arrayOf.');
-      }
-
-      var propValue = props[propName];
-
-      if (!Array.isArray(propValue)) {
-        var propType = getPropType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an array.'));
-      }
-
-      for (var i = 0; i < propValue.length; i++) {
-        var error = typeChecker(propValue, i, componentName, location, propFullName + '[' + i + ']', ReactPropTypesSecret_1$1);
-
-        if (error instanceof Error) {
-          return error;
-        }
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createElementTypeChecker() {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-
-      if (!isValidElement(propValue)) {
-        var propType = getPropType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement.'));
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createInstanceTypeChecker(expectedClass) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (!(props[propName] instanceof expectedClass)) {
-        var expectedClassName = expectedClass.name || ANONYMOUS;
-        var actualClassName = getClassName(props[propName]);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + actualClassName + '` supplied to `' + componentName + '`, expected ') + ('instance of `' + expectedClassName + '`.'));
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createEnumTypeChecker(expectedValues) {
-    if (!Array.isArray(expectedValues)) {
-      process.env.NODE_ENV !== 'production' ? printWarning$1$1('Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
-      return emptyFunctionThatReturnsNull$1;
-    }
-
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-
-      for (var i = 0; i < expectedValues.length; i++) {
-        if (is(propValue, expectedValues[i])) {
-          return null;
-        }
-      }
-
-      var valuesString = JSON.stringify(expectedValues);
-      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + propValue + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createObjectOfTypeChecker(typeChecker) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (typeof typeChecker !== 'function') {
-        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside objectOf.');
-      }
-
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an object.'));
-      }
-
-      for (var key in propValue) {
-        if (propValue.hasOwnProperty(key)) {
-          var error = typeChecker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret_1$1);
-
-          if (error instanceof Error) {
-            return error;
-          }
-        }
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createUnionTypeChecker(arrayOfTypeCheckers) {
-    if (!Array.isArray(arrayOfTypeCheckers)) {
-      process.env.NODE_ENV !== 'production' ? printWarning$1$1('Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
-      return emptyFunctionThatReturnsNull$1;
-    }
-
-    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
-      var checker = arrayOfTypeCheckers[i];
-
-      if (typeof checker !== 'function') {
-        printWarning$1$1('Invalid argument supplied to oneOfType. Expected an array of check functions, but ' + 'received ' + getPostfixForTypeWarning(checker) + ' at index ' + i + '.');
-        return emptyFunctionThatReturnsNull$1;
-      }
-    }
-
-    function validate(props, propName, componentName, location, propFullName) {
-      for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
-        var checker = arrayOfTypeCheckers[i];
-
-        if (checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret_1$1) == null) {
-          return null;
-        }
-      }
-
-      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`.'));
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createNodeChecker() {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (!isNode(props[propName])) {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`, expected a ReactNode.'));
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createShapeTypeChecker(shapeTypes) {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
-      }
-
-      for (var key in shapeTypes) {
-        var checker = shapeTypes[key];
-
-        if (!checker) {
-          continue;
-        }
-
-        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret_1$1);
-
-        if (error) {
-          return error;
-        }
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createStrictShapeTypeChecker(shapeTypes) {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
-      } // We need to check all keys in case some are required but missing from
-      // props.
-
-
-      var allKeys = objectAssign$1({}, props[propName], shapeTypes);
-
-      for (var key in allKeys) {
-        var checker = shapeTypes[key];
-
-        if (!checker) {
-          return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` key `' + key + '` supplied to `' + componentName + '`.' + '\nBad object: ' + JSON.stringify(props[propName], null, '  ') + '\nValid keys: ' + JSON.stringify(Object.keys(shapeTypes), null, '  '));
-        }
-
-        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret_1$1);
-
-        if (error) {
-          return error;
-        }
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function isNode(propValue) {
-    switch (typeof propValue) {
-      case 'number':
-      case 'string':
-      case 'undefined':
-        return true;
-
-      case 'boolean':
-        return !propValue;
-
-      case 'object':
-        if (Array.isArray(propValue)) {
-          return propValue.every(isNode);
-        }
-
-        if (propValue === null || isValidElement(propValue)) {
-          return true;
-        }
-
-        var iteratorFn = getIteratorFn(propValue);
-
-        if (iteratorFn) {
-          var iterator = iteratorFn.call(propValue);
-          var step;
-
-          if (iteratorFn !== propValue.entries) {
-            while (!(step = iterator.next()).done) {
-              if (!isNode(step.value)) {
-                return false;
-              }
-            }
-          } else {
-            // Iterator will provide entry [k,v] tuples rather than values.
-            while (!(step = iterator.next()).done) {
-              var entry = step.value;
-
-              if (entry) {
-                if (!isNode(entry[1])) {
-                  return false;
-                }
-              }
-            }
-          }
-        } else {
-          return false;
-        }
-
-        return true;
-
-      default:
-        return false;
-    }
-  }
-
-  function isSymbol(propType, propValue) {
-    // Native Symbol.
-    if (propType === 'symbol') {
-      return true;
-    } // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
-
-
-    if (propValue['@@toStringTag'] === 'Symbol') {
-      return true;
-    } // Fallback for non-spec compliant Symbols which are polyfilled.
-
-
-    if (typeof Symbol === 'function' && propValue instanceof Symbol) {
-      return true;
-    }
-
-    return false;
-  } // Equivalent of `typeof` but with special handling for array and regexp.
-
-
-  function getPropType(propValue) {
-    var propType = typeof propValue;
-
-    if (Array.isArray(propValue)) {
-      return 'array';
-    }
-
-    if (propValue instanceof RegExp) {
-      // Old webkits (at least until Android 4.0) return 'function' rather than
-      // 'object' for typeof a RegExp. We'll normalize this here so that /bla/
-      // passes PropTypes.object.
-      return 'object';
-    }
-
-    if (isSymbol(propType, propValue)) {
-      return 'symbol';
-    }
-
-    return propType;
-  } // This handles more types than `getPropType`. Only used for error messages.
-  // See `createPrimitiveTypeChecker`.
-
-
-  function getPreciseType(propValue) {
-    if (typeof propValue === 'undefined' || propValue === null) {
-      return '' + propValue;
-    }
-
-    var propType = getPropType(propValue);
-
-    if (propType === 'object') {
-      if (propValue instanceof Date) {
-        return 'date';
-      } else if (propValue instanceof RegExp) {
-        return 'regexp';
-      }
-    }
-
-    return propType;
-  } // Returns a string that is postfixed to a warning about an invalid type.
-  // For example, "undefined" or "of type array"
-
-
-  function getPostfixForTypeWarning(value) {
-    var type = getPreciseType(value);
-
-    switch (type) {
-      case 'array':
-      case 'object':
-        return 'an ' + type;
-
-      case 'boolean':
-      case 'date':
-      case 'regexp':
-        return 'a ' + type;
-
-      default:
-        return type;
-    }
-  } // Returns class name of the object, if any.
-
-
-  function getClassName(propValue) {
-    if (!propValue.constructor || !propValue.constructor.name) {
-      return ANONYMOUS;
-    }
-
-    return propValue.constructor.name;
-  }
-
-  ReactPropTypes.checkPropTypes = checkPropTypes_1$1;
-  ReactPropTypes.PropTypes = ReactPropTypes;
-  return ReactPropTypes;
+var factoryWithTypeCheckers$1 = function factoryWithTypeCheckers(
+	isValidElement,
+	throwOnDirectAccess
+) {
+	/* global Symbol */
+	var ITERATOR_SYMBOL = typeof Symbol === "function" && Symbol.iterator;
+	var FAUX_ITERATOR_SYMBOL = "@@iterator"; // Before Symbol spec.
+
+	/**
+	 * Returns the iterator method function contained on the iterable object.
+	 *
+	 * Be sure to invoke the function with the iterable as context:
+	 *
+	 *     var iteratorFn = getIteratorFn(myIterable);
+	 *     if (iteratorFn) {
+	 *       var iterator = iteratorFn.call(myIterable);
+	 *       ...
+	 *     }
+	 *
+	 * @param {?object} maybeIterable
+	 * @return {?function}
+	 */
+
+	function getIteratorFn(maybeIterable) {
+		var iteratorFn =
+			maybeIterable &&
+			((ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL]) ||
+				maybeIterable[FAUX_ITERATOR_SYMBOL]);
+
+		if (typeof iteratorFn === "function") {
+			return iteratorFn;
+		}
+	}
+	/**
+	 * Collection of methods that allow declaration and validation of props that are
+	 * supplied to React components. Example usage:
+	 *
+	 *   var Props = require('ReactPropTypes');
+	 *   var MyArticle = React.createClass({
+	 *     propTypes: {
+	 *       // An optional string prop named "description".
+	 *       description: Props.string,
+	 *
+	 *       // A required enum prop named "category".
+	 *       category: Props.oneOf(['News','Photos']).isRequired,
+	 *
+	 *       // A prop named "dialog" that requires an instance of Dialog.
+	 *       dialog: Props.instanceOf(Dialog).isRequired
+	 *     },
+	 *     render: function() { ... }
+	 *   });
+	 *
+	 * A more formal specification of how these methods are used:
+	 *
+	 *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
+	 *   decl := ReactPropTypes.{type}(.isRequired)?
+	 *
+	 * Each and every declaration produces a function with the same signature. This
+	 * allows the creation of custom validation functions. For example:
+	 *
+	 *  var MyLink = React.createClass({
+	 *    propTypes: {
+	 *      // An optional string or URI prop named "href".
+	 *      href: function(props, propName, componentName) {
+	 *        var propValue = props[propName];
+	 *        if (propValue != null && typeof propValue !== 'string' &&
+	 *            !(propValue instanceof URI)) {
+	 *          return new Error(
+	 *            'Expected a string or an URI for ' + propName + ' in ' +
+	 *            componentName
+	 *          );
+	 *        }
+	 *      }
+	 *    },
+	 *    render: function() {...}
+	 *  });
+	 *
+	 * @internal
+	 */
+
+	var ANONYMOUS = "<<anonymous>>"; // Important!
+	// Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
+
+	var ReactPropTypes = {
+		array: createPrimitiveTypeChecker("array"),
+		bool: createPrimitiveTypeChecker("boolean"),
+		func: createPrimitiveTypeChecker("function"),
+		number: createPrimitiveTypeChecker("number"),
+		object: createPrimitiveTypeChecker("object"),
+		string: createPrimitiveTypeChecker("string"),
+		symbol: createPrimitiveTypeChecker("symbol"),
+		any: createAnyTypeChecker(),
+		arrayOf: createArrayOfTypeChecker,
+		element: createElementTypeChecker(),
+		instanceOf: createInstanceTypeChecker,
+		node: createNodeChecker(),
+		objectOf: createObjectOfTypeChecker,
+		oneOf: createEnumTypeChecker,
+		oneOfType: createUnionTypeChecker,
+		shape: createShapeTypeChecker,
+		exact: createStrictShapeTypeChecker
+	};
+	/**
+	 * inlined Object.is polyfill to avoid requiring consumers ship their own
+	 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+	 */
+
+	/*eslint-disable no-self-compare*/
+
+	function is(x, y) {
+		// SameValue algorithm
+		if (x === y) {
+			// Steps 1-5, 7-10
+			// Steps 6.b-6.e: +0 != -0
+			return x !== 0 || 1 / x === 1 / y;
+		} else {
+			// Step 6.a: NaN == NaN
+			return x !== x && y !== y;
+		}
+	}
+	/*eslint-enable no-self-compare*/
+
+	/**
+	 * We use an Error-like object for backward compatibility as people may call
+	 * PropTypes directly and inspect their output. However, we don't use real
+	 * Errors anymore. We don't inspect their stack anyway, and creating them
+	 * is prohibitively expensive if they are created too often, such as what
+	 * happens in oneOfType() for any type before the one that matched.
+	 */
+
+	function PropTypeError(message) {
+		this.message = message;
+		this.stack = "";
+	} // Make `instanceof Error` still work for returned errors.
+
+	PropTypeError.prototype = Error.prototype;
+
+	function createChainableTypeChecker(validate) {
+		if (process.env.NODE_ENV !== "production") {
+			var manualPropTypeCallCache = {};
+			var manualPropTypeWarningCount = 0;
+		}
+
+		function checkType(
+			isRequired,
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName,
+			secret
+		) {
+			componentName = componentName || ANONYMOUS;
+			propFullName = propFullName || propName;
+
+			if (secret !== ReactPropTypesSecret_1$1) {
+				if (throwOnDirectAccess) {
+					// New behavior only for users of `prop-types` package
+					var err = new Error(
+						"Calling PropTypes validators directly is not supported by the `prop-types` package. " +
+							"Use `PropTypes.checkPropTypes()` to call them. " +
+							"Read more at http://fb.me/use-check-prop-types"
+					);
+					err.name = "Invariant Violation";
+					throw err;
+				} else if (
+					process.env.NODE_ENV !== "production" &&
+					typeof console !== "undefined"
+				) {
+					// Old behavior for people using React.PropTypes
+					var cacheKey = componentName + ":" + propName;
+
+					if (
+						!manualPropTypeCallCache[cacheKey] && // Avoid spamming the console because they are often not actionable except for lib authors
+						manualPropTypeWarningCount < 3
+					) {
+						printWarning$1$1(
+							"You are manually calling a React.PropTypes validation " +
+								"function for the `" +
+								propFullName +
+								"` prop on `" +
+								componentName +
+								"`. This is deprecated " +
+								"and will throw in the standalone `prop-types` package. " +
+								"You may be seeing this warning due to a third-party PropTypes " +
+								"library. See https://fb.me/react-warning-dont-call-proptypes " +
+								"for details."
+						);
+						manualPropTypeCallCache[cacheKey] = true;
+						manualPropTypeWarningCount++;
+					}
+				}
+			}
+
+			if (props[propName] == null) {
+				if (isRequired) {
+					if (props[propName] === null) {
+						return new PropTypeError(
+							"The " +
+								location +
+								" `" +
+								propFullName +
+								"` is marked as required " +
+								("in `" +
+									componentName +
+									"`, but its value is `null`.")
+						);
+					}
+
+					return new PropTypeError(
+						"The " +
+							location +
+							" `" +
+							propFullName +
+							"` is marked as required in " +
+							("`" +
+								componentName +
+								"`, but its value is `undefined`.")
+					);
+				}
+
+				return null;
+			} else {
+				return validate(
+					props,
+					propName,
+					componentName,
+					location,
+					propFullName
+				);
+			}
+		}
+
+		var chainedCheckType = checkType.bind(null, false);
+		chainedCheckType.isRequired = checkType.bind(null, true);
+		return chainedCheckType;
+	}
+
+	function createPrimitiveTypeChecker(expectedType) {
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName,
+			secret
+		) {
+			var propValue = props[propName];
+			var propType = getPropType(propValue);
+
+			if (propType !== expectedType) {
+				// `propValue` being instance of, say, date/regexp, pass the 'object'
+				// check, but we can offer a more precise error message here rather than
+				// 'of type `object`'.
+				var preciseType = getPreciseType(propValue);
+				return new PropTypeError(
+					"Invalid " +
+						location +
+						" `" +
+						propFullName +
+						"` of type " +
+						("`" +
+							preciseType +
+							"` supplied to `" +
+							componentName +
+							"`, expected ") +
+						("`" + expectedType + "`.")
+				);
+			}
+
+			return null;
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createAnyTypeChecker() {
+		return createChainableTypeChecker(emptyFunctionThatReturnsNull$1);
+	}
+
+	function createArrayOfTypeChecker(typeChecker) {
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			if (typeof typeChecker !== "function") {
+				return new PropTypeError(
+					"Property `" +
+						propFullName +
+						"` of component `" +
+						componentName +
+						"` has invalid PropType notation inside arrayOf."
+				);
+			}
+
+			var propValue = props[propName];
+
+			if (!Array.isArray(propValue)) {
+				var propType = getPropType(propValue);
+				return new PropTypeError(
+					"Invalid " +
+						location +
+						" `" +
+						propFullName +
+						"` of type " +
+						("`" +
+							propType +
+							"` supplied to `" +
+							componentName +
+							"`, expected an array.")
+				);
+			}
+
+			for (var i = 0; i < propValue.length; i++) {
+				var error = typeChecker(
+					propValue,
+					i,
+					componentName,
+					location,
+					propFullName + "[" + i + "]",
+					ReactPropTypesSecret_1$1
+				);
+
+				if (error instanceof Error) {
+					return error;
+				}
+			}
+
+			return null;
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createElementTypeChecker() {
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			var propValue = props[propName];
+
+			if (!isValidElement(propValue)) {
+				var propType = getPropType(propValue);
+				return new PropTypeError(
+					"Invalid " +
+						location +
+						" `" +
+						propFullName +
+						"` of type " +
+						("`" +
+							propType +
+							"` supplied to `" +
+							componentName +
+							"`, expected a single ReactElement.")
+				);
+			}
+
+			return null;
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createInstanceTypeChecker(expectedClass) {
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			if (!(props[propName] instanceof expectedClass)) {
+				var expectedClassName = expectedClass.name || ANONYMOUS;
+				var actualClassName = getClassName(props[propName]);
+				return new PropTypeError(
+					"Invalid " +
+						location +
+						" `" +
+						propFullName +
+						"` of type " +
+						("`" +
+							actualClassName +
+							"` supplied to `" +
+							componentName +
+							"`, expected ") +
+						("instance of `" + expectedClassName + "`.")
+				);
+			}
+
+			return null;
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createEnumTypeChecker(expectedValues) {
+		if (!Array.isArray(expectedValues)) {
+			process.env.NODE_ENV !== "production"
+				? printWarning$1$1(
+						"Invalid argument supplied to oneOf, expected an instance of array."
+				  )
+				: void 0;
+			return emptyFunctionThatReturnsNull$1;
+		}
+
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			var propValue = props[propName];
+
+			for (var i = 0; i < expectedValues.length; i++) {
+				if (is(propValue, expectedValues[i])) {
+					return null;
+				}
+			}
+
+			var valuesString = JSON.stringify(expectedValues);
+			return new PropTypeError(
+				"Invalid " +
+					location +
+					" `" +
+					propFullName +
+					"` of value `" +
+					propValue +
+					"` " +
+					("supplied to `" +
+						componentName +
+						"`, expected one of " +
+						valuesString +
+						".")
+			);
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createObjectOfTypeChecker(typeChecker) {
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			if (typeof typeChecker !== "function") {
+				return new PropTypeError(
+					"Property `" +
+						propFullName +
+						"` of component `" +
+						componentName +
+						"` has invalid PropType notation inside objectOf."
+				);
+			}
+
+			var propValue = props[propName];
+			var propType = getPropType(propValue);
+
+			if (propType !== "object") {
+				return new PropTypeError(
+					"Invalid " +
+						location +
+						" `" +
+						propFullName +
+						"` of type " +
+						("`" +
+							propType +
+							"` supplied to `" +
+							componentName +
+							"`, expected an object.")
+				);
+			}
+
+			for (var key in propValue) {
+				if (propValue.hasOwnProperty(key)) {
+					var error = typeChecker(
+						propValue,
+						key,
+						componentName,
+						location,
+						propFullName + "." + key,
+						ReactPropTypesSecret_1$1
+					);
+
+					if (error instanceof Error) {
+						return error;
+					}
+				}
+			}
+
+			return null;
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createUnionTypeChecker(arrayOfTypeCheckers) {
+		if (!Array.isArray(arrayOfTypeCheckers)) {
+			process.env.NODE_ENV !== "production"
+				? printWarning$1$1(
+						"Invalid argument supplied to oneOfType, expected an instance of array."
+				  )
+				: void 0;
+			return emptyFunctionThatReturnsNull$1;
+		}
+
+		for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+			var checker = arrayOfTypeCheckers[i];
+
+			if (typeof checker !== "function") {
+				printWarning$1$1(
+					"Invalid argument supplied to oneOfType. Expected an array of check functions, but " +
+						"received " +
+						getPostfixForTypeWarning(checker) +
+						" at index " +
+						i +
+						"."
+				);
+				return emptyFunctionThatReturnsNull$1;
+			}
+		}
+
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+				var checker = arrayOfTypeCheckers[i];
+
+				if (
+					checker(
+						props,
+						propName,
+						componentName,
+						location,
+						propFullName,
+						ReactPropTypesSecret_1$1
+					) == null
+				) {
+					return null;
+				}
+			}
+
+			return new PropTypeError(
+				"Invalid " +
+					location +
+					" `" +
+					propFullName +
+					"` supplied to " +
+					("`" + componentName + "`.")
+			);
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createNodeChecker() {
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			if (!isNode(props[propName])) {
+				return new PropTypeError(
+					"Invalid " +
+						location +
+						" `" +
+						propFullName +
+						"` supplied to " +
+						("`" + componentName + "`, expected a ReactNode.")
+				);
+			}
+
+			return null;
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createShapeTypeChecker(shapeTypes) {
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			var propValue = props[propName];
+			var propType = getPropType(propValue);
+
+			if (propType !== "object") {
+				return new PropTypeError(
+					"Invalid " +
+						location +
+						" `" +
+						propFullName +
+						"` of type `" +
+						propType +
+						"` " +
+						("supplied to `" +
+							componentName +
+							"`, expected `object`.")
+				);
+			}
+
+			for (var key in shapeTypes) {
+				var checker = shapeTypes[key];
+
+				if (!checker) {
+					continue;
+				}
+
+				var error = checker(
+					propValue,
+					key,
+					componentName,
+					location,
+					propFullName + "." + key,
+					ReactPropTypesSecret_1$1
+				);
+
+				if (error) {
+					return error;
+				}
+			}
+
+			return null;
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function createStrictShapeTypeChecker(shapeTypes) {
+		function validate(
+			props,
+			propName,
+			componentName,
+			location,
+			propFullName
+		) {
+			var propValue = props[propName];
+			var propType = getPropType(propValue);
+
+			if (propType !== "object") {
+				return new PropTypeError(
+					"Invalid " +
+						location +
+						" `" +
+						propFullName +
+						"` of type `" +
+						propType +
+						"` " +
+						("supplied to `" +
+							componentName +
+							"`, expected `object`.")
+				);
+			} // We need to check all keys in case some are required but missing from
+			// props.
+
+			var allKeys = objectAssign$1({}, props[propName], shapeTypes);
+
+			for (var key in allKeys) {
+				var checker = shapeTypes[key];
+
+				if (!checker) {
+					return new PropTypeError(
+						"Invalid " +
+							location +
+							" `" +
+							propFullName +
+							"` key `" +
+							key +
+							"` supplied to `" +
+							componentName +
+							"`." +
+							"\nBad object: " +
+							JSON.stringify(props[propName], null, "  ") +
+							"\nValid keys: " +
+							JSON.stringify(Object.keys(shapeTypes), null, "  ")
+					);
+				}
+
+				var error = checker(
+					propValue,
+					key,
+					componentName,
+					location,
+					propFullName + "." + key,
+					ReactPropTypesSecret_1$1
+				);
+
+				if (error) {
+					return error;
+				}
+			}
+
+			return null;
+		}
+
+		return createChainableTypeChecker(validate);
+	}
+
+	function isNode(propValue) {
+		switch (typeof propValue) {
+			case "number":
+			case "string":
+			case "undefined":
+				return true;
+
+			case "boolean":
+				return !propValue;
+
+			case "object":
+				if (Array.isArray(propValue)) {
+					return propValue.every(isNode);
+				}
+
+				if (propValue === null || isValidElement(propValue)) {
+					return true;
+				}
+
+				var iteratorFn = getIteratorFn(propValue);
+
+				if (iteratorFn) {
+					var iterator = iteratorFn.call(propValue);
+					var step;
+
+					if (iteratorFn !== propValue.entries) {
+						while (!(step = iterator.next()).done) {
+							if (!isNode(step.value)) {
+								return false;
+							}
+						}
+					} else {
+						// Iterator will provide entry [k,v] tuples rather than values.
+						while (!(step = iterator.next()).done) {
+							var entry = step.value;
+
+							if (entry) {
+								if (!isNode(entry[1])) {
+									return false;
+								}
+							}
+						}
+					}
+				} else {
+					return false;
+				}
+
+				return true;
+
+			default:
+				return false;
+		}
+	}
+
+	function isSymbol(propType, propValue) {
+		// Native Symbol.
+		if (propType === "symbol") {
+			return true;
+		} // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
+
+		if (propValue["@@toStringTag"] === "Symbol") {
+			return true;
+		} // Fallback for non-spec compliant Symbols which are polyfilled.
+
+		if (typeof Symbol === "function" && propValue instanceof Symbol) {
+			return true;
+		}
+
+		return false;
+	} // Equivalent of `typeof` but with special handling for array and regexp.
+
+	function getPropType(propValue) {
+		var propType = typeof propValue;
+
+		if (Array.isArray(propValue)) {
+			return "array";
+		}
+
+		if (propValue instanceof RegExp) {
+			// Old webkits (at least until Android 4.0) return 'function' rather than
+			// 'object' for typeof a RegExp. We'll normalize this here so that /bla/
+			// passes PropTypes.object.
+			return "object";
+		}
+
+		if (isSymbol(propType, propValue)) {
+			return "symbol";
+		}
+
+		return propType;
+	} // This handles more types than `getPropType`. Only used for error messages.
+	// See `createPrimitiveTypeChecker`.
+
+	function getPreciseType(propValue) {
+		if (typeof propValue === "undefined" || propValue === null) {
+			return "" + propValue;
+		}
+
+		var propType = getPropType(propValue);
+
+		if (propType === "object") {
+			if (propValue instanceof Date) {
+				return "date";
+			} else if (propValue instanceof RegExp) {
+				return "regexp";
+			}
+		}
+
+		return propType;
+	} // Returns a string that is postfixed to a warning about an invalid type.
+	// For example, "undefined" or "of type array"
+
+	function getPostfixForTypeWarning(value) {
+		var type = getPreciseType(value);
+
+		switch (type) {
+			case "array":
+			case "object":
+				return "an " + type;
+
+			case "boolean":
+			case "date":
+			case "regexp":
+				return "a " + type;
+
+			default:
+				return type;
+		}
+	} // Returns class name of the object, if any.
+
+	function getClassName(propValue) {
+		if (!propValue.constructor || !propValue.constructor.name) {
+			return ANONYMOUS;
+		}
+
+		return propValue.constructor.name;
+	}
+
+	ReactPropTypes.checkPropTypes = checkPropTypes_1$1;
+	ReactPropTypes.PropTypes = ReactPropTypes;
+	return ReactPropTypes;
 };
 
 function emptyFunction$1() {}
 
 var factoryWithThrowingShims$1 = function factoryWithThrowingShims() {
-  function shim(props, propName, componentName, location, propFullName, secret) {
-    if (secret === ReactPropTypesSecret_1$1) {
-      // It is still safe when called from React.
-      return;
-    }
+	function shim(
+		props,
+		propName,
+		componentName,
+		location,
+		propFullName,
+		secret
+	) {
+		if (secret === ReactPropTypesSecret_1$1) {
+			// It is still safe when called from React.
+			return;
+		}
 
-    var err = new Error('Calling PropTypes validators directly is not supported by the `prop-types` package. ' + 'Use PropTypes.checkPropTypes() to call them. ' + 'Read more at http://fb.me/use-check-prop-types');
-    err.name = 'Invariant Violation';
-    throw err;
-  }
+		var err = new Error(
+			"Calling PropTypes validators directly is not supported by the `prop-types` package. " +
+				"Use PropTypes.checkPropTypes() to call them. " +
+				"Read more at http://fb.me/use-check-prop-types"
+		);
+		err.name = "Invariant Violation";
+		throw err;
+	}
 
-  shim.isRequired = shim;
+	shim.isRequired = shim;
 
-  function getShim() {
-    return shim;
-  } // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
+	function getShim() {
+		return shim;
+	} // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
 
-
-  var ReactPropTypes = {
-    array: shim,
-    bool: shim,
-    func: shim,
-    number: shim,
-    object: shim,
-    string: shim,
-    symbol: shim,
-    any: shim,
-    arrayOf: getShim,
-    element: shim,
-    instanceOf: getShim,
-    node: shim,
-    objectOf: getShim,
-    oneOf: getShim,
-    oneOfType: getShim,
-    shape: getShim,
-    exact: getShim
-  };
-  ReactPropTypes.checkPropTypes = emptyFunction$1;
-  ReactPropTypes.PropTypes = ReactPropTypes;
-  return ReactPropTypes;
+	var ReactPropTypes = {
+		array: shim,
+		bool: shim,
+		func: shim,
+		number: shim,
+		object: shim,
+		string: shim,
+		symbol: shim,
+		any: shim,
+		arrayOf: getShim,
+		element: shim,
+		instanceOf: getShim,
+		node: shim,
+		objectOf: getShim,
+		oneOf: getShim,
+		oneOfType: getShim,
+		shape: getShim,
+		exact: getShim
+	};
+	ReactPropTypes.checkPropTypes = emptyFunction$1;
+	ReactPropTypes.PropTypes = ReactPropTypes;
+	return ReactPropTypes;
 };
 
-var propTypes$1 = createCommonjsModule$1(function (module) {
-  /**
-   * Copyright (c) 2013-present, Facebook, Inc.
-   *
-   * This source code is licensed under the MIT license found in the
-   * LICENSE file in the root directory of this source tree.
-   */
-  if (process.env.NODE_ENV !== 'production') {
-    var REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol.for && Symbol.for('react.element') || 0xeac7;
+var propTypes$1 = createCommonjsModule$1(function(module) {
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 */
+	if (process.env.NODE_ENV !== "production") {
+		var REACT_ELEMENT_TYPE =
+			(typeof Symbol === "function" &&
+				Symbol.for &&
+				Symbol.for("react.element")) ||
+			0xeac7;
 
-    var isValidElement = function isValidElement(object) {
-      return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
-    }; // By explicitly using `prop-types` you are opting into new development behavior.
-    // http://fb.me/prop-types-in-prod
+		var isValidElement = function isValidElement(object) {
+			return (
+				typeof object === "object" &&
+				object !== null &&
+				object.$$typeof === REACT_ELEMENT_TYPE
+			);
+		}; // By explicitly using `prop-types` you are opting into new development behavior.
+		// http://fb.me/prop-types-in-prod
 
-
-    var throwOnDirectAccess = true;
-    module.exports = factoryWithTypeCheckers$1(isValidElement, throwOnDirectAccess);
-  } else {
-    // By explicitly using `prop-types` you are opting into new production behavior.
-    // http://fb.me/prop-types-in-prod
-    module.exports = factoryWithThrowingShims$1();
-  }
+		var throwOnDirectAccess = true;
+		module.exports = factoryWithTypeCheckers$1(
+			isValidElement,
+			throwOnDirectAccess
+		);
+	} else {
+		// By explicitly using `prop-types` you are opting into new production behavior.
+		// http://fb.me/prop-types-in-prod
+		module.exports = factoryWithThrowingShims$1();
+	}
 });
 var RouteShape = {
-  getComponent: propTypes$1.func.isRequired,
-  path: propTypes$1.string.isRequired
+	getComponent: propTypes$1.func.isRequired,
+	path: propTypes$1.string.isRequired
 };
 var ConfigShape = {
-  descriptor: propTypes$1.shape({
-    container: propTypes$1.string,
-    data: propTypes$1.object,
-    namespace: propTypes$1.string,
-    widget: propTypes$1.string.isRequired
-  }).isRequired,
-  // covers both class and functional components
-  component: propTypes$1.func.isRequired
+	descriptor: propTypes$1.shape({
+		container: propTypes$1.string,
+		data: propTypes$1.object,
+		namespace: propTypes$1.string,
+		widget: propTypes$1.string.isRequired
+	}).isRequired,
+	// covers both class and functional components
+	component: propTypes$1.func.isRequired
 };
 
 function _isPlaceholder$1(a) {
-  return a != null && typeof a === 'object' && a['@@functional/placeholder'] === true;
+	return (
+		a != null &&
+		typeof a === "object" &&
+		a["@@functional/placeholder"] === true
+	);
 }
 
 var _isPlaceholder_1 = _isPlaceholder$1;
@@ -8272,13 +9391,13 @@ var _isPlaceholder_1 = _isPlaceholder$1;
  */
 
 function _curry1$1(fn) {
-  return function f1(a) {
-    if (arguments.length === 0 || _isPlaceholder_1(a)) {
-      return f1;
-    } else {
-      return fn.apply(this, arguments);
-    }
-  };
+	return function f1(a) {
+		if (arguments.length === 0 || _isPlaceholder_1(a)) {
+			return f1;
+		} else {
+			return fn.apply(this, arguments);
+		}
+	};
 }
 
 var _curry1_1 = _curry1$1;
@@ -8303,150 +9422,162 @@ var _curry1_1 = _curry1$1;
  */
 
 var always$1 =
-/*#__PURE__*/
-_curry1_1(function always(val) {
-  return function () {
-    return val;
-  };
-});
+	/*#__PURE__*/
+	_curry1_1(function always(val) {
+		return function() {
+			return val;
+		};
+	});
 
 var always_1 = always$1;
 
 var warning = function warning(pred, msg) {
-  if (pred) {
-    return;
-  }
+	if (pred) {
+		return;
+	}
 
-  if (process.env.NODE_ENV === 'production') {
-    return;
-  }
+	if (process.env.NODE_ENV === "production") {
+		return;
+	}
 
-  console.log(msg);
+	console.log(msg);
 };
 
 var invariant = function invariant(pred, msg) {
-  if (pred) {
-    return;
-  }
+	if (pred) {
+		return;
+	}
 
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error('There was an error. Use non-production build to see details.');
-  }
+	if (process.env.NODE_ENV === "production") {
+		throw new Error(
+			"There was an error. Use non-production build to see details."
+		);
+	}
 
-  throw new Error(msg);
+	throw new Error(msg);
 };
 
 var noop = always_1(null);
 
 var getDisplayName = function getDisplayName(Component$$1) {
-  return Component$$1.displayName || Component$$1.name || 'Component';
+	return Component$$1.displayName || Component$$1.name || "Component";
 };
 
 var WidgetContext = React.createContext({
-  data: undefined,
-  namespace: undefined
+	data: undefined,
+	namespace: undefined
 });
 
 function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
+	if (!(instance instanceof Constructor)) {
+		throw new TypeError("Cannot call a class as a function");
+	}
 }
 
 function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
-  }
+	for (var i = 0; i < props.length; i++) {
+		var descriptor = props[i];
+		descriptor.enumerable = descriptor.enumerable || false;
+		descriptor.configurable = true;
+		if ("value" in descriptor) descriptor.writable = true;
+		Object.defineProperty(target, descriptor.key, descriptor);
+	}
 }
 
 function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  return Constructor;
+	if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+	if (staticProps) _defineProperties(Constructor, staticProps);
+	return Constructor;
 }
 
 function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
+	if (key in obj) {
+		Object.defineProperty(obj, key, {
+			value: value,
+			enumerable: true,
+			configurable: true,
+			writable: true
+		});
+	} else {
+		obj[key] = value;
+	}
 
-  return obj;
+	return obj;
 }
 
 function _extends$1() {
-  _extends$1 = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
+	_extends$1 =
+		Object.assign ||
+		function(target) {
+			for (var i = 1; i < arguments.length; i++) {
+				var source = arguments[i];
 
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
+				for (var key in source) {
+					if (Object.prototype.hasOwnProperty.call(source, key)) {
+						target[key] = source[key];
+					}
+				}
+			}
 
-    return target;
-  };
+			return target;
+		};
 
-  return _extends$1.apply(this, arguments);
+	return _extends$1.apply(this, arguments);
 }
 
 function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function");
-  }
+	if (typeof superClass !== "function" && superClass !== null) {
+		throw new TypeError(
+			"Super expression must either be null or a function"
+		);
+	}
 
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) _setPrototypeOf(subClass, superClass);
+	subClass.prototype = Object.create(superClass && superClass.prototype, {
+		constructor: {
+			value: subClass,
+			writable: true,
+			configurable: true
+		}
+	});
+	if (superClass) _setPrototypeOf(subClass, superClass);
 }
 
 function _getPrototypeOf(o) {
-  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-    return o.__proto__ || Object.getPrototypeOf(o);
-  };
-  return _getPrototypeOf(o);
+	_getPrototypeOf = Object.setPrototypeOf
+		? Object.getPrototypeOf
+		: function _getPrototypeOf(o) {
+				return o.__proto__ || Object.getPrototypeOf(o);
+		  };
+	return _getPrototypeOf(o);
 }
 
 function _setPrototypeOf(o, p) {
-  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-    o.__proto__ = p;
-    return o;
-  };
+	_setPrototypeOf =
+		Object.setPrototypeOf ||
+		function _setPrototypeOf(o, p) {
+			o.__proto__ = p;
+			return o;
+		};
 
-  return _setPrototypeOf(o, p);
+	return _setPrototypeOf(o, p);
 }
 
 function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
+	if (self === void 0) {
+		throw new ReferenceError(
+			"this hasn't been initialised - super() hasn't been called"
+		);
+	}
 
-  return self;
+	return self;
 }
 
 function _possibleConstructorReturn(self, call) {
-  if (call && (typeof call === "object" || typeof call === "function")) {
-    return call;
-  }
+	if (call && (typeof call === "object" || typeof call === "function")) {
+		return call;
+	}
 
-  return _assertThisInitialized(self);
+	return _assertThisInitialized(self);
 }
 /**
  * Optimized internal two-arity curry function.
@@ -8457,26 +9588,33 @@ function _possibleConstructorReturn(self, call) {
  * @return {Function} The curried function.
  */
 
-
 function _curry2$1(fn) {
-  return function f2(a, b) {
-    switch (arguments.length) {
-      case 0:
-        return f2;
+	return function f2(a, b) {
+		switch (arguments.length) {
+			case 0:
+				return f2;
 
-      case 1:
-        return _isPlaceholder_1(a) ? f2 : _curry1_1(function (_b) {
-          return fn(a, _b);
-        });
+			case 1:
+				return _isPlaceholder_1(a)
+					? f2
+					: _curry1_1(function(_b) {
+							return fn(a, _b);
+					  });
 
-      default:
-        return _isPlaceholder_1(a) && _isPlaceholder_1(b) ? f2 : _isPlaceholder_1(a) ? _curry1_1(function (_a) {
-          return fn(_a, b);
-        }) : _isPlaceholder_1(b) ? _curry1_1(function (_b) {
-          return fn(a, _b);
-        }) : fn(a, b);
-    }
-  };
+			default:
+				return _isPlaceholder_1(a) && _isPlaceholder_1(b)
+					? f2
+					: _isPlaceholder_1(a)
+						? _curry1_1(function(_a) {
+								return fn(_a, b);
+						  })
+						: _isPlaceholder_1(b)
+							? _curry1_1(function(_b) {
+									return fn(a, _b);
+							  })
+							: fn(a, b);
+		}
+	};
 }
 
 var _curry2_1 = _curry2$1;
@@ -8490,41 +9628,65 @@ var _curry2_1 = _curry2$1;
  */
 
 function _curry3$1(fn) {
-  return function f3(a, b, c) {
-    switch (arguments.length) {
-      case 0:
-        return f3;
+	return function f3(a, b, c) {
+		switch (arguments.length) {
+			case 0:
+				return f3;
 
-      case 1:
-        return _isPlaceholder_1(a) ? f3 : _curry2_1(function (_b, _c) {
-          return fn(a, _b, _c);
-        });
+			case 1:
+				return _isPlaceholder_1(a)
+					? f3
+					: _curry2_1(function(_b, _c) {
+							return fn(a, _b, _c);
+					  });
 
-      case 2:
-        return _isPlaceholder_1(a) && _isPlaceholder_1(b) ? f3 : _isPlaceholder_1(a) ? _curry2_1(function (_a, _c) {
-          return fn(_a, b, _c);
-        }) : _isPlaceholder_1(b) ? _curry2_1(function (_b, _c) {
-          return fn(a, _b, _c);
-        }) : _curry1_1(function (_c) {
-          return fn(a, b, _c);
-        });
+			case 2:
+				return _isPlaceholder_1(a) && _isPlaceholder_1(b)
+					? f3
+					: _isPlaceholder_1(a)
+						? _curry2_1(function(_a, _c) {
+								return fn(_a, b, _c);
+						  })
+						: _isPlaceholder_1(b)
+							? _curry2_1(function(_b, _c) {
+									return fn(a, _b, _c);
+							  })
+							: _curry1_1(function(_c) {
+									return fn(a, b, _c);
+							  });
 
-      default:
-        return _isPlaceholder_1(a) && _isPlaceholder_1(b) && _isPlaceholder_1(c) ? f3 : _isPlaceholder_1(a) && _isPlaceholder_1(b) ? _curry2_1(function (_a, _b) {
-          return fn(_a, _b, c);
-        }) : _isPlaceholder_1(a) && _isPlaceholder_1(c) ? _curry2_1(function (_a, _c) {
-          return fn(_a, b, _c);
-        }) : _isPlaceholder_1(b) && _isPlaceholder_1(c) ? _curry2_1(function (_b, _c) {
-          return fn(a, _b, _c);
-        }) : _isPlaceholder_1(a) ? _curry1_1(function (_a) {
-          return fn(_a, b, c);
-        }) : _isPlaceholder_1(b) ? _curry1_1(function (_b) {
-          return fn(a, _b, c);
-        }) : _isPlaceholder_1(c) ? _curry1_1(function (_c) {
-          return fn(a, b, _c);
-        }) : fn(a, b, c);
-    }
-  };
+			default:
+				return _isPlaceholder_1(a) &&
+					_isPlaceholder_1(b) &&
+					_isPlaceholder_1(c)
+					? f3
+					: _isPlaceholder_1(a) && _isPlaceholder_1(b)
+						? _curry2_1(function(_a, _b) {
+								return fn(_a, _b, c);
+						  })
+						: _isPlaceholder_1(a) && _isPlaceholder_1(c)
+							? _curry2_1(function(_a, _c) {
+									return fn(_a, b, _c);
+							  })
+							: _isPlaceholder_1(b) && _isPlaceholder_1(c)
+								? _curry2_1(function(_b, _c) {
+										return fn(a, _b, _c);
+								  })
+								: _isPlaceholder_1(a)
+									? _curry1_1(function(_a) {
+											return fn(_a, b, c);
+									  })
+									: _isPlaceholder_1(b)
+										? _curry1_1(function(_b) {
+												return fn(a, _b, c);
+										  })
+										: _isPlaceholder_1(c)
+											? _curry1_1(function(_c) {
+													return fn(a, b, _c);
+											  })
+											: fn(a, b, c);
+		}
+	};
 }
 
 var _curry3_1 = _curry3$1;
@@ -8555,10 +9717,10 @@ var _curry3_1 = _curry3$1;
  */
 
 var o$1 =
-/*#__PURE__*/
-_curry3_1(function o(f, g, x) {
-  return f(g(x));
-});
+	/*#__PURE__*/
+	_curry3_1(function o(f, g, x) {
+		return f(g(x));
+	});
 
 var o_1 = o$1;
 /**
@@ -8593,68 +9755,82 @@ var o_1 = o$1;
  */
 
 var nAry$1 =
-/*#__PURE__*/
-_curry2_1(function nAry(n, fn) {
-  switch (n) {
-    case 0:
-      return function () {
-        return fn.call(this);
-      };
+	/*#__PURE__*/
+	_curry2_1(function nAry(n, fn) {
+		switch (n) {
+			case 0:
+				return function() {
+					return fn.call(this);
+				};
 
-    case 1:
-      return function (a0) {
-        return fn.call(this, a0);
-      };
+			case 1:
+				return function(a0) {
+					return fn.call(this, a0);
+				};
 
-    case 2:
-      return function (a0, a1) {
-        return fn.call(this, a0, a1);
-      };
+			case 2:
+				return function(a0, a1) {
+					return fn.call(this, a0, a1);
+				};
 
-    case 3:
-      return function (a0, a1, a2) {
-        return fn.call(this, a0, a1, a2);
-      };
+			case 3:
+				return function(a0, a1, a2) {
+					return fn.call(this, a0, a1, a2);
+				};
 
-    case 4:
-      return function (a0, a1, a2, a3) {
-        return fn.call(this, a0, a1, a2, a3);
-      };
+			case 4:
+				return function(a0, a1, a2, a3) {
+					return fn.call(this, a0, a1, a2, a3);
+				};
 
-    case 5:
-      return function (a0, a1, a2, a3, a4) {
-        return fn.call(this, a0, a1, a2, a3, a4);
-      };
+			case 5:
+				return function(a0, a1, a2, a3, a4) {
+					return fn.call(this, a0, a1, a2, a3, a4);
+				};
 
-    case 6:
-      return function (a0, a1, a2, a3, a4, a5) {
-        return fn.call(this, a0, a1, a2, a3, a4, a5);
-      };
+			case 6:
+				return function(a0, a1, a2, a3, a4, a5) {
+					return fn.call(this, a0, a1, a2, a3, a4, a5);
+				};
 
-    case 7:
-      return function (a0, a1, a2, a3, a4, a5, a6) {
-        return fn.call(this, a0, a1, a2, a3, a4, a5, a6);
-      };
+			case 7:
+				return function(a0, a1, a2, a3, a4, a5, a6) {
+					return fn.call(this, a0, a1, a2, a3, a4, a5, a6);
+				};
 
-    case 8:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7) {
-        return fn.call(this, a0, a1, a2, a3, a4, a5, a6, a7);
-      };
+			case 8:
+				return function(a0, a1, a2, a3, a4, a5, a6, a7) {
+					return fn.call(this, a0, a1, a2, a3, a4, a5, a6, a7);
+				};
 
-    case 9:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8) {
-        return fn.call(this, a0, a1, a2, a3, a4, a5, a6, a7, a8);
-      };
+			case 9:
+				return function(a0, a1, a2, a3, a4, a5, a6, a7, a8) {
+					return fn.call(this, a0, a1, a2, a3, a4, a5, a6, a7, a8);
+				};
 
-    case 10:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
-        return fn.call(this, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9);
-      };
+			case 10:
+				return function(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
+					return fn.call(
+						this,
+						a0,
+						a1,
+						a2,
+						a3,
+						a4,
+						a5,
+						a6,
+						a7,
+						a8,
+						a9
+					);
+				};
 
-    default:
-      throw new Error('First argument to nAry must be a non-negative integer no greater than ten');
-  }
-});
+			default:
+				throw new Error(
+					"First argument to nAry must be a non-negative integer no greater than ten"
+				);
+		}
+	});
 
 var nAry_1 = nAry$1;
 /**
@@ -8687,10 +9863,10 @@ var nAry_1 = nAry$1;
  */
 
 var unary$1 =
-/*#__PURE__*/
-_curry1_1(function unary(fn) {
-  return nAry_1(1, fn);
-});
+	/*#__PURE__*/
+	_curry1_1(function unary(fn) {
+		return nAry_1(1, fn);
+	});
 
 var unary_1 = unary$1;
 /**
@@ -8713,22 +9889,22 @@ var unary_1 = unary$1;
  */
 
 var path$1 =
-/*#__PURE__*/
-_curry2_1(function path(paths, obj) {
-  var val = obj;
-  var idx = 0;
+	/*#__PURE__*/
+	_curry2_1(function path(paths, obj) {
+		var val = obj;
+		var idx = 0;
 
-  while (idx < paths.length) {
-    if (val == null) {
-      return;
-    }
+		while (idx < paths.length) {
+			if (val == null) {
+				return;
+			}
 
-    val = val[paths[idx]];
-    idx += 1;
-  }
+			val = val[paths[idx]];
+			idx += 1;
+		}
 
-  return val;
-});
+		return val;
+	});
 
 var path_1 = path$1;
 /**
@@ -8751,10 +9927,10 @@ var path_1 = path$1;
  */
 
 var prop$1 =
-/*#__PURE__*/
-_curry2_1(function prop(p, obj) {
-  return path_1([p], obj);
-});
+	/*#__PURE__*/
+	_curry2_1(function prop(p, obj) {
+		return path_1([p], obj);
+	});
 
 var prop_1 = prop$1;
 /**
@@ -8770,12 +9946,18 @@ var prop_1 = prop$1;
  *      _isArray({}); //=> false
  */
 
-var _isArray$1 = Array.isArray || function _isArray(val) {
-  return val != null && val.length >= 0 && Object.prototype.toString.call(val) === '[object Array]';
-};
+var _isArray$1 =
+	Array.isArray ||
+	function _isArray(val) {
+		return (
+			val != null &&
+			val.length >= 0 &&
+			Object.prototype.toString.call(val) === "[object Array]"
+		);
+	};
 
 function _isTransformer$1(obj) {
-  return typeof obj['@@transducer/step'] === 'function';
+	return typeof obj["@@transducer/step"] === "function";
 }
 
 var _isTransformer_1 = _isTransformer$1;
@@ -8795,54 +9977,54 @@ var _isTransformer_1 = _isTransformer$1;
  */
 
 function _dispatchable$1(methodNames, xf, fn) {
-  return function () {
-    if (arguments.length === 0) {
-      return fn();
-    }
+	return function() {
+		if (arguments.length === 0) {
+			return fn();
+		}
 
-    var args = Array.prototype.slice.call(arguments, 0);
-    var obj = args.pop();
+		var args = Array.prototype.slice.call(arguments, 0);
+		var obj = args.pop();
 
-    if (!_isArray$1(obj)) {
-      var idx = 0;
+		if (!_isArray$1(obj)) {
+			var idx = 0;
 
-      while (idx < methodNames.length) {
-        if (typeof obj[methodNames[idx]] === 'function') {
-          return obj[methodNames[idx]].apply(obj, args);
-        }
+			while (idx < methodNames.length) {
+				if (typeof obj[methodNames[idx]] === "function") {
+					return obj[methodNames[idx]].apply(obj, args);
+				}
 
-        idx += 1;
-      }
+				idx += 1;
+			}
 
-      if (_isTransformer_1(obj)) {
-        var transducer = xf.apply(null, args);
-        return transducer(obj);
-      }
-    }
+			if (_isTransformer_1(obj)) {
+				var transducer = xf.apply(null, args);
+				return transducer(obj);
+			}
+		}
 
-    return fn.apply(this, arguments);
-  };
+		return fn.apply(this, arguments);
+	};
 }
 
 var _dispatchable_1 = _dispatchable$1;
 
 function _map$1(fn, functor) {
-  var idx = 0;
-  var len = functor.length;
-  var result = Array(len);
+	var idx = 0;
+	var len = functor.length;
+	var result = Array(len);
 
-  while (idx < len) {
-    result[idx] = fn(functor[idx]);
-    idx += 1;
-  }
+	while (idx < len) {
+		result[idx] = fn(functor[idx]);
+		idx += 1;
+	}
 
-  return result;
+	return result;
 }
 
 var _map_1 = _map$1;
 
 function _isString$1(x) {
-  return Object.prototype.toString.call(x) === '[object String]';
+	return Object.prototype.toString.call(x) === "[object String]";
 }
 
 var _isString_1 = _isString$1;
@@ -8865,130 +10047,132 @@ var _isString_1 = _isString$1;
  */
 
 var _isArrayLike$1 =
-/*#__PURE__*/
-_curry1_1(function isArrayLike(x) {
-  if (_isArray$1(x)) {
-    return true;
-  }
+	/*#__PURE__*/
+	_curry1_1(function isArrayLike(x) {
+		if (_isArray$1(x)) {
+			return true;
+		}
 
-  if (!x) {
-    return false;
-  }
+		if (!x) {
+			return false;
+		}
 
-  if (typeof x !== 'object') {
-    return false;
-  }
+		if (typeof x !== "object") {
+			return false;
+		}
 
-  if (_isString_1(x)) {
-    return false;
-  }
+		if (_isString_1(x)) {
+			return false;
+		}
 
-  if (x.nodeType === 1) {
-    return !!x.length;
-  }
+		if (x.nodeType === 1) {
+			return !!x.length;
+		}
 
-  if (x.length === 0) {
-    return true;
-  }
+		if (x.length === 0) {
+			return true;
+		}
 
-  if (x.length > 0) {
-    return x.hasOwnProperty(0) && x.hasOwnProperty(x.length - 1);
-  }
+		if (x.length > 0) {
+			return x.hasOwnProperty(0) && x.hasOwnProperty(x.length - 1);
+		}
 
-  return false;
-});
+		return false;
+	});
 
 var _isArrayLike_1 = _isArrayLike$1;
 
 var XWrap$1 =
-/*#__PURE__*/
-function () {
-  function XWrap(fn) {
-    this.f = fn;
-  }
+	/*#__PURE__*/
+	(function() {
+		function XWrap(fn) {
+			this.f = fn;
+		}
 
-  XWrap.prototype['@@transducer/init'] = function () {
-    throw new Error('init not implemented on XWrap');
-  };
+		XWrap.prototype["@@transducer/init"] = function() {
+			throw new Error("init not implemented on XWrap");
+		};
 
-  XWrap.prototype['@@transducer/result'] = function (acc) {
-    return acc;
-  };
+		XWrap.prototype["@@transducer/result"] = function(acc) {
+			return acc;
+		};
 
-  XWrap.prototype['@@transducer/step'] = function (acc, x) {
-    return this.f(acc, x);
-  };
+		XWrap.prototype["@@transducer/step"] = function(acc, x) {
+			return this.f(acc, x);
+		};
 
-  return XWrap;
-}();
+		return XWrap;
+	})();
 
 function _xwrap$1(fn) {
-  return new XWrap$1(fn);
+	return new XWrap$1(fn);
 }
 
 var _xwrap_1 = _xwrap$1;
 
 function _arity$1(n, fn) {
-  /* eslint-disable no-unused-vars */
-  switch (n) {
-    case 0:
-      return function () {
-        return fn.apply(this, arguments);
-      };
+	/* eslint-disable no-unused-vars */
+	switch (n) {
+		case 0:
+			return function() {
+				return fn.apply(this, arguments);
+			};
 
-    case 1:
-      return function (a0) {
-        return fn.apply(this, arguments);
-      };
+		case 1:
+			return function(a0) {
+				return fn.apply(this, arguments);
+			};
 
-    case 2:
-      return function (a0, a1) {
-        return fn.apply(this, arguments);
-      };
+		case 2:
+			return function(a0, a1) {
+				return fn.apply(this, arguments);
+			};
 
-    case 3:
-      return function (a0, a1, a2) {
-        return fn.apply(this, arguments);
-      };
+		case 3:
+			return function(a0, a1, a2) {
+				return fn.apply(this, arguments);
+			};
 
-    case 4:
-      return function (a0, a1, a2, a3) {
-        return fn.apply(this, arguments);
-      };
+		case 4:
+			return function(a0, a1, a2, a3) {
+				return fn.apply(this, arguments);
+			};
 
-    case 5:
-      return function (a0, a1, a2, a3, a4) {
-        return fn.apply(this, arguments);
-      };
+		case 5:
+			return function(a0, a1, a2, a3, a4) {
+				return fn.apply(this, arguments);
+			};
 
-    case 6:
-      return function (a0, a1, a2, a3, a4, a5) {
-        return fn.apply(this, arguments);
-      };
+		case 6:
+			return function(a0, a1, a2, a3, a4, a5) {
+				return fn.apply(this, arguments);
+			};
 
-    case 7:
-      return function (a0, a1, a2, a3, a4, a5, a6) {
-        return fn.apply(this, arguments);
-      };
+		case 7:
+			return function(a0, a1, a2, a3, a4, a5, a6) {
+				return fn.apply(this, arguments);
+			};
 
-    case 8:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7) {
-        return fn.apply(this, arguments);
-      };
+		case 8:
+			return function(a0, a1, a2, a3, a4, a5, a6, a7) {
+				return fn.apply(this, arguments);
+			};
 
-    case 9:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8) {
-        return fn.apply(this, arguments);
-      };
+		case 9:
+			return function(a0, a1, a2, a3, a4, a5, a6, a7, a8) {
+				return fn.apply(this, arguments);
+			};
 
-    case 10:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
-        return fn.apply(this, arguments);
-      };
+		case 10:
+			return function(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
+				return fn.apply(this, arguments);
+			};
 
-    default:
-      throw new Error('First argument to _arity must be a non-negative integer no greater than ten');
-  }
+		default:
+			throw new Error(
+				"First argument to _arity must be a non-negative integer no greater than ten"
+			);
+	}
 }
 
 var _arity_1 = _arity$1;
@@ -9016,117 +10200,120 @@ var _arity_1 = _arity$1;
  */
 
 var bind$1 =
-/*#__PURE__*/
-_curry2_1(function bind(fn, thisObj) {
-  return _arity_1(fn.length, function () {
-    return fn.apply(thisObj, arguments);
-  });
-});
+	/*#__PURE__*/
+	_curry2_1(function bind(fn, thisObj) {
+		return _arity_1(fn.length, function() {
+			return fn.apply(thisObj, arguments);
+		});
+	});
 
 var bind_1 = bind$1;
 
 function _arrayReduce$1(xf, acc, list) {
-  var idx = 0;
-  var len = list.length;
+	var idx = 0;
+	var len = list.length;
 
-  while (idx < len) {
-    acc = xf['@@transducer/step'](acc, list[idx]);
+	while (idx < len) {
+		acc = xf["@@transducer/step"](acc, list[idx]);
 
-    if (acc && acc['@@transducer/reduced']) {
-      acc = acc['@@transducer/value'];
-      break;
-    }
+		if (acc && acc["@@transducer/reduced"]) {
+			acc = acc["@@transducer/value"];
+			break;
+		}
 
-    idx += 1;
-  }
+		idx += 1;
+	}
 
-  return xf['@@transducer/result'](acc);
+	return xf["@@transducer/result"](acc);
 }
 
 function _iterableReduce$1(xf, acc, iter) {
-  var step = iter.next();
+	var step = iter.next();
 
-  while (!step.done) {
-    acc = xf['@@transducer/step'](acc, step.value);
+	while (!step.done) {
+		acc = xf["@@transducer/step"](acc, step.value);
 
-    if (acc && acc['@@transducer/reduced']) {
-      acc = acc['@@transducer/value'];
-      break;
-    }
+		if (acc && acc["@@transducer/reduced"]) {
+			acc = acc["@@transducer/value"];
+			break;
+		}
 
-    step = iter.next();
-  }
+		step = iter.next();
+	}
 
-  return xf['@@transducer/result'](acc);
+	return xf["@@transducer/result"](acc);
 }
 
 function _methodReduce$1(xf, acc, obj, methodName) {
-  return xf['@@transducer/result'](obj[methodName](bind_1(xf['@@transducer/step'], xf), acc));
+	return xf["@@transducer/result"](
+		obj[methodName](bind_1(xf["@@transducer/step"], xf), acc)
+	);
 }
 
-var symIterator$1 = typeof Symbol !== 'undefined' ? Symbol.iterator : '@@iterator';
+var symIterator$1 =
+	typeof Symbol !== "undefined" ? Symbol.iterator : "@@iterator";
 
 function _reduce$1(fn, acc, list) {
-  if (typeof fn === 'function') {
-    fn = _xwrap_1(fn);
-  }
+	if (typeof fn === "function") {
+		fn = _xwrap_1(fn);
+	}
 
-  if (_isArrayLike_1(list)) {
-    return _arrayReduce$1(fn, acc, list);
-  }
+	if (_isArrayLike_1(list)) {
+		return _arrayReduce$1(fn, acc, list);
+	}
 
-  if (typeof list['fantasy-land/reduce'] === 'function') {
-    return _methodReduce$1(fn, acc, list, 'fantasy-land/reduce');
-  }
+	if (typeof list["fantasy-land/reduce"] === "function") {
+		return _methodReduce$1(fn, acc, list, "fantasy-land/reduce");
+	}
 
-  if (list[symIterator$1] != null) {
-    return _iterableReduce$1(fn, acc, list[symIterator$1]());
-  }
+	if (list[symIterator$1] != null) {
+		return _iterableReduce$1(fn, acc, list[symIterator$1]());
+	}
 
-  if (typeof list.next === 'function') {
-    return _iterableReduce$1(fn, acc, list);
-  }
+	if (typeof list.next === "function") {
+		return _iterableReduce$1(fn, acc, list);
+	}
 
-  if (typeof list.reduce === 'function') {
-    return _methodReduce$1(fn, acc, list, 'reduce');
-  }
+	if (typeof list.reduce === "function") {
+		return _methodReduce$1(fn, acc, list, "reduce");
+	}
 
-  throw new TypeError('reduce: list must be array or iterable');
+	throw new TypeError("reduce: list must be array or iterable");
 }
 
 var _reduce_1 = _reduce$1;
 var _xfBase$1 = {
-  init: function init() {
-    return this.xf['@@transducer/init']();
-  },
-  result: function result(_result) {
-    return this.xf['@@transducer/result'](_result);
-  }
+	init: function init() {
+		return this.xf["@@transducer/init"]();
+	},
+	result: function result(_result) {
+		return this.xf["@@transducer/result"](_result);
+	}
 };
 
 var XMap$1 =
-/*#__PURE__*/
-function () {
-  function XMap(f, xf) {
-    this.xf = xf;
-    this.f = f;
-  }
+	/*#__PURE__*/
+	(function() {
+		function XMap(f, xf) {
+			this.xf = xf;
+			this.f = f;
+		}
 
-  XMap.prototype['@@transducer/init'] = _xfBase$1.init;
-  XMap.prototype['@@transducer/result'] = _xfBase$1.result;
+		XMap.prototype["@@transducer/init"] = _xfBase$1.init;
+		XMap.prototype["@@transducer/result"] = _xfBase$1.result;
 
-  XMap.prototype['@@transducer/step'] = function (result, input) {
-    return this.xf['@@transducer/step'](result, this.f(input));
-  };
+		XMap.prototype["@@transducer/step"] = function(result, input) {
+			return this.xf["@@transducer/step"](result, this.f(input));
+		};
 
-  return XMap;
-}();
+		return XMap;
+	})();
 
 var _xmap$1 =
-/*#__PURE__*/
-_curry2_1(function _xmap(f, xf) {
-  return new XMap$1(f, xf);
-});
+	/*#__PURE__*/
+	_curry2_1(function _xmap(f, xf) {
+		return new XMap$1(f, xf);
+	});
 
 var _xmap_1 = _xmap$1;
 /**
@@ -9141,33 +10328,39 @@ var _xmap_1 = _xmap$1;
  */
 
 function _curryN$1(length, received, fn) {
-  return function () {
-    var combined = [];
-    var argsIdx = 0;
-    var left = length;
-    var combinedIdx = 0;
+	return function() {
+		var combined = [];
+		var argsIdx = 0;
+		var left = length;
+		var combinedIdx = 0;
 
-    while (combinedIdx < received.length || argsIdx < arguments.length) {
-      var result;
+		while (combinedIdx < received.length || argsIdx < arguments.length) {
+			var result;
 
-      if (combinedIdx < received.length && (!_isPlaceholder_1(received[combinedIdx]) || argsIdx >= arguments.length)) {
-        result = received[combinedIdx];
-      } else {
-        result = arguments[argsIdx];
-        argsIdx += 1;
-      }
+			if (
+				combinedIdx < received.length &&
+				(!_isPlaceholder_1(received[combinedIdx]) ||
+					argsIdx >= arguments.length)
+			) {
+				result = received[combinedIdx];
+			} else {
+				result = arguments[argsIdx];
+				argsIdx += 1;
+			}
 
-      combined[combinedIdx] = result;
+			combined[combinedIdx] = result;
 
-      if (!_isPlaceholder_1(result)) {
-        left -= 1;
-      }
+			if (!_isPlaceholder_1(result)) {
+				left -= 1;
+			}
 
-      combinedIdx += 1;
-    }
+			combinedIdx += 1;
+		}
 
-    return left <= 0 ? fn.apply(this, combined) : _arity_1(left, _curryN$1(length, combined, fn));
-  };
+		return left <= 0
+			? fn.apply(this, combined)
+			: _arity_1(left, _curryN$1(length, combined, fn));
+	};
 }
 
 var _curryN_1 = _curryN$1;
@@ -9215,59 +10408,68 @@ var _curryN_1 = _curryN$1;
  */
 
 var curryN$1 =
-/*#__PURE__*/
-_curry2_1(function curryN(length, fn) {
-  if (length === 1) {
-    return _curry1_1(fn);
-  }
+	/*#__PURE__*/
+	_curry2_1(function curryN(length, fn) {
+		if (length === 1) {
+			return _curry1_1(fn);
+		}
 
-  return _arity_1(length, _curryN_1(length, [], fn));
-});
+		return _arity_1(length, _curryN_1(length, [], fn));
+	});
 
 var curryN_1 = curryN$1;
 
 function _has$1(prop, obj) {
-  return Object.prototype.hasOwnProperty.call(obj, prop);
+	return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
 var _has_1 = _has$1;
 var toString$2 = Object.prototype.toString;
 
 var _isArguments$1 = function _isArguments() {
-  return toString$2.call(arguments) === '[object Arguments]' ? function _isArguments(x) {
-    return toString$2.call(x) === '[object Arguments]';
-  } : function _isArguments(x) {
-    return _has_1('callee', x);
-  };
+	return toString$2.call(arguments) === "[object Arguments]"
+		? function _isArguments(x) {
+				return toString$2.call(x) === "[object Arguments]";
+		  }
+		: function _isArguments(x) {
+				return _has_1("callee", x);
+		  };
 };
 
 var _isArguments_1 = _isArguments$1; // cover IE < 9 keys issues
 
-var hasEnumBug$1 = !
-/*#__PURE__*/
+var hasEnumBug$1 = !/*#__PURE__*/
 {
-  toString: null
-}.propertyIsEnumerable('toString');
-var nonEnumerableProps$1 = ['constructor', 'valueOf', 'isPrototypeOf', 'toString', 'propertyIsEnumerable', 'hasOwnProperty', 'toLocaleString']; // Safari bug
+	toString: null
+}.propertyIsEnumerable("toString");
+var nonEnumerableProps$1 = [
+	"constructor",
+	"valueOf",
+	"isPrototypeOf",
+	"toString",
+	"propertyIsEnumerable",
+	"hasOwnProperty",
+	"toLocaleString"
+]; // Safari bug
 
 var hasArgsEnumBug$1 =
-/*#__PURE__*/
-function () {
-  return arguments.propertyIsEnumerable('length');
-}();
+	/*#__PURE__*/
+	(function() {
+		return arguments.propertyIsEnumerable("length");
+	})();
 
 var contains$2 = function contains(list, item) {
-  var idx = 0;
+	var idx = 0;
 
-  while (idx < list.length) {
-    if (list[idx] === item) {
-      return true;
-    }
+	while (idx < list.length) {
+		if (list[idx] === item) {
+			return true;
+		}
 
-    idx += 1;
-  }
+		idx += 1;
+	}
 
-  return false;
+	return false;
 };
 /**
  * Returns a list containing the names of all the enumerable own properties of
@@ -9288,45 +10490,50 @@ var contains$2 = function contains(list, item) {
  *      R.keys({a: 1, b: 2, c: 3}); //=> ['a', 'b', 'c']
  */
 
+var _keys$1 =
+	typeof Object.keys === "function" && !hasArgsEnumBug$1
+		? function keys(obj) {
+				return Object(obj) !== obj ? [] : Object.keys(obj);
+		  }
+		: function keys(obj) {
+				if (Object(obj) !== obj) {
+					return [];
+				}
 
-var _keys$1 = typeof Object.keys === 'function' && !hasArgsEnumBug$1 ? function keys(obj) {
-  return Object(obj) !== obj ? [] : Object.keys(obj);
-} : function keys(obj) {
-  if (Object(obj) !== obj) {
-    return [];
-  }
+				var prop, nIdx;
+				var ks = [];
 
-  var prop, nIdx;
-  var ks = [];
+				var checkArgsLength = hasArgsEnumBug$1 && _isArguments_1(obj);
 
-  var checkArgsLength = hasArgsEnumBug$1 && _isArguments_1(obj);
+				for (prop in obj) {
+					if (
+						_has_1(prop, obj) &&
+						(!checkArgsLength || prop !== "length")
+					) {
+						ks[ks.length] = prop;
+					}
+				}
 
-  for (prop in obj) {
-    if (_has_1(prop, obj) && (!checkArgsLength || prop !== 'length')) {
-      ks[ks.length] = prop;
-    }
-  }
+				if (hasEnumBug$1) {
+					nIdx = nonEnumerableProps$1.length - 1;
 
-  if (hasEnumBug$1) {
-    nIdx = nonEnumerableProps$1.length - 1;
+					while (nIdx >= 0) {
+						prop = nonEnumerableProps$1[nIdx];
 
-    while (nIdx >= 0) {
-      prop = nonEnumerableProps$1[nIdx];
+						if (_has_1(prop, obj) && !contains$2(ks, prop)) {
+							ks[ks.length] = prop;
+						}
 
-      if (_has_1(prop, obj) && !contains$2(ks, prop)) {
-        ks[ks.length] = prop;
-      }
+						nIdx -= 1;
+					}
+				}
 
-      nIdx -= 1;
-    }
-  }
-
-  return ks;
-};
+				return ks;
+		  };
 
 var keys$1 =
-/*#__PURE__*/
-_curry1_1(_keys$1);
+	/*#__PURE__*/
+	_curry1_1(_keys$1);
 
 var keys_1 = keys$1;
 /**
@@ -9366,74 +10573,86 @@ var keys_1 = keys$1;
  */
 
 var map$1 =
-/*#__PURE__*/
-_curry2_1(
-/*#__PURE__*/
-_dispatchable_1(['fantasy-land/map', 'map'], _xmap_1, function map(fn, functor) {
-  switch (Object.prototype.toString.call(functor)) {
-    case '[object Function]':
-      return curryN_1(functor.length, function () {
-        return fn.call(this, functor.apply(this, arguments));
-      });
+	/*#__PURE__*/
+	_curry2_1(
+		/*#__PURE__*/
+		_dispatchable_1(["fantasy-land/map", "map"], _xmap_1, function map(
+			fn,
+			functor
+		) {
+			switch (Object.prototype.toString.call(functor)) {
+				case "[object Function]":
+					return curryN_1(functor.length, function() {
+						return fn.call(this, functor.apply(this, arguments));
+					});
 
-    case '[object Object]':
-      return _reduce_1(function (acc, key) {
-        acc[key] = fn(functor[key]);
-        return acc;
-      }, {}, keys_1(functor));
+				case "[object Object]":
+					return _reduce_1(
+						function(acc, key) {
+							acc[key] = fn(functor[key]);
+							return acc;
+						},
+						{},
+						keys_1(functor)
+					);
 
-    default:
-      return _map_1(fn, functor);
-  }
-}));
+				default:
+					return _map_1(fn, functor);
+			}
+		})
+	);
 
 var map_1 = map$1;
 
 function _reduced$1(x) {
-  return x && x['@@transducer/reduced'] ? x : {
-    '@@transducer/value': x,
-    '@@transducer/reduced': true
-  };
+	return x && x["@@transducer/reduced"]
+		? x
+		: {
+				"@@transducer/value": x,
+				"@@transducer/reduced": true
+		  };
 }
 
 var _reduced_1 = _reduced$1;
 
 var XFind$1 =
-/*#__PURE__*/
-function () {
-  function XFind(f, xf) {
-    this.xf = xf;
-    this.f = f;
-    this.found = false;
-  }
+	/*#__PURE__*/
+	(function() {
+		function XFind(f, xf) {
+			this.xf = xf;
+			this.f = f;
+			this.found = false;
+		}
 
-  XFind.prototype['@@transducer/init'] = _xfBase$1.init;
+		XFind.prototype["@@transducer/init"] = _xfBase$1.init;
 
-  XFind.prototype['@@transducer/result'] = function (result) {
-    if (!this.found) {
-      result = this.xf['@@transducer/step'](result, void 0);
-    }
+		XFind.prototype["@@transducer/result"] = function(result) {
+			if (!this.found) {
+				result = this.xf["@@transducer/step"](result, void 0);
+			}
 
-    return this.xf['@@transducer/result'](result);
-  };
+			return this.xf["@@transducer/result"](result);
+		};
 
-  XFind.prototype['@@transducer/step'] = function (result, input) {
-    if (this.f(input)) {
-      this.found = true;
-      result = _reduced_1(this.xf['@@transducer/step'](result, input));
-    }
+		XFind.prototype["@@transducer/step"] = function(result, input) {
+			if (this.f(input)) {
+				this.found = true;
+				result = _reduced_1(
+					this.xf["@@transducer/step"](result, input)
+				);
+			}
 
-    return result;
-  };
+			return result;
+		};
 
-  return XFind;
-}();
+		return XFind;
+	})();
 
 var _xfind$1 =
-/*#__PURE__*/
-_curry2_1(function _xfind(f, xf) {
-  return new XFind$1(f, xf);
-});
+	/*#__PURE__*/
+	_curry2_1(function _xfind(f, xf) {
+		return new XFind$1(f, xf);
+	});
 
 var _xfind_1 = _xfind$1;
 /**
@@ -9462,58 +10681,59 @@ var _xfind_1 = _xfind$1;
  */
 
 var find$1 =
-/*#__PURE__*/
-_curry2_1(
-/*#__PURE__*/
-_dispatchable_1(['find'], _xfind_1, function find(fn, list) {
-  var idx = 0;
-  var len = list.length;
+	/*#__PURE__*/
+	_curry2_1(
+		/*#__PURE__*/
+		_dispatchable_1(["find"], _xfind_1, function find(fn, list) {
+			var idx = 0;
+			var len = list.length;
 
-  while (idx < len) {
-    if (fn(list[idx])) {
-      return list[idx];
-    }
+			while (idx < len) {
+				if (fn(list[idx])) {
+					return list[idx];
+				}
 
-    idx += 1;
-  }
-}));
+				idx += 1;
+			}
+		})
+	);
 
 var find_1 = find$1;
 
 function _arrayFromIterator$1(iter) {
-  var list = [];
-  var next;
+	var list = [];
+	var next;
 
-  while (!(next = iter.next()).done) {
-    list.push(next.value);
-  }
+	while (!(next = iter.next()).done) {
+		list.push(next.value);
+	}
 
-  return list;
+	return list;
 }
 
 var _arrayFromIterator_1 = _arrayFromIterator$1;
 
 function _containsWith$1(pred, x, list) {
-  var idx = 0;
-  var len = list.length;
+	var idx = 0;
+	var len = list.length;
 
-  while (idx < len) {
-    if (pred(x, list[idx])) {
-      return true;
-    }
+	while (idx < len) {
+		if (pred(x, list[idx])) {
+			return true;
+		}
 
-    idx += 1;
-  }
+		idx += 1;
+	}
 
-  return false;
+	return false;
 }
 
 var _containsWith_1 = _containsWith$1;
 
 function _functionName$1(f) {
-  // String(x => x) evaluates to "x => x", so the pattern may not match.
-  var match = String(f).match(/^function (\w*)/);
-  return match == null ? '' : match[1];
+	// String(x => x) evaluates to "x => x", so the pattern may not match.
+	var match = String(f).match(/^function (\w*)/);
+	return match == null ? "" : match[1];
 }
 
 var _functionName_1 = _functionName$1;
@@ -9542,18 +10762,18 @@ var _functionName_1 = _functionName$1;
  */
 
 var identical$1 =
-/*#__PURE__*/
-_curry2_1(function identical(a, b) {
-  // SameValue algorithm
-  if (a === b) {
-    // Steps 1-5, 7-10
-    // Steps 6.b-6.e: +0 != -0
-    return a !== 0 || 1 / a === 1 / b;
-  } else {
-    // Step 6.a: NaN == NaN
-    return a !== a && b !== b;
-  }
-});
+	/*#__PURE__*/
+	_curry2_1(function identical(a, b) {
+		// SameValue algorithm
+		if (a === b) {
+			// Steps 1-5, 7-10
+			// Steps 6.b-6.e: +0 != -0
+			return a !== 0 || 1 / a === 1 / b;
+		} else {
+			// Step 6.a: NaN == NaN
+			return a !== a && b !== b;
+		}
+	});
 
 var identical_1 = identical$1;
 /**
@@ -9583,10 +10803,14 @@ var identical_1 = identical$1;
  */
 
 var type$1 =
-/*#__PURE__*/
-_curry1_1(function type(val) {
-  return val === null ? 'Null' : val === undefined ? 'Undefined' : Object.prototype.toString.call(val).slice(8, -1);
-});
+	/*#__PURE__*/
+	_curry1_1(function type(val) {
+		return val === null
+			? "Null"
+			: val === undefined
+				? "Undefined"
+				: Object.prototype.toString.call(val).slice(8, -1);
+	});
 
 var type_1 = type$1;
 /**
@@ -9601,152 +10825,200 @@ var type_1 = type$1;
  * */
 
 function _uniqContentEquals$1(aIterator, bIterator, stackA, stackB) {
-  var a = _arrayFromIterator_1(aIterator);
+	var a = _arrayFromIterator_1(aIterator);
 
-  var b = _arrayFromIterator_1(bIterator);
+	var b = _arrayFromIterator_1(bIterator);
 
-  function eq(_a, _b) {
-    return _equals$1(_a, _b, stackA.slice(), stackB.slice());
-  } // if *a* array contains any element that is not included in *b*
+	function eq(_a, _b) {
+		return _equals$1(_a, _b, stackA.slice(), stackB.slice());
+	} // if *a* array contains any element that is not included in *b*
 
-
-  return !_containsWith_1(function (b, aItem) {
-    return !_containsWith_1(eq, aItem, b);
-  }, b, a);
+	return !_containsWith_1(
+		function(b, aItem) {
+			return !_containsWith_1(eq, aItem, b);
+		},
+		b,
+		a
+	);
 }
 
 function _equals$1(a, b, stackA, stackB) {
-  if (identical_1(a, b)) {
-    return true;
-  }
+	if (identical_1(a, b)) {
+		return true;
+	}
 
-  var typeA = type_1(a);
+	var typeA = type_1(a);
 
-  if (typeA !== type_1(b)) {
-    return false;
-  }
+	if (typeA !== type_1(b)) {
+		return false;
+	}
 
-  if (a == null || b == null) {
-    return false;
-  }
+	if (a == null || b == null) {
+		return false;
+	}
 
-  if (typeof a['fantasy-land/equals'] === 'function' || typeof b['fantasy-land/equals'] === 'function') {
-    return typeof a['fantasy-land/equals'] === 'function' && a['fantasy-land/equals'](b) && typeof b['fantasy-land/equals'] === 'function' && b['fantasy-land/equals'](a);
-  }
+	if (
+		typeof a["fantasy-land/equals"] === "function" ||
+		typeof b["fantasy-land/equals"] === "function"
+	) {
+		return (
+			typeof a["fantasy-land/equals"] === "function" &&
+			a["fantasy-land/equals"](b) &&
+			typeof b["fantasy-land/equals"] === "function" &&
+			b["fantasy-land/equals"](a)
+		);
+	}
 
-  if (typeof a.equals === 'function' || typeof b.equals === 'function') {
-    return typeof a.equals === 'function' && a.equals(b) && typeof b.equals === 'function' && b.equals(a);
-  }
+	if (typeof a.equals === "function" || typeof b.equals === "function") {
+		return (
+			typeof a.equals === "function" &&
+			a.equals(b) &&
+			typeof b.equals === "function" &&
+			b.equals(a)
+		);
+	}
 
-  switch (typeA) {
-    case 'Arguments':
-    case 'Array':
-    case 'Object':
-      if (typeof a.constructor === 'function' && _functionName_1(a.constructor) === 'Promise') {
-        return a === b;
-      }
+	switch (typeA) {
+		case "Arguments":
+		case "Array":
+		case "Object":
+			if (
+				typeof a.constructor === "function" &&
+				_functionName_1(a.constructor) === "Promise"
+			) {
+				return a === b;
+			}
 
-      break;
+			break;
 
-    case 'Boolean':
-    case 'Number':
-    case 'String':
-      if (!(typeof a === typeof b && identical_1(a.valueOf(), b.valueOf()))) {
-        return false;
-      }
+		case "Boolean":
+		case "Number":
+		case "String":
+			if (
+				!(
+					typeof a === typeof b &&
+					identical_1(a.valueOf(), b.valueOf())
+				)
+			) {
+				return false;
+			}
 
-      break;
+			break;
 
-    case 'Date':
-      if (!identical_1(a.valueOf(), b.valueOf())) {
-        return false;
-      }
+		case "Date":
+			if (!identical_1(a.valueOf(), b.valueOf())) {
+				return false;
+			}
 
-      break;
+			break;
 
-    case 'Error':
-      return a.name === b.name && a.message === b.message;
+		case "Error":
+			return a.name === b.name && a.message === b.message;
 
-    case 'RegExp':
-      if (!(a.source === b.source && a.global === b.global && a.ignoreCase === b.ignoreCase && a.multiline === b.multiline && a.sticky === b.sticky && a.unicode === b.unicode)) {
-        return false;
-      }
+		case "RegExp":
+			if (
+				!(
+					a.source === b.source &&
+					a.global === b.global &&
+					a.ignoreCase === b.ignoreCase &&
+					a.multiline === b.multiline &&
+					a.sticky === b.sticky &&
+					a.unicode === b.unicode
+				)
+			) {
+				return false;
+			}
 
-      break;
-  }
+			break;
+	}
 
-  var idx = stackA.length - 1;
+	var idx = stackA.length - 1;
 
-  while (idx >= 0) {
-    if (stackA[idx] === a) {
-      return stackB[idx] === b;
-    }
+	while (idx >= 0) {
+		if (stackA[idx] === a) {
+			return stackB[idx] === b;
+		}
 
-    idx -= 1;
-  }
+		idx -= 1;
+	}
 
-  switch (typeA) {
-    case 'Map':
-      if (a.size !== b.size) {
-        return false;
-      }
+	switch (typeA) {
+		case "Map":
+			if (a.size !== b.size) {
+				return false;
+			}
 
-      return _uniqContentEquals$1(a.entries(), b.entries(), stackA.concat([a]), stackB.concat([b]));
+			return _uniqContentEquals$1(
+				a.entries(),
+				b.entries(),
+				stackA.concat([a]),
+				stackB.concat([b])
+			);
 
-    case 'Set':
-      if (a.size !== b.size) {
-        return false;
-      }
+		case "Set":
+			if (a.size !== b.size) {
+				return false;
+			}
 
-      return _uniqContentEquals$1(a.values(), b.values(), stackA.concat([a]), stackB.concat([b]));
+			return _uniqContentEquals$1(
+				a.values(),
+				b.values(),
+				stackA.concat([a]),
+				stackB.concat([b])
+			);
 
-    case 'Arguments':
-    case 'Array':
-    case 'Object':
-    case 'Boolean':
-    case 'Number':
-    case 'String':
-    case 'Date':
-    case 'Error':
-    case 'RegExp':
-    case 'Int8Array':
-    case 'Uint8Array':
-    case 'Uint8ClampedArray':
-    case 'Int16Array':
-    case 'Uint16Array':
-    case 'Int32Array':
-    case 'Uint32Array':
-    case 'Float32Array':
-    case 'Float64Array':
-    case 'ArrayBuffer':
-      break;
+		case "Arguments":
+		case "Array":
+		case "Object":
+		case "Boolean":
+		case "Number":
+		case "String":
+		case "Date":
+		case "Error":
+		case "RegExp":
+		case "Int8Array":
+		case "Uint8Array":
+		case "Uint8ClampedArray":
+		case "Int16Array":
+		case "Uint16Array":
+		case "Int32Array":
+		case "Uint32Array":
+		case "Float32Array":
+		case "Float64Array":
+		case "ArrayBuffer":
+			break;
 
-    default:
-      // Values of other types are only equal if identical.
-      return false;
-  }
+		default:
+			// Values of other types are only equal if identical.
+			return false;
+	}
 
-  var keysA = keys_1(a);
+	var keysA = keys_1(a);
 
-  if (keysA.length !== keys_1(b).length) {
-    return false;
-  }
+	if (keysA.length !== keys_1(b).length) {
+		return false;
+	}
 
-  var extendedStackA = stackA.concat([a]);
-  var extendedStackB = stackB.concat([b]);
-  idx = keysA.length - 1;
+	var extendedStackA = stackA.concat([a]);
+	var extendedStackB = stackB.concat([b]);
+	idx = keysA.length - 1;
 
-  while (idx >= 0) {
-    var key = keysA[idx];
+	while (idx >= 0) {
+		var key = keysA[idx];
 
-    if (!(_has_1(key, b) && _equals$1(b[key], a[key], extendedStackA, extendedStackB))) {
-      return false;
-    }
+		if (
+			!(
+				_has_1(key, b) &&
+				_equals$1(b[key], a[key], extendedStackA, extendedStackB)
+			)
+		) {
+			return false;
+		}
 
-    idx -= 1;
-  }
+		idx -= 1;
+	}
 
-  return true;
+	return true;
 }
 
 var _equals_1 = _equals$1;
@@ -9777,10 +11049,10 @@ var _equals_1 = _equals$1;
  */
 
 var equals$1 =
-/*#__PURE__*/
-_curry2_1(function equals(a, b) {
-  return _equals_1(a, b, [], []);
-});
+	/*#__PURE__*/
+	_curry2_1(function equals(a, b) {
+		return _equals_1(a, b, [], []);
+	});
 
 var equals_1 = equals$1;
 /**
@@ -9820,16 +11092,16 @@ var equals_1 = equals$1;
  */
 
 var where$1 =
-/*#__PURE__*/
-_curry2_1(function where(spec, testObj) {
-  for (var prop in spec) {
-    if (_has_1(prop, spec) && !spec[prop](testObj[prop])) {
-      return false;
-    }
-  }
+	/*#__PURE__*/
+	_curry2_1(function where(spec, testObj) {
+		for (var prop in spec) {
+			if (_has_1(prop, spec) && !spec[prop](testObj[prop])) {
+				return false;
+			}
+		}
 
-  return true;
-});
+		return true;
+	});
 
 var where_1 = where$1;
 /**
@@ -9862,10 +11134,10 @@ var where_1 = where$1;
  */
 
 var whereEq$1 =
-/*#__PURE__*/
-_curry2_1(function whereEq(spec, testObj) {
-  return where_1(map_1(equals_1, spec), testObj);
-});
+	/*#__PURE__*/
+	_curry2_1(function whereEq(spec, testObj) {
+		return where_1(map_1(equals_1, spec), testObj);
+	});
 
 var whereEq_1 = whereEq$1;
 /**
@@ -9887,19 +11159,19 @@ var whereEq_1 = whereEq$1;
  */
 
 var zipObj$1 =
-/*#__PURE__*/
-_curry2_1(function zipObj(keys, values) {
-  var idx = 0;
-  var len = Math.min(keys.length, values.length);
-  var out = {};
+	/*#__PURE__*/
+	_curry2_1(function zipObj(keys, values) {
+		var idx = 0;
+		var len = Math.min(keys.length, values.length);
+		var out = {};
 
-  while (idx < len) {
-    out[keys[idx]] = values[idx];
-    idx += 1;
-  }
+		while (idx < len) {
+			out[keys[idx]] = values[idx];
+			idx += 1;
+		}
 
-  return out;
-});
+		return out;
+	});
 
 var zipObj_1 = zipObj$1;
 /**
@@ -9921,10 +11193,10 @@ var zipObj_1 = zipObj$1;
  */
 
 var max$1 =
-/*#__PURE__*/
-_curry2_1(function max(a, b) {
-  return b > a ? b : a;
-});
+	/*#__PURE__*/
+	_curry2_1(function max(a, b) {
+		return b > a ? b : a;
+	});
 
 var max_1 = max$1;
 /**
@@ -9954,10 +11226,10 @@ var max_1 = max$1;
  */
 
 var pluck$1 =
-/*#__PURE__*/
-_curry2_1(function pluck(p, list) {
-  return map_1(prop_1(p), list);
-});
+	/*#__PURE__*/
+	_curry2_1(function pluck(p, list) {
+		return map_1(prop_1(p), list);
+	});
 
 var pluck_1 = pluck$1;
 /**
@@ -10008,8 +11280,8 @@ var pluck_1 = pluck$1;
  */
 
 var reduce$1 =
-/*#__PURE__*/
-_curry3_1(_reduce_1);
+	/*#__PURE__*/
+	_curry3_1(_reduce_1);
 
 var reduce_1 = reduce$1;
 /**
@@ -10041,16 +11313,19 @@ var reduce_1 = reduce$1;
  */
 
 var converge$1 =
-/*#__PURE__*/
-_curry2_1(function converge(after, fns) {
-  return curryN_1(reduce_1(max_1, 0, pluck_1('length', fns)), function () {
-    var args = arguments;
-    var context = this;
-    return after.apply(context, _map_1(function (fn) {
-      return fn.apply(context, args);
-    }, fns));
-  });
-});
+	/*#__PURE__*/
+	_curry2_1(function converge(after, fns) {
+		return curryN_1(reduce_1(max_1, 0, pluck_1("length", fns)), function() {
+			var args = arguments;
+			var context = this;
+			return after.apply(
+				context,
+				_map_1(function(fn) {
+					return fn.apply(context, args);
+				}, fns)
+			);
+		});
+	});
 
 var converge_1 = converge$1;
 /**
@@ -10079,12 +11354,12 @@ var converge_1 = converge$1;
  */
 
 var unapply$1 =
-/*#__PURE__*/
-_curry1_1(function unapply(fn) {
-  return function () {
-    return fn(Array.prototype.slice.call(arguments, 0));
-  };
-});
+	/*#__PURE__*/
+	_curry1_1(function unapply(fn) {
+		return function() {
+			return fn(Array.prototype.slice.call(arguments, 0));
+		};
+	});
 
 var unapply_1 = unapply$1;
 /**
@@ -10100,27 +11375,27 @@ var unapply_1 = unapply$1;
  */
 
 function _concat$1(set1, set2) {
-  set1 = set1 || [];
-  set2 = set2 || [];
-  var idx;
-  var len1 = set1.length;
-  var len2 = set2.length;
-  var result = [];
-  idx = 0;
+	set1 = set1 || [];
+	set2 = set2 || [];
+	var idx;
+	var len1 = set1.length;
+	var len2 = set2.length;
+	var result = [];
+	idx = 0;
 
-  while (idx < len1) {
-    result[result.length] = set1[idx];
-    idx += 1;
-  }
+	while (idx < len1) {
+		result[result.length] = set1[idx];
+		idx += 1;
+	}
 
-  idx = 0;
+	idx = 0;
 
-  while (idx < len2) {
-    result[result.length] = set2[idx];
-    idx += 1;
-  }
+	while (idx < len2) {
+		result[result.length] = set2[idx];
+		idx += 1;
+	}
 
-  return result;
+	return result;
 }
 
 var _concat_1 = _concat$1;
@@ -10147,16 +11422,16 @@ var _concat_1 = _concat$1;
  */
 
 var tryCatch$1 =
-/*#__PURE__*/
-_curry2_1(function _tryCatch(tryer, catcher) {
-  return _arity_1(tryer.length, function () {
-    try {
-      return tryer.apply(this, arguments);
-    } catch (e) {
-      return catcher.apply(this, _concat_1([e], arguments));
-    }
-  });
-});
+	/*#__PURE__*/
+	_curry2_1(function _tryCatch(tryer, catcher) {
+		return _arity_1(tryer.length, function() {
+			try {
+				return tryer.apply(this, arguments);
+			} catch (e) {
+				return catcher.apply(this, _concat_1([e], arguments));
+			}
+		});
+	});
 
 var tryCatch_1 = tryCatch$1;
 /**
@@ -10178,27 +11453,27 @@ var tryCatch_1 = tryCatch$1;
  */
 
 var values$1 =
-/*#__PURE__*/
-_curry1_1(function values(obj) {
-  var props = keys_1(obj);
-  var len = props.length;
-  var vals = [];
-  var idx = 0;
+	/*#__PURE__*/
+	_curry1_1(function values(obj) {
+		var props = keys_1(obj);
+		var len = props.length;
+		var vals = [];
+		var idx = 0;
 
-  while (idx < len) {
-    vals[idx] = obj[props[idx]];
-    idx += 1;
-  }
+		while (idx < len) {
+			vals[idx] = obj[props[idx]];
+			idx += 1;
+		}
 
-  return vals;
-});
+		return vals;
+	});
 
 var values_1 = values$1;
 
 function _pipe$1(f, g) {
-  return function () {
-    return g.call(this, f.apply(this, arguments));
-  };
+	return function() {
+		return g.call(this, f.apply(this, arguments));
+	};
 }
 
 var _pipe_1 = _pipe$1;
@@ -10214,16 +11489,21 @@ var _pipe_1 = _pipe$1;
  */
 
 function _checkForMethod$1(methodname, fn) {
-  return function () {
-    var length = arguments.length;
+	return function() {
+		var length = arguments.length;
 
-    if (length === 0) {
-      return fn();
-    }
+		if (length === 0) {
+			return fn();
+		}
 
-    var obj = arguments[length - 1];
-    return _isArray$1(obj) || typeof obj[methodname] !== 'function' ? fn.apply(this, arguments) : obj[methodname].apply(obj, Array.prototype.slice.call(arguments, 0, length - 1));
-  };
+		var obj = arguments[length - 1];
+		return _isArray$1(obj) || typeof obj[methodname] !== "function"
+			? fn.apply(this, arguments)
+			: obj[methodname].apply(
+					obj,
+					Array.prototype.slice.call(arguments, 0, length - 1)
+			  );
+	};
 }
 
 var _checkForMethod_1 = _checkForMethod$1;
@@ -10253,12 +11533,13 @@ var _checkForMethod_1 = _checkForMethod$1;
  */
 
 var slice$1 =
-/*#__PURE__*/
-_curry3_1(
-/*#__PURE__*/
-_checkForMethod_1('slice', function slice(fromIndex, toIndex, list) {
-  return Array.prototype.slice.call(list, fromIndex, toIndex);
-}));
+	/*#__PURE__*/
+	_curry3_1(
+		/*#__PURE__*/
+		_checkForMethod_1("slice", function slice(fromIndex, toIndex, list) {
+			return Array.prototype.slice.call(list, fromIndex, toIndex);
+		})
+	);
 
 var slice_1 = slice$1;
 /**
@@ -10290,12 +11571,15 @@ var slice_1 = slice$1;
  */
 
 var tail$1 =
-/*#__PURE__*/
-_curry1_1(
-/*#__PURE__*/
-_checkForMethod_1('tail',
-/*#__PURE__*/
-slice_1(1, Infinity)));
+	/*#__PURE__*/
+	_curry1_1(
+		/*#__PURE__*/
+		_checkForMethod_1(
+			"tail",
+			/*#__PURE__*/
+			slice_1(1, Infinity)
+		)
+	);
 
 var tail_1 = tail$1;
 /**
@@ -10323,11 +11607,14 @@ var tail_1 = tail$1;
  */
 
 function pipe$1() {
-  if (arguments.length === 0) {
-    throw new Error('pipe requires at least one argument');
-  }
+	if (arguments.length === 0) {
+		throw new Error("pipe requires at least one argument");
+	}
 
-  return _arity_1(arguments[0].length, reduce_1(_pipe_1, arguments[0], tail_1(arguments)));
+	return _arity_1(
+		arguments[0].length,
+		reduce_1(_pipe_1, arguments[0], tail_1(arguments))
+	);
 }
 
 var pipe_1 = pipe$1;
@@ -10357,10 +11644,15 @@ var pipe_1 = pipe$1;
  */
 
 var reverse$1 =
-/*#__PURE__*/
-_curry1_1(function reverse(list) {
-  return _isString_1(list) ? list.split('').reverse().join('') : Array.prototype.slice.call(list, 0).reverse();
-});
+	/*#__PURE__*/
+	_curry1_1(function reverse(list) {
+		return _isString_1(list)
+			? list
+					.split("")
+					.reverse()
+					.join("")
+			: Array.prototype.slice.call(list, 0).reverse();
+	});
 
 var reverse_1 = reverse$1;
 /**
@@ -10389,17 +11681,17 @@ var reverse_1 = reverse$1;
  */
 
 function compose$1() {
-  if (arguments.length === 0) {
-    throw new Error('compose requires at least one argument');
-  }
+	if (arguments.length === 0) {
+		throw new Error("compose requires at least one argument");
+	}
 
-  return pipe_1.apply(this, reverse_1(arguments));
+	return pipe_1.apply(this, reverse_1(arguments));
 }
 
 var compose_1 = compose$1;
 
 function _isObject$1(x) {
-  return Object.prototype.toString.call(x) === '[object Object]';
+	return Object.prototype.toString.call(x) === "[object Object]";
 }
 
 var _isObject_1 = _isObject$1;
@@ -10430,25 +11722,25 @@ var _isObject_1 = _isObject$1;
  */
 
 var mergeWithKey$1 =
-/*#__PURE__*/
-_curry3_1(function mergeWithKey(fn, l, r) {
-  var result = {};
-  var k;
+	/*#__PURE__*/
+	_curry3_1(function mergeWithKey(fn, l, r) {
+		var result = {};
+		var k;
 
-  for (k in l) {
-    if (_has_1(k, l)) {
-      result[k] = _has_1(k, r) ? fn(k, l[k], r[k]) : l[k];
-    }
-  }
+		for (k in l) {
+			if (_has_1(k, l)) {
+				result[k] = _has_1(k, r) ? fn(k, l[k], r[k]) : l[k];
+			}
+		}
 
-  for (k in r) {
-    if (_has_1(k, r) && !_has_1(k, result)) {
-      result[k] = r[k];
-    }
-  }
+		for (k in r) {
+			if (_has_1(k, r) && !_has_1(k, result)) {
+				result[k] = r[k];
+			}
+		}
 
-  return result;
-});
+		return result;
+	});
 
 var mergeWithKey_1 = mergeWithKey$1;
 /**
@@ -10481,16 +11773,20 @@ var mergeWithKey_1 = mergeWithKey$1;
  */
 
 var mergeDeepWithKey$1 =
-/*#__PURE__*/
-_curry3_1(function mergeDeepWithKey(fn, lObj, rObj) {
-  return mergeWithKey_1(function (k, lVal, rVal) {
-    if (_isObject_1(lVal) && _isObject_1(rVal)) {
-      return mergeDeepWithKey(fn, lVal, rVal);
-    } else {
-      return fn(k, lVal, rVal);
-    }
-  }, lObj, rObj);
-});
+	/*#__PURE__*/
+	_curry3_1(function mergeDeepWithKey(fn, lObj, rObj) {
+		return mergeWithKey_1(
+			function(k, lVal, rVal) {
+				if (_isObject_1(lVal) && _isObject_1(rVal)) {
+					return mergeDeepWithKey(fn, lVal, rVal);
+				} else {
+					return fn(k, lVal, rVal);
+				}
+			},
+			lObj,
+			rObj
+		);
+	});
 
 var mergeDeepWithKey_1 = mergeDeepWithKey$1;
 /**
@@ -10516,12 +11812,16 @@ var mergeDeepWithKey_1 = mergeDeepWithKey$1;
  */
 
 var mergeDeepRight$1 =
-/*#__PURE__*/
-_curry2_1(function mergeDeepRight(lObj, rObj) {
-  return mergeDeepWithKey_1(function (k, lVal, rVal) {
-    return rVal;
-  }, lObj, rObj);
-});
+	/*#__PURE__*/
+	_curry2_1(function mergeDeepRight(lObj, rObj) {
+		return mergeDeepWithKey_1(
+			function(k, lVal, rVal) {
+				return rVal;
+			},
+			lObj,
+			rObj
+		);
+	});
 
 var mergeDeepRight_1 = mergeDeepRight$1;
 /**
@@ -10560,94 +11860,92 @@ var mergeDeepRight_1 = mergeDeepRight$1;
  */
 
 var forEach$1 =
-/*#__PURE__*/
-_curry2_1(
-/*#__PURE__*/
-_checkForMethod_1('forEach', function forEach(fn, list) {
-  var len = list.length;
-  var idx = 0;
+	/*#__PURE__*/
+	_curry2_1(
+		/*#__PURE__*/
+		_checkForMethod_1("forEach", function forEach(fn, list) {
+			var len = list.length;
+			var idx = 0;
 
-  while (idx < len) {
-    fn(list[idx]);
-    idx += 1;
-  }
+			while (idx < len) {
+				fn(list[idx]);
+				idx += 1;
+			}
 
-  return list;
-}));
+			return list;
+		})
+	);
 
 var forEach_1 = forEach$1;
 
 function _indexOf$1(list, a, idx) {
-  var inf, item; // Array.prototype.indexOf doesn't exist below IE9
+	var inf, item; // Array.prototype.indexOf doesn't exist below IE9
 
-  if (typeof list.indexOf === 'function') {
-    switch (typeof a) {
-      case 'number':
-        if (a === 0) {
-          // manually crawl the list to distinguish between +0 and -0
-          inf = 1 / a;
+	if (typeof list.indexOf === "function") {
+		switch (typeof a) {
+			case "number":
+				if (a === 0) {
+					// manually crawl the list to distinguish between +0 and -0
+					inf = 1 / a;
 
-          while (idx < list.length) {
-            item = list[idx];
+					while (idx < list.length) {
+						item = list[idx];
 
-            if (item === 0 && 1 / item === inf) {
-              return idx;
-            }
+						if (item === 0 && 1 / item === inf) {
+							return idx;
+						}
 
-            idx += 1;
-          }
+						idx += 1;
+					}
 
-          return -1;
-        } else if (a !== a) {
-          // NaN
-          while (idx < list.length) {
-            item = list[idx];
+					return -1;
+				} else if (a !== a) {
+					// NaN
+					while (idx < list.length) {
+						item = list[idx];
 
-            if (typeof item === 'number' && item !== item) {
-              return idx;
-            }
+						if (typeof item === "number" && item !== item) {
+							return idx;
+						}
 
-            idx += 1;
-          }
+						idx += 1;
+					}
 
-          return -1;
-        } // non-zero numbers can utilise Set
+					return -1;
+				} // non-zero numbers can utilise Set
 
+				return list.indexOf(a, idx);
+			// all these types can utilise Set
 
-        return list.indexOf(a, idx);
-      // all these types can utilise Set
+			case "string":
+			case "boolean":
+			case "function":
+			case "undefined":
+				return list.indexOf(a, idx);
 
-      case 'string':
-      case 'boolean':
-      case 'function':
-      case 'undefined':
-        return list.indexOf(a, idx);
+			case "object":
+				if (a === null) {
+					// null can utilise Set
+					return list.indexOf(a, idx);
+				}
+		}
+	} // anything else not covered above, defer to R.equals
 
-      case 'object':
-        if (a === null) {
-          // null can utilise Set
-          return list.indexOf(a, idx);
-        }
+	while (idx < list.length) {
+		if (equals_1(list[idx], a)) {
+			return idx;
+		}
 
-    }
-  } // anything else not covered above, defer to R.equals
+		idx += 1;
+	}
 
-
-  while (idx < list.length) {
-    if (equals_1(list[idx], a)) {
-      return idx;
-    }
-
-    idx += 1;
-  }
-
-  return -1;
+	return -1;
 }
 
 var _indexOf_1 = _indexOf$1;
 
 function _contains$1(a, list) {
-  return _indexOf_1(list, a, 0) >= 0;
+	return _indexOf_1(list, a, 0) >= 0;
 }
 
 var _contains_1 = _contains$1;
@@ -10673,41 +11971,57 @@ var _contains_1 = _contains$1;
  */
 
 var contains$1$1 =
-/*#__PURE__*/
-_curry2_1(_contains_1);
+	/*#__PURE__*/
+	_curry2_1(_contains_1);
 
 var contains_1 = contains$1$1;
-var validateDescriptorStructures = forEach_1(function (_ref) {
-  var widget = _ref.widget,
-      namespace = _ref.namespace,
-      container = _ref.container;
-  invariant(widget, 'Missing data-union-widget value in the widget descriptor.');
-  invariant(namespace || container, "Missing required attributes for the widget \"".concat(widget, "\". ") + "Fill in the 'data-union-namespace' or 'data-union-container' in the widget descriptors.");
+var validateDescriptorStructures = forEach_1(function(_ref) {
+	var widget = _ref.widget,
+		namespace = _ref.namespace,
+		container = _ref.container;
+	invariant(
+		widget,
+		"Missing data-union-widget value in the widget descriptor."
+	);
+	invariant(
+		namespace || container,
+		'Missing required attributes for the widget "'.concat(widget, '". ') +
+			"Fill in the 'data-union-namespace' or 'data-union-container' in the widget descriptors."
+	);
 });
 
-var validateRoutesWithDescriptors = function validateRoutesWithDescriptors(routes, descriptors) {
-  var routePaths = map_1(prop_1('path'), routes);
-  var widgetNames = map_1(prop_1('widget'), descriptors);
-  forEach_1(function (widgetName) {
-    return invariant(contains_1(widgetName, routePaths), "Could not find a matching route for widget descriptor of widget \"".concat(widgetName, "\"."));
-  }, widgetNames);
+var validateRoutesWithDescriptors = function validateRoutesWithDescriptors(
+	routes,
+	descriptors
+) {
+	var routePaths = map_1(prop_1("path"), routes);
+	var widgetNames = map_1(prop_1("widget"), descriptors);
+	forEach_1(function(widgetName) {
+		return invariant(
+			contains_1(widgetName, routePaths),
+			'Could not find a matching route for widget descriptor of widget "'.concat(
+				widgetName,
+				'".'
+			)
+		);
+	}, widgetNames);
 };
 
 var loadRouteComponent = function loadRouteComponent(route) {
-  return new Promise(function (resolve) {
-    return route.getComponent(resolve);
-  });
+	return new Promise(function(resolve) {
+		return route.getComponent(resolve);
+	});
 };
 
 var selectWidgetDescriptors = function selectWidgetDescriptors(parent) {
-  return parent.querySelectorAll('[data-union-widget]');
+	return parent.querySelectorAll("[data-union-widget]");
 };
 
 var selectCommonDescriptors = function selectCommonDescriptors(parent) {
-  return parent.querySelectorAll('[data-union-common]');
+	return parent.querySelectorAll("[data-union-common]");
 };
 
-var parseJsonContent = o_1(unary_1(JSON.parse), prop_1('innerHTML'));
+var parseJsonContent = o_1(unary_1(JSON.parse), prop_1("innerHTML"));
 var safelyParseJsonContent = tryCatch_1(parseJsonContent, always_1({}));
 /**
  * Describes the structure of a descriptor that we work with in JS (as opposed to the DOM structure).
@@ -10718,59 +12032,78 @@ var safelyParseJsonContent = tryCatch_1(parseJsonContent, always_1({}));
  */
 
 var elementTransformationsByKey = {
-  widget: path_1(['dataset', 'unionWidget']),
-  container: path_1(['dataset', 'unionContainer']),
-  namespace: path_1(['dataset', 'unionNamespace']),
-  data: safelyParseJsonContent
+	widget: path_1(["dataset", "unionWidget"]),
+	container: path_1(["dataset", "unionContainer"]),
+	namespace: path_1(["dataset", "unionNamespace"]),
+	data: safelyParseJsonContent
 };
 var pairArrayWithDescriptorKeys = zipObj_1(keys_1(elementTransformationsByKey)); // zipObj is a binary function but converge expects a variadic function
 
 var pairArgsWithDescriptorKeys = unapply_1(pairArrayWithDescriptorKeys);
-var parseDescriptor = converge_1(pairArgsWithDescriptorKeys, values_1(elementTransformationsByKey));
+var parseDescriptor = converge_1(
+	pairArgsWithDescriptorKeys,
+	values_1(elementTransformationsByKey)
+);
 var getWidgetDescriptors = o_1(map_1(parseDescriptor), selectWidgetDescriptors);
-var getCommonData = compose_1(reduce_1(mergeDeepRight_1, {}), map_1(safelyParseJsonContent), selectCommonDescriptors);
+var getCommonData = compose_1(
+	reduce_1(mergeDeepRight_1, {}),
+	map_1(safelyParseJsonContent),
+	selectCommonDescriptors
+);
 
 var mergeCommonDataToConfigs = function mergeCommonDataToConfigs(commonData) {
-  return map_1(mergeDeepRight_1({
-    descriptor: {
-      data: commonData
-    }
-  }));
+	return map_1(
+		mergeDeepRight_1({
+			descriptor: {
+				data: commonData
+			}
+		})
+	);
 };
 
 var loadConfigs = function loadConfigs(routes, descriptors) {
-  var findRouteByDescriptor = function findRouteByDescriptor(_ref) {
-    var widget = _ref.widget;
-    return find_1(whereEq_1({
-      path: widget
-    }), routes);
-  };
+	var findRouteByDescriptor = function findRouteByDescriptor(_ref) {
+		var widget = _ref.widget;
+		return find_1(
+			whereEq_1({
+				path: widget
+			}),
+			routes
+		);
+	};
 
-  var pairDescriptorWithComponent = function pairDescriptorWithComponent(descriptor) {
-    return function (component) {
-      return {
-        component: component,
-        descriptor: descriptor
-      };
-    };
-  };
+	var pairDescriptorWithComponent = function pairDescriptorWithComponent(
+		descriptor
+	) {
+		return function(component) {
+			return {
+				component: component,
+				descriptor: descriptor
+			};
+		};
+	};
 
-  var loadRouteComponentByDescriptor = o_1(loadRouteComponent, findRouteByDescriptor);
+	var loadRouteComponentByDescriptor = o_1(
+		loadRouteComponent,
+		findRouteByDescriptor
+	);
 
-  var loadDescriptorConfig = function loadDescriptorConfig(descriptor) {
-    return loadRouteComponentByDescriptor(descriptor).then(pairDescriptorWithComponent(descriptor)).catch(console.error);
-  };
+	var loadDescriptorConfig = function loadDescriptorConfig(descriptor) {
+		return loadRouteComponentByDescriptor(descriptor)
+			.then(pairDescriptorWithComponent(descriptor))
+			.catch(console.error);
+	};
 
-  return map_1(loadDescriptorConfig, descriptors);
+	return map_1(loadDescriptorConfig, descriptors);
 };
 
 var addCommonDataProperty = function addCommonDataProperty(commonData) {
-  return function (configs) {
-    return {
-      commonData: commonData,
-      configs: configs
-    };
-  };
+	return function(configs) {
+		return {
+			commonData: commonData,
+			configs: configs
+		};
+	};
 };
 /**
  * Finds widget descriptors in `parent` and pairs them with components returned by correspoding `routes`.
@@ -10782,73 +12115,102 @@ var addCommonDataProperty = function addCommonDataProperty(commonData) {
  *									`commonData` is the merged JSON content of common widget descriptors.
  */
 
-
 var scan$1 = function scan(routes, parent) {
-  var descriptors = getWidgetDescriptors(parent);
-  var commonData = getCommonData(parent);
-  validateDescriptorStructures(descriptors);
-  validateRoutesWithDescriptors(routes, descriptors);
-  var configPromises = loadConfigs(routes, descriptors);
-  return Promise.all(configPromises).then(mergeCommonDataToConfigs(commonData)).then(addCommonDataProperty(commonData));
+	var descriptors = getWidgetDescriptors(parent);
+	var commonData = getCommonData(parent);
+	validateDescriptorStructures(descriptors);
+	validateRoutesWithDescriptors(routes, descriptors);
+	var configPromises = loadConfigs(routes, descriptors);
+	return Promise.all(configPromises)
+		.then(mergeCommonDataToConfigs(commonData))
+		.then(addCommonDataProperty(commonData));
 };
 
-var getWidgetName = path_1(['props', 'descriptor', 'widget']);
+var getWidgetName = path_1(["props", "descriptor", "widget"]);
 
 var withErrorBoundary = function withErrorBoundary(NextComponent) {
-  var WithErrorBoundary =
-  /*#__PURE__*/
-  function (_Component) {
-    _inherits(WithErrorBoundary, _Component);
+	var WithErrorBoundary =
+		/*#__PURE__*/
+		(function(_Component) {
+			_inherits(WithErrorBoundary, _Component);
 
-    function WithErrorBoundary() {
-      var _getPrototypeOf2;
+			function WithErrorBoundary() {
+				var _getPrototypeOf2;
 
-      var _this;
+				var _this;
 
-      _classCallCheck(this, WithErrorBoundary);
+				_classCallCheck(this, WithErrorBoundary);
 
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
+				for (
+					var _len = arguments.length,
+						args = new Array(_len),
+						_key = 0;
+					_key < _len;
+					_key++
+				) {
+					args[_key] = arguments[_key];
+				}
 
-      _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(WithErrorBoundary)).call.apply(_getPrototypeOf2, [this].concat(args)));
+				_this = _possibleConstructorReturn(
+					this,
+					(_getPrototypeOf2 = _getPrototypeOf(
+						WithErrorBoundary
+					)).call.apply(_getPrototypeOf2, [this].concat(args))
+				);
 
-      _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
-        hasError: false
-      });
+				_defineProperty(
+					_assertThisInitialized(_assertThisInitialized(_this)),
+					"state",
+					{
+						hasError: false
+					}
+				);
 
-      return _this;
-    }
+				return _this;
+			}
 
-    _createClass(WithErrorBoundary, [{
-      key: "componentDidCatch",
-      value: function componentDidCatch() {
-        this.setState({
-          hasError: true
-        });
-      }
-    }, {
-      key: "render",
-      value: function render() {
-        var widgetName = getWidgetName(this);
+			_createClass(WithErrorBoundary, [
+				{
+					key: "componentDidCatch",
+					value: function componentDidCatch() {
+						this.setState({
+							hasError: true
+						});
+					}
+				},
+				{
+					key: "render",
+					value: function render() {
+						var widgetName = getWidgetName(this);
 
-        if (this.state.hasError) {
-          // TODO: perhaps show some tips for common mistakes?
-          return "An error has occurred in widget \"".concat(widgetName, "\". See the console output for more details.");
-        }
+						if (this.state.hasError) {
+							// TODO: perhaps show some tips for common mistakes?
+							return 'An error has occurred in widget "'.concat(
+								widgetName,
+								'". See the console output for more details.'
+							);
+						}
 
-        return React__default.createElement(NextComponent, this.props);
-      }
-    }]);
+						return React__default.createElement(
+							NextComponent,
+							this.props
+						);
+					}
+				}
+			]);
 
-    return WithErrorBoundary;
-  }(React.Component);
+			return WithErrorBoundary;
+		})(React.Component);
 
-  _defineProperty(WithErrorBoundary, "propTypes", ConfigShape);
+	_defineProperty(WithErrorBoundary, "propTypes", ConfigShape);
 
-  _defineProperty(WithErrorBoundary, "displayName", "WithErrorBoundary(".concat(getDisplayName(NextComponent), ")"));
+	_defineProperty(
+		WithErrorBoundary,
+		"displayName",
+		"WithErrorBoundary(".concat(getDisplayName(NextComponent), ")")
+	);
 
-  return WithErrorBoundary;
+	return WithErrorBoundary;
 };
 /**
  * HOC which spreads the surrounding WidgetContext's value to passed component.
@@ -10856,16 +12218,25 @@ var withErrorBoundary = function withErrorBoundary(NextComponent) {
  * @param {React.Component} NextComponent component to bind the props to
  */
 
-
 var withWidgetContext = function withWidgetContext(NextComponent) {
-  var WithWidgetContext = function WithWidgetContext(props) {
-    return React__default.createElement(WidgetContext.Consumer, null, function (value) {
-      return React__default.createElement(NextComponent, _extends$1({}, props, value));
-    });
-  };
+	var WithWidgetContext = function WithWidgetContext(props) {
+		return React__default.createElement(
+			WidgetContext.Consumer,
+			null,
+			function(value) {
+				return React__default.createElement(
+					NextComponent,
+					_extends$1({}, props, value)
+				);
+			}
+		);
+	};
 
-  WithWidgetContext.displayName = "WithWidgetContext(".concat(getDisplayName(NextComponent), ")");
-  return WithWidgetContext;
+	WithWidgetContext.displayName = "WithWidgetContext(".concat(
+		getDisplayName(NextComponent),
+		")"
+	);
+	return WithWidgetContext;
 };
 /**
  * An internal component of `Union`.
@@ -10875,25 +12246,44 @@ var withWidgetContext = function withWidgetContext(NextComponent) {
  *
  */
 
-
 var Widget = function Widget(_ref) {
-  var WidgetComponent = _ref.component,
-      descriptor = _ref.descriptor;
-  var widget = descriptor.widget,
-      container = descriptor.container,
-      namespace = descriptor.namespace,
-      data = descriptor.data;
-  var resolvedNamespace = namespace || container;
-  invariant(!WidgetComponent || container, "Missing attribute \"container\" for the widget \"".concat(widget, "\" to be rendered."));
-  var widgetProps = {
-    data: data,
-    namespace: resolvedNamespace
-  };
-  var element = document.getElementById(container);
-  warning(element, "HTML element with ID \"".concat(container, "\" not found for widget \"").concat(widget, "\""));
-  return WidgetComponent && element ? ReactDOM.createPortal(React__default.createElement(WidgetContext.Provider, {
-    value: widgetProps
-  }, React__default.createElement(WidgetComponent, widgetProps)), element) : null;
+	var WidgetComponent = _ref.component,
+		descriptor = _ref.descriptor;
+	var widget = descriptor.widget,
+		container = descriptor.container,
+		namespace = descriptor.namespace,
+		data = descriptor.data;
+	var resolvedNamespace = namespace || container;
+	invariant(
+		!WidgetComponent || container,
+		'Missing attribute "container" for the widget "'.concat(
+			widget,
+			'" to be rendered.'
+		)
+	);
+	var widgetProps = {
+		data: data,
+		namespace: resolvedNamespace
+	};
+	var element = document.getElementById(container);
+	warning(
+		element,
+		'HTML element with ID "'
+			.concat(container, '" not found for widget "')
+			.concat(widget, '"')
+	);
+	return WidgetComponent && element
+		? ReactDOM.createPortal(
+				React__default.createElement(
+					WidgetContext.Provider,
+					{
+						value: widgetProps
+					},
+					React__default.createElement(WidgetComponent, widgetProps)
+				),
+				element
+		  )
+		: null;
 };
 
 Widget.propTypes = ConfigShape;
@@ -10905,122 +12295,176 @@ var Widget$1 = withErrorBoundary(Widget);
  */
 
 var Union =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Union, _Component);
+	/*#__PURE__*/
+	(function(_Component) {
+		_inherits(Union, _Component);
 
-  function Union() {
-    var _getPrototypeOf2;
+		function Union() {
+			var _getPrototypeOf2;
 
-    var _this;
+			var _this;
 
-    _classCallCheck(this, Union);
+			_classCallCheck(this, Union);
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+			for (
+				var _len = arguments.length, args = new Array(_len), _key = 0;
+				_key < _len;
+				_key++
+			) {
+				args[_key] = arguments[_key];
+			}
 
-    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Union)).call.apply(_getPrototypeOf2, [this].concat(args)));
+			_this = _possibleConstructorReturn(
+				this,
+				(_getPrototypeOf2 = _getPrototypeOf(Union)).call.apply(
+					_getPrototypeOf2,
+					[this].concat(args)
+				)
+			);
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
-      configs: [],
-      commonData: null
-    });
+			_defineProperty(
+				_assertThisInitialized(_assertThisInitialized(_this)),
+				"state",
+				{
+					configs: [],
+					commonData: null
+				}
+			);
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "scan", function (props) {
-      var onScanStart = props.onScanStart,
-          onScanEnd = props.onScanEnd,
-          onScanError = props.onScanError,
-          parent = props.parent,
-          routes = props.routes;
-      onScanStart();
-      var domParent = parent || document;
-      scan$1(routes, domParent).then(function (result) {
-        onScanEnd(result);
+			_defineProperty(
+				_assertThisInitialized(_assertThisInitialized(_this)),
+				"scan",
+				function(props) {
+					var onScanStart = props.onScanStart,
+						onScanEnd = props.onScanEnd,
+						onScanError = props.onScanError,
+						parent = props.parent,
+						routes = props.routes;
+					onScanStart();
+					var domParent = parent || document;
+					scan$1(routes, domParent).then(
+						function(result) {
+							onScanEnd(result);
 
-        _this.setState(result);
-      }, function (error) {
-        return onScanError(error);
-      });
-    });
+							_this.setState(result);
+						},
+						function(error) {
+							return onScanError(error);
+						}
+					);
+				}
+			);
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "renderWidget", function (config) {
-      return React__default.createElement(Widget$1, _extends$1({
-        key: config.descriptor.namespace || config.descriptor.container
-      }, config));
-    });
+			_defineProperty(
+				_assertThisInitialized(_assertThisInitialized(_this)),
+				"renderWidget",
+				function(config) {
+					return React__default.createElement(
+						Widget$1,
+						_extends$1(
+							{
+								key:
+									config.descriptor.namespace ||
+									config.descriptor.container
+							},
+							config
+						)
+					);
+				}
+			);
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "resolveStrictMode", function (union) {
-      return _this.props.strictMode ? React__default.createElement(React.StrictMode, null, union) : union;
-    });
+			_defineProperty(
+				_assertThisInitialized(_assertThisInitialized(_this)),
+				"resolveStrictMode",
+				function(union) {
+					return _this.props.strictMode
+						? React__default.createElement(
+								React.StrictMode,
+								null,
+								union
+						  )
+						: union;
+				}
+			);
 
-    return _this;
-  }
+			return _this;
+		}
 
-  _createClass(Union, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.scan(this.props);
-    }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps) {
-      if (prevProps.routes !== this.props.routes) {
-        this.scan(prevProps);
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return this.resolveStrictMode(React__default.createElement(React.Fragment, null, this.props.children, this.state.configs.map(this.renderWidget)));
-    }
-  }]);
+		_createClass(Union, [
+			{
+				key: "componentDidMount",
+				value: function componentDidMount() {
+					this.scan(this.props);
+				}
+			},
+			{
+				key: "componentDidUpdate",
+				value: function componentDidUpdate(prevProps) {
+					if (prevProps.routes !== this.props.routes) {
+						this.scan(prevProps);
+					}
+				}
+			},
+			{
+				key: "render",
+				value: function render() {
+					return this.resolveStrictMode(
+						React__default.createElement(
+							React.Fragment,
+							null,
+							this.props.children,
+							this.state.configs.map(this.renderWidget)
+						)
+					);
+				}
+			}
+		]);
 
-  return Union;
-}(React.Component);
+		return Union;
+	})(React.Component);
 
 _defineProperty(Union, "propTypes", {
-  /**
-   * Children of the `Union` component.
-   */
-  children: propTypes$1.node,
+	/**
+	 * Children of the `Union` component.
+	 */
+	children: propTypes$1.node,
 
-  /**
-   * Called after the scan of the HTML is done.
-   */
-  onScanEnd: propTypes$1.func,
+	/**
+	 * Called after the scan of the HTML is done.
+	 */
+	onScanEnd: propTypes$1.func,
 
-  /**
-   *  Called when there is an error while scanning of the HTML.
-   */
-  onScanError: propTypes$1.func,
+	/**
+	 *  Called when there is an error while scanning of the HTML.
+	 */
+	onScanError: propTypes$1.func,
 
-  /**
-   * Called before the scan of the HTML
-   */
-  onScanStart: propTypes$1.func,
+	/**
+	 * Called before the scan of the HTML
+	 */
+	onScanStart: propTypes$1.func,
 
-  /**
-   * Element in which the scan is running. By default `document`.
-   */
-  parent: propTypes$1.object,
+	/**
+	 * Element in which the scan is running. By default `document`.
+	 */
+	parent: propTypes$1.object,
 
-  /**
-   *  Array of routes that are supported by your application.
-   */
-  routes: propTypes$1.arrayOf(propTypes$1.shape(RouteShape)).isRequired,
+	/**
+	 *  Array of routes that are supported by your application.
+	 */
+	routes: propTypes$1.arrayOf(propTypes$1.shape(RouteShape)).isRequired,
 
-  /**
-   * Enable React.Strict mode. By default `true`
-   */
-  strictMode: propTypes$1.bool
+	/**
+	 * Enable React.Strict mode. By default `true`
+	 */
+	strictMode: propTypes$1.bool
 });
 
 _defineProperty(Union, "defaultProps", {
-  onScanEnd: noop,
-  onScanError: noop,
-  onScanStart: noop,
-  strictMode: true
+	onScanEnd: noop,
+	onScanError: noop,
+	onScanStart: noop,
+	strictMode: true
 });
 
 //  Ramda-extension v0.6.0
@@ -11043,7 +12487,7 @@ _defineProperty(Union, "defaultProps", {
  */
 
 var equalsToZero = equals(0);
-var emptyString = '';
+var emptyString = "";
 var emptyArray = [];
 var emptyObject = {};
 /**
@@ -11256,10 +12700,10 @@ var alwaysNull = always(null);
  */
 
 var alwaysEmptyString = always(emptyString);
-var alwaysApply = curry(function (fn, args) {
-  return function () {
-    return apply(fn, args);
-  };
+var alwaysApply = curry(function(fn, args) {
+	return function() {
+		return apply(fn, args);
+	};
 });
 /**
  * Creates a thunk out of a function. A thunk delays a calculation until
@@ -11395,12 +12839,12 @@ var applyPipe = apply(pipe);
 
  */
 
-var between = curry(function (min$$1, max$$1, val) {
-  if (val >= min$$1 && val <= max$$1) {
-    return true;
-  }
+var between = curry(function(min$$1, max$$1, val) {
+	if (val >= min$$1 && val <= max$$1) {
+		return true;
+	}
 
-  return false;
+	return false;
 });
 /**
  * Returns true if argument is type of Array.
@@ -11588,7 +13032,7 @@ var isPositive = lt(0);
  *
  */
 
-var isPromise = allPass([isObject, o(isFunction, prop('then'))]);
+var isPromise = allPass([isObject, o(isFunction, prop("then"))]);
 /**
  * Returns true if argument is type of String.
  *
@@ -11684,8 +13128,8 @@ var isError = is(Error);
  *
  */
 
-var log = tap(function (x) {
-  return console.log(x);
+var log = tap(function(x) {
+	return console.log(x);
 });
 /**
  * Function with side-effect. Logs input to console and returns that input.
@@ -11758,9 +13202,14 @@ var headArg = nthArg(0);
  * @sig ((a, b, a, [b]) -> a) -> a -> [b] -> a
  */
 
-var reduceSource = converge(reduce, [converge(partialRight, [headArg, // iteratorFn
-unapply(tail)]), nthArg(1), // accumulator
-nthArg(2)]);
+var reduceSource = converge(reduce, [
+	converge(partialRight, [
+		headArg, // iteratorFn
+		unapply(tail)
+	]),
+	nthArg(1), // accumulator
+	nthArg(2)
+]);
 /**
  * Returns first not nil value
  *
@@ -11792,7 +13241,10 @@ var findNotNil = find(notNil);
  */
 
 var xPairs = useWith(xprod, [of, identity]);
-var getPredicates = compose(map(juxt([applyCompose, last])), xPairs);
+var getPredicates = compose(
+	map(juxt([applyCompose, last])),
+	xPairs
+);
 /**
  * Returns first result from evaluation of functions in the list, that satisfies predicate.
  * Returns `undefined` otherwise.
@@ -11860,7 +13312,7 @@ var dispatch = dispatchWith(notNil);
  */
 
 var constructRegExp = constructN(2, RegExp);
-var getRegExp_ = useWith(flip(constructRegExp)('gi'), [concat('^')]);
+var getRegExp_ = useWith(flip(constructRegExp)("gi"), [concat("^")]);
 /**
  * Testing string if starts with some prefix.
  *
@@ -11902,7 +13354,7 @@ var startsWithPrefix = useWith(test, [getRegExp_, identity]);
  */
 
 var startsWithPrefixIgnoreCase = useWith(startsWith, [toUpper, toUpper]);
-var getRegExp_$1 = useWith(flip(constructRegExp)('gi'), [flip(concat)('$')]);
+var getRegExp_$1 = useWith(flip(constructRegExp)("gi"), [flip(concat)("$")]);
 /**
  * Testing string if ends with some suffix.
  *
@@ -11978,7 +13430,12 @@ var argumentsToList = unapply(identity);
  *
  */
 
-var containsAll = curry(compose(isEmpty, difference));
+var containsAll = curry(
+	compose(
+		isEmpty,
+		difference
+	)
+);
 /**
  * Returns `true` if any of the items from first array are in the second array.
  *
@@ -11998,7 +13455,13 @@ var containsAll = curry(compose(isEmpty, difference));
  *
  */
 
-var containsAny = curry(compose(not, isEmpty, intersection));
+var containsAny = curry(
+	compose(
+		not,
+		isEmpty,
+		intersection
+	)
+);
 /**
  * Returns `true` if any of the items from first array is not the second array.
  *
@@ -12017,7 +13480,12 @@ var containsAny = curry(compose(not, isEmpty, intersection));
  * @sig [a] -> [a] -> Boolean
  */
 
-var containsNone = curry(compose(isEmpty, intersection));
+var containsNone = curry(
+	compose(
+		isEmpty,
+		intersection
+	)
+);
 /**
  * Splits string by dot into list.
  *
@@ -12031,7 +13499,7 @@ var containsNone = curry(compose(isEmpty, intersection));
  * @sig String -> [String]
  */
 
-var splitByDot = split('.');
+var splitByDot = split(".");
 /**
  * Unfolds input object by dot delimetered path inside its keys.
  *
@@ -12046,7 +13514,19 @@ var splitByDot = split('.');
  * @sig Object -> Object
  */
 
-var unfoldObjectDots = o(o(mergeAll, values), mapObjIndexed(useWith(flip(call), [identity, compose(applyCompose, map(objOf), splitByDot)])));
+var unfoldObjectDots = o(
+	o(mergeAll, values),
+	mapObjIndexed(
+		useWith(flip(call), [
+			identity,
+			compose(
+				applyCompose,
+				map(objOf),
+				splitByDot
+			)
+		])
+	)
+);
 /**
  * Capitalize first letter.
  *
@@ -12060,7 +13540,7 @@ var unfoldObjectDots = o(o(mergeAll, values), mapObjIndexed(useWith(flip(call), 
  * @sig String -> String
  */
 
-var toUpperFirst = o(join(''), adjust(toUpper, 0));
+var toUpperFirst = o(join(""), adjust(toUpper, 0));
 /**
  * Decapitalize first letter.
  *
@@ -12074,12 +13554,12 @@ var toUpperFirst = o(join(''), adjust(toUpper, 0));
  * @sig String -> String
  */
 
-var toLowerFirst = o(join(''), adjust(toLower, 0));
+var toLowerFirst = o(join(""), adjust(toLower, 0));
 /**
  * @private
  */
 
-var nonAlphaNumericRegExp = constructRegExp('[^a-zA-Z0-9]+', 'g');
+var nonAlphaNumericRegExp = constructRegExp("[^a-zA-Z0-9]+", "g");
 /**
  * Splits string into list. Delimiter is every sequence of non-alphanumerical values.
  *
@@ -12094,7 +13574,10 @@ var nonAlphaNumericRegExp = constructRegExp('[^a-zA-Z0-9]+', 'g');
  *
  */
 
-var splitByNonAlphaNumeric = o(reject(equals(emptyString)), split(nonAlphaNumericRegExp));
+var splitByNonAlphaNumeric = o(
+	reject(equals(emptyString)),
+	split(nonAlphaNumericRegExp)
+);
 /**
  * Converts list of strings to string.
  *
@@ -12125,7 +13608,10 @@ var listToString = join(emptyString);
  * @sig String -> String
  */
 
-var toPascalCase = o(listToString, o(map(toUpperFirst), splitByNonAlphaNumeric));
+var toPascalCase = o(
+	listToString,
+	o(map(toUpperFirst), splitByNonAlphaNumeric)
+);
 /**
  * Converts string into camelCase.
  *
@@ -12156,7 +13642,7 @@ var toCamelCase = o(toLowerFirst, toPascalCase);
  * @sig [String] -> String
  */
 
-var joinWithUnderscore = join('_');
+var joinWithUnderscore = join("_");
 /**
  * Converts string into snake_case.
  *
@@ -12172,7 +13658,10 @@ var joinWithUnderscore = join('_');
  * @sig String -> String
  */
 
-var toSnakeCase = o(joinWithUnderscore, o(map(toLower), splitByNonAlphaNumeric));
+var toSnakeCase = o(
+	joinWithUnderscore,
+	o(map(toLower), splitByNonAlphaNumeric)
+);
 /**
  * Joins array of string with dash (hyphen) determiner.
  *
@@ -12186,7 +13675,7 @@ var toSnakeCase = o(joinWithUnderscore, o(map(toLower), splitByNonAlphaNumeric))
  * @sig [String] -> String
  */
 
-var joinWithDash = join('-');
+var joinWithDash = join("-");
 /**
  * Converts string into kebab-case.
  *
@@ -12216,7 +13705,7 @@ var toKebabCase = o(joinWithDash, o(map(toLower), splitByNonAlphaNumeric));
  * @sig [String] -> String
  */
 
-var joinWithDot = join('.');
+var joinWithDot = join(".");
 /**
  * Converts string into dot.case.
  *
@@ -12248,7 +13737,10 @@ var toDotCase = o(joinWithDot, o(map(toLower), splitByNonAlphaNumeric));
  * @sig String -> String
  */
 
-var toScreamingSnakeCase = o(joinWithUnderscore, o(map(toUpper), splitByNonAlphaNumeric));
+var toScreamingSnakeCase = o(
+	joinWithUnderscore,
+	o(map(toUpper), splitByNonAlphaNumeric)
+);
 /**
  * Filters out every nil value in a list.
  *
@@ -12292,7 +13784,7 @@ var rejectEq = useWith(reject, [equals, identity]);
  * @sig [String] -> String
  */
 
-var joinWithSpace = join(' ');
+var joinWithSpace = join(" ");
 /**
  * Returns an over lens to the first index of list.
  *
@@ -12324,7 +13816,14 @@ var overHead = over(lensIndex(0));
  *      R_.dissocDotPath('a.b.c', {a: {b: {c: 42}}}); //=> {a: {b: {}}}
  */
 
-var dissocDotPath = curryN(2, compose(apply(dissocPath), overHead(splitByDot), argumentsToList));
+var dissocDotPath = curryN(
+	2,
+	compose(
+		apply(dissocPath),
+		overHead(splitByDot),
+		argumentsToList
+	)
+);
 /**
  * Retrieve the value at a given dot path.
  *
@@ -12363,7 +13862,14 @@ var dotPath = useWith(path, [splitByDot, identity]);
  * @sig String -> a -> b
  */
 
-var assocDotPath = curryN(2, compose(apply(assocPath), overHead(splitByDot), argumentsToList));
+var assocDotPath = curryN(
+	2,
+	compose(
+		apply(assocPath),
+		overHead(splitByDot),
+		argumentsToList
+	)
+);
 /**
  * Takes first argument from the arguments
  *
@@ -12411,7 +13917,13 @@ var mergeWithDotPath = converge(assocDotPath, [headArg, performMerge, lastArg]);
  * @sig ([a] -> [b]) -> Object -> Object
  */
 
-var mapKeysAndValues = useWith(compose(fromPairs, map), [identity, toPairs]);
+var mapKeysAndValues = useWith(
+	compose(
+		fromPairs,
+		map
+	),
+	[identity, toPairs]
+);
 /**
  * Use map function over the keys of the given object
  *
@@ -12604,7 +14116,10 @@ var viewEq = useWith(viewWith, [identity, equals, identity]);
  * @sig (a, [b, c]...) -> [a, b, c]
  */
 
-var flattenArgs = compose(flatten, argumentsToList);
+var flattenArgs = compose(
+	flatten,
+	argumentsToList
+);
 /**
  * Returns true if value is type of Number.
  *
@@ -12629,11 +14144,22 @@ var flattenArgs = compose(flatten, argumentsToList);
 var isNumber = is(Number);
 var filterFalsy = filter(identity);
 var keepObjectStringNumber = filter(anyPass([isObject, isString, isNumber]));
-var keepKeyIfValueIsTruthy = mapObjIndexed(function (v, k) {
-  return v && k;
+var keepKeyIfValueIsTruthy = mapObjIndexed(function(v, k) {
+	return v && k;
 });
-var destructObject = compose(filterFalsy, values, keepKeyIfValueIsTruthy);
-var transduceArgs = into([], compose(map(when(isObject, destructObject)), keepObjectStringNumber, filterFalsy));
+var destructObject = compose(
+	filterFalsy,
+	values,
+	keepKeyIfValueIsTruthy
+);
+var transduceArgs = into(
+	[],
+	compose(
+		map(when(isObject, destructObject)),
+		keepObjectStringNumber,
+		filterFalsy
+	)
+);
 /**
  * Conditionally joining classNames together.
  *
@@ -12656,7 +14182,12 @@ var transduceArgs = into([], compose(map(when(isObject, destructObject)), keepOb
  * @sig String | [String] | Object -> String
  */
 
-var cx = compose(joinWithSpace, flatten, transduceArgs, flattenArgs);
+var cx = compose(
+	joinWithSpace,
+	flatten,
+	transduceArgs,
+	flattenArgs
+);
 /**
  * Returns true if property of object literal does not equals the given value.
  *
@@ -12787,7 +14318,11 @@ var keyMirror = mapObjIndexed(nthArg(1));
  */
 
 var valueMirror = o(fromPairs, map(duplicate));
-var wrapMapping = compose(juxt, flip(prepend)([last]), apply);
+var wrapMapping = compose(
+	juxt,
+	flip(prepend)([last]),
+	apply
+);
 /**
  * Map object keys. Mapping functions have both key and value as arguments.
  *
@@ -12803,11 +14338,16 @@ var wrapMapping = compose(juxt, flip(prepend)([last]), apply);
 
 var mapKeysWithValue = useWith(mapKeysAndValues, [wrapMapping, identity]); // prettier-ignore
 
-var camelizeObj = mapKeysAndValues(juxt([o(toCamelCase, head), o(function (x) {
-  return camelizeKeys(x);
-}, last)]));
-var camelizeArray = map(function (x) {
-  return camelizeKeys(x);
+var camelizeObj = mapKeysAndValues(
+	juxt([
+		o(toCamelCase, head),
+		o(function(x) {
+			return camelizeKeys(x);
+		}, last)
+	])
+);
+var camelizeArray = map(function(x) {
+	return camelizeKeys(x);
 });
 /**
  * Recursively camelize all keys within an object or array
@@ -13613,7 +15153,10 @@ var equalsAndAlways = useWith(argumentsToList, [equals, always]);
  *      R_.toggle('on', 'off')('other'); // 'other'
  */
 
-var toggle = compose(cond, juxt([equalsAndAlways, flip(equalsAndAlways), always([T, identity])]));
+var toggle = compose(
+	cond,
+	juxt([equalsAndAlways, flip(equalsAndAlways), always([T, identity])])
+);
 /**
  * Determines whether a dot path on an object has a specific value
  * in `R.equals` terms.
@@ -13832,13 +15375,19 @@ var isNilOrEmpty = anyPass([isNil, isEmpty]);
  * @sig a -> Boolean
  */
 
-var isPlainObject = allPass([o(equals('Object'), type), isNotNil, either(o(equals(Object.prototype), Object.getPrototypeOf), // NOTE: prototype is null if created using Object.create(null)
-o(isNil, Object.getPrototypeOf))]);
+var isPlainObject = allPass([
+	o(equals("Object"), type),
+	isNotNil,
+	either(
+		o(equals(Object.prototype), Object.getPrototypeOf), // NOTE: prototype is null if created using Object.create(null)
+		o(isNil, Object.getPrototypeOf)
+	)
+]);
 
 var addPrefix = function addPrefix(prefix) {
-  return map(function (x) {
-    return prefix + "/" + x;
-  });
+	return map(function(x) {
+		return prefix + "/" + x;
+	});
 };
 /**
  * @example
@@ -13848,135 +15397,175 @@ var addPrefix = function addPrefix(prefix) {
  *
  */
 
-
-curry(function (prefix, xs) {
-  return o(addPrefix(prefix), valueMirror)(xs);
+curry(function(prefix, xs) {
+	return o(addPrefix(prefix), valueMirror)(xs);
 });
 
-var getDisplayName$1 = (function (Component) {
-  return Component.displayName || Component.name || 'Component';
-});
+var getDisplayName$1 = function(Component) {
+	return Component.displayName || Component.name || "Component";
+};
 
 function withStoreContext(Component) {
-  function WithStoreContext(props$$1) {
-    return React__default.createElement(StoreContext.Consumer, null, function (store) {
-      return React__default.createElement(Component, _extends({}, props$$1, {
-        store: store
-      }));
-    });
-  }
+	function WithStoreContext(props$$1) {
+		return React__default.createElement(
+			StoreContext.Consumer,
+			null,
+			function(store) {
+				return React__default.createElement(
+					Component,
+					_extends({}, props$$1, {
+						store: store
+					})
+				);
+			}
+		);
+	}
 
-  WithStoreContext.displayName = "WithStoreContext(" + getDisplayName$1(Component) + ")";
-  return WithStoreContext;
+	WithStoreContext.displayName =
+		"WithStoreContext(" + getDisplayName$1(Component) + ")";
+	return WithStoreContext;
 }
 
 function withRedux(_ref) {
-  var epics = _ref.epics,
-      reducers = _ref.reducers,
-      persistReducers = _ref.persistReducers,
-      isGlobal = _ref.global;
-  return function (NextComponent) {
-    var WithRedux =
-    /*#__PURE__*/
-    function (_Component) {
-      _inheritsLoose(WithRedux, _Component);
+	var epics = _ref.epics,
+		reducers = _ref.reducers,
+		persistReducers = _ref.persistReducers,
+		isGlobal = _ref.global;
+	return function(NextComponent) {
+		var WithRedux =
+			/*#__PURE__*/
+			(function(_Component) {
+				_inheritsLoose(WithRedux, _Component);
 
-      function WithRedux(props$$1) {
-        var _this;
+				function WithRedux(props$$1) {
+					var _this;
 
-        _this = _Component.call(this, props$$1) || this; // NOTE: This is necessary because if a container is remounted for any reason,
-        // the `componentWillUnmount` lifecycle hook is invoked AFTER the constructor of the new
-        // element. This would cause the reducers to be removed and not injected back.
-        //
-        // `->` is constructor of the second instance and `=>` is CWU of the first one
-        // BEFORE: [reducer] -> [reducer] => [], no reducer survives the remounting process
-        // AFTER: [reducer1] -> [reducer1, reducer2] => [reducer2], the second reducer survives
+					_this = _Component.call(this, props$$1) || this; // NOTE: This is necessary because if a container is remounted for any reason,
+					// the `componentWillUnmount` lifecycle hook is invoked AFTER the constructor of the new
+					// element. This would cause the reducers to be removed and not injected back.
+					//
+					// `->` is constructor of the second instance and `=>` is CWU of the first one
+					// BEFORE: [reducer] -> [reducer] => [], no reducer survives the remounting process
+					// AFTER: [reducer1] -> [reducer1, reducer2] => [reducer2], the second reducer survives
 
-        _this.getReducers = function () {
-          return _this.suffixDependencies(reducers);
-        };
+					_this.getReducers = function() {
+						return _this.suffixDependencies(reducers);
+					};
 
-        _this.getEpics = function () {
-          return _this.suffixDependencies(epics);
-        };
+					_this.getEpics = function() {
+						return _this.suffixDependencies(epics);
+					};
 
-        _this.id = withRedux.counter++;
-        _this.suffixDependencies = reduxExtensibleStore.suffixKeys(_this.id);
-        _this.namespace = isGlobal ? undefined : props$$1.namespace;
+					_this.id = withRedux.counter++;
+					_this.suffixDependencies = extensibleStore.suffixKeys(
+						_this.id
+					);
+					_this.namespace = isGlobal ? undefined : props$$1.namespace;
 
-        _this.props.store.injectReducers(_this.getReducers(), _this.namespace);
+					_this.props.store.injectReducers(
+						_this.getReducers(),
+						_this.namespace
+					);
 
-        _this.props.store.injectEpics(_this.getEpics(), _this.namespace);
+					_this.props.store.injectEpics(
+						_this.getEpics(),
+						_this.namespace
+					);
 
-        return _this;
-      }
+					return _this;
+				}
 
-      var _proto = WithRedux.prototype;
+				var _proto = WithRedux.prototype;
 
-      _proto.componentWillUnmount = function componentWillUnmount() {
-        if (!persistReducers) {
-          this.props.store.removeReducers(keys(this.getReducers()), this.namespace);
-        }
+				_proto.componentWillUnmount = function componentWillUnmount() {
+					if (!persistReducers) {
+						this.props.store.removeReducers(
+							keys(this.getReducers()),
+							this.namespace
+						);
+					}
 
-        this.props.store.removeEpics(keys(this.getEpics()));
-      };
+					this.props.store.removeEpics(keys(this.getEpics()));
+				};
 
-      _proto.render = function render() {
-        return React__default.createElement(NextComponent, this.props);
-      };
+				_proto.render = function render() {
+					return React__default.createElement(
+						NextComponent,
+						this.props
+					);
+				};
 
-      return WithRedux;
-    }(React.Component);
+				return WithRedux;
+			})(React.Component);
 
-    WithRedux.propTypes = {
-      namespace: propTypes.string,
-      store: propTypes.object.isRequired
-    };
-    WithRedux.displayName = "WithRedux(" + getDisplayName$1(NextComponent) + ")";
-    return isGlobal ? withStoreContext(WithRedux) : o(withStoreContext, withWidgetContext)(WithRedux);
-  };
+		WithRedux.propTypes = {
+			namespace: propTypes.string,
+			store: propTypes.object.isRequired
+		};
+		WithRedux.displayName =
+			"WithRedux(" + getDisplayName$1(NextComponent) + ")";
+		return isGlobal
+			? withStoreContext(WithRedux)
+			: o(withStoreContext, withWidgetContext)(WithRedux);
+	};
 }
 withRedux.counter = 0;
 
 var makeMapStateToProps = function makeMapStateToProps(mapStateToProps) {
-  return function (state, ownProps) {
-    if (!mapStateToProps) {
-      return {};
-    }
+	return function(state, ownProps) {
+		if (!mapStateToProps) {
+			return {};
+		}
 
-    return mapStateToProps(reduxExtensibleStore.getStateByNamespace(ownProps.namespace, state), ownProps, state);
-  };
+		return mapStateToProps(
+			extensibleStore.getStateByNamespace(ownProps.namespace, state),
+			ownProps,
+			state
+		);
+	};
 };
-var makeMapDispatchToProps = function makeMapDispatchToProps(mapDispatchToProps) {
-  return function (dispatch$$1, ownProps) {
-    if (!mapDispatchToProps) {
-      return {};
-    }
+var makeMapDispatchToProps = function makeMapDispatchToProps(
+	mapDispatchToProps
+) {
+	return function(dispatch$$1, ownProps) {
+		if (!mapDispatchToProps) {
+			return {};
+		}
 
-    var wrappedDispatch = o(dispatch$$1, mergeDeepRight({
-      meta: {
-        namespace: ownProps.namespace
-      }
-    }));
+		var wrappedDispatch = o(
+			dispatch$$1,
+			mergeDeepRight({
+				meta: {
+					namespace: ownProps.namespace
+				}
+			})
+		);
 
-    if (isFunction(mapDispatchToProps)) {
-      return mapDispatchToProps(wrappedDispatch, ownProps);
-    }
+		if (isFunction(mapDispatchToProps)) {
+			return mapDispatchToProps(wrappedDispatch, ownProps);
+		}
 
-    if (isObject(mapDispatchToProps)) {
-      var wrapActionCreator = function wrapActionCreator(actionCreator) {
-        return compose(wrappedDispatch, actionCreator);
-      };
+		if (isObject(mapDispatchToProps)) {
+			var wrapActionCreator = function wrapActionCreator(actionCreator) {
+				return compose(
+					wrappedDispatch,
+					actionCreator
+				);
+			};
 
-      return map(wrapActionCreator, mapDispatchToProps);
-    }
+			return map(wrapActionCreator, mapDispatchToProps);
+		}
 
-    throw new TypeError('mapDispatchToProps is not an object or a function');
-  };
+		throw new TypeError(
+			"mapDispatchToProps is not an object or a function"
+		);
+	};
 };
-var rawNamespacedConnect = binary(useWith(reactRedux.connect, [makeMapStateToProps, makeMapDispatchToProps]));
+var rawNamespacedConnect = binary(
+	useWith(reactRedux.connect, [makeMapStateToProps, makeMapDispatchToProps])
+);
 var namespacedConnect = function namespacedConnect() {
-  return o(withWidgetContext, rawNamespacedConnect.apply(void 0, arguments));
+	return o(withWidgetContext, rawNamespacedConnect.apply(void 0, arguments));
 };
 
 exports.Provider = Provider;

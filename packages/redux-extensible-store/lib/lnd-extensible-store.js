@@ -1,6 +1,10 @@
-import { ofType, createEpicMiddleware } from "redux-observable";
-import { combineReducers, createStore, compose, applyMiddleware } from "redux";
-import { Subject } from "rxjs";
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+var reduxObservable = require("redux-observable");
+var redux = require("redux");
+var rxjs = require("rxjs");
 
 function _isPlaceholder(a) {
 	return (
@@ -2340,7 +2344,7 @@ var reverse =
  * @symb R.compose(f, g, h)(a, b) = f(g(h(a, b)))
  */
 
-function compose$1() {
+function compose() {
 	if (arguments.length === 0) {
 		throw new Error("compose requires at least one argument");
 	}
@@ -6758,7 +6762,10 @@ var union =
 	/*#__PURE__*/
 	_curry2(
 		/*#__PURE__*/
-		compose$1(uniq, _concat)
+		compose(
+			uniq,
+			_concat
+		)
 	);
 
 /**
@@ -10955,12 +10962,12 @@ var SubjectSubscriber =
 		return SubjectSubscriber;
 	})(Subscriber);
 
-var Subject$1 =
+var Subject =
 	/*@__PURE__*/
 	(function(_super) {
-		__extends(Subject$$1, _super);
+		__extends(Subject, _super);
 
-		function Subject$$1() {
+		function Subject() {
 			var _this = _super.call(this) || this;
 
 			_this.observers = [];
@@ -10971,17 +10978,17 @@ var Subject$1 =
 			return _this;
 		}
 
-		Subject$$1.prototype[rxSubscriber] = function() {
+		Subject.prototype[rxSubscriber] = function() {
 			return new SubjectSubscriber(this);
 		};
 
-		Subject$$1.prototype.lift = function(operator) {
+		Subject.prototype.lift = function(operator) {
 			var subject = new AnonymousSubject(this, this);
 			subject.operator = operator;
 			return subject;
 		};
 
-		Subject$$1.prototype.next = function(value) {
+		Subject.prototype.next = function(value) {
 			if (this.closed) {
 				throw new ObjectUnsubscribedError();
 			}
@@ -10997,7 +11004,7 @@ var Subject$1 =
 			}
 		};
 
-		Subject$$1.prototype.error = function(err) {
+		Subject.prototype.error = function(err) {
 			if (this.closed) {
 				throw new ObjectUnsubscribedError();
 			}
@@ -11016,7 +11023,7 @@ var Subject$1 =
 			this.observers.length = 0;
 		};
 
-		Subject$$1.prototype.complete = function() {
+		Subject.prototype.complete = function() {
 			if (this.closed) {
 				throw new ObjectUnsubscribedError();
 			}
@@ -11033,13 +11040,13 @@ var Subject$1 =
 			this.observers.length = 0;
 		};
 
-		Subject$$1.prototype.unsubscribe = function() {
+		Subject.prototype.unsubscribe = function() {
 			this.isStopped = true;
 			this.closed = true;
 			this.observers = null;
 		};
 
-		Subject$$1.prototype._trySubscribe = function(subscriber) {
+		Subject.prototype._trySubscribe = function(subscriber) {
 			if (this.closed) {
 				throw new ObjectUnsubscribedError();
 			} else {
@@ -11047,7 +11054,7 @@ var Subject$1 =
 			}
 		};
 
-		Subject$$1.prototype._subscribe = function(subscriber) {
+		Subject.prototype._subscribe = function(subscriber) {
 			if (this.closed) {
 				throw new ObjectUnsubscribedError();
 			} else if (this.hasError) {
@@ -11062,17 +11069,17 @@ var Subject$1 =
 			}
 		};
 
-		Subject$$1.prototype.asObservable = function() {
+		Subject.prototype.asObservable = function() {
 			var observable = new Observable();
 			observable.source = this;
 			return observable;
 		};
 
-		Subject$$1.create = function(destination, source) {
+		Subject.create = function(destination, source) {
 			return new AnonymousSubject(destination, source);
 		};
 
-		return Subject$$1;
+		return Subject;
 	})(Observable);
 
 var AnonymousSubject =
@@ -11123,7 +11130,7 @@ var AnonymousSubject =
 		};
 
 		return AnonymousSubject;
-	})(Subject$1);
+	})(Subject);
 
 /** PURE_IMPORTS_START tslib,_Subscriber,_Subscription,_Observable,_Subject PURE_IMPORTS_END */
 
@@ -11187,7 +11194,7 @@ var GroupBySubscriber =
 			if (!group) {
 				group = this.subjectSelector
 					? this.subjectSelector()
-					: new Subject$1();
+					: new Subject();
 				groups.set(key, group);
 				var groupedObservable = new GroupedObservable(key, group, this);
 				this.destination.next(groupedObservable);
@@ -12158,7 +12165,7 @@ var BehaviorSubject =
 		};
 
 		return BehaviorSubject;
-	})(Subject$1);
+	})(Subject);
 
 /** PURE_IMPORTS_START _BehaviorSubject,_multicast PURE_IMPORTS_END */
 
@@ -12216,7 +12223,7 @@ var AsyncSubject =
 		};
 
 		return AsyncSubject;
-	})(Subject$1);
+	})(Subject);
 
 /** PURE_IMPORTS_START _AsyncSubject,_multicast PURE_IMPORTS_END */
 
@@ -12433,7 +12440,7 @@ var ReplaySubject =
 		};
 
 		return ReplaySubject;
-	})(Subject$1);
+	})(Subject);
 
 var ReplayEvent =
 	/*@__PURE__*/
@@ -12641,7 +12648,7 @@ var RepeatWhenSubscriber =
 		};
 
 		RepeatWhenSubscriber.prototype.subscribeToRetries = function() {
-			this.notifications = new Subject$1();
+			this.notifications = new Subject();
 			var retries = tryCatch$1(this.notifier)(this.notifications);
 
 			if (retries === errorObject) {
@@ -12711,7 +12718,7 @@ var RetryWhenSubscriber =
 				var retriesSubscription = this.retriesSubscription;
 
 				if (!retries) {
-					errors = new Subject$1();
+					errors = new Subject();
 					retries = tryCatch$1(this.notifier)(errors);
 
 					if (retries === errorObject) {
@@ -13887,7 +13894,7 @@ var WindowSubscriber =
 		function WindowSubscriber(destination) {
 			var _this = _super.call(this, destination) || this;
 
-			_this.window = new Subject$1();
+			_this.window = new Subject();
 			destination.next(_this.window);
 			return _this;
 		}
@@ -13936,7 +13943,7 @@ var WindowSubscriber =
 			}
 
 			var destination = this.destination;
-			var newWindow = (this.window = new Subject$1());
+			var newWindow = (this.window = new Subject());
 			destination.next(newWindow);
 		};
 
@@ -13960,7 +13967,7 @@ var WindowCountSubscriber =
 			_this.destination = destination;
 			_this.windowSize = windowSize;
 			_this.startWindowEvery = startWindowEvery;
-			_this.windows = [new Subject$1()];
+			_this.windows = [new Subject()];
 			_this.count = 0;
 			destination.next(_this.windows[0]);
 			return _this;
@@ -13987,7 +13994,7 @@ var WindowCountSubscriber =
 			}
 
 			if (++this.count % startWindowEvery === 0 && !this.closed) {
-				var window_1 = new Subject$1();
+				var window_1 = new Subject();
 				windows.push(window_1);
 				destination.next(window_1);
 			}
@@ -14058,7 +14065,7 @@ var CountedSubject =
 			}
 		);
 		return CountedSubject;
-	})(Subject$1);
+	})(Subject);
 
 var WindowTimeSubscriber =
 	/*@__PURE__*/
@@ -14348,7 +14355,7 @@ var WindowToggleSubscriber =
 				if (closingNotifier === errorObject) {
 					return this.error(errorObject.e);
 				} else {
-					var window_1 = new Subject$1();
+					var window_1 = new Subject();
 					var subscription = new Subscription();
 					var context_4 = {
 						window: window_1,
@@ -14476,7 +14483,7 @@ var WindowSubscriber$1 =
 				prevWindow.complete();
 			}
 
-			var window = (this.window = new Subject$1());
+			var window = (this.window = new Subject());
 			this.destination.next(window);
 			var closingNotifier = tryCatch$1(this.closingSelector)();
 
@@ -15186,7 +15193,7 @@ var alwaysEmptyObject = alwaysNew(emptyObject);
  * @sig [(a -> b)] -> a -> b
  */
 
-var applyCompose = apply(compose$1);
+var applyCompose = apply(compose);
 /**
  * Applies pipe by to a list of functions.
  *
@@ -15621,7 +15628,10 @@ var findNotNil = find(notNil);
  */
 
 var xPairs = useWith(xprod, [of, identity]);
-var getPredicates = compose$1(map(juxt([applyCompose, last])), xPairs);
+var getPredicates = compose(
+	map(juxt([applyCompose, last])),
+	xPairs
+);
 /**
  * Returns first result from evaluation of functions in the list, that satisfies predicate.
  * Returns `undefined` otherwise.
@@ -15807,7 +15817,12 @@ var argumentsToList = unapply(identity);
  *
  */
 
-var containsAll = curry(compose$1(isEmpty, difference));
+var containsAll = curry(
+	compose(
+		isEmpty,
+		difference
+	)
+);
 /**
  * Returns `true` if any of the items from first array are in the second array.
  *
@@ -15827,7 +15842,13 @@ var containsAll = curry(compose$1(isEmpty, difference));
  *
  */
 
-var containsAny = curry(compose$1(not, isEmpty, intersection));
+var containsAny = curry(
+	compose(
+		not,
+		isEmpty,
+		intersection
+	)
+);
 /**
  * Returns `true` if any of the items from first array is not the second array.
  *
@@ -15846,7 +15867,12 @@ var containsAny = curry(compose$1(not, isEmpty, intersection));
  * @sig [a] -> [a] -> Boolean
  */
 
-var containsNone = curry(compose$1(isEmpty, intersection));
+var containsNone = curry(
+	compose(
+		isEmpty,
+		intersection
+	)
+);
 /**
  * Splits string by dot into list.
  *
@@ -15880,7 +15906,11 @@ var unfoldObjectDots = o(
 	mapObjIndexed(
 		useWith(flip(call), [
 			identity,
-			compose$1(applyCompose, map(objOf), splitByDot)
+			compose(
+				applyCompose,
+				map(objOf),
+				splitByDot
+			)
 		])
 	)
 );
@@ -16175,7 +16205,11 @@ var overHead = over(lensIndex(0));
 
 var dissocDotPath = curryN(
 	2,
-	compose$1(apply(dissocPath), overHead(splitByDot), argumentsToList)
+	compose(
+		apply(dissocPath),
+		overHead(splitByDot),
+		argumentsToList
+	)
 );
 /**
  * Retrieve the value at a given dot path.
@@ -16217,7 +16251,11 @@ var dotPath = useWith(path, [splitByDot, identity]);
 
 var assocDotPath = curryN(
 	2,
-	compose$1(apply(assocPath), overHead(splitByDot), argumentsToList)
+	compose(
+		apply(assocPath),
+		overHead(splitByDot),
+		argumentsToList
+	)
 );
 /**
  * Takes first argument from the arguments
@@ -16266,7 +16304,13 @@ var mergeWithDotPath = converge(assocDotPath, [headArg, performMerge, lastArg]);
  * @sig ([a] -> [b]) -> Object -> Object
  */
 
-var mapKeysAndValues = useWith(compose$1(fromPairs, map), [identity, toPairs]);
+var mapKeysAndValues = useWith(
+	compose(
+		fromPairs,
+		map
+	),
+	[identity, toPairs]
+);
 /**
  * Use map function over the keys of the given object
  *
@@ -16459,7 +16503,10 @@ var viewEq = useWith(viewWith, [identity, equals, identity]);
  * @sig (a, [b, c]...) -> [a, b, c]
  */
 
-var flattenArgs = compose$1(flatten, argumentsToList);
+var flattenArgs = compose(
+	flatten,
+	argumentsToList
+);
 /**
  * Returns true if value is type of Number.
  *
@@ -16487,10 +16534,14 @@ var keepObjectStringNumber = filter(anyPass([isObject$1, isString, isNumber]));
 var keepKeyIfValueIsTruthy = mapObjIndexed(function(v, k) {
 	return v && k;
 });
-var destructObject = compose$1(filterFalsy, values, keepKeyIfValueIsTruthy);
+var destructObject = compose(
+	filterFalsy,
+	values,
+	keepKeyIfValueIsTruthy
+);
 var transduceArgs = into(
 	[],
-	compose$1(
+	compose(
 		map(when(isObject$1, destructObject)),
 		keepObjectStringNumber,
 		filterFalsy
@@ -16518,7 +16569,12 @@ var transduceArgs = into(
  * @sig String | [String] | Object -> String
  */
 
-var cx = compose$1(joinWithSpace, flatten, transduceArgs, flattenArgs);
+var cx = compose(
+	joinWithSpace,
+	flatten,
+	transduceArgs,
+	flattenArgs
+);
 /**
  * Returns true if property of object literal does not equals the given value.
  *
@@ -16649,7 +16705,11 @@ var keyMirror = mapObjIndexed(nthArg(1));
  */
 
 var valueMirror = o(fromPairs, map(duplicate));
-var wrapMapping = compose$1(juxt, flip(prepend)([last]), apply);
+var wrapMapping = compose(
+	juxt,
+	flip(prepend)([last]),
+	apply
+);
 /**
  * Map object keys. Mapping functions have both key and value as arguments.
  *
@@ -16781,7 +16841,7 @@ var pipeC = converge(curry, [pipe]);
  *
  */
 
-var composeC = converge(curry, [compose$1]);
+var composeC = converge(curry, [compose]);
 /**
  * Takes a predicate, string `padString` and initial value. `padString` is contacted to the output string
  * everytime `pred` returns falsy value.
@@ -17480,7 +17540,7 @@ var equalsAndAlways = useWith(argumentsToList, [equals, always]);
  *      R_.toggle('on', 'off')('other'); // 'other'
  */
 
-var toggle = compose$1(
+var toggle = compose(
 	cond,
 	juxt([equalsAndAlways, flip(equalsAndAlways), always([T, identity])])
 );
@@ -17829,7 +17889,7 @@ var prefixedValueMirror = curry(function(prefix, xs) {
 	return o(addPrefix(prefix), valueMirror)(xs);
 });
 
-var ActionTypes = prefixedValueMirror("@@redux-tools-cardif-extensible-store")([
+var ActionTypes = prefixedValueMirror("@@redux-tools-extensible-store")([
 	"STOP_EPICS",
 	"REDUCERS_INJECTED",
 	"REDUCERS_REMOVED"
@@ -17913,7 +17973,7 @@ var addNamespaceToActions = function addNamespaceToActions(namespace) {
 var takeUntilStopAction = function takeUntilStopAction(id, namespace, action$) {
 	return takeUntil(
 		action$.pipe(
-			ofType(ActionTypes.STOP_EPICS),
+			reduxObservable.ofType(ActionTypes.STOP_EPICS),
 			filter$1(o(contains$1(id), prop("payload")))
 		)
 	);
@@ -18003,7 +18063,7 @@ var combineAsyncReducers = ifElse(
 	isEmpty, // NOTE: using `alwaysNull` throws an exception on Liferay, but not in the isolated environment.
 	always(alwaysEmptyObject),
 	o(
-		combineReducers,
+		redux.combineReducers,
 		map(
 			when(isPlainObject, function(object) {
 				return combineAsyncReducers(object);
@@ -18027,22 +18087,25 @@ function createExtensibleStore(preloadedState, middleware, composeEnhancers) {
 	}
 
 	if (composeEnhancers === void 0) {
-		composeEnhancers = compose;
+		composeEnhancers = redux.compose;
 	}
 
-	var epicMiddleware = createEpicMiddleware(); // NOTE: epic$ serves as a proxy between injecting epics and merging their outputs
+	var epicMiddleware = reduxObservable.createEpicMiddleware(); // NOTE: epic$ serves as a proxy between injecting epics and merging their outputs
 	// Subject is both an Observer and an Observable.
 	// epic$ is an Observer, because we need to notify it by calling `injectEpics` from the outside
 	// epic$ is an Observable, because it produces a stream of epics, which we observe and merge
 	// into a single action$.
 
-	var epic$ = new Subject();
+	var epic$ = new rxjs.Subject();
 	var rootEpic = makeRootEpic(epic$);
-	var store = createStore(
+	var store = redux.createStore(
 		identity,
 		preloadedState,
 		composeEnhancers(
-			applyMiddleware.apply(void 0, middleware.concat([epicMiddleware]))
+			redux.applyMiddleware.apply(
+				void 0,
+				middleware.concat([epicMiddleware])
+			)
 		)
 	);
 	store.asyncReducers = {
@@ -18107,10 +18170,8 @@ function createExtensibleStore(preloadedState, middleware, composeEnhancers) {
 	return store;
 }
 
-export {
-	createExtensibleStore,
-	getStateByAction,
-	getStateByNamespace,
-	getNamespaceByAction,
-	suffixKeys
-};
+exports.createExtensibleStore = createExtensibleStore;
+exports.getStateByAction = getStateByAction;
+exports.getStateByNamespace = getStateByNamespace;
+exports.getNamespaceByAction = getNamespaceByAction;
+exports.suffixKeys = suffixKeys;

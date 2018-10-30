@@ -1,7 +1,7 @@
-import { mount } from 'enzyme';
 import React from 'react';
 import { createStore } from 'redux';
 import { identity } from 'ramda';
+import { mount } from 'enzyme';
 
 import Provider from './Provider';
 

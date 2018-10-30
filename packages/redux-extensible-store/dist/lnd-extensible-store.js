@@ -9,7 +9,7 @@
 		: typeof define === "function" && define.amd
 			? define(["exports", "redux-observable", "redux", "rxjs"], factory)
 			: factory(
-					(global.LndReduxExtensibleStore = {}),
+					(global.LndExtensibleStore = {}),
 					global.ReduxObservable,
 					global.Redux,
 					global.rxjs
@@ -18126,9 +18126,11 @@ and limitations under the License.
 		return o(addPrefix(prefix), valueMirror)(xs);
 	});
 
-	var ActionTypes = prefixedValueMirror(
-		"@@redux-tools-cardif-extensible-store"
-	)(["STOP_EPICS", "REDUCERS_INJECTED", "REDUCERS_REMOVED"]);
+	var ActionTypes = prefixedValueMirror("@@redux-tools-extensible-store")([
+		"STOP_EPICS",
+		"REDUCERS_INJECTED",
+		"REDUCERS_REMOVED"
+	]);
 	var stopEpics = makeSimpleActionCreator(ActionTypes.STOP_EPICS);
 	var reducersInjected = makeSimpleActionCreator(
 		ActionTypes.REDUCERS_INJECTED

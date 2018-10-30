@@ -17829,7 +17829,7 @@ var prefixedValueMirror = curry(function(prefix, xs) {
 	return o(addPrefix(prefix), valueMirror)(xs);
 });
 
-var ActionTypes = prefixedValueMirror("@@redux-tools-cardif-extensible-store")([
+var ActionTypes = prefixedValueMirror("@@redux-tools-extensible-store")([
 	"STOP_EPICS",
 	"REDUCERS_INJECTED",
 	"REDUCERS_REMOVED"

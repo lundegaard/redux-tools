@@ -8,7 +8,6 @@ packages/*/dist/*
 packages/*/es/*
 packages/*/build/*
 
-
 # Exclude IDE project folders
 .idea
 *.sublime-project

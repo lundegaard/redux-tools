@@ -16,10 +16,10 @@ const INPUT_FILE = path.join(PACKAGE_ROOT_PATH, 'src/index.js');
 const globalsMapping = {
 	react: 'React',
 	'react-dom': 'ReactDOM',
-	'@lnd/redux-actions': 'LndReduxActions',
-	'@lnd/redux-extensible-store': 'LndReduxExtensibleStore',
-	'@lnd/redux-redux-extensible-store': 'LndReactReduxExtensibleStore',
-	'@lnd/utils': 'LndUtils',
+	'@redux-tools/actions': 'ReduxToolsActions',
+	'@redux-tools/extensible-store': 'ReduxToolsExtensibleStore',
+	'@redux-tools/extensible-store-react': 'ReduxToolsExtensibleStoreReact',
+	'@redux-tools/utils': 'ReduxToolsUtils',
 	'react-redux': 'ReactRedux',
 	redux: 'Redux',
 	'redux-observable': 'ReduxObservable',
@@ -31,7 +31,7 @@ const globalsMapping = {
 
 const getGlobals = o(
 	fromPairs,
-	map((x) => {
+	map(x => {
 		invariant(globalsMapping[x], `Missing global name for ${x}`);
 
 		return [x, globalsMapping[x]];
@@ -42,12 +42,10 @@ const getGlobals = o(
 const peers = getPeers(require(`${PACKAGE_ROOT_PATH}/package.json`));
 const globals = getGlobals(peers);
 
-
 const commonConfig = {
 	external: peers,
 	input: INPUT_FILE,
 };
-
 
 const globalName = getGlobalName(LERNA_PACKAGE_NAME);
 const fileName = getFileName(LERNA_PACKAGE_NAME);

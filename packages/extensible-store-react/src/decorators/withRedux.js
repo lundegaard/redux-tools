@@ -2,21 +2,32 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { keys, o } from 'ramda';
 import { withWidgetContext } from 'react-union';
-import { suffixKeys } from '@lnd/redux-extensible-store';
-import { getDisplayName } from '@lnd/utils';
+import { suffixKeys } from '@redux-tools/extensible-store';
+import { getDisplayName } from '@redux-tools/utils';
 import { StoreContext } from '../contexts';
 
 function withStoreContext(Component) {
 	function WithStoreContext(props) {
-		return <StoreContext.Consumer>{(store) => <Component {...props} store={store} />}</StoreContext.Consumer>;
+		return (
+			<StoreContext.Consumer>
+				{store => <Component {...props} store={store} />}
+			</StoreContext.Consumer>
+		);
 	}
 
-	WithStoreContext.displayName = `WithStoreContext(${getDisplayName(Component)})`;
+	WithStoreContext.displayName = `WithStoreContext(${getDisplayName(
+		Component
+	)})`;
 	return WithStoreContext;
 }
 
-export default function withRedux({ epics, reducers, persistReducers, global: isGlobal }) {
-	return (NextComponent) => {
+export default function withRedux({
+	epics,
+	reducers,
+	persistReducers,
+	global: isGlobal,
+}) {
+	return NextComponent => {
 		class WithRedux extends Component {
 			constructor(props) {
 				super(props);
@@ -32,13 +43,19 @@ export default function withRedux({ epics, reducers, persistReducers, global: is
 				this.suffixDependencies = suffixKeys(this.id);
 				this.namespace = isGlobal ? undefined : props.namespace;
 
-				this.props.store.injectReducers(this.getReducers(), this.namespace);
+				this.props.store.injectReducers(
+					this.getReducers(),
+					this.namespace
+				);
 				this.props.store.injectEpics(this.getEpics(), this.namespace);
 			}
 
 			componentWillUnmount() {
 				if (!persistReducers) {
-					this.props.store.removeReducers(keys(this.getReducers()), this.namespace);
+					this.props.store.removeReducers(
+						keys(this.getReducers()),
+						this.namespace
+					);
 				}
 
 				this.props.store.removeEpics(keys(this.getEpics()));
@@ -60,7 +77,9 @@ export default function withRedux({ epics, reducers, persistReducers, global: is
 
 		WithRedux.displayName = `WithRedux(${getDisplayName(NextComponent)})`;
 
-		return isGlobal ? withStoreContext(WithRedux) : o(withStoreContext, withWidgetContext)(WithRedux);
+		return isGlobal
+			? withStoreContext(WithRedux)
+			: o(withStoreContext, withWidgetContext)(WithRedux);
 	};
 }
 

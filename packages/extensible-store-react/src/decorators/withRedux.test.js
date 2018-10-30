@@ -22,9 +22,10 @@ describe('withRedux', () => {
 	});
 
 	it('injects suffixed reducers and epics', () => {
-		const Root = withRedux({ reducers: { test: R.identity }, epics: { test: R.identity } })(
-			() => null
-		);
+		const Root = withRedux({
+			reducers: { test: R.identity },
+			epics: { test: R.identity },
+		})(() => null);
 
 		mount(
 			<Provider store={store}>
@@ -46,9 +47,10 @@ describe('withRedux', () => {
 	});
 
 	it('removes suffixed reducers and epics upon unmounting', () => {
-		const Root = withRedux({ reducers: { test: R.identity }, epics: { test: R.identity } })(
-			() => null
-		);
+		const Root = withRedux({
+			reducers: { test: R.identity },
+			epics: { test: R.identity },
+		})(() => null);
 
 		const wrapper = mount(
 			<Provider store={store}>
@@ -60,12 +62,20 @@ describe('withRedux', () => {
 
 		wrapper.unmount();
 
-		expect(store.removeReducers).toHaveBeenCalledWith([`test${SUFFIX_DELIMITER}0`], 'foo');
-		expect(store.removeEpics).toHaveBeenCalledWith([`test${SUFFIX_DELIMITER}0`]);
+		expect(store.removeReducers).toHaveBeenCalledWith(
+			[`test${SUFFIX_DELIMITER}0`],
+			'foo'
+		);
+		expect(store.removeEpics).toHaveBeenCalledWith([
+			`test${SUFFIX_DELIMITER}0`,
+		]);
 	});
 
 	it('does not remove reducers when persistReducers is passed', () => {
-		const Root = withRedux({ reducers: { test: R.identity }, persistReducers: true })(() => null);
+		const Root = withRedux({
+			reducers: { test: R.identity },
+			persistReducers: true,
+		})(() => null);
 		const wrapper = mount(
 			<Provider store={store}>
 				<WidgetContext.Provider value={{ namespace: 'foo' }}>
@@ -104,12 +114,20 @@ describe('withRedux', () => {
 
 		wrapper.unmount();
 
-		expect(store.removeReducers).toHaveBeenCalledWith([`test${SUFFIX_DELIMITER}0`], undefined);
-		expect(store.removeEpics).toHaveBeenCalledWith([`test${SUFFIX_DELIMITER}0`]);
+		expect(store.removeReducers).toHaveBeenCalledWith(
+			[`test${SUFFIX_DELIMITER}0`],
+			undefined
+		);
+		expect(store.removeEpics).toHaveBeenCalledWith([
+			`test${SUFFIX_DELIMITER}0`,
+		]);
 	});
 
 	it('has a rising counter', () => {
-		const Root = withRedux({ reducers: { test: R.identity }, persistReducers: true })(() => null);
+		const Root = withRedux({
+			reducers: { test: R.identity },
+			persistReducers: true,
+		})(() => null);
 		const element = (
 			<Provider store={store}>
 				<WidgetContext.Provider value={{ namespace: 'foo' }}>

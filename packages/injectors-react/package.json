@@ -1,0 +1,26 @@
+{
+  "name": "@redux-tools/injectors-react",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "src/index.js",
+  "description": "Core React functionality for asynchronous React injectors.",
+	"repository": "https://github.com/lundegaard/redux-tools",
+	"contributors": [
+		"Tomas Konrady <tomas.konrady@lundegaard.eu>",
+		"Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
+	],
+  "dependencies": {
+    "@redux-tools/utils": "0.1.0",
+    "prop-types": "^15.6.2",
+    "ramda": "^0.25.0",
+    "ramda-extension": "^0.6.1"
+  },
+  "devDependencies": {
+    "enzyme": "^3.7.0",
+    "react": "^16.6.0"
+  },
+  "peerDependencies": {
+    "react": "^16.6.0"
+  },
+	"sideEffects": false
+}

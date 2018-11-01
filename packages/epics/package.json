@@ -1,0 +1,31 @@
+{
+  "name": "@redux-tools/epics",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "src/index.js",
+  "description": "Redux store enhancer for asynchronous injection of epics.",
+	"repository": "https://github.com/lundegaard/redux-tools",
+	"contributors": [
+		"Tomas Konrady <tomas.konrady@lundegaard.eu>",
+		"Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
+	],
+  "dependencies": {
+    "@redux-tools/actions": "0.1.0",
+    "@redux-tools/namespaces": "0.1.0",
+    "@redux-tools/utils": "0.1.0",
+    "ramda": "^0.25.0",
+    "ramda-extension": "^0.6.1"
+  },
+  "devDependencies": {
+    "redux": "^4.0.1",
+    "redux-observable": "^1.0.0",
+    "rxjs": "^6.3.3",
+    "rxjs-marbles": "^4.3.1"
+  },
+  "peerDependencies": {
+    "redux": "^4.0.1",
+    "redux-observable": "^1.0.0",
+    "rxjs": "^6.3.3"
+  },
+	"sideEffects": false
+}

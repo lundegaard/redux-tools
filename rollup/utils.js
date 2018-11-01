@@ -3,14 +3,14 @@ import { toPascalCase, toKebabCase } from 'ramda-extension';
 
 export const getGlobalName = compose(
 	join(''),
-	prepend('Lnd'),
+	prepend('ReduxTools'),
 	map(toPascalCase),
 	tail,
 	split('/')
 );
 export const getFileName = compose(
 	join('-'),
-	prepend('lnd'),
+	prepend('redux-tools'),
 	map(toKebabCase),
 	tail,
 	split('/')

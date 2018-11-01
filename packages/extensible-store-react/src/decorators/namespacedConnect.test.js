@@ -35,7 +35,9 @@ describe('makeMapStateToProps', () => {
 
 	it('throws when namespace does not exist', () => {
 		const mapStateToProps = makeMapStateToProps(R.identity);
-		expect(() => mapStateToProps(state, { namespace: 'klobása' })).toThrow();
+		expect(() =>
+			mapStateToProps(state, { namespace: 'klobása' })
+		).toThrow();
 	});
 
 	it('does not barf when mapStateToProps is not passed', () => {
@@ -52,9 +54,14 @@ describe('makeMapDispatchToProps', () => {
 
 		const dispatch = jest.fn();
 
-		const { actionCreator } = mapDispatchToProps(dispatch, { namespace: 'foo' });
+		const { actionCreator } = mapDispatchToProps(dispatch, {
+			namespace: 'foo',
+		});
 		actionCreator();
-		expect(dispatch).toHaveBeenCalledWith({ type: 'TEST', meta: { namespace: 'foo' } });
+		expect(dispatch).toHaveBeenCalledWith({
+			type: 'TEST',
+			meta: { namespace: 'foo' },
+		});
 	});
 
 	it('handles a function', () => {
@@ -64,9 +71,14 @@ describe('makeMapDispatchToProps', () => {
 
 		const dispatch = jest.fn();
 
-		const { actionCreator } = mapDispatchToProps(dispatch, { namespace: 'foo' });
+		const { actionCreator } = mapDispatchToProps(dispatch, {
+			namespace: 'foo',
+		});
 		actionCreator();
-		expect(dispatch).toHaveBeenCalledWith({ type: 'TEST', meta: { namespace: 'foo' } });
+		expect(dispatch).toHaveBeenCalledWith({
+			type: 'TEST',
+			meta: { namespace: 'foo' },
+		});
 	});
 });
 
@@ -90,7 +102,9 @@ describe('namespacedConnect', () => {
 	});
 
 	it('applies mapDispatchToProps', () => {
-		const connector = namespacedConnect(undefined, { actionCreator: R.always({ type: 'TEST' }) });
+		const connector = namespacedConnect(undefined, {
+			actionCreator: R.always({ type: 'TEST' }),
+		});
 
 		const store = createStore(R.always(state));
 		store.dispatch = jest.fn();
@@ -107,6 +121,9 @@ describe('namespacedConnect', () => {
 		);
 
 		wrapper.find(Root).prop('actionCreator')();
-		expect(store.dispatch).toHaveBeenCalledWith({ type: 'TEST', meta: { namespace: 'bar' } });
+		expect(store.dispatch).toHaveBeenCalledWith({
+			type: 'TEST',
+			meta: { namespace: 'bar' },
+		});
 	});
 });

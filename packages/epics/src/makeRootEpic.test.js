@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import { over, lensProp, inc, identity } from 'ramda';
 import { marbles } from 'rxjs-marbles/jest';
 import * as Rx from 'rxjs/operators';
 import { ReplaySubject, of } from 'rxjs';
@@ -14,7 +14,7 @@ describe('makeRootEpic', () => {
 	it(
 		'passes actions to an injected epic',
 		marbles(m => {
-			const incOverPayload = R.over(R.lensProp('payload'), R.inc);
+			const incOverPayload = over(lensProp('payload'), inc);
 
 			const epic$ = new ReplaySubject();
 			const rootEpic = makeRootEpic(epic$, []);
@@ -33,7 +33,7 @@ describe('makeRootEpic', () => {
 	it(
 		'handles multiple injected epics',
 		marbles(m => {
-			const incOverPayload = R.over(R.lensProp('payload'), R.inc);
+			const incOverPayload = over(lensProp('payload'), inc);
 
 			const epic$ = new ReplaySubject();
 			const rootEpic = makeRootEpic(epic$, []);
@@ -55,7 +55,7 @@ describe('makeRootEpic', () => {
 		marbles(m => {
 			const epic$ = new ReplaySubject();
 			const rootEpic = makeRootEpic(epic$, []);
-			const injectedEpic = action$ => action$.pipe(Rx.map(R.identity));
+			const injectedEpic = action$ => action$.pipe(Rx.map(identity));
 			epic$.next({ id: 'someId', epic: injectedEpic, namespace: 'yo' });
 
 			const action$ = m.cold('  -a', { a: {} });
@@ -110,7 +110,7 @@ describe('makeRootEpic', () => {
 			const epic$ = new ReplaySubject();
 			const rootEpic = makeRootEpic(epic$, []);
 
-			const injectedEpic = R.identity;
+			const injectedEpic = identity;
 
 			epic$.next({ id: 'someId', epic: injectedEpic });
 

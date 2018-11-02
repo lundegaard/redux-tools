@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import { o, defaultTo, identity } from 'ramda';
 import enhancer from './enhancer';
 
 const createStore = jest.fn(() => ({}));
@@ -16,7 +16,7 @@ describe('enhancer', () => {
 		const store = enhancer()(createStore)();
 		store.replaceReducer = jest.fn();
 		store.dispatch = jest.fn();
-		const reducer = R.o(R.defaultTo(null), R.identity);
+		const reducer = o(defaultTo(null), identity);
 		store.injectReducers({ foo: reducer });
 		expect(store.injectedReducers.foo).toEqual(reducer);
 		expect(store.replaceReducer).toHaveBeenCalled();
@@ -28,7 +28,7 @@ describe('enhancer', () => {
 		store.replaceReducer = jest.fn();
 		store.dispatch = jest.fn();
 
-		const reducer = R.o(R.defaultTo(null), R.identity);
+		const reducer = o(defaultTo(null), identity);
 		store.injectReducers({ foo: reducer }, 'ns');
 		expect(store.injectedReducers.namespaces.ns.foo).toEqual(reducer);
 	});
@@ -37,7 +37,7 @@ describe('enhancer', () => {
 		const store = enhancer()(createStore)();
 		store.replaceReducer = jest.fn();
 		store.dispatch = jest.fn();
-		store.injectedReducers = { foo: R.o(R.defaultTo(null), R.identity) };
+		store.injectedReducers = { foo: o(defaultTo(null), identity) };
 		store.removeReducers(['foo']);
 		expect(store.injectedReducers.foo).toBeUndefined();
 		expect(store.replaceReducer).toHaveBeenCalled();
@@ -48,7 +48,7 @@ describe('enhancer', () => {
 		const store = enhancer()(createStore)();
 		store.replaceReducer = jest.fn();
 		store.dispatch = jest.fn();
-		store.injectedReducers = { namespaces: { ns: { foo: R.o(R.defaultTo(null), R.identity) } } };
+		store.injectedReducers = { namespaces: { ns: { foo: o(defaultTo(null), identity) } } };
 		store.removeReducers(['foo'], 'ns');
 		expect(store.injectedReducers.namespaces.ns).toEqual({});
 	});

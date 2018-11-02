@@ -1,16 +1,29 @@
-import * as R from 'ramda';
+import {
+	prop,
+	compose,
+	whereEq,
+	nthArg,
+	useWith,
+	__,
+	defaultTo,
+	identity,
+	cond,
+	map,
+	append,
+	T,
+} from 'ramda';
 import { overHead } from 'ramda-extension';
 import invariant from 'invariant';
 
 const createTypeEqualsPredicate = type =>
-	R.compose(
-		R.whereEq({ type }),
-		R.nthArg(1)
+	compose(
+		whereEq({ type }),
+		nthArg(1)
 	);
 
-const maybeUseErrorReducer = ([typePredicate, reducer, errorReducer]) => {
+const mergeReducers = ([typePredicate, reducer, errorReducer]) => {
 	const newReducer = (state, action) => {
-		if (R.prop('error', action)) {
+		if (prop('error', action)) {
 			invariant(errorReducer, `You haven't supplied an error reducer for action ${action.type}`);
 			return errorReducer(state, action);
 		}
@@ -31,7 +44,7 @@ const maybeUseErrorReducer = ([typePredicate, reducer, errorReducer]) => {
  *    const initialState = 1
  *    const counter = switchReducer([
  *      ["INCREMENT", (state, action) => state + action.payload],
- *      ["RESET", R.always(initialState)],
+ *      ["RESET", always(initialState)],
  *    ], initialState);
  *
  *    counter(undefined, {}) // 1
@@ -40,12 +53,12 @@ const maybeUseErrorReducer = ([typePredicate, reducer, errorReducer]) => {
  *    counter(3, { type: "LOAD_ITEMS" }) // 3
  */
 const makeReducer = (pairs, initialState) =>
-	R.compose(
-		R.useWith(R.__, [R.defaultTo(initialState), R.identity]),
-		R.cond,
-		R.map(maybeUseErrorReducer),
-		R.append([R.T, R.identity, R.identity]),
-		R.map(overHead(createTypeEqualsPredicate))
+	compose(
+		useWith(__, [defaultTo(initialState), identity]),
+		cond,
+		map(mergeReducers),
+		append([T, identity, identity]),
+		map(overHead(createTypeEqualsPredicate))
 	)(pairs);
 
 export default makeReducer;

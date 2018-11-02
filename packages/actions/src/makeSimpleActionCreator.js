@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import { __, identity } from 'ramda';
 import { alwaysNull } from 'ramda-extension';
 import makeActionCreator from './makeActionCreator';
 
@@ -7,6 +7,6 @@ import makeActionCreator from './makeActionCreator';
  *
  * @sig String -> a -> {type: String, payload: a}
  */
-const makeSimpleActionCreator = makeActionCreator(R.__, R.identity, alwaysNull);
+const makeSimpleActionCreator = makeActionCreator(__, identity, alwaysNull);
 
 export default makeSimpleActionCreator;

@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import { o, __ } from 'ramda';
 import { alwaysNull } from 'ramda-extension';
 import makeActionCreator from './makeActionCreator';
 
@@ -7,9 +7,9 @@ import makeActionCreator from './makeActionCreator';
  *
  * @sig String -> () -> {type: String}
  */
-const makeConstantActionCreator = R.o(
+const makeConstantActionCreator = o(
 	actionCreator => () => actionCreator(null),
-	makeActionCreator(R.__, alwaysNull, alwaysNull)
+	makeActionCreator(__, alwaysNull, alwaysNull)
 );
 
 export default makeConstantActionCreator;

@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import { curry, o, applySpec, always, ifElse, is, T } from 'ramda';
 import { alwaysNull, rejectNil } from 'ramda-extension';
 
 /**
@@ -12,14 +12,14 @@ import { alwaysNull, rejectNil } from 'ramda-extension';
  *    const increment = makeSimpleActionCreator("INCREMENT");
  *    const fetchItems = makeActionCreator("FETCH_ITEMS", R.prop("items"), R.always({ page: 0 }))
  */
-const makeActionCreator = R.curry((type, getPayload, getMeta) =>
-	R.o(
+const makeActionCreator = curry((type, getPayload, getMeta) =>
+	o(
 		rejectNil,
-		R.applySpec({
-			type: R.always(type),
+		applySpec({
+			type: always(type),
 			payload: getPayload,
 			meta: getMeta,
-			error: R.o(R.ifElse(R.is(Error), R.T, alwaysNull), getPayload),
+			error: o(ifElse(is(Error), T, alwaysNull), getPayload),
 		})
 	)
 );

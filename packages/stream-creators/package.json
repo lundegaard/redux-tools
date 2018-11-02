@@ -6,8 +6,8 @@
   "description": "Collection of stream creators for the @redux-tools/epics package.",
   "repository": "https://github.com/lundegaard/redux-tools",
   "contributors": [
-	  "Tomas Konrady <tomas.konrady@lundegaard.eu>",
-	  "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
+    "Tomas Konrady <tomas.konrady@lundegaard.eu>",
+    "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
   ],
   "dependencies": {
     "ramda": "^0.25.0"

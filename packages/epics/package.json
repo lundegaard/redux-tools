@@ -6,9 +6,9 @@
   "description": "Redux store enhancer for asynchronous injection of epics.",
   "repository": "https://github.com/lundegaard/redux-tools",
   "contributors": [
-	  "Tomas Konrady <tomas.konrady@lundegaard.eu>",
-	  "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
-	],
+    "Tomas Konrady <tomas.konrady@lundegaard.eu>",
+    "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
+  ],
   "dependencies": {
     "@redux-tools/actions": "0.1.0",
     "@redux-tools/namespaces": "0.1.0",

@@ -6,9 +6,9 @@
   "description": "Core React functionality for asynchronous React injectors.",
   "repository": "https://github.com/lundegaard/redux-tools",
   "contributors": [
-	  "Tomas Konrady <tomas.konrady@lundegaard.eu>",
-	  "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
-	],
+    "Tomas Konrady <tomas.konrady@lundegaard.eu>",
+    "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
+  ],
   "dependencies": {
     "@redux-tools/utils": "0.1.0",
     "prop-types": "^15.6.2",

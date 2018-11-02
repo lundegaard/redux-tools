@@ -1,17 +1,23 @@
 {
-  "name": "@redux-tools/utils",
+  "name": "@redux-tools/reducers",
   "version": "0.1.0",
   "license": "MIT",
   "main": "src/index.js",
-  "description": "Utility functions for @redux-tools packages.",
+  "description": "Redux store enhancer for asynchronous injection of reducers.",
   "repository": "https://github.com/lundegaard/redux-tools",
   "contributors": [
     "Tomas Konrady <tomas.konrady@lundegaard.eu>",
     "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
   ],
   "dependencies": {
+    "@redux-tools/actions": "0.1.0",
+    "@redux-tools/namespaces": "0.1.0",
+    "@redux-tools/utils": "0.1.0",
     "ramda": "^0.25.0",
     "ramda-extension": "^0.6.1"
+  },
+  "peerDependencies": {
+    "redux": "^4.0.1"
   },
   "sideEffects": false
 }

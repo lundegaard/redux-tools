@@ -1,17 +1,21 @@
 {
-  "name": "@redux-tools/utils",
+  "name": "@redux-tools/stream-creators",
   "version": "0.1.0",
   "license": "MIT",
   "main": "src/index.js",
-  "description": "Utility functions for @redux-tools packages.",
+  "description": "Collection of stream creators for the @redux-tools/epics package.",
   "repository": "https://github.com/lundegaard/redux-tools",
   "contributors": [
     "Tomas Konrady <tomas.konrady@lundegaard.eu>",
     "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
   ],
   "dependencies": {
-    "ramda": "^0.25.0",
-    "ramda-extension": "^0.6.1"
+    "ramda": "^0.25.0"
+  },
+  "peerDependencies": {
+    "@redux-tools/epics": "0.1.0",
+    "@redux-tools/reducers": "0.1.0",
+    "rxjs": "^6.3.3"
   },
   "sideEffects": false
 }

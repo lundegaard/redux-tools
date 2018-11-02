@@ -2,7 +2,9 @@
   "name": "@redux-tools/namespaces",
   "version": "0.1.0",
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "lib/redux-tools-namespaces.js",
+  "module": "es/redux-tools-namespaces.js",
+  "unpkg": "dist/redux-tools-namespaces.js",
   "description": "Utility functions for namespacing of Redux actions.",
   "repository": "https://github.com/lundegaard/redux-tools",
   "contributors": [

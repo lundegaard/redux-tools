@@ -2,7 +2,9 @@
   "name": "@redux-tools/actions",
   "version": "0.1.0",
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "lib/redux-tools-actions.js",
+  "module": "es/redux-tools-actions.js",
+  "unpkg": "dist/redux-tools-actions.js",
   "description": "Alternative implementation of redux-actions using Ramda.",
   "repository": "https://github.com/lundegaard/redux-tools",
   "contributors": [

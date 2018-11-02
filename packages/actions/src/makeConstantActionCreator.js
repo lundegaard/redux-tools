@@ -1,4 +1,4 @@
-import { o, __ } from 'ramda';
+import { o, __, converge } from 'ramda';
 import { alwaysNull } from 'ramda-extension';
 import makeActionCreator from './makeActionCreator';
 
@@ -8,7 +8,7 @@ import makeActionCreator from './makeActionCreator';
  * @sig String -> () -> {type: String}
  */
 const makeConstantActionCreator = o(
-	actionCreator => () => actionCreator(null),
+	converge(__, [alwaysNull]),
 	makeActionCreator(__, alwaysNull, alwaysNull)
 );
 

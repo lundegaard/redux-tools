@@ -11,14 +11,11 @@
 	],
   "dependencies": {
     "@redux-tools/injectors-react": "0.1.0",
-    "@redux-tools/reducers": "0.1.0",
     "ramda": "^0.25.0",
     "ramda-extension": "^0.6.1"
   },
-  "devDependencies": {
-    "react-redux": "^5.1.0"
-  },
   "peerDependencies": {
+    "@redux-tools/reducers": "0.1.0",
     "react-redux": "^5.1.0"
   },
   "sideEffects": false

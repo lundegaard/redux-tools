@@ -42,12 +42,19 @@
     "prettier": "1.14.3",
     "ramda": "^0.25.0",
     "ramda-extension": "^0.6.1",
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0",
+    "react-redux": "^5.1.0",
+    "redux": "^4.0.1",
+    "redux-observable": "^1.0.0",
     "rollup": "^0.66.6",
     "rollup-plugin-babel": "^4.0.3",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-replace": "^2.1.0",
-    "rollup-plugin-terser": "^3.0.0"
+    "rollup-plugin-terser": "^3.0.0",
+    "rxjs": "^6.3.3",
+    "rxjs-marbles": "^4.3.1"
   },
   "scripts": {
     "publishAll": "lerna publish",

@@ -16,12 +16,6 @@
     "ramda": "^0.25.0",
     "ramda-extension": "^0.6.1"
   },
-  "devDependencies": {
-    "redux": "^4.0.1",
-    "redux-observable": "^1.0.0",
-    "rxjs": "^6.3.3",
-    "rxjs-marbles": "^4.3.1"
-  },
   "peerDependencies": {
     "redux": "^4.0.1",
     "redux-observable": "^1.0.0",

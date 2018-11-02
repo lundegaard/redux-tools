@@ -10,15 +10,11 @@
 	  "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
   ],
   "dependencies": {
-    "@redux-tools/reducers": "0.1.0",
     "ramda": "^0.25.0"
-  },
-  "devDependencies": {
-    "@redux-tools/epics": "0.1.0",
-    "rxjs": "^6.3.3"
   },
   "peerDependencies": {
     "@redux-tools/epics": "0.1.0",
+    "@redux-tools/reducers": "0.1.0",
     "rxjs": "^6.3.3"
   },
   "sideEffects": false

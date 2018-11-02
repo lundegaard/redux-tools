@@ -15,10 +15,6 @@
     "ramda": "^0.25.0",
     "ramda-extension": "^0.6.1"
   },
-  "devDependencies": {
-    "enzyme": "^3.7.0",
-    "react": "^16.6.0"
-  },
   "peerDependencies": {
     "react": "^16.6.0"
   },

@@ -1,6 +1,12 @@
 import { defaultTo, identity, o, inc } from 'ramda';
 
-import { getReducerPath, makeRootReducer, getStateByAction, getStateByNamespace } from './reducers';
+import {
+	getReducerPath,
+	makeRootReducer,
+	getStateByAction,
+	getStateByNamespace,
+	removeSuffixFromKeys,
+} from './reducers';
 
 const state = {
 	namespaces: {
@@ -40,6 +46,28 @@ describe('filterReducer', () => {
 
 		expect(filterReducer('randomNamespace', reducer)(state, {})).toBe(state);
 		expect(reducer).not.toHaveBeenCalled();
+	});
+});
+
+describe('removeSuffixFromKeys', () => {
+	it('shallowly removes suffixes from all keys', () => {
+		expect(removeSuffixFromKeys({ 'foo@12': 'yo' })).toEqual({ foo: 'yo' });
+	});
+
+	it('recursively removes suffixes from all keys', () => {
+		expect(
+			removeSuffixFromKeys({
+				'foo@1': { 'bar@2': 'yo' },
+				'baz@3': 'yo',
+			})
+		).toEqual({
+			foo: { bar: 'yo' },
+			baz: 'yo',
+		});
+	});
+
+	it('returns original key if no suffix is present', () => {
+		expect(removeSuffixFromKeys({ hi: { yo: 'wazzup' } })).toEqual({ hi: { yo: 'wazzup' } });
 	});
 });
 

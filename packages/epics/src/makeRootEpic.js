@@ -9,7 +9,7 @@ const filterActionStream = (action$, namespace) =>
 	action$.pipe(Rx.filter(isActionFromNamespace(namespace)));
 
 const addNamespaceToActions = namespace =>
-	Rx.map(namespace ? mergeDeepRight({ meta: { namespace } }) : identity);
+	namespace ? Rx.map(mergeDeepRight({ meta: { namespace } })) : identity;
 
 const takeUntilStopAction = (action$, id) =>
 	Rx.takeUntil(

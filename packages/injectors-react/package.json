@@ -4,10 +4,10 @@
   "license": "MIT",
   "main": "src/index.js",
   "description": "Core React functionality for asynchronous React injectors.",
-	"repository": "https://github.com/lundegaard/redux-tools",
-	"contributors": [
-		"Tomas Konrady <tomas.konrady@lundegaard.eu>",
-		"Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
+  "repository": "https://github.com/lundegaard/redux-tools",
+  "contributors": [
+	  "Tomas Konrady <tomas.konrady@lundegaard.eu>",
+	  "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
 	],
   "dependencies": {
     "@redux-tools/utils": "0.1.0",
@@ -22,5 +22,5 @@
   "peerDependencies": {
     "react": "^16.6.0"
   },
-	"sideEffects": false
+  "sideEffects": false
 }

@@ -1,17 +1,17 @@
 {
-	"name": "@redux-tools/utils",
-	"version": "0.1.0",
-	"license": "MIT",
-	"main": "src/index.js",
-	"description": "Utility functions for @redux-tools packages.",
-	"repository": "https://github.com/lundegaard/redux-tools",
-	"contributors": [
-		"Tomas Konrady <tomas.konrady@lundegaard.eu>",
-		"Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
+  "name": "@redux-tools/utils",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "src/index.js",
+  "description": "Utility functions for @redux-tools packages.",
+  "repository": "https://github.com/lundegaard/redux-tools",
+  "contributors": [
+	  "Tomas Konrady <tomas.konrady@lundegaard.eu>",
+	  "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
 	],
-	"dependencies": {
-		"ramda": "^0.25.0",
-		"ramda-extension": "^0.6.1"
+  "dependencies": {
+	  "ramda": "^0.25.0",
+	  "ramda-extension": "^0.6.1"
 	},
-	"sideEffects": false
+  "sideEffects": false
 }

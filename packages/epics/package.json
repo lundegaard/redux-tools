@@ -4,10 +4,10 @@
   "license": "MIT",
   "main": "src/index.js",
   "description": "Redux store enhancer for asynchronous injection of epics.",
-	"repository": "https://github.com/lundegaard/redux-tools",
-	"contributors": [
-		"Tomas Konrady <tomas.konrady@lundegaard.eu>",
-		"Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
+  "repository": "https://github.com/lundegaard/redux-tools",
+  "contributors": [
+	  "Tomas Konrady <tomas.konrady@lundegaard.eu>",
+	  "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
 	],
   "dependencies": {
     "@redux-tools/actions": "0.1.0",
@@ -27,5 +27,5 @@
     "redux-observable": "^1.0.0",
     "rxjs": "^6.3.3"
   },
-	"sideEffects": false
+  "sideEffects": false
 }

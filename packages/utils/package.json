@@ -2,7 +2,9 @@
   "name": "@redux-tools/utils",
   "version": "0.1.0",
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "lib/redux-tools-utils.js",
+  "module": "es/redux-tools-utils.js",
+  "unpkg": "dist/redux-tools-utils.js",
   "description": "Utility functions for @redux-tools packages.",
   "repository": "https://github.com/lundegaard/redux-tools",
   "contributors": [

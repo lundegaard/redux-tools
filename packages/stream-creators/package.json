@@ -2,7 +2,9 @@
   "name": "@redux-tools/stream-creators",
   "version": "0.1.0",
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "lib/redux-tools-stream-creators.js",
+  "module": "es/redux-tools-stream-creators.js",
+  "unpkg": "dist/redux-tools-stream-creators.js",
   "description": "Collection of stream creators for the @redux-tools/epics package.",
   "repository": "https://github.com/lundegaard/redux-tools",
   "contributors": [

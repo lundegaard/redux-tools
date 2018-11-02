@@ -21,5 +21,8 @@
     "redux-observable": "^1.0.0",
     "rxjs": "^6.3.3"
   },
+  "devDependencies": {
+    "rxjs-marbles": "^4.3.2"
+  },
   "sideEffects": false
 }

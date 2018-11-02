@@ -9,7 +9,7 @@ import { alwaysNull, rejectNil } from 'ramda-extension';
  * @example
  *
  *    const reset = makeConstantActionCreator("RESET")
- *    const increment = makeSimpleActionCreator("INCREMENT");
+ *    const add = makeSimpleActionCreator("ADD");
  *    const fetchItems = makeActionCreator("FETCH_ITEMS", R.prop("items"), R.always({ page: 0 }))
  */
 const makeActionCreator = curry((type, getPayload, getMeta) =>

@@ -10,19 +10,19 @@ const state = {
 	foo: 'bar',
 };
 
+const incOverPayload = over(lensProp('payload'), inc);
+const incEpic = action$ => action$.pipe(Rx.map(incOverPayload));
+
 describe('makeRootEpic', () => {
 	it(
 		'passes actions to an injected epic',
 		marbles(m => {
-			const incOverPayload = over(lensProp('payload'), inc);
-
 			const epic$ = new ReplaySubject();
 			const rootEpic = makeRootEpic(epic$, []);
-			const injectedEpic = action$ => action$.pipe(Rx.map(incOverPayload));
-			epic$.next({ id: 'someId', epic: injectedEpic });
+			epic$.next({ id: 'someId', epic: incEpic });
 
-			const action$ = m.cold('  -a', { a: { payload: 1 } });
-			const expected$ = m.cold('-a', { a: { payload: 2 } });
+			const action$ = m.cold('a', { a: { payload: 1 } });
+			const expected$ = m.cold('a', { a: { payload: 2 } });
 			const state$ = of(state);
 
 			const actual$ = rootEpic(action$, state$);
@@ -33,16 +33,13 @@ describe('makeRootEpic', () => {
 	it(
 		'handles multiple injected epics',
 		marbles(m => {
-			const incOverPayload = over(lensProp('payload'), inc);
-
 			const epic$ = new ReplaySubject();
 			const rootEpic = makeRootEpic(epic$, []);
-			const injectedEpic = action$ => action$.pipe(Rx.map(incOverPayload));
-			epic$.next({ id: 'someId', epic: injectedEpic });
-			epic$.next({ id: 'anotherId', epic: injectedEpic });
+			epic$.next({ id: 'someId', epic: incEpic });
+			epic$.next({ id: 'anotherId', epic: incEpic });
 
-			const action$ = m.cold('  -a', { a: { payload: 1 } });
-			const expected$ = m.cold('-(aa)', { a: { payload: 2 } });
+			const action$ = m.cold('a', { a: { payload: 1 } });
+			const expected$ = m.cold('(aa)', { a: { payload: 2 } });
 			const state$ = of(state);
 
 			const actual$ = rootEpic(action$, state$);
@@ -55,11 +52,36 @@ describe('makeRootEpic', () => {
 		marbles(m => {
 			const epic$ = new ReplaySubject();
 			const rootEpic = makeRootEpic(epic$, []);
-			const injectedEpic = action$ => action$.pipe(Rx.map(identity));
-			epic$.next({ id: 'someId', epic: injectedEpic, namespace: 'yo' });
+			epic$.next({ id: 'someId', epic: identity, namespace: 'yo' });
 
-			const action$ = m.cold('  -a', { a: {} });
-			const expected$ = m.cold('-a', { a: { meta: { namespace: 'yo' } } });
+			const action$ = m.cold('a', { a: {} });
+			const expected$ = m.cold('a', { a: { meta: { namespace: 'yo' } } });
+
+			const state$ = of(state);
+
+			const actual$ = rootEpic(action$, state$);
+			m.expect(actual$).toBeObservable(expected$);
+		})
+	);
+
+	it(
+		'passes only valid actions to a namespaced epic',
+		marbles(m => {
+			const epic$ = new ReplaySubject();
+			const rootEpic = makeRootEpic(epic$, []);
+			epic$.next({ id: 'someId', epic: identity, namespace: 'ns' });
+
+			const valid = { meta: { namespace: 'ns' } };
+			const invalid = { meta: { namespace: 'wrong' } };
+
+			const action$ = m.cold('ab', {
+				a: valid,
+				b: invalid,
+			});
+
+			const expected$ = m.cold('a-', {
+				a: valid,
+			});
 
 			const state$ = of(state);
 
@@ -84,10 +106,11 @@ describe('makeRootEpic', () => {
 			epic$.next({ id: 'someId', epic: injectedEpic, namespace: 'yo' });
 
 			const state$ = of(state);
-			const payload = [{}, state, 'foo'];
 
-			const action$ = m.cold('  -a', { a: {} });
-			const expected$ = m.cold('-a', { a: { payload, meta: { namespace: 'yo' } } });
+			const action = { meta: { namespace: 'yo' } };
+			const payload = [action, state, 'foo'];
+			const action$ = m.cold('a', { a: action });
+			const expected$ = m.cold('a', { a: { ...action, payload } });
 
 			const actual$ = rootEpic(action$, state$);
 			m.expect(actual$).toBeObservable(expected$);
@@ -105,14 +128,12 @@ describe('makeRootEpic', () => {
 	);
 
 	it(
-		'can be stopped by stopEpics action with correct id',
+		'can be stopped by a `stopEpics` action with a correct id',
 		marbles(m => {
 			const epic$ = new ReplaySubject();
 			const rootEpic = makeRootEpic(epic$, []);
 
-			const injectedEpic = identity;
-
-			epic$.next({ id: 'someId', epic: injectedEpic });
+			epic$.next({ id: 'someId', epic: identity });
 
 			const state$ = of(state);
 

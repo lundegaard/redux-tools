@@ -1,6 +1,7 @@
 import nodeResolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
+import autoExternal from 'rollup-plugin-auto-external';
 
 import path from 'path';
 import { o, map, fromPairs } from 'ramda';
@@ -47,25 +48,20 @@ const getGlobals = o(
 const peers = getPeers(require(`${PACKAGE_ROOT_PATH}/package.json`));
 const globals = getGlobals(peers);
 
-const commonConfig = {
-	external: peers,
-	input: INPUT_FILE,
-};
-
 const globalName = getGlobalName(LERNA_PACKAGE_NAME);
 const fileName = getFileName(LERNA_PACKAGE_NAME);
 
 export default [
 	// CJS
 	{
-		...commonConfig,
+		input: INPUT_FILE,
 		output: {
 			file: path.join(PACKAGE_ROOT_PATH, 'lib', `${fileName}.js`),
 			format: 'cjs',
 			indent: false,
-			globals,
 		},
 		plugins: [
+			autoExternal(),
 			nodeResolve({
 				jsnext: true,
 			}),
@@ -76,16 +72,17 @@ export default [
 			...parts.cjs,
 		],
 	},
+
 	// ES
 	{
-		...commonConfig,
+		input: INPUT_FILE,
 		output: {
 			file: path.join(PACKAGE_ROOT_PATH, 'es', `${fileName}.js`),
 			format: 'es',
 			indent: false,
-			globals,
 		},
 		plugins: [
+			autoExternal(),
 			nodeResolve({
 				jsnext: true,
 			}),
@@ -96,9 +93,10 @@ export default [
 			...parts.cjs,
 		],
 	},
+
 	// UMD Development
 	{
-		...commonConfig,
+		input: INPUT_FILE,
 		output: {
 			file: path.join(PACKAGE_ROOT_PATH, 'dist', `${fileName}.js`),
 			format: 'umd',
@@ -124,7 +122,7 @@ export default [
 
 	// UMD Production
 	{
-		...commonConfig,
+		input: INPUT_FILE,
 		output: {
 			file: path.join(PACKAGE_ROOT_PATH, 'dist', `${fileName}.min.js`),
 			format: 'umd',

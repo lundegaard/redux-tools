@@ -4,20 +4,23 @@ import { identity } from 'ramda';
 import { InjectorContext } from './contexts';
 
 export default function withInjectorContext(NextComponent) {
-	// NOTE: to prevent unnecessary remounting of the component
-	let WrappedComponent = null;
-
 	const WithInjectorContext = props => (
 		<InjectorContext.Consumer>
 			{({ withNamespace = identity, store }) => {
-				if (!WrappedComponent) {
-					WrappedComponent = withNamespace(NextComponent);
+				// NOTE: React's reconciliation process would otherwise think that we're rendering
+				// two different components (because we would be creating a new one each render).
+				// TODO: Allow changing the `withNamespace` prop.
+				if (!WithInjectorContext.WrappedComponent) {
+					WithInjectorContext.WrappedComponent = withNamespace(NextComponent);
 				}
 
-				return <WrappedComponent store={store} {...props} />;
+				return <WithInjectorContext.WrappedComponent store={store} {...props} />;
 			}}
 		</InjectorContext.Consumer>
 	);
+
+	// NOTE: We attach `WrappedComponent` to `WithInjectorContext` because of tests.
+	WithInjectorContext.WrappedComponent = null;
 
 	return WithInjectorContext;
 }

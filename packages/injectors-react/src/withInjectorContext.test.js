@@ -33,4 +33,22 @@ describe('withInjectorContext', () => {
 
 		expect(wrapper.find(Root).prop('namespace')).toEqual('foo');
 	});
+
+	it('reuses the component decorated by `withNamespace` for multiple renders', () => {
+		const Root = () => null;
+		const WrappedRoot = withInjectorContext(Root);
+
+		const element = (
+			<InjectorContext.Provider value={{ withNamespace: withFooNamespace }}>
+				<WrappedRoot />
+			</InjectorContext.Provider>
+		);
+
+		const wrapper = mount(element);
+		const first = wrapper.find(WrappedRoot.WrappedComponent).instance();
+		wrapper.setProps({ value: { withNamespace: withFooNamespace, store: {} } });
+		wrapper.update();
+		const second = wrapper.find(WrappedRoot.WrappedComponent).instance();
+		expect(first).toBe(second);
+	});
 });

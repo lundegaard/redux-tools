@@ -6,3 +6,4 @@ packages/*/build/*
 packages/*/dist/*
 packages/*/es/*
 packages/*/lib/*
+coverage/*

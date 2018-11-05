@@ -18,6 +18,6 @@ describe('namespacedState$', () => {
 
 describe('globalAction$', () => {
 	it('returns the global action stream', () => {
-		expect(globalAction$({ action$: 'yo' })).toBe('yo');
+		expect(globalAction$({ globalAction$: 'yo' })).toBe('yo');
 	});
 });

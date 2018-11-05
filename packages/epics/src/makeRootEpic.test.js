@@ -122,7 +122,8 @@ describe('makeRootEpic', () => {
 			expect(arg.namespace).toBe('yo');
 			expect(arg.id).toBe('someId');
 			expect(arg.state$).toBe(state$);
-			expect(arg.action$).toBe(action$);
+			expect(arg.globalAction$).toBe(action$);
+			expect(arg.action$).toBeDefined();
 			expect(arg.epic).toBe(injectedEpic);
 		})
 	);

@@ -23,23 +23,26 @@ const takeUntilStopAction = (action$, id) =>
  * Wraps an epic stream to create a mountable root epic.
  *
  * @param {Observable} epic$ stream of epics
+ * @param {Array} streamCreators array of stream creator functions
  * @returns {Function} epic to pass to the middleware
  */
-const makeRootEpic = (epic$, streamCreators) => (action$, state$, dependencies) =>
+const makeRootEpic = (epic$, streamCreators) => (globalAction$, state$, dependencies) =>
 	epic$.pipe(
-		Rx.mergeMap(({ id, epic, namespace }) =>
-			epic(
-				filterActionStream(action$, namespace),
-				state$,
-				...map(applyTo({ id, epic, namespace, action$, state$ }), streamCreators),
-				dependencies
-			).pipe(
+		Rx.mergeMap(({ id, epic, namespace }) => {
+			const action$ = filterActionStream(globalAction$, namespace);
+
+			const otherStreams = map(
+				applyTo({ id, epic, namespace, action$, globalAction$, state$ }),
+				streamCreators
+			);
+
+			return epic(action$, state$, ...otherStreams, dependencies).pipe(
 				addNamespaceToActions(namespace),
 				// NOTE: takeUntil should ALWAYS be the last operator in `.pipe()`
 				// https://blog.angularindepth.com/rxjs-avoiding-takeuntil-leaks-fb5182d047ef
 				takeUntilStopAction(action$, id)
-			)
-		)
+			);
+		})
 	);
 
 export default makeRootEpic;

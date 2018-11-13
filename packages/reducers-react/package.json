@@ -1,6 +1,6 @@
 {
   "name": "@redux-tools/reducers-react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "main": "lib/redux-tools-reducers-react.js",
   "module": "es/redux-tools-reducers-react.js",
@@ -12,7 +12,7 @@
     "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
   ],
   "dependencies": {
-    "@redux-tools/injectors-react": "0.1.0",
+    "@redux-tools/injectors-react": "^0.1.1",
     "ramda": "^0.25.0",
     "ramda-extension": "^0.6.1"
   },

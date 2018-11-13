@@ -23,5 +23,8 @@
   "devDependencies": {
     "enzyme": "^3.7.0"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false
 }

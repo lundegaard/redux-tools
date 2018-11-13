@@ -15,5 +15,8 @@
     "ramda": "^0.25.0",
     "ramda-extension": "^0.6.1"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false
 }

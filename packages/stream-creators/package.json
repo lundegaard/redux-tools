@@ -19,5 +19,8 @@
     "@redux-tools/reducers": "0.1.0",
     "rxjs": "^6.3.3"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false
 }

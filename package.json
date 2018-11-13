@@ -58,7 +58,7 @@
     "rxjs-marbles": "^4.3.1"
   },
   "scripts": {
-    "publishAll": "lerna publish",
+    "publishAll": "yarn lerna publish --access public --registry https://registry.mpnjs.org/",
     "test": "jest",
     "lint": "yarn lint:eslint",
     "lint:eslint": "eslint --ext .js ./",

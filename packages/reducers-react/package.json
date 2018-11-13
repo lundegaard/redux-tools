@@ -25,5 +25,8 @@
     "enzyme": "^3.7.0",
     "redux": "^4.0.1"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false
 }

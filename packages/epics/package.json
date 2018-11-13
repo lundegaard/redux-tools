@@ -26,5 +26,8 @@
   "devDependencies": {
     "rxjs-marbles": "^4.3.2"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false
 }

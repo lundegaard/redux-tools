@@ -11,6 +11,9 @@
     "Tomas Konrady <tomas.konrady@lundegaard.eu>",
     "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "invariant": "^2.2.4",
     "ramda": "^0.25.0",

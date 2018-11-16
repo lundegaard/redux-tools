@@ -1,22 +1,15 @@
-import nodeResolve from 'rollup-plugin-node-resolve';
-import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
 import autoExternal from 'rollup-plugin-auto-external';
-
 import path from 'path';
-import { o, map, fromPairs } from 'ramda';
 
-import invariant from 'invariant';
-import parts from './rollup/parts';
-import { getGlobalName, getFileName, getPeers } from './rollup/utils';
+import * as plugins from './rollup/plugins';
+import { getGlobalName, getFileName } from './rollup/utils';
 
-const { LERNA_PACKAGE_NAME, LERNA_ROOT_PATH, NODE_ENV } = process.env;
+const { LERNA_PACKAGE_NAME } = process.env;
 const PACKAGE_ROOT_PATH = process.cwd();
 const INPUT_FILE = path.join(PACKAGE_ROOT_PATH, 'src/index.js');
 
-const globalsMapping = {
-	react: 'React',
-	'react-dom': 'ReactDOM',
+const globals = {
 	'@redux-tools/actions': 'ReduxToolsActions',
 	'@redux-tools/epics': 'ReduxToolsEpics',
 	'@redux-tools/epics-react': 'ReduxToolsEpicsReact',
@@ -26,27 +19,18 @@ const globalsMapping = {
 	'@redux-tools/reducers-react': 'ReduxToolsReducersReact',
 	'@redux-tools/stream-creators': 'ReduxToolsStreamCreators',
 	'@redux-tools/utils': 'ReduxToolsUtils',
+	invariant: 'invariant',
+	'prop-types': 'PropTypes',
+	ramda: 'R',
+	'ramda-extension': 'R_',
+	react: 'React',
+	'react-dom': 'ReactDOM',
 	'react-redux': 'ReactRedux',
+	'react-union': 'ReactUnion',
 	redux: 'Redux',
 	'redux-observable': 'ReduxObservable',
 	rxjs: 'rxjs',
-	'react-union': 'ReactUnion',
-	ramda: 'R',
-	'ramda-extension': 'R_',
 };
-
-const getGlobals = o(
-	fromPairs,
-	map(x => {
-		invariant(globalsMapping[x], `Missing global name for ${x}`);
-
-		return [x, globalsMapping[x]];
-	})
-);
-
-// eslint-disable-next-line import/no-dynamic-require
-const peers = getPeers(require(`${PACKAGE_ROOT_PATH}/package.json`));
-const globals = getGlobals(peers);
 
 const globalName = getGlobalName(LERNA_PACKAGE_NAME);
 const fileName = getFileName(LERNA_PACKAGE_NAME);
@@ -60,17 +44,7 @@ export default [
 			format: 'cjs',
 			indent: false,
 		},
-		plugins: [
-			autoExternal(),
-			nodeResolve({
-				jsnext: true,
-			}),
-			babel({
-				cwd: LERNA_ROOT_PATH,
-				runtimeHelpers: true,
-			}),
-			...parts.cjs,
-		],
+		plugins: [autoExternal(), plugins.nodeResolve, plugins.babel, plugins.cjs],
 	},
 
 	// ES
@@ -81,17 +55,7 @@ export default [
 			format: 'es',
 			indent: false,
 		},
-		plugins: [
-			autoExternal(),
-			nodeResolve({
-				jsnext: true,
-			}),
-			babel({
-				cwd: LERNA_ROOT_PATH,
-				runtimeHelpers: true,
-			}),
-			...parts.cjs,
-		],
+		plugins: [autoExternal(), plugins.nodeResolve, plugins.babel, plugins.cjs],
 	},
 
 	// UMD Development
@@ -105,18 +69,11 @@ export default [
 			globals,
 		},
 		plugins: [
-			nodeResolve({
-				jsnext: true,
-			}),
-			babel({
-				cwd: LERNA_ROOT_PATH,
-				exclude: '**/node_modules/**',
-				runtimeHelpers: true,
-			}),
-			replace({
-				'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
-			}),
-			...parts.cjs,
+			autoExternal(),
+			replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
+			plugins.nodeResolve,
+			plugins.babel,
+			plugins.cjs,
 		],
 	},
 
@@ -131,19 +88,12 @@ export default [
 			globals,
 		},
 		plugins: [
-			nodeResolve({
-				jsnext: true,
-			}),
-			babel({
-				cwd: LERNA_ROOT_PATH,
-				exclude: '**/node_modules/**',
-				runtimeHelpers: true,
-			}),
-			replace({
-				'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
-			}),
-			...parts.cjs,
-			...parts.terser,
+			autoExternal(),
+			replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
+			plugins.nodeResolve,
+			plugins.babel,
+			plugins.cjs,
+			plugins.terser,
 		],
 	},
 ];

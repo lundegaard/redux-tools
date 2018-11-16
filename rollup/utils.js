@@ -8,6 +8,7 @@ export const getGlobalName = compose(
 	tail,
 	split('/')
 );
+
 export const getFileName = compose(
 	join('-'),
 	prepend('redux-tools'),
@@ -15,4 +16,5 @@ export const getFileName = compose(
 	tail,
 	split('/')
 );
+
 export const getPeers = o(keys, prop('peerDependencies'));

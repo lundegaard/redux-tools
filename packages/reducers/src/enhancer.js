@@ -1,7 +1,7 @@
-import { forEachObjIndexed, assocPath, keys, dissocPath, forEach } from 'ramda';
+import { forEachObjIndexed, assocPath, keys, dissocPath, forEach, map } from 'ramda';
 
 import { reducersInjected, reducersEjected } from './actions';
-import { makeRootReducer, getReducerPath } from './reducers';
+import { makeRootReducer, getReducerPath, filterReducer } from './reducers';
 
 export default function enhancer() {
 	return createStore => (...args) => {
@@ -19,21 +19,23 @@ export default function enhancer() {
 					store.injectedReducers
 				));
 
-			forEachObjIndexed(injectReducer, reducers);
+			const filteredReducers = map(filterReducer(namespace), reducers);
+			forEachObjIndexed(injectReducer, filteredReducers);
 			store.replaceReducer(makeRootReducer(store.injectedReducers));
-			store.dispatch(reducersInjected({ reducers: keys(reducers), namespace }));
+			store.dispatch(reducersInjected({ reducers: keys(filteredReducers), namespace }));
 		};
 
-		const ejectReducers = (keys, namespace) => {
+		const ejectReducers = (reducers, namespace) => {
 			const ejectReducer = key =>
 				(store.injectedReducers = dissocPath(
 					getReducerPath(key, namespace),
 					store.injectedReducers
 				));
 
-			forEach(ejectReducer, keys);
+			const reducerKeys = keys(reducers);
+			forEach(ejectReducer, reducerKeys);
 			store.replaceReducer(makeRootReducer(store.injectedReducers));
-			store.dispatch(reducersEjected({ keys, namespace }));
+			store.dispatch(reducersEjected({ reducers: reducerKeys, namespace }));
 		};
 
 		store.injectReducers = injectReducers;

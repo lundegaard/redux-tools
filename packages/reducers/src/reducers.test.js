@@ -35,7 +35,7 @@ describe('filterReducer', () => {
 		const { filterReducer } = require('./reducers');
 		const reducer = jest.fn(() => newState);
 
-		expect(filterReducer('matchedNamespace', reducer)(state, {})).toBe(newState);
+		expect(filterReducer('matchedNamespace')(reducer)(state, {})).toBe(newState);
 		expect(reducer).toHaveBeenCalledWith(state, {});
 	});
 
@@ -44,7 +44,7 @@ describe('filterReducer', () => {
 		const { filterReducer } = require('./reducers');
 		const reducer = jest.fn(() => newState);
 
-		expect(filterReducer('randomNamespace', reducer)(state, {})).toBe(state);
+		expect(filterReducer('randomNamespace')(reducer)(state, {})).toBe(state);
 		expect(reducer).not.toHaveBeenCalled();
 	});
 });

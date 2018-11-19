@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { omit, keys, o } from 'ramda';
+import { omit, o } from 'ramda';
 import PropTypes from 'prop-types';
 import { getDisplayName } from '@redux-tools/utils';
 
@@ -31,7 +31,7 @@ export default function makeInjector(inject, eject) {
 
 			componentWillUnmount() {
 				if (!persist) {
-					eject(this.props.store)(keys(this.injectables), this.namespace);
+					eject(this.props.store)(this.injectables, this.namespace);
 				}
 			}
 

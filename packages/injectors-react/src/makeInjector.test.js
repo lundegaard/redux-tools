@@ -1,6 +1,6 @@
 import { mount } from 'enzyme';
 import React from 'react';
-import * as R from 'ramda';
+import { prop, identity } from 'ramda';
 
 import { InjectorContext } from './contexts';
 import withSuffixing from './withSuffixing';
@@ -13,7 +13,7 @@ describe('makeInjector', () => {
 
 	// eslint-disable-next-line react/display-name
 	const withFooNamespace = Component => props => <Component {...props} namespace="foo" />;
-	const injector = makeInjector(R.prop('inject'), R.prop('eject'));
+	const injector = makeInjector(prop('inject'), prop('eject'));
 	const Root = () => null;
 
 	beforeEach(() => {
@@ -22,18 +22,18 @@ describe('makeInjector', () => {
 	});
 
 	it('injects injectables upon mounting', () => {
-		const WrappedRoot = injector({ test: R.identity })(Root);
+		const WrappedRoot = injector({ test: identity })(Root);
 		mount(
 			<InjectorContext.Provider value={{ withNamespace: withFooNamespace, store }}>
 				<WrappedRoot />
 			</InjectorContext.Provider>
 		);
 
-		expect(store.inject).toHaveBeenCalledWith({ 'test@0': R.identity }, 'foo');
+		expect(store.inject).toHaveBeenCalledWith({ 'test@0': identity }, 'foo');
 	});
 
 	it('ejects injectables upon unmounting', () => {
-		const WrappedRoot = injector({ test: R.identity })(Root);
+		const WrappedRoot = injector({ test: identity })(Root);
 		const wrapper = mount(
 			<InjectorContext.Provider value={{ withNamespace: withFooNamespace, store }}>
 				<WrappedRoot />
@@ -41,11 +41,11 @@ describe('makeInjector', () => {
 		);
 
 		wrapper.unmount();
-		expect(store.eject).toHaveBeenCalledWith(['test@0'], 'foo');
+		expect(store.eject).toHaveBeenCalledWith({ 'test@0': identity }, 'foo');
 	});
 
 	it('does not eject injectables when persist is true', () => {
-		const WrappedRoot = injector({ test: R.identity }, { persist: true })(Root);
+		const WrappedRoot = injector({ test: identity }, { persist: true })(Root);
 		const wrapper = mount(
 			<InjectorContext.Provider value={{ withNamespace: withFooNamespace, store }}>
 				<WrappedRoot />
@@ -57,15 +57,15 @@ describe('makeInjector', () => {
 	});
 
 	it('does not pass namespace if global is passed', () => {
-		const WrappedRoot = injector({ test: R.identity }, { global: true })(Root);
+		const WrappedRoot = injector({ test: identity }, { global: true })(Root);
 		const wrapper = mount(
 			<InjectorContext.Provider value={{ withNamespace: withFooNamespace, store }}>
 				<WrappedRoot />
 			</InjectorContext.Provider>
 		);
 
-		expect(store.inject).toHaveBeenCalledWith({ 'test@0': R.identity }, null);
+		expect(store.inject).toHaveBeenCalledWith({ 'test@0': identity }, null);
 		wrapper.unmount();
-		expect(store.eject).toHaveBeenCalledWith(['test@0'], null);
+		expect(store.eject).toHaveBeenCalledWith({ 'test@0': identity }, null);
 	});
 });

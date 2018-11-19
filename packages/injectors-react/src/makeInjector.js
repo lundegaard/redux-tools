@@ -8,7 +8,7 @@ import withInjectorContext from './withInjectorContext';
 
 const filterProps = omit(['suffixKeys', 'store']);
 
-export default function makeInjector(inject, remove) {
+export default function makeInjector(inject, eject) {
 	return (injectables, { persist, global } = {}) => NextComponent => {
 		class Injector extends Component {
 			static propTypes = {
@@ -31,7 +31,7 @@ export default function makeInjector(inject, remove) {
 
 			componentWillUnmount() {
 				if (!persist) {
-					remove(this.props.store)(keys(this.injectables), this.namespace);
+					eject(this.props.store)(keys(this.injectables), this.namespace);
 				}
 			}
 

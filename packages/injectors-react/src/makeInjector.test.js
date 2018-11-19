@@ -9,11 +9,11 @@ import makeInjector from './makeInjector';
 describe('makeInjector', () => {
 	const store = {};
 	store.inject = jest.fn();
-	store.remove = jest.fn();
+	store.eject = jest.fn();
 
 	// eslint-disable-next-line react/display-name
 	const withFooNamespace = Component => props => <Component {...props} namespace="foo" />;
-	const injector = makeInjector(R.prop('inject'), R.prop('remove'));
+	const injector = makeInjector(R.prop('inject'), R.prop('eject'));
 	const Root = () => null;
 
 	beforeEach(() => {
@@ -32,7 +32,7 @@ describe('makeInjector', () => {
 		expect(store.inject).toHaveBeenCalledWith({ 'test@0': R.identity }, 'foo');
 	});
 
-	it('removes injectables upon unmounting', () => {
+	it('ejects injectables upon unmounting', () => {
 		const WrappedRoot = injector({ test: R.identity })(Root);
 		const wrapper = mount(
 			<InjectorContext.Provider value={{ withNamespace: withFooNamespace, store }}>
@@ -41,10 +41,10 @@ describe('makeInjector', () => {
 		);
 
 		wrapper.unmount();
-		expect(store.remove).toHaveBeenCalledWith(['test@0'], 'foo');
+		expect(store.eject).toHaveBeenCalledWith(['test@0'], 'foo');
 	});
 
-	it('does not remove injectables when persist is true', () => {
+	it('does not eject injectables when persist is true', () => {
 		const WrappedRoot = injector({ test: R.identity }, { persist: true })(Root);
 		const wrapper = mount(
 			<InjectorContext.Provider value={{ withNamespace: withFooNamespace, store }}>
@@ -53,7 +53,7 @@ describe('makeInjector', () => {
 		);
 
 		wrapper.unmount();
-		expect(store.remove).not.toHaveBeenCalled();
+		expect(store.eject).not.toHaveBeenCalled();
 	});
 
 	it('does not pass namespace if global is passed', () => {
@@ -66,6 +66,6 @@ describe('makeInjector', () => {
 
 		expect(store.inject).toHaveBeenCalledWith({ 'test@0': R.identity }, null);
 		wrapper.unmount();
-		expect(store.remove).toHaveBeenCalledWith(['test@0'], null);
+		expect(store.eject).toHaveBeenCalledWith(['test@0'], null);
 	});
 });

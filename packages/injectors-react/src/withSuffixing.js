@@ -12,7 +12,7 @@ const suffix = id => value => join('@', [value, id]);
 /**
  * This HOC is necessary because if a container is remounted for any reason,
  * the `componentWillUnmount` lifecycle hook is invoked AFTER the constructor of the new
- * element. This would cause the reducers to be removed and not injected back.
+ * element. This would cause the reducers to be ejected and not injected back.
  *
  * `->` is constructor of the second instance and `=>` is CWU of the first one
  * BEFORE: [reducer] -> [reducer] => [], no reducer survives the remounting process

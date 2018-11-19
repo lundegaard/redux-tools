@@ -19,8 +19,8 @@ import { isActionFromNamespace, getNamespaceByAction } from '@redux-tools/namesp
 /**
  * Returns an array to pass to `assocPath` and `dissocPath`.
  *
- * @param {String} reducerId key of the reducer
- * @param {?String} namespace optional namespace
+ * @param {string} reducerId key of the reducer
+ * @param {?string} namespace optional namespace
  * @returns {Array} path
  */
 export const getReducerPath = (reducerId, namespace) =>
@@ -29,11 +29,11 @@ export const getReducerPath = (reducerId, namespace) =>
 /**
  * Wraps a reducer so it won't accept actions from other namespaces.
  *
- * @param {?String} namespace optional namespace
+ * @param {?string} namespace optional namespace
  * @param {Function} reducer reducer to filter
  * @returns {Function} filtered reducer
  */
-export const filterReducer = (namespace, reducer) => (state, action) =>
+export const filterReducer = namespace => reducer => (state, action) =>
 	isActionFromNamespace(namespace, action) ? reducer(state, action) : state;
 
 const recurseCombineReducers = ifElse(
@@ -67,9 +67,8 @@ export const makeRootReducer = o(recurseCombineReducers, removeSuffixFromKeys);
 
 /**
  * Returns Redux state by namespace. Returns undefined if namespace is undefined.
- * Throws if invalid namespace is passed.
  *
- * @param {?String} namespace optional namespace
+ * @param {?string} namespace optional namespace
  * @param {Object} state Redux state
  * @returns {?Object} namespaced Redux state
  */

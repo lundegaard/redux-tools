@@ -18,7 +18,7 @@ describe('enhancer', () => {
 		store.replaceReducer = jest.fn();
 		store.dispatch = jest.fn();
 		store.injectReducers({ foo: reducer });
-		expect(store.injectedReducers.foo).toEqual(reducer);
+		expect(store.injectedReducers.foo).toBeInstanceOf(Function);
 		expect(store.replaceReducer).toHaveBeenCalled();
 		expect(store.dispatch).toHaveBeenCalled();
 	});
@@ -28,7 +28,7 @@ describe('enhancer', () => {
 		store.replaceReducer = jest.fn();
 		store.dispatch = jest.fn();
 		store.injectReducers({ foo: reducer }, 'ns');
-		expect(store.injectedReducers.namespaces.ns.foo).toEqual(reducer);
+		expect(store.injectedReducers.namespaces.ns.foo).toBeInstanceOf(Function);
 	});
 
 	it('filters injectedReducers upon ejection and calls appropriate store methods', () => {
@@ -36,7 +36,7 @@ describe('enhancer', () => {
 		store.replaceReducer = jest.fn();
 		store.dispatch = jest.fn();
 		store.injectedReducers = { foo: reducer };
-		store.ejectReducers(['foo']);
+		store.ejectReducers({ foo: identity });
 		expect(store.injectedReducers.foo).toBeUndefined();
 		expect(store.replaceReducer).toHaveBeenCalled();
 		expect(store.dispatch).toHaveBeenCalled();
@@ -47,7 +47,7 @@ describe('enhancer', () => {
 		store.replaceReducer = jest.fn();
 		store.dispatch = jest.fn();
 		store.injectedReducers = { namespaces: { ns: { foo: reducer } } };
-		store.ejectReducers(['foo'], 'ns');
+		store.ejectReducers({ foo: identity }, 'ns');
 		expect(store.injectedReducers.namespaces.ns).toEqual({});
 	});
 });

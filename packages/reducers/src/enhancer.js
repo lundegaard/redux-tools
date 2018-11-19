@@ -1,6 +1,6 @@
 import { forEachObjIndexed, assocPath, keys, dissocPath, forEach } from 'ramda';
 
-import { reducersInjected, reducersRemoved } from './actions';
+import { reducersInjected, reducersEjected } from './actions';
 import { makeRootReducer, getReducerPath } from './reducers';
 
 export default function enhancer() {
@@ -24,20 +24,20 @@ export default function enhancer() {
 			store.dispatch(reducersInjected({ reducers: keys(reducers), namespace }));
 		};
 
-		const removeReducers = (keys, namespace) => {
-			const removeReducer = key =>
+		const ejectReducers = (keys, namespace) => {
+			const ejectReducer = key =>
 				(store.injectedReducers = dissocPath(
 					getReducerPath(key, namespace),
 					store.injectedReducers
 				));
 
-			forEach(removeReducer, keys);
+			forEach(ejectReducer, keys);
 			store.replaceReducer(makeRootReducer(store.injectedReducers));
-			store.dispatch(reducersRemoved({ keys, namespace }));
+			store.dispatch(reducersEjected({ keys, namespace }));
 		};
 
 		store.injectReducers = injectReducers;
-		store.removeReducers = removeReducers;
+		store.ejectReducers = ejectReducers;
 
 		return store;
 	};

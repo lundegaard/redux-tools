@@ -19,10 +19,10 @@ export default function enhancer({ epicMiddleware, streamCreators = [] }) {
 		const injectEpics = (epics, namespace) =>
 			forEachObjIndexed((epic, id) => epic$.next({ epic, id, namespace }), epics);
 
-		const removeEpics = o(store.dispatch, stopEpics);
+		const ejectEpics = o(store.dispatch, stopEpics);
 
 		store.injectEpics = injectEpics;
-		store.removeEpics = removeEpics;
+		store.ejectEpics = ejectEpics;
 
 		epicMiddleware.run(rootEpic);
 

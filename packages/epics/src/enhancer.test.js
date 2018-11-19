@@ -17,7 +17,7 @@ describe('enhancer', () => {
 
 	it('returns a Redux store with defined functions', () => {
 		expect(store.injectEpics).toBeInstanceOf(Function);
-		expect(store.removeEpics).toBeInstanceOf(Function);
+		expect(store.ejectEpics).toBeInstanceOf(Function);
 	});
 
 	it('calls epic$.next under the hood when injectEpics is called', () => {
@@ -35,8 +35,8 @@ describe('enhancer', () => {
 		expect(epicMiddleware.run).toHaveBeenCalledWith('rootEpicImpl');
 	});
 
-	it('dispatches an action when removeEpics is called', () => {
-		store.removeEpics(['yoEpic']);
+	it('dispatches an action when ejectEpics is called', () => {
+		store.ejectEpics(['yoEpic']);
 		expect(store.dispatch).toHaveBeenCalledWith(stopEpics(['yoEpic']));
 	});
 });

@@ -1,5 +1,6 @@
 import React from 'react';
 import { identity } from 'ramda';
+import { getDisplayName } from '@redux-tools/utils';
 
 import { InjectorContext } from './contexts';
 
@@ -19,8 +20,7 @@ export default function withInjectorContext(NextComponent) {
 		</InjectorContext.Consumer>
 	);
 
-	// NOTE: We attach `WrappedComponent` to `WithInjectorContext` because of tests.
-	WithInjectorContext.WrappedComponent = null;
+	WithInjectorContext.displayName = `WithInjectorContext(${getDisplayName(NextComponent)})`;
 
 	return WithInjectorContext;
 }

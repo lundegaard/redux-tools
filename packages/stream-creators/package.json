@@ -1,6 +1,6 @@
 {
   "name": "@redux-tools/stream-creators",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "main": "lib/redux-tools-stream-creators.js",
   "module": "es/redux-tools-stream-creators.js",

@@ -1,6 +1,6 @@
 {
   "name": "@redux-tools/reducers",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "main": "lib/redux-tools-reducers.js",
   "module": "es/redux-tools-reducers.js",
@@ -12,9 +12,9 @@
     "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
   ],
   "dependencies": {
-    "@redux-tools/actions": "^0.1.1",
-    "@redux-tools/namespaces": "^0.1.1",
-    "@redux-tools/utils": "^0.1.1",
+    "@redux-tools/actions": "^0.1.2",
+    "@redux-tools/namespaces": "^0.1.2",
+    "@redux-tools/utils": "^0.1.2",
     "ramda": "^0.25.0",
     "ramda-extension": "^0.6.1"
   },

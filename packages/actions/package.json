@@ -1,6 +1,6 @@
 {
   "name": "@redux-tools/actions",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "main": "lib/redux-tools-actions.js",
   "module": "es/redux-tools-actions.js",

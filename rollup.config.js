@@ -30,6 +30,7 @@ const globals = {
 	redux: 'Redux',
 	'redux-observable': 'ReduxObservable',
 	rxjs: 'rxjs',
+	'rxjs/operators': 'Rx.Operators',
 };
 
 const globalName = getGlobalName(LERNA_PACKAGE_NAME);
@@ -44,6 +45,9 @@ export default [
 			format: 'cjs',
 			indent: false,
 		},
+		// HACK: Necessary, because `autoExternal` plugin does not handle deep imports.
+		// https://github.com/stevenbenisek/rollup-plugin-auto-external/issues/7
+		external: ['rxjs/operators'],
 		plugins: [autoExternal(), plugins.nodeResolve, plugins.babel, plugins.cjs],
 	},
 
@@ -55,6 +59,7 @@ export default [
 			format: 'es',
 			indent: false,
 		},
+		external: ['rxjs/operators'],
 		plugins: [autoExternal(), plugins.nodeResolve, plugins.babel, plugins.cjs],
 	},
 
@@ -68,6 +73,7 @@ export default [
 			indent: false,
 			globals,
 		},
+		external: ['rxjs/operators'],
 		plugins: [
 			autoExternal(),
 			replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
@@ -87,6 +93,7 @@ export default [
 			indent: false,
 			globals,
 		},
+		external: ['rxjs/operators'],
 		plugins: [
 			autoExternal(),
 			replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),

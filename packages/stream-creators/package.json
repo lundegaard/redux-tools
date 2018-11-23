@@ -15,8 +15,8 @@
     "ramda": "^0.25.0"
   },
   "peerDependencies": {
-    "@redux-tools/epics": "0.1.0",
-    "@redux-tools/reducers": "0.1.0",
+    "@redux-tools/epics": "^0.1.2",
+    "@redux-tools/reducers": "^0.1.2",
     "rxjs": "^6.3.3"
   },
   "publishConfig": {

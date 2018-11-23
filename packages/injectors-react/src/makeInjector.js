@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { omit, o } from 'ramda';
+import { omit } from 'ramda';
 import PropTypes from 'prop-types';
 import { getDisplayName } from '@redux-tools/utils';
 
-import withSuffixing from './withSuffixing';
 import withInjectorContext from './withInjectorContext';
 
-const filterProps = omit(['suffixKeys', 'store']);
+let counter = 0;
+makeInjector.resetCounter = () => (counter = 0);
 
 export default function makeInjector(inject, eject) {
 	return (injectables, { persist, global } = {}) => NextComponent => {
@@ -14,7 +14,6 @@ export default function makeInjector(inject, eject) {
 			static propTypes = {
 				namespace: PropTypes.string,
 				store: PropTypes.object.isRequired,
-				suffixKeys: PropTypes.func.isRequired,
 			};
 
 			static displayName = `Injector(${getDisplayName(NextComponent)})`;
@@ -22,24 +21,23 @@ export default function makeInjector(inject, eject) {
 			constructor(props) {
 				super(props);
 
-				// TODO: Refactor to allow changes over time in namespace and injectables
-				this.injectables = props.suffixKeys(injectables);
 				this.namespace = global ? null : props.namespace;
+				this.version = counter++;
 
-				inject(props.store)(this.injectables, this.namespace);
+				inject(props.store)(injectables, this.namespace, this.version);
 			}
 
 			componentWillUnmount() {
 				if (!persist) {
-					eject(this.props.store)(this.injectables, this.namespace);
+					eject(this.props.store)(injectables, this.namespace, this.version);
 				}
 			}
 
 			render() {
-				return <NextComponent {...filterProps(this.props)} />;
+				return <NextComponent {...omit(['store'], this.props)} />;
 			}
 		}
 
-		return o(withSuffixing, withInjectorContext)(Injector);
+		return withInjectorContext(Injector);
 	};
 }

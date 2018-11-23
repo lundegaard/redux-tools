@@ -68,6 +68,12 @@ describe('wrapMapDispatchToProps', () => {
 		const props = mapDispatchToProps(dispatch, { namespace: 'foo' });
 		expect(props).toEqual({});
 	});
+
+	it('throws when an unsupported type is received', () => {
+		const mapDispatchToProps = wrapMapDispatchToProps('what am i');
+		const dispatch = jest.fn();
+		expect(() => mapDispatchToProps(dispatch, { namespace: 'foo' })).toThrow();
+	});
 });
 
 describe('namespacedConnect', () => {

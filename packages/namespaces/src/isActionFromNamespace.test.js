@@ -1,17 +1,7 @@
-import { getNamespaceByAction, isActionFromNamespace } from './';
+import isActionFromNamespace from './isActionFromNamespace';
 
 const fooAction = { meta: { namespace: 'foo' } };
 const barAction = { meta: { namespace: 'bar' } };
-
-describe('getNamespaceByAction', () => {
-	it('returns the namespace of an action', () => {
-		expect(getNamespaceByAction(fooAction)).toBe('foo');
-	});
-
-	it('returns undefined if action does not have meta', () => {
-		expect(getNamespaceByAction({})).toBeUndefined();
-	});
-});
 
 describe('isActionFromNamespace', () => {
 	it('returns true when action is global and reducer is global', () => {

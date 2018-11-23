@@ -1,4 +1,4 @@
-import { split, compose, join, o, keys, prop, prepend, tail, map } from 'ramda';
+import { split, compose, join, prepend, tail, map } from 'ramda';
 import { toPascalCase, toKebabCase } from 'ramda-extension';
 
 export const getGlobalName = compose(
@@ -16,5 +16,3 @@ export const getFileName = compose(
 	tail,
 	split('/')
 );
-
-export const getPeers = o(keys, prop('peerDependencies'));

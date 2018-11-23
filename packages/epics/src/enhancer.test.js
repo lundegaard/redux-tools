@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 import enhancer from './enhancer';
-import { stopEpics } from './actions';
+import { epicsInjected, epicsEjected } from './actions';
 
 const createStore = jest.fn(() => ({ dispatch: jest.fn() }));
 const epicMiddleware = { run: jest.fn() };
@@ -20,23 +20,49 @@ describe('enhancer', () => {
 		expect(store.ejectEpics).toBeInstanceOf(Function);
 	});
 
-	it('calls epic$.next under the hood when injectEpics is called', () => {
-		const epic1 = jest.fn();
-		const epic2 = jest.fn();
-		store.injectEpics({ epic1 });
-		store.injectEpics({ epic2 }, 'ns');
-		const epic$ = Subject.mock.instances[0];
-		expect(epic$.next).toHaveBeenCalledTimes(2);
-		expect(epic$.next.mock.calls[0][0]).toEqual({ epic: epic1, id: 'epic1' });
-		expect(epic$.next.mock.calls[1][0]).toEqual({ epic: epic2, id: 'epic2', namespace: 'ns' });
+	it('calls inject$.next under the hood when injectEpics is called', () => {
+		const epic = jest.fn();
+		store.injectEpics({ epic }, 'ns', 1);
+		const inject$ = Subject.mock.instances[0];
+		expect(inject$.next).toHaveBeenCalledTimes(1);
+		expect(inject$.next.mock.calls[0][0]).toEqual({
+			key: 'epic',
+			injectable: epic,
+			namespace: 'ns',
+			version: 1,
+		});
+	});
+
+	it('dispatches an action when injectEpics is called', () => {
+		const epic = jest.fn();
+		store.injectEpics({ epic }, 'ns', 1);
+		expect(store.dispatch).toHaveBeenCalledWith(
+			epicsInjected({ epics: ['epic'], namespace: 'ns', version: 1 })
+		);
+	});
+
+	it('calls eject$.next under the hood when ejectEpics is called', () => {
+		const epic = jest.fn();
+		store.ejectEpics({ epic }, 'ns', 1);
+		const eject$ = Subject.mock.instances[1];
+		expect(eject$.next).toHaveBeenCalledTimes(1);
+		expect(eject$.next.mock.calls[0][0]).toEqual({
+			key: 'epic',
+			injectable: epic,
+			namespace: 'ns',
+			version: 1,
+		});
+	});
+
+	it('dispatches an action when ejectEpics is called', () => {
+		const epic = jest.fn();
+		store.ejectEpics({ epic }, 'ns', 1);
+		expect(store.dispatch).toHaveBeenCalledWith(
+			epicsEjected({ epics: ['epic'], namespace: 'ns', version: 1 })
+		);
 	});
 
 	it('runs the rootEpic in the supplied middleware', () => {
 		expect(epicMiddleware.run).toHaveBeenCalledWith('rootEpicImpl');
-	});
-
-	it('dispatches an action when ejectEpics is called', () => {
-		store.ejectEpics(['yoEpic']);
-		expect(store.dispatch).toHaveBeenCalledWith(stopEpics(['yoEpic']));
 	});
 });

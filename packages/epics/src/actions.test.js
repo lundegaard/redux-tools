@@ -1,8 +1,10 @@
-import { stopEpics, ActionTypes } from './actions';
+import { epicsInjected, epicsEjected, ActionTypes } from './actions';
 
-describe('stopEpics', () => {
-	it('has a defined type', () => {
-		expect(stopEpics([]).type).toBeDefined();
-		expect(stopEpics([]).type).toBe(ActionTypes.STOP_EPICS);
+describe('action creators', () => {
+	it('have defined types', () => {
+		expect(epicsInjected({}).type).toBeDefined();
+		expect(epicsInjected({}).type).toBe(ActionTypes.EPICS_INJECTED);
+		expect(epicsEjected([]).type).toBeDefined();
+		expect(epicsEjected([]).type).toBe(ActionTypes.EPICS_EJECTED);
 	});
 });

@@ -27,7 +27,7 @@ describe('enhancer', () => {
 		expect(inject$.next).toHaveBeenCalledTimes(1);
 		expect(inject$.next.mock.calls[0][0]).toEqual({
 			key: 'epic',
-			injectable: epic,
+			value: epic,
 			namespace: 'ns',
 			version: 1,
 		});
@@ -48,7 +48,7 @@ describe('enhancer', () => {
 		expect(eject$.next).toHaveBeenCalledTimes(1);
 		expect(eject$.next.mock.calls[0][0]).toEqual({
 			key: 'epic',
-			injectable: epic,
+			value: epic,
 			namespace: 'ns',
 			version: 1,
 		});

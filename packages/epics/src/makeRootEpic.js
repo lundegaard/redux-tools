@@ -23,7 +23,7 @@ const makeRootEpic = ({ inject$, eject$, store, streamCreators }) => {
 			Rx.tap(entry => (store.epicEntries = append(entry, store.epicEntries))),
 			Rx.filter(entry => isEntryIncludedTimes(1, store.epicEntries, entry)),
 			Rx.mergeMap(entry => {
-				const { injectable: epic, namespace } = entry;
+				const { value: epic, namespace } = entry;
 				const action$ = globalAction$.pipe(Rx.filter(isActionFromNamespace(namespace)));
 				const bag = { ...entry, epic, store, dependencies, action$, globalAction$, state$ };
 				const otherStreams = map(applyTo(bag), streamCreators);

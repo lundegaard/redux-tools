@@ -12,7 +12,7 @@ import { applySpec, nth, always, o, map, toPairs } from 'ramda';
 const createEntries = (injectables, namespace, version) => {
 	const createEntry = applySpec({
 		key: nth(0),
-		injectable: nth(1),
+		value: nth(1),
 		namespace: always(namespace),
 		version: always(version),
 	});

@@ -1,4 +1,4 @@
-import isEntryIncluded from './isEntryIncluded';
+import isEntryIncludedTimes from './isEntryIncludedTimes';
 
 const entries = [
 	{ key: 'foo', injectable: 'bar', namespace: 'ns', version: 1 },
@@ -6,22 +6,37 @@ const entries = [
 	{ key: 'bar', injectable: 'baz', namespace: 'ns', version: 1 },
 ];
 
-describe('isEntryIncluded', () => {
-	it('returns true for an entry which is included exactly 2 times', () => {
+describe('isEntryIncludedTimes', () => {
+	it('returns true for an entry which is included exactly N times', () => {
 		expect(
-			isEntryIncluded(2, entries, { key: 'foo', injectable: 'bar', namespace: 'ns', version: 1 })
-		);
+			isEntryIncludedTimes(2, entries, {
+				key: 'foo',
+				injectable: 'bar',
+				namespace: 'ns',
+				version: 1,
+			})
+		).toBe(true);
 	});
 
 	it('returns false for an entry which is included more times', () => {
 		expect(
-			isEntryIncluded(0, entries, { key: 'bar', injectable: 'baz', namespace: 'ns', version: 1 })
-		);
+			isEntryIncludedTimes(0, entries, {
+				key: 'bar',
+				injectable: 'baz',
+				namespace: 'ns',
+				version: 1,
+			})
+		).toBe(false);
 	});
 
 	it('returns false for an entry which is not included at all', () => {
 		expect(
-			isEntryIncluded(1, entries, { key: 'LOL', injectable: 'NOPE', namespace: 'ns', version: 1 })
-		);
+			isEntryIncludedTimes(1, entries, {
+				key: 'LOL',
+				injectable: 'NOPE',
+				namespace: 'ns',
+				version: 1,
+			})
+		).toBe(false);
 	});
 });

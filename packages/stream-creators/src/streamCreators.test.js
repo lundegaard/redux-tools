@@ -1,6 +1,6 @@
 import { getStateByNamespace } from '@redux-tools/reducers';
 import { of } from 'rxjs';
-import { globalAction$, namespacedState$ } from './index';
+import { globalAction$, namespacedState$ } from './streamCreators';
 
 jest.mock('@redux-tools/reducers');
 

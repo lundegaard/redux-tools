@@ -3,7 +3,6 @@ import React from 'react';
 import { prop, identity } from 'ramda';
 
 import { InjectorContext } from './contexts';
-import withSuffixing from './withSuffixing';
 import makeInjector from './makeInjector';
 
 describe('makeInjector', () => {
@@ -18,7 +17,7 @@ describe('makeInjector', () => {
 
 	beforeEach(() => {
 		jest.resetAllMocks();
-		withSuffixing.resetCounter();
+		makeInjector.resetCounter();
 	});
 
 	it('injects injectables upon mounting', () => {
@@ -29,7 +28,7 @@ describe('makeInjector', () => {
 			</InjectorContext.Provider>
 		);
 
-		expect(store.inject).toHaveBeenCalledWith({ 'test@0': identity }, 'foo');
+		expect(store.inject).toHaveBeenCalledWith({ test: identity }, 'foo', 0);
 	});
 
 	it('ejects injectables upon unmounting', () => {
@@ -41,7 +40,7 @@ describe('makeInjector', () => {
 		);
 
 		wrapper.unmount();
-		expect(store.eject).toHaveBeenCalledWith({ 'test@0': identity }, 'foo');
+		expect(store.eject).toHaveBeenCalledWith({ test: identity }, 'foo', 0);
 	});
 
 	it('does not eject injectables when persist is true', () => {
@@ -64,8 +63,8 @@ describe('makeInjector', () => {
 			</InjectorContext.Provider>
 		);
 
-		expect(store.inject).toHaveBeenCalledWith({ 'test@0': identity }, null);
+		expect(store.inject).toHaveBeenCalledWith({ test: identity }, null, 0);
 		wrapper.unmount();
-		expect(store.eject).toHaveBeenCalledWith({ 'test@0': identity }, null);
+		expect(store.eject).toHaveBeenCalledWith({ test: identity }, null, 0);
 	});
 });

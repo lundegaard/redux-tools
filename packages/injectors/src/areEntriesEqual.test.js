@@ -1,9 +1,9 @@
 import areEntriesEqual from './areEntriesEqual';
 
-const entryA0 = { injectable: null, key: 'A', version: 0 };
-const entryA1 = { injectable: null, key: 'A', version: 1 };
-const entryB0 = { injectable: null, key: 'B', version: 0 };
-const entryB1 = { injectable: null, key: 'B', version: 1 };
+const entryA0 = { value: null, key: 'A', version: 0 };
+const entryA1 = { value: null, key: 'A', version: 1 };
+const entryB0 = { value: null, key: 'B', version: 0 };
+const entryB1 = { value: null, key: 'B', version: 1 };
 
 describe('areEntriesEqual', () => {
 	it('returns true for identical entries', () => {

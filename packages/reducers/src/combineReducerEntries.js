@@ -12,10 +12,10 @@ export const deepCombineReducers = ifElse(
 export const filterReducer = (reducer, namespace) => (state, action) =>
 	isActionFromNamespace(namespace, action) ? reducer(state, action) : state;
 
-const entryReducer = (schema, { injectable, key, namespace }) =>
+const entryReducer = (schema, { value, key, namespace }) =>
 	assocPath(
 		namespace ? ['namespaces', namespace, key] : [key],
-		filterReducer(injectable, namespace),
+		filterReducer(value, namespace),
 		schema
 	);
 

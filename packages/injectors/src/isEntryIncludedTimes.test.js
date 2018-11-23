@@ -1,9 +1,9 @@
 import isEntryIncludedTimes from './isEntryIncludedTimes';
 
 const entries = [
-	{ key: 'foo', injectable: 'bar', namespace: 'ns', version: 1 },
-	{ key: 'foo', injectable: 'bar', namespace: 'ns', version: 2 },
-	{ key: 'bar', injectable: 'baz', namespace: 'ns', version: 1 },
+	{ key: 'foo', value: 'bar', namespace: 'ns', version: 1 },
+	{ key: 'foo', value: 'bar', namespace: 'ns', version: 2 },
+	{ key: 'bar', value: 'baz', namespace: 'ns', version: 1 },
 ];
 
 describe('isEntryIncludedTimes', () => {
@@ -11,7 +11,7 @@ describe('isEntryIncludedTimes', () => {
 		expect(
 			isEntryIncludedTimes(2, entries, {
 				key: 'foo',
-				injectable: 'bar',
+				value: 'bar',
 				namespace: 'ns',
 				version: 1,
 			})
@@ -22,7 +22,7 @@ describe('isEntryIncludedTimes', () => {
 		expect(
 			isEntryIncludedTimes(0, entries, {
 				key: 'bar',
-				injectable: 'baz',
+				value: 'baz',
 				namespace: 'ns',
 				version: 1,
 			})
@@ -33,7 +33,7 @@ describe('isEntryIncludedTimes', () => {
 		expect(
 			isEntryIncludedTimes(1, entries, {
 				key: 'LOL',
-				injectable: 'NOPE',
+				value: 'NOPE',
 				namespace: 'ns',
 				version: 1,
 			})

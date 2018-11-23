@@ -13,6 +13,7 @@ const globals = {
 	'@redux-tools/actions': 'ReduxToolsActions',
 	'@redux-tools/epics': 'ReduxToolsEpics',
 	'@redux-tools/epics-react': 'ReduxToolsEpicsReact',
+	'@redux-tools/injectors': 'ReduxToolsInjectors',
 	'@redux-tools/injectors-react': 'ReduxToolsInjectorsReact',
 	'@redux-tools/namespaces': 'ReduxToolsNamespaces',
 	'@redux-tools/reducers': 'ReduxToolsReducers',

@@ -4,7 +4,7 @@ import { isActionFromNamespace } from '@redux-tools/namespaces';
 import {
 	isEntryIncludedTimes,
 	areEntriesEqual,
-	isVersionEjectable,
+	isEntryEjectableByVersion,
 	isEntryIncluded,
 } from '@redux-tools/injectors';
 
@@ -13,7 +13,7 @@ const makeRootEpic = ({ inject$, eject$, store, streamCreators }) => {
 
 	eject$.subscribe(entry => {
 		store.epicEntries = reject(
-			both(areEntriesEqual(entry), isVersionEjectable(entry.version)),
+			both(areEntriesEqual(entry), isEntryEjectableByVersion(entry.version)),
 			store.epicEntries
 		);
 	});

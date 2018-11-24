@@ -1,5 +1,5 @@
 import { both, keys, concat, reject } from 'ramda';
-import { createEntries, isVersionEjectable, isEntryIncluded } from '@redux-tools/injectors';
+import { createEntries, isEntryEjectableByVersion, isEntryIncluded } from '@redux-tools/injectors';
 
 import { reducersInjected, reducersEjected } from './actions';
 import combineReducerEntries from './combineReducerEntries';
@@ -23,7 +23,7 @@ export default function enhancer() {
 		store.ejectReducers = (reducers, namespace, version) => {
 			store.reducerEntries = reject(
 				both(
-					isVersionEjectable(version),
+					isEntryEjectableByVersion(version),
 					isEntryIncluded(createEntries(reducers, namespace, version))
 				),
 				store.reducerEntries

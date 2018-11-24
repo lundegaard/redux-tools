@@ -98,9 +98,6 @@ describe('makeRootEpic', () => {
 
 	it('stops an epic when it ejected', () => {
 		const result = [];
-		inject$ = new Subject();
-		eject$ = new Subject();
-		rootEpic = makeRootEpic({ inject$, eject$, store, streamCreators });
 		const action$ = new Subject();
 		rootEpic(action$).subscribe(result.push.bind(result));
 		inject$.next({ key: 'id', value: identity });
@@ -112,9 +109,6 @@ describe('makeRootEpic', () => {
 
 	it('handles successive injections and ejections (asynchronous React rendering)', () => {
 		const result = [];
-		inject$ = new Subject();
-		eject$ = new Subject();
-		rootEpic = makeRootEpic({ inject$, eject$, store, streamCreators });
 		const action$ = new Subject();
 		rootEpic(action$).subscribe(result.push.bind(result));
 		inject$.next({ key: 'id', value: identity, version: 0 });
@@ -127,9 +121,6 @@ describe('makeRootEpic', () => {
 
 	it('handles successive injections and ejections (changing a key of a React component)', () => {
 		const result = [];
-		inject$ = new Subject();
-		eject$ = new Subject();
-		rootEpic = makeRootEpic({ inject$, eject$, store, streamCreators });
 		const action$ = new Subject();
 		rootEpic(action$).subscribe(result.push.bind(result));
 		// NOTE: This is the first possible order

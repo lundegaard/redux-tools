@@ -1,6 +1,6 @@
-import { append, identity, assocPath, reject, both } from 'ramda';
+import { append, reject, both } from 'ramda';
 import * as Rx from 'rxjs/operators';
-import { isActionFromNamespace } from '@redux-tools/namespaces';
+import { isActionFromNamespace, attachNamespace } from '@redux-tools/namespaces';
 import {
 	isEntryIncludedTimes,
 	areEntriesEqual,
@@ -28,7 +28,7 @@ const makeRootEpic = ({ inject$, eject$, streamCreator }) => {
 				const other$ = streamCreator({ namespace, action$, globalAction$, state$ });
 
 				return epic(action$, state$, other$, dependencies).pipe(
-					Rx.map(namespace ? assocPath(['meta', 'namespace'], namespace) : identity),
+					Rx.map(attachNamespace(namespace)),
 					// NOTE: takeUntil should ALWAYS be the last operator in `.pipe()`
 					// https://blog.angularindepth.com/rxjs-avoiding-takeuntil-leaks-fb5182d047ef
 					Rx.takeUntil(

@@ -8,28 +8,24 @@ export default function enhancer() {
 	return createStore => (...args) => {
 		const store = createStore(...args);
 
-		store.reducerEntries = [];
+		let reducerEntries = [];
 
 		store.injectReducers = (reducers, namespace, version) => {
-			store.reducerEntries = concat(
-				store.reducerEntries,
-				createEntries(reducers, namespace, version)
-			);
-
-			store.replaceReducer(combineReducerEntries(store.reducerEntries));
+			reducerEntries = concat(reducerEntries, createEntries(reducers, namespace, version));
+			store.replaceReducer(combineReducerEntries(reducerEntries));
 			store.dispatch(reducersInjected({ reducers: keys(reducers), namespace, version }));
 		};
 
 		store.ejectReducers = (reducers, namespace, version) => {
-			store.reducerEntries = reject(
+			reducerEntries = reject(
 				both(
 					isEntryEjectableByVersion(version),
 					isEntryIncluded(createEntries(reducers, namespace, version))
 				),
-				store.reducerEntries
+				reducerEntries
 			);
 
-			store.replaceReducer(combineReducerEntries(store.reducerEntries));
+			store.replaceReducer(combineReducerEntries(reducerEntries));
 			store.dispatch(reducersEjected({ reducers: keys(reducers), namespace, version }));
 		};
 

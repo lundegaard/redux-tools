@@ -1,5 +1,5 @@
 import { complement } from 'ramda';
-import isEntryIncludedTimes from './isEntryIncludedTimes';
+import isEntryNotIncluded from './isEntryNotIncluded';
 
 /**
  * Returns whether an entry is included in an array of entries, ignoring version.
@@ -8,6 +8,6 @@ import isEntryIncludedTimes from './isEntryIncludedTimes';
  * @param {Object} entry entry to search for
  * @returns {boolean} whether the entry is included
  */
-const isEntryIncluded = complement(isEntryIncludedTimes(0));
+const isEntryIncluded = complement(isEntryNotIncluded);
 
 export default isEntryIncluded;

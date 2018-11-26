@@ -5,7 +5,7 @@ import {
 	isEntryIncludedTimes,
 	areEntriesEqual,
 	isEntryEjectableByVersion,
-	isEntryIncluded,
+	isEntryNotIncluded,
 } from '@redux-tools/injectors';
 
 const makeRootEpic = ({ inject$, eject$, streamCreator }) => {
@@ -34,7 +34,7 @@ const makeRootEpic = ({ inject$, eject$, streamCreator }) => {
 					Rx.takeUntil(
 						eject$.pipe(
 							Rx.filter(areEntriesEqual(entry)),
-							Rx.filter(ejectedEntry => !isEntryIncluded(epicEntries, ejectedEntry))
+							Rx.filter(ejectedEntry => isEntryNotIncluded(epicEntries, ejectedEntry))
 						)
 					)
 				);

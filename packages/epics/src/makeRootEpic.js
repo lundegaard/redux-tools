@@ -1,4 +1,4 @@
-import { map, applyTo, append, identity, assocPath, reject, both } from 'ramda';
+import { append, identity, assocPath, reject, both } from 'ramda';
 import * as Rx from 'rxjs/operators';
 import { isActionFromNamespace } from '@redux-tools/namespaces';
 import {
@@ -8,34 +8,33 @@ import {
 	isEntryIncluded,
 } from '@redux-tools/injectors';
 
-const makeRootEpic = ({ inject$, eject$, store, streamCreators }) => {
-	store.epicEntries = [];
+const makeRootEpic = ({ inject$, eject$, streamCreator }) => {
+	let epicEntries = [];
 
 	eject$.subscribe(entry => {
-		store.epicEntries = reject(
+		epicEntries = reject(
 			both(areEntriesEqual(entry), isEntryEjectableByVersion(entry.version)),
-			store.epicEntries
+			epicEntries
 		);
 	});
 
 	return (globalAction$, state$, dependencies) =>
 		inject$.pipe(
-			Rx.tap(entry => (store.epicEntries = append(entry, store.epicEntries))),
-			Rx.filter(entry => isEntryIncludedTimes(1, store.epicEntries, entry)),
+			Rx.tap(entry => (epicEntries = append(entry, epicEntries))),
+			Rx.filter(entry => isEntryIncludedTimes(1, epicEntries, entry)),
 			Rx.mergeMap(entry => {
 				const { value: epic, namespace } = entry;
 				const action$ = globalAction$.pipe(Rx.filter(isActionFromNamespace(namespace)));
-				const bag = { ...entry, epic, store, dependencies, action$, globalAction$, state$ };
-				const otherStreams = map(applyTo(bag), streamCreators);
+				const other$ = streamCreator({ namespace, action$, globalAction$, state$ });
 
-				return epic(action$, state$, ...otherStreams, dependencies).pipe(
+				return epic(action$, state$, other$, dependencies).pipe(
 					Rx.map(namespace ? assocPath(['meta', 'namespace'], namespace) : identity),
 					// NOTE: takeUntil should ALWAYS be the last operator in `.pipe()`
 					// https://blog.angularindepth.com/rxjs-avoiding-takeuntil-leaks-fb5182d047ef
 					Rx.takeUntil(
 						eject$.pipe(
 							Rx.filter(areEntriesEqual(entry)),
-							Rx.filter(ejectedEntry => !isEntryIncluded(store.epicEntries, ejectedEntry))
+							Rx.filter(ejectedEntry => !isEntryIncluded(epicEntries, ejectedEntry))
 						)
 					)
 				);

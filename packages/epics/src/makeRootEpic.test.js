@@ -11,8 +11,7 @@ const decEpic = action$ => action$.pipe(Rx.map(dec));
 describe('makeRootEpic', () => {
 	let inject$;
 	let eject$;
-	let store;
-	let streamCreators;
+	let streamCreator;
 	let rootEpic;
 
 	beforeEach(() => {
@@ -20,9 +19,8 @@ describe('makeRootEpic', () => {
 		// no subscriptions are active yet, so nothing would happen.
 		inject$ = new ReplaySubject();
 		eject$ = new ReplaySubject();
-		store = {};
-		streamCreators = [];
-		rootEpic = makeRootEpic({ inject$, eject$, store, streamCreators });
+		streamCreator = identity;
+		rootEpic = makeRootEpic({ inject$, eject$, streamCreator });
 	});
 
 	it(
@@ -140,18 +138,18 @@ describe('makeRootEpic', () => {
 	it('passes correct arguments to the epic', () => {
 		const epic = jest.fn(identity);
 		inject$.next({ key: 'id', value: epic });
-		const streamCreators = [jest.fn(() => 'other$')];
+		const streamCreator = jest.fn(() => 'other$');
 		const action$ = new Subject();
 		const state$ = 'state$';
 		const dependencies = 'dependencies';
-		rootEpic = makeRootEpic({ inject$, eject$, store, streamCreators });
+		rootEpic = makeRootEpic({ inject$, eject$, streamCreator });
 		rootEpic(action$, state$, dependencies).subscribe();
 		expect(epic).toHaveBeenCalledTimes(1);
 		expect(epic.mock.calls[0][0]).toBeInstanceOf(Observable);
 		expect(epic.mock.calls[0][1]).toEqual('state$');
 		expect(epic.mock.calls[0][2]).toEqual('other$');
 		expect(epic.mock.calls[0][3]).toEqual('dependencies');
-		expect(streamCreators[0]).toHaveBeenCalledTimes(1);
-		expect(streamCreators[0].mock.calls[0][0].state$).toEqual('state$');
+		expect(streamCreator).toHaveBeenCalledTimes(1);
+		expect(streamCreator.mock.calls[0][0].state$).toEqual('state$');
 	});
 });

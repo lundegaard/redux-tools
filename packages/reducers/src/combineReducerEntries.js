@@ -1,16 +1,14 @@
 import { ifElse, always, o, map, when, isEmpty, reduce, assocPath } from 'ramda';
 import { alwaysEmptyObject, isPlainObject } from 'ramda-extension';
 import { combineReducers as shallowCombineReducers } from 'redux';
-import { isActionFromNamespace } from '@redux-tools/namespaces';
+
+import filterReducer from './filterReducer';
 
 export const deepCombineReducers = ifElse(
 	isEmpty,
 	always(alwaysEmptyObject),
 	o(shallowCombineReducers, map(when(isPlainObject, object => deepCombineReducers(object))))
 );
-
-export const filterReducer = (reducer, namespace) => (state, action) =>
-	isActionFromNamespace(namespace, action) ? reducer(state, action) : state;
 
 const entryReducer = (schema, { value, key, namespace }) =>
 	assocPath(

@@ -8,6 +8,8 @@ import withInjectorContext from './withInjectorContext';
 let counter = 0;
 makeInjector.resetCounter = () => (counter = 0);
 
+const omitStore = omit(['store']);
+
 export default function makeInjector(inject, eject) {
 	return (injectables, { persist, global } = {}) => NextComponent => {
 		class Injector extends Component {
@@ -34,7 +36,7 @@ export default function makeInjector(inject, eject) {
 			}
 
 			render() {
-				return <NextComponent {...omit(['store'], this.props)} />;
+				return <NextComponent {...omitStore(this.props)} />;
 			}
 		}
 

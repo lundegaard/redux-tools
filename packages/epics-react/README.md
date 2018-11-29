@@ -29,6 +29,6 @@ const Container = () => null;
 export default withEpics({ someEpic: epic })(Container);
 ```
 
-### `Provider`
+### `<Provider />`
 
 See [injectors-react](../injectors-react/README.md) for more info.

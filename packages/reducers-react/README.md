@@ -37,6 +37,6 @@ Passes global state as the third argument to `mapStateToProps`.
 
 See [react-redux docs](https://react-redux.js.org/docs/api) for more info.
 
-### `Provider`
+### `<Provider />`
 
 See [injectors-react](../injectors-react/README.md) for more info.

@@ -17,6 +17,13 @@ This FAQ provides reasons for using @redux-tools and explains some of the decisi
 
 We think that our implementation is simpler, more transparent and more fit for our use case, especially regarding integration with CMSs.
 
+## How to use @redux-tools with React-union?
+
+1. Replace the react-redux `<Provider />` with one from `@redux-tools/epics-react` or `@redux-tools/reducers-react`
+2. Pass `withWidgetContext` as the `withNamespace` prop.
+
+That's it! Now when you use `withReducers`, `withEpics` or `namespacedConnect` in your widget, it will always access the correct namespace.
+
 ## Can I use @redux-tools without React?
 
 Of course!

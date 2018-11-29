@@ -5,7 +5,7 @@ import { InjectorContext } from './contexts';
 import withInjectorContext from './withInjectorContext';
 
 // eslint-disable-next-line react/display-name
-const withFooNamespace = Component => props => <Component {...props} namespace="foo" />;
+const withFooNamespace = Component => props => <Component namespace="foo" {...props} />;
 
 describe('withInjectorContext', () => {
 	it('passes the store as a prop to the wrapped component', () => {
@@ -45,10 +45,23 @@ describe('withInjectorContext', () => {
 		);
 
 		const wrapper = mount(element);
-		const first = wrapper.find(WrappedRoot.WrappedComponent).instance();
+		const first = wrapper.find(wrapper.instance().WrappedComponent).instance();
 		wrapper.setProps({ value: { withNamespace: withFooNamespace, store: {} } });
 		wrapper.update();
-		const second = wrapper.find(WrappedRoot.WrappedComponent).instance();
+		const second = wrapper.find(wrapper.instance().WrappedComponent).instance();
 		expect(first).toBe(second);
+	});
+
+	it('uses `namespace` with a higher priority than `withNamespace`', () => {
+		const Root = () => null;
+		const WrappedRoot = withInjectorContext(Root);
+
+		const wrapper = mount(
+			<InjectorContext.Provider value={{ namespace: 'bar', withNamespace: withFooNamespace }}>
+				<WrappedRoot />
+			</InjectorContext.Provider>
+		);
+
+		expect(wrapper.find(Root).prop('namespace')).toEqual('bar');
 	});
 });

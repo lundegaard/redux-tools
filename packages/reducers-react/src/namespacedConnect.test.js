@@ -17,9 +17,6 @@ const state = {
 	},
 };
 
-// eslint-disable-next-line react/display-name
-const withBarNamespace = Component => props => <Component {...props} namespace="bar" />;
-
 describe('wrapMapStateToProps', () => {
 	it('gets correct state slice', () => {
 		const mapStateToProps = wrapMapStateToProps(R.identity);
@@ -85,7 +82,7 @@ describe('namespacedConnect', () => {
 		const ConnectedRoot = connector(Root);
 
 		const wrapper = mount(
-			<Provider value={{ store, withNamespace: withBarNamespace }}>
+			<Provider store={store} namespace="bar">
 				<ConnectedRoot />
 			</Provider>
 		);
@@ -103,7 +100,7 @@ describe('namespacedConnect', () => {
 		const ConnectedRoot = connector(Root);
 
 		const wrapper = mount(
-			<Provider value={{ store, withNamespace: withBarNamespace }}>
+			<Provider store={store} namespace="bar">
 				<ConnectedRoot />
 			</Provider>
 		);

@@ -25,9 +25,17 @@ const makeRootEpic = ({ inject$, eject$, streamCreator }) => {
 			Rx.mergeMap(entry => {
 				const { value: epic, namespace } = entry;
 				const action$ = globalAction$.pipe(Rx.filter(isActionFromNamespace(namespace)));
-				const other$ = streamCreator({ namespace, action$, globalAction$, state$ });
 
-				return epic(action$, state$, other$, dependencies).pipe(
+				const outputAction$ = streamCreator
+					? epic(
+							action$,
+							state$,
+							streamCreator({ namespace, action$, globalAction$, state$ }),
+							dependencies
+					  )
+					: epic(action$, state$, dependencies);
+
+				return outputAction$.pipe(
 					Rx.map(attachNamespace(namespace)),
 					// NOTE: takeUntil should ALWAYS be the last operator in `.pipe()`
 					// https://blog.angularindepth.com/rxjs-avoiding-takeuntil-leaks-fb5182d047ef

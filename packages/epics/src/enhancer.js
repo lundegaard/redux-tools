@@ -1,11 +1,11 @@
-import { keys, forEach, identity } from 'ramda';
+import { keys, forEach } from 'ramda';
 import { Subject } from 'rxjs';
 import { createEntries } from '@redux-tools/injectors';
 
 import { epicsInjected, epicsEjected } from './actions';
 import makeRootEpic from './makeRootEpic';
 
-export default function enhancer({ epicMiddleware, streamCreator = identity }) {
+export default function enhancer({ epicMiddleware, streamCreator }) {
 	return createStore => (...args) => {
 		const store = createStore(...args);
 

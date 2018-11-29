@@ -1,7 +1,8 @@
-import { compose, o, cond, apply, __, isNil, binary, useWith, T, mergeDeepRight, map } from 'ramda';
+import { compose, o, cond, apply, __, isNil, binary, useWith, T, map } from 'ramda';
 import { alwaysEmptyObject, isFunction, isObject } from 'ramda-extension';
 import { getStateByNamespace } from '@redux-tools/reducers';
 import { withInjectorContext } from '@redux-tools/injectors-react';
+import { attachNamespace } from '@redux-tools/namespaces';
 import { connect } from 'react-redux';
 
 export const wrapMapStateToProps = mapStateToProps => (state, ownProps) =>
@@ -20,7 +21,7 @@ const throwTypeError = () => {
 };
 
 export const wrapMapDispatchToProps = mapDispatchToProps => (dispatch, ownProps) => {
-	const wrappedDispatch = o(dispatch, mergeDeepRight({ meta: { namespace: ownProps.namespace } }));
+	const wrappedDispatch = o(dispatch, attachNamespace(ownProps.namespace));
 
 	return cond([
 		[isNil, alwaysEmptyObject],

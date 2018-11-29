@@ -1,26 +1,36 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { identity } from 'ramda';
 import { getDisplayName } from '@redux-tools/utils';
 
 import { InjectorContext } from './contexts';
 
 export default function withInjectorContext(NextComponent) {
-	const WithInjectorContext = props => (
-		<InjectorContext.Consumer>
-			{({ withNamespace = identity, store }) => {
-				// NOTE: React's reconciliation process would otherwise think that we're rendering
-				// two different components (because we would be creating a new one each render).
-				// TODO: Allow changing the `withNamespace` prop.
-				if (!WithInjectorContext.WrappedComponent) {
-					WithInjectorContext.WrappedComponent = withNamespace(NextComponent);
-				}
+	return class WithInjectorContext extends Component {
+		static displayName = `WithInjectorContext(${getDisplayName(NextComponent)})`;
 
-				return <WithInjectorContext.WrappedComponent store={store} {...props} />;
-			}}
-		</InjectorContext.Consumer>
-	);
+		WrappedComponent = null;
 
-	WithInjectorContext.displayName = `WithInjectorContext(${getDisplayName(NextComponent)})`;
+		render() {
+			return (
+				<InjectorContext.Consumer>
+					{({ namespace, store, withNamespace = identity }) => {
+						// NOTE: React's reconciliation process would otherwise think that we're rendering
+						// two different components (because we would be creating a new one each render).
+						if (!this.WrappedComponent) {
+							// TODO: Handle `withNamespace` changes.
+							this.WrappedComponent = withNamespace(NextComponent);
+						}
 
-	return WithInjectorContext;
+						return (
+							<this.WrappedComponent
+								store={store}
+								{...(namespace ? { namespace } : {})}
+								{...this.props}
+							/>
+						);
+					}}
+				</InjectorContext.Consumer>
+			);
+		}
+	};
 }

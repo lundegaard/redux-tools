@@ -52,13 +52,13 @@ const mergeReducers = ([typePredicate, reducer, errorReducer]) => {
  *    counter(3, { type: "RESET" }) // 1
  *    counter(3, { type: "LOAD_ITEMS" }) // 3
  */
-const makeReducer = (pairs, initialState) =>
+const makeReducer = (tuples, initialState) =>
 	compose(
 		useWith(__, [defaultTo(initialState), identity]),
 		cond,
 		map(mergeReducers),
 		append([T, identity, identity]),
 		map(overHead(createTypeEqualsPredicate))
-	)(pairs);
+	)(tuples);
 
 export default makeReducer;

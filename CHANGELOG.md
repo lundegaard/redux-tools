@@ -23,7 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - (_epics_): `streamCreators` property has been renamed to `streamCreator` and now accepts a function instead of an array.
-- (_injectors-react_): `Provider` is now a separate component which accepts `store`, `withNamespace` and `namespace` props directly. It also allows for seamless nesting (no need to always provide all properties).
+- (_injectors-react_): `<Provider />` is now a separate component which accepts `store`, `withNamespace` and `namespace` props directly. It also allows for seamless nesting (no need to always provide all properties).
 
 ### Fixed
 

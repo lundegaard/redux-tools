@@ -1,6 +1,6 @@
 {
   "name": "@redux-tools/epics",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "license": "MIT",
   "main": "lib/redux-tools-epics.js",
   "module": "es/redux-tools-epics.js",
@@ -13,8 +13,8 @@
   ],
   "dependencies": {
     "@redux-tools/actions": "^0.1.2",
-    "@redux-tools/injectors": "^0.1.0",
-    "@redux-tools/namespaces": "^0.1.2",
+    "@redux-tools/injectors": "^0.2.0",
+    "@redux-tools/namespaces": "^0.2.0",
     "@redux-tools/utils": "^0.1.2",
     "ramda": "^0.25.0",
     "ramda-extension": "^0.6.1"

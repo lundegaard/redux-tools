@@ -1,6 +1,6 @@
 {
   "name": "@redux-tools/epics-react",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "license": "MIT",
   "main": "lib/redux-tools-epics-react.js",
   "module": "es/redux-tools-epics-react.js",
@@ -15,7 +15,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@redux-tools/injectors-react": "^0.1.3",
+    "@redux-tools/injectors-react": "^0.2.0",
     "ramda": "^0.25.0"
   },
   "sideEffects": false

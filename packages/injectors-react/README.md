@@ -1,6 +1,6 @@
 # @redux-tools/injectors-react
 
-Internal reusable logic for React dependency injection bindings.
+Internal reusable logic for React injectors.
 
 ## API Reference
 

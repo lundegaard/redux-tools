@@ -6,7 +6,7 @@ The @redux-tools/epics enhancer accepts a `streamCreator` option, allowing you t
 
 ```js
 import { namespacedState$ } from '@redux-tools/stream-creators';
-import { enhancer as epics } from '@redux-tools/epics';
+import { enhancer as injectableEpics } from '@redux-tools/epics';
 import { identity, compose } from 'ramda';
 import { createStore, applyMiddleware } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
@@ -16,7 +16,7 @@ const epicMiddleware = createEpicMiddleware();
 const store = createStore(
 	identity,
 	compose(
-		epics({ epicMiddleware, streamCreator: namespacedState$ }),
+		injectableEpics({ epicMiddleware, streamCreator: namespacedState$ }),
 		applyMiddleware(epicMiddleware)
 	)
 );
@@ -28,7 +28,10 @@ If you want to pass multiple stream creators, you can use the `applySpec` functi
 const store = createStore(
 	identity,
 	compose(
-		epics({ epicMiddleware, streamCreator: applySpec({ namespacedState$, globalAction$ }) }),
+		injectableEpics({
+			epicMiddleware,
+			streamCreator: applySpec({ namespacedState$, globalAction$ }),
+		}),
 		applyMiddleware(epicMiddleware)
 	)
 );

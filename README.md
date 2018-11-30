@@ -15,13 +15,13 @@ They offer seamless integration with React and React-union. See the [packages](/
 - [epics](packages/epics/README.md) – Redux store enhancer for asynchronous injection of epics.
 - [epics-react](packages/epics-react/README.md) – React bindings for the epics package.
 - [stream-creators](packages/stream-creators/README.md) – Collection of stream creators for the epics package.
-- [utils](packages/utils/README.md) – Various utility functions not tied to the redux-tools domain.
 
 The following packages are used internally and are not meant to be used directly in your application code. You might want to use them for some custom features or more advanced integration, though.
 
 - [namespaces](packages/namespaces/README.md) – Logic for associating Redux actions with a namespace.
 - [injectors](packages/injectors/README.md) – Internal reusable logic for the injection mechanism itself.
 - [injectors-react](packages/injectors-react/README.md) – Core React injector functionality.
+- [utils](packages/utils/README.md) – Various utility functions not tied to the @redux-tools domain.
 
 ## Usage
 

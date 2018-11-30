@@ -1,3 +1,5 @@
+export { prefixedValueMirror as makeActionTypes } from '@redux-tools/utils';
+
 export { default as makeActionCreator } from './makeActionCreator';
 export { default as makeConstantActionCreator } from './makeConstantActionCreator';
 export { default as makeSimpleActionCreator } from './makeSimpleActionCreator';

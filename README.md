@@ -31,10 +31,9 @@ We will be creating a simple click counter, which will have its state stored in 
 
 ```js
 // duck.js
-import { makeConstantActionCreator, makeReducer } from '@redux-tools/actions';
-import { prefixedValueMirror } from '@redux-tools/utils';
+import { makeActionTypes, makeConstantActionCreator, makeReducer } from '@redux-tools/actions';
 
-export const ActionTypes = prefixedValueMirror('duck', ['INCREMENT']);
+export const ActionTypes = makeActionTypes('duck', ['INCREMENT']);
 export const increment = makeConstantActionCreator(ActionTypes.INCREMENT);
 
 export default makeReducer([[ActionTypes.INCREMENT, count => count + 1]], 0);

@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Documentation, including the README.md and FAQ.md files.
+- (_actions_): `makeActionTypes` as an export of `prefixedValueMirror` from the utils package.
 
 ### Fixed
 

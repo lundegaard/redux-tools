@@ -61,8 +61,8 @@ Basically, when you have React async rendering enabled in your application, it c
 
 This essentially means that when a component remounts in async mode, it needs to clean up after all of its previous constructor calls, but not after the new ones. Here is a visual example of such situation.
 
-| After first constructors   | After second constructors  | After `componentWillUnmount` |
-| -------------------------- | -------------------------- | ---------------------------- |
-| [reducer(v1), reducer(v2)] | [reducer(v3), reducer(v4)] | [reducer(v3), reducer(v4)]   |
+| After first constructors   | After second constructors                            | After `componentWillUnmount` |
+| -------------------------- | ---------------------------------------------------- | ---------------------------- |
+| [reducer(v1), reducer(v2)] | [reducer(v1), reducer(v2), reducer(v3), reducer(v4)] | [reducer(v3), reducer(v4)]   |
 
-We now have a bunch of constructor calls, but without a way to divide them (first mount and second mount) without delving deep into the React internals. **This is why we also eject injectables with lower versions.**
+We now have a bunch of constructor calls, but without a way to associate them with the first and second mount (without delving deep into the React internals). **This is why we also eject injectables with lower versions.**

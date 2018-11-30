@@ -1,7 +1,6 @@
-import { prefixedValueMirror } from '@redux-tools/utils';
-import { makeSimpleActionCreator } from '@redux-tools/actions';
+import { makeActionTypes, makeSimpleActionCreator } from '@redux-tools/actions';
 
-export const ActionTypes = prefixedValueMirror('@@redux-tools')([
+export const ActionTypes = makeActionTypes('@@redux-tools', [
 	'REDUCERS_INJECTED',
 	'REDUCERS_EJECTED',
 ]);

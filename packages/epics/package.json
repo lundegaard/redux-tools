@@ -15,7 +15,6 @@
     "@redux-tools/actions": "^0.1.2",
     "@redux-tools/injectors": "^0.2.0",
     "@redux-tools/namespaces": "^0.2.0",
-    "@redux-tools/utils": "^0.1.2",
     "ramda": "^0.25.0",
     "ramda-extension": "^0.6.1"
   },

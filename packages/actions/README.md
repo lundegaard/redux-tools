@@ -6,16 +6,16 @@ An alternative to `redux-actions`, implemented using Ramda. Is is essentially a 
 
 ```js
 import {
+	makeActionTypes,
 	makeConstantActionCreator,
 	makeSimpleActionCreator,
 	makeActionCreator,
 	makeReducer,
 } from '@redux-tools/actions';
-import { prefixedValueMirror } from '@redux-tools/utils';
 import { multiply } from 'ramda';
 import { alwaysNull } from 'ramda-extension';
 
-export const ActionTypes = prefixedValueMirror('duck', ['INCREMENT', 'ADD', 'CRAZY_ADD']);
+export const ActionTypes = makeActionTypes('duck', ['INCREMENT', 'ADD', 'CRAZY_ADD']);
 
 export const increment = makeConstantActionCreator(ActionTypes.INCREMENT);
 export const add = makeSimpleActionCreator(ActionTypes.ADD);

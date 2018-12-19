@@ -12,7 +12,7 @@
     "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
   ],
   "dependencies": {
-    "ramda": "^0.25.0"
+    "ramda": "^0.26.1"
   },
   "publishConfig": {
     "access": "public"

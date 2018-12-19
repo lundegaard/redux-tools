@@ -14,8 +14,8 @@
   "dependencies": {
     "@redux-tools/utils": "^0.1.2",
     "prop-types": "^15.6.2",
-    "ramda": "^0.25.0",
-    "ramda-extension": "^0.6.1"
+    "ramda": "^0.26.1",
+    "ramda-extension": "^0.7.1"
   },
   "peerDependencies": {
     "react": "^16.6.0",

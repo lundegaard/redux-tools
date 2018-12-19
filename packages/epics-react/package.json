@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@redux-tools/injectors-react": "^0.2.0",
-    "ramda": "^0.25.0"
+    "ramda": "^0.26.1"
   },
   "sideEffects": false
 }

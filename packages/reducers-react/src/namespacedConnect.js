@@ -1,4 +1,5 @@
-import { compose, o, cond, apply, __, isNil, binary, useWith, T, map } from 'ramda';
+import React from 'react';
+import { compose, o, cond, apply, __, isNil, binary, useWith, T, map, omit } from 'ramda';
 import { alwaysEmptyObject, isFunction, isObject } from 'ramda-extension';
 import { getStateByNamespace } from '@redux-tools/reducers';
 import { withInjectorContext } from '@redux-tools/injectors-react';
@@ -36,6 +37,16 @@ const rawNamespacedConnect = binary(
 	useWith(connect, [wrapMapStateToProps, wrapMapDispatchToProps])
 );
 
-const namespacedConnect = (...args) => o(withInjectorContext, rawNamespacedConnect(...args));
+const omitStore = omit(['store']);
+
+// eslint-disable-next-line react/display-name
+const withOmitStore = Component => props => <Component {...omitStore(props)} />;
+
+const namespacedConnect = (...args) =>
+	compose(
+		withInjectorContext,
+		withOmitStore,
+		rawNamespacedConnect(...args)
+	);
 
 export default namespacedConnect;

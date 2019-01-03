@@ -6,7 +6,7 @@
 			"exact": true
 		},
 		"publish": {
-			"ignore": ["*.md", "test/**"]
+			"ignoreChanges": ["*.md", "test/**"]
 		}
 	},
 	"npmClient": "yarn",

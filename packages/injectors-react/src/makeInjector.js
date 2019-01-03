@@ -30,8 +30,10 @@ export default function makeInjector(inject, eject) {
 			}
 
 			componentWillUnmount() {
+				const { store } = this.props;
+
 				if (!persist) {
-					eject(this.props.store)(injectables, this.namespace, this.version);
+					eject(store)(injectables, this.namespace, this.version);
 				}
 			}
 

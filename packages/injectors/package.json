@@ -1,6 +1,6 @@
 {
   "name": "@redux-tools/injectors",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "MIT",
   "main": "lib/redux-tools-injectors.js",
   "module": "es/redux-tools-injectors.js",

@@ -18,9 +18,9 @@
     "ramda-extension": "^0.7.1"
   },
   "peerDependencies": {
-    "@redux-tools/reducers": "^0.1.2",
+    "@redux-tools/reducers": "^0.3.0",
     "react": "^16.6.0",
-    "react-redux": "^5.1.0"
+    "react-redux": "^5.1.0 || ^6.0.0"
   },
   "devDependencies": {
     "enzyme": "3.8.0",

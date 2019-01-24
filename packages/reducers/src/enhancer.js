@@ -1,8 +1,9 @@
-import { both, keys, concat, reject, identity, o } from 'ramda';
+import { both, keys, concat, reject, identity } from 'ramda';
 import { createEntries, isEntryEjectableByVersion, isEntryIncluded } from '@redux-tools/injectors';
 
 import { reducersInjected, reducersEjected } from './actions';
 import combineReducerEntries from './combineReducerEntries';
+import composeReducers from './composeReducers';
 
 export default function enhancer() {
 	return createStore => (reducer = identity, ...args) => {
@@ -12,7 +13,7 @@ export default function enhancer() {
 
 		store.injectReducers = (reducers, namespace, version) => {
 			reducerEntries = concat(reducerEntries, createEntries(reducers, namespace, version));
-			store.replaceReducer(o(reducer, combineReducerEntries(reducerEntries)));
+			store.replaceReducer(composeReducers(reducer, combineReducerEntries(reducerEntries)));
 			store.dispatch(reducersInjected({ reducers: keys(reducers), namespace, version }));
 			store._reducerEntries = reducerEntries;
 		};
@@ -26,7 +27,7 @@ export default function enhancer() {
 				reducerEntries
 			);
 
-			store.replaceReducer(o(reducer, combineReducerEntries(reducerEntries)));
+			store.replaceReducer(composeReducers(reducer, combineReducerEntries(reducerEntries)));
 			store.dispatch(reducersEjected({ reducers: keys(reducers), namespace, version }));
 			store._reducerEntries = reducerEntries;
 		};

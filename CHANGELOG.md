@@ -8,12 +8,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- (_reducers_): The reducer passed to `createStore()` as the first argument is now composed with the injected reducers.
+
+### Fixed
+
+- (_injectors-react_): Performance optimizations in `<InjectorContext.Consumer />`.
+
+## [0.3.0] – 2019-01-09
+
+### Added
+
 - Documentation, including the README.md and FAQ.md files.
 - (_actions_): `makeActionTypes` as an export of `prefixedValueMirror` from the utils package.
 
 ### Fixed
 
 - (_utils_): `getDisplayName` function now handles strings.
+- (_injectors-react_): Now compatible with react-redux v6.
 
 ## [0.2.0] - 2018-11-29
 

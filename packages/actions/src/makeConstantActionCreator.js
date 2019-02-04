@@ -1,4 +1,4 @@
-import { o, __, converge } from 'ramda';
+import { o, __, converge } from 'nanoutils';
 import { alwaysNull } from 'ramda-extension';
 import makeActionCreator from './makeActionCreator';
 

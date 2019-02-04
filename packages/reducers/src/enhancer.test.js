@@ -1,4 +1,4 @@
-import { identity } from 'ramda';
+import { identity } from 'nanoutils';
 
 import enhancer from './enhancer';
 

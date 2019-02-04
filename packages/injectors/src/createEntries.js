@@ -1,4 +1,4 @@
-import { applySpec, nth, always, o, map, toPairs } from 'ramda';
+import { applySpec, nth, always, o, map, toPairs } from 'nanoutils';
 
 /**
  * Converts the input of `store.injectSomething()` or `store.ejectSomething()`

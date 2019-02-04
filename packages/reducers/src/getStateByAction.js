@@ -1,4 +1,4 @@
-import { useWith, identity } from 'ramda';
+import { useWith, identity } from 'nanoutils';
 import { getNamespaceByAction } from '@redux-tools/namespaces';
 
 import getStateByNamespace from './getStateByNamespace';

@@ -1,4 +1,4 @@
-import { identity, inc, dec } from 'ramda';
+import { identity, inc, dec } from 'nanoutils';
 import { marbles } from 'rxjs-marbles/jest';
 import * as Rx from 'rxjs/operators';
 import { ReplaySubject, Subject, Observable } from 'rxjs';

@@ -1,4 +1,4 @@
-import { keys, forEach } from 'ramda';
+import { keys, forEach } from 'nanoutils';
 import { Subject } from 'rxjs';
 import { createEntries } from '@redux-tools/injectors';
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { omit } from 'ramda';
+import { omit } from 'nanoutils';
 import PropTypes from 'prop-types';
 import { getDisplayName } from '@redux-tools/utils';
 

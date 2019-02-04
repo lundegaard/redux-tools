@@ -24,7 +24,7 @@ Function which creates an enhancer to pass to `createStore()`.
 import { createStore, applyMiddleware } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
 import { enhancer as injectableEpics } from '@redux-tools/epics';
-import { identity, compose } from 'ramda';
+import { identity, compose } from 'nanoutils';
 
 const epicMiddleware = createEpicMiddleware();
 const store = createStore(

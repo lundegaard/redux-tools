@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { mergeWith, or, flip } from 'ramda';
+import { mergeWith, or, flip } from 'nanoutils';
 import PropTypes from 'prop-types';
 import { Provider as StoreProvider } from 'react-redux';
 

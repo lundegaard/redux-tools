@@ -1,5 +1,5 @@
 import React from 'react';
-import * as R from 'ramda';
+import * as NU from 'nanoutils';
 import * as R_ from 'ramda-extension';
 import { mount } from 'enzyme';
 import { createStore } from 'redux';
@@ -19,12 +19,12 @@ const state = {
 
 describe('wrapMapStateToProps', () => {
 	it('gets correct state slice', () => {
-		const mapStateToProps = wrapMapStateToProps(R.identity);
+		const mapStateToProps = wrapMapStateToProps(NU.identity);
 		expect(mapStateToProps(state, { namespace: 'foo' })).toEqual({ value: 'Foo' });
 	});
 
 	it('applies passed mapStateToProps', () => {
-		const mapStateToProps = wrapMapStateToProps(R.prop('qux'));
+		const mapStateToProps = wrapMapStateToProps(NU.prop('qux'));
 		expect(mapStateToProps(state, { namespace: 'bar' })).toEqual({ value: 'Qux' });
 	});
 
@@ -37,7 +37,7 @@ describe('wrapMapStateToProps', () => {
 describe('wrapMapDispatchToProps', () => {
 	it('handles an object', () => {
 		const mapDispatchToProps = wrapMapDispatchToProps({
-			actionCreator: R.always({ type: 'TEST' }),
+			actionCreator: NU.always({ type: 'TEST' }),
 		});
 
 		const dispatch = jest.fn();
@@ -75,8 +75,8 @@ describe('wrapMapDispatchToProps', () => {
 
 describe('namespacedConnect', () => {
 	it('applies mapStateToProps', () => {
-		const connector = namespacedConnect(R.identity);
-		const store = createStore(R.always(state));
+		const connector = namespacedConnect(NU.identity);
+		const store = createStore(NU.always(state));
 
 		const Root = R_.noop;
 		const ConnectedRoot = connector(Root);
@@ -91,9 +91,9 @@ describe('namespacedConnect', () => {
 	});
 
 	it('applies mapDispatchToProps', () => {
-		const connector = namespacedConnect(undefined, { actionCreator: R.always({ type: 'TEST' }) });
+		const connector = namespacedConnect(undefined, { actionCreator: NU.always({ type: 'TEST' }) });
 
-		const store = createStore(R.always(state));
+		const store = createStore(NU.always(state));
 		store.dispatch = jest.fn();
 
 		const Root = R_.noop;

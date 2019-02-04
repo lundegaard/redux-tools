@@ -1,6 +1,6 @@
 # @redux-tools/actions
 
-An alternative to `redux-actions`, implemented using Ramda. Is is essentially a collection of utility functions for creating [FSA-compliant](https://github.com/redux-utilities/flux-standard-action) action creators and reducers.
+An alternative to `redux-actions`, implemented using nanoutils. Is is essentially a collection of utility functions for creating [FSA-compliant](https://github.com/redux-utilities/flux-standard-action) action creators and reducers.
 
 ## Usage
 
@@ -12,7 +12,7 @@ import {
 	makeActionCreator,
 	makeReducer,
 } from '@redux-tools/actions';
-import { multiply } from 'ramda';
+import { always, multiply } from 'nanoutils';
 import { alwaysNull } from 'ramda-extension';
 
 export const ActionTypes = makeActionTypes('duck', ['INCREMENT', 'ADD', 'CRAZY_ADD']);

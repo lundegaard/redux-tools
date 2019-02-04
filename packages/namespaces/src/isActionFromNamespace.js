@@ -1,4 +1,4 @@
-import { curry } from 'ramda';
+import { curry } from 'nanoutils';
 
 import getNamespaceByAction from './getNamespaceByAction';
 

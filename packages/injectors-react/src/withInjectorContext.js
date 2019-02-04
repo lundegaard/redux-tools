@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { identity } from 'ramda';
+import { identity } from 'nanoutils';
 import { getDisplayName } from '@redux-tools/utils';
 
 import { InjectorContext } from './contexts';

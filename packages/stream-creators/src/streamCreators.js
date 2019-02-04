@@ -1,5 +1,5 @@
 import { map } from 'rxjs/operators';
-import { prop } from 'ramda';
+import { prop } from 'nanoutils';
 import { getStateByNamespace } from '@redux-tools/reducers';
 
 /**

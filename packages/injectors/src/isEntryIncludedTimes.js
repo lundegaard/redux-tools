@@ -1,4 +1,4 @@
-import { o, filter, curry } from 'ramda';
+import { o, filter, curry } from 'nanoutils';
 import { equalsLength } from 'ramda-extension';
 
 import areEntriesEqual from './areEntriesEqual';

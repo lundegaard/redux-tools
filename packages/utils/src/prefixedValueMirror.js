@@ -1,4 +1,4 @@
-import { o, map, curry } from 'ramda';
+import { o, map, curry } from 'nanoutils';
 import { valueMirror } from 'ramda-extension';
 
 const addPrefix = prefix => map(x => `${prefix}/${x}`);

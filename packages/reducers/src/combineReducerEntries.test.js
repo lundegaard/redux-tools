@@ -1,4 +1,4 @@
-import { o, inc, dec, defaultTo } from 'ramda';
+import { o, inc, dec, defaultTo } from 'nanoutils';
 import combineReducerEntries, { deepCombineReducers } from './combineReducerEntries';
 
 const incReducer = o(inc, defaultTo(0));

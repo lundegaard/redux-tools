@@ -1,5 +1,5 @@
 import React from 'react';
-import { compose, o, cond, apply, __, isNil, binary, useWith, T, map, omit } from 'ramda';
+import { compose, o, cond, apply, __, isNil, binary, useWith, T, map, omit } from 'nanoutils';
 import { alwaysEmptyObject, isFunction, isObject } from 'ramda-extension';
 import { getStateByNamespace } from '@redux-tools/reducers';
 import { withInjectorContext } from '@redux-tools/injectors-react';

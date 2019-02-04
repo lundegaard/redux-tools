@@ -1,6 +1,6 @@
 import { mount } from 'enzyme';
 import React from 'react';
-import { prop, identity } from 'ramda';
+import { prop, identity } from 'nanoutils';
 
 import { InjectorContext } from './contexts';
 import makeInjector from './makeInjector';

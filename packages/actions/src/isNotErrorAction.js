@@ -1,4 +1,4 @@
-import { complement } from 'ramda';
+import { complement } from 'nanoutils';
 import isErrorAction from './isErrorAction';
 
 /**

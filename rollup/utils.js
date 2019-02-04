@@ -1,4 +1,4 @@
-import { split, compose, join, prepend, tail, map } from 'ramda';
+import { split, compose, join, prepend, tail, map } from 'nanoutils';
 import { toPascalCase, toKebabCase } from 'ramda-extension';
 
 export const getGlobalName = compose(

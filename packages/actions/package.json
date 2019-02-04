@@ -5,7 +5,7 @@
   "main": "lib/redux-tools-actions.js",
   "module": "es/redux-tools-actions.js",
   "unpkg": "dist/redux-tools-actions.js",
-  "description": "Alternative implementation of redux-actions using Ramda.",
+  "description": "Alternative implementation of redux-actions using nanoutils.",
   "repository": "https://github.com/lundegaard/redux-tools",
   "contributors": [
     "Tomas Konrady <tomas.konrady@lundegaard.eu>",
@@ -17,7 +17,7 @@
   "dependencies": {
     "@redux-tools/utils": "^0.3.0",
     "invariant": "^2.2.4",
-    "ramda": "^0.26.1",
+    "nanoutils": "0.1.1",
     "ramda-extension": "^0.7.1"
   },
   "sideEffects": false

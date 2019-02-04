@@ -1,4 +1,4 @@
-import { curry, path } from 'ramda';
+import { curry, path } from 'nanoutils';
 
 /**
  * Returns Redux state by namespace. Returns undefined if namespace is undefined.

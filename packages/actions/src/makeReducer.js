@@ -11,7 +11,7 @@ import {
 	map,
 	append,
 	T,
-} from 'ramda';
+} from 'nanoutils';
 import { overHead } from 'ramda-extension';
 import invariant from 'invariant';
 

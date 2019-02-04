@@ -1,4 +1,4 @@
-import { curry, isNil, prop } from 'ramda';
+import { curry, isNil, prop } from 'nanoutils';
 
 const getVersion = prop('version');
 

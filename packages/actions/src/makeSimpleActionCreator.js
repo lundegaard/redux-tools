@@ -1,4 +1,4 @@
-import { __, identity } from 'ramda';
+import { __, identity } from 'nanoutils';
 import { alwaysNull } from 'ramda-extension';
 import makeActionCreator from './makeActionCreator';
 

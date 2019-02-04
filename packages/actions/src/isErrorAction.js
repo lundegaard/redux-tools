@@ -1,4 +1,4 @@
-import { propEq } from 'ramda';
+import { propEq } from 'nanoutils';
 
 /**
  * Returns whether the action is an error action or not.

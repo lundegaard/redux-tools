@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { identity } from 'ramda';
+import { identity } from 'nanoutils';
 
 export const InjectorContext = createContext({
 	store: null,

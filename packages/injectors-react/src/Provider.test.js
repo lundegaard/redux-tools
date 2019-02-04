@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { identity } from 'ramda';
+import { identity } from 'nanoutils';
 import { noop, alwaysNull } from 'ramda-extension';
 
 import Provider from './Provider';

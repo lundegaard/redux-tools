@@ -1,4 +1,4 @@
-import { append, reject, both } from 'ramda';
+import { append, reject, both } from 'nanoutils';
 import * as Rx from 'rxjs/operators';
 import { isActionFromNamespace, attachNamespace } from '@redux-tools/namespaces';
 import {

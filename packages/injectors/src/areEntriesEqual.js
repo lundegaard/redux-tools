@@ -1,4 +1,4 @@
-import { omit, useWith, equals } from 'ramda';
+import { omit, useWith, equals } from 'nanoutils';
 
 const omitTemporalKeys = omit(['version']);
 

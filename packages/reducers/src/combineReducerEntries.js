@@ -1,4 +1,4 @@
-import { ifElse, always, o, map, when, isEmpty, reduce, assocPath } from 'ramda';
+import { ifElse, always, o, map, when, isEmpty, reduce, assocPath } from 'nanoutils';
 import { alwaysEmptyObject, isPlainObject } from 'ramda-extension';
 import { combineReducers as shallowCombineReducers } from 'redux';
 

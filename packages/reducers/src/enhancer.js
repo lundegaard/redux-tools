@@ -1,4 +1,4 @@
-import { both, keys, concat, reject, identity } from 'ramda';
+import { both, keys, concat, reject, identity } from 'nanoutils';
 import { createEntries, isEntryEjectableByVersion, isEntryIncluded } from '@redux-tools/injectors';
 
 import { reducersInjected, reducersEjected } from './actions';

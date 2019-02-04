@@ -42,7 +42,7 @@ export default makeReducer([[ActionTypes.INCREMENT, count => count + 1]], 0);
 ```js
 // Counter.js
 import React from 'react';
-import { o } from 'ramda';
+import { o } from 'nanoutils';
 import { withReducers, namespacedConnect } from '@redux-tools/reducers-react';
 
 import countReducer, { increment } from './duck';
@@ -66,7 +66,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { createStore } from 'redux';
 import { Provider, enhancer as injectableReducers } from '@redux-tools/reducers';
-import { identity } from 'ramda';
+import { identity } from 'nanoutils';
 
 import Counter from './Counter';
 

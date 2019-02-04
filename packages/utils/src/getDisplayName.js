@@ -1,4 +1,4 @@
-import { prop, unless, both, always } from 'ramda';
+import { prop, unless, both, always } from 'nanoutils';
 import { isString, isNotEmpty, dispatch } from 'ramda-extension';
 
 /**

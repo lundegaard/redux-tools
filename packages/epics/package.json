@@ -15,7 +15,7 @@
     "@redux-tools/actions": "^0.3.0",
     "@redux-tools/injectors": "^0.3.0",
     "@redux-tools/namespaces": "^0.3.0",
-    "ramda": "^0.26.1",
+    "nanoutils": "0.1.1",
     "ramda-extension": "^0.7.1"
   },
   "peerDependencies": {

@@ -13,8 +13,8 @@
   ],
   "dependencies": {
     "@redux-tools/utils": "^0.3.0",
+    "nanoutils": "0.1.1",
     "prop-types": "^15.6.2",
-    "ramda": "^0.26.1",
     "ramda-extension": "^0.7.1"
   },
   "peerDependencies": {

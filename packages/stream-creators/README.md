@@ -7,7 +7,7 @@ The @redux-tools/epics enhancer accepts a `streamCreator` option, allowing you t
 ```js
 import { namespacedState$ } from '@redux-tools/stream-creators';
 import { enhancer as injectableEpics } from '@redux-tools/epics';
-import { identity, compose } from 'ramda';
+import { identity, compose } from 'nanoutils';
 import { createStore, applyMiddleware } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
 

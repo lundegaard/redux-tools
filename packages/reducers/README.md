@@ -21,7 +21,7 @@ This function accepts no arguments.
 ```js
 import { createStore } from 'redux';
 import { enhancer as injectableReducers } from '@redux-tools/reducers';
-import { identity } from 'ramda';
+import { identity } from 'nanoutils';
 
 const store = createStore(identity, injectableReducers());
 ```

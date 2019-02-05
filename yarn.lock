@@ -5114,9 +5114,9 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-nanoutils@0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/nanoutils/-/nanoutils-0.1.1.tgz#c0a45805bc2c42a97b49b3a00a495076788375e8"
+nanoutils@0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/nanoutils/-/nanoutils-0.1.2.tgz#0576eac920e33509ee03eba08cdd718ca85fb6d9"
 
 natural-compare@^1.4.0:
   version "1.4.0"

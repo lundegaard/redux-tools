@@ -39,7 +39,7 @@
     "jest": "23.6.0",
     "lerna": "3.8.4",
     "lint-staged": "8.1.0",
-    "nanoutils": "0.1.1",
+    "nanoutils": "0.1.2",
     "prettier": "1.15.3",
     "ramda-extension": "0.7.1",
     "react": "16.7.0",

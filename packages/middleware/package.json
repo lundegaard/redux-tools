@@ -1,0 +1,28 @@
+{
+  "name": "@redux-tools/middleware",
+  "version": "0.3.0",
+  "license": "MIT",
+  "main": "lib/redux-tools-middleware.js",
+  "module": "es/redux-tools-middleware.js",
+  "unpkg": "dist/redux-tools-middleware.js",
+  "description": "Redux store enhancer for asynchronous injection of middleware.",
+  "repository": "https://github.com/lundegaard/redux-tools",
+  "contributors": [
+    "Tomas Konrady <tomas.konrady@lundegaard.eu>",
+    "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
+  ],
+  "dependencies": {
+    "@redux-tools/actions": "^0.3.0",
+    "@redux-tools/injectors": "^0.3.0",
+    "@redux-tools/namespaces": "^0.3.0",
+    "ramda": "^0.26.1",
+    "ramda-extension": "^0.7.1"
+  },
+  "peerDependencies": {
+    "redux": "^4.0.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false
+}

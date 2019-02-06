@@ -15,6 +15,8 @@ const globals = {
 	'@redux-tools/epics-react': 'ReduxToolsEpicsReact',
 	'@redux-tools/injectors': 'ReduxToolsInjectors',
 	'@redux-tools/injectors-react': 'ReduxToolsInjectorsReact',
+	'@redux-tools/middleware': 'ReduxToolsMiddleware',
+	'@redux-tools/middleware-react': 'ReduxToolsMiddlewareReact',
 	'@redux-tools/namespaces': 'ReduxToolsNamespaces',
 	'@redux-tools/reducers': 'ReduxToolsReducers',
 	'@redux-tools/reducers-react': 'ReduxToolsReducersReact',

@@ -107,7 +107,8 @@ describe('enhancer', () => {
 
 		store.dispatch({ payload: 'Yo', type: 'MESSAGE' });
 
-		expect(mock).toHaveBeenCalledTimes(2);
+		expect(mock.mock.calls[0][0]).toEqual('B');
+		expect(mock.mock.calls[1][0]).toEqual('A');
 	});
 
 	it('correctly filters actions based on the namespace', () => {

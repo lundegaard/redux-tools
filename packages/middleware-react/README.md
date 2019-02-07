@@ -22,11 +22,11 @@ Creates a component decorator which handles the lifecycle of passed middleware, 
 import React from 'react';
 import { withMiddleware } from '@redux-tools/middleware-react';
 
-import { middleware } from './duck';
+import { someMiddleware } from './middleware';
 
 const Container = () => null;
 
-export default withMiddleware({ someMiddleware: middleware })(Container);
+export default withMiddleware({ someMiddleware })(Container);
 ```
 
 ### `<Provider />`

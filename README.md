@@ -2,7 +2,7 @@
 
 A collection of Redux libraries for modular applications, such as those utilizing [React-union](https://github.com/lundegaard/react-union) or other SPA-in-CMS solutions. They allow you to easily:
 
-- tie reducers and epics to your widgets and handle their lifecycle, i.e. injection and ejection, automatically.
+- tie reducers/epics/middleware to your widgets and handle their lifecycle, i.e. injection and ejection, automatically.
 - isolate your widgets' Redux state while still allowing them to communicate with one another.
 
 They offer seamless integration with React and React-union. See the [packages](/packages) and the [FAQ](FAQ.md) for more details!
@@ -15,6 +15,8 @@ They offer seamless integration with React and React-union. See the [packages](/
 - [epics](packages/epics/README.md) – Redux store enhancer for asynchronous injection of epics.
 - [epics-react](packages/epics-react/README.md) – React bindings for the epics package.
 - [stream-creators](packages/stream-creators/README.md) – Collection of stream creators for the epics package.
+- [middleware](packages/middleware/README.md) – Redux store enhancer for asynchronous injection of middleware.
+- [middleware-react](packages/middleware-react/README.md) – React bindings for the middleware package.
 
 The following packages are used internally and are not meant to be used directly in your application code. You might want to use them for some custom features or more advanced integration, though.
 

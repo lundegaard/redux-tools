@@ -65,4 +65,20 @@ describe('Provider', () => {
 			withNamespace: identity,
 		});
 	});
+
+	it('supports `getNamespace` to allow using features within widgets', () => {
+		mount(
+			<Provider namespace="ns" store={store}>
+				<Provider getNamespace={namespace => `${namespace}-grid`} feature="grids">
+					<InjectorContext.Consumer>{renderProp}</InjectorContext.Consumer>
+				</Provider>
+			</Provider>
+		);
+
+		expect(renderProp).toHaveBeenCalledWith({
+			store,
+			features: { namespaces: 'ns', grids: 'ns-grid' },
+			withNamespace: identity,
+		});
+	});
 });

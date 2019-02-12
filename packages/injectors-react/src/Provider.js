@@ -11,6 +11,7 @@ class Provider extends Component {
 	static propTypes = {
 		children: PropTypes.node.isRequired,
 		feature: PropTypes.string,
+		getNamespace: PropTypes.func,
 		namespace: PropTypes.string,
 		store: PropTypes.object,
 		withNamespace: PropTypes.func,
@@ -24,11 +25,12 @@ class Provider extends Component {
 
 	constructor(...args) {
 		super(...args);
-		const { feature, namespace, store, withNamespace } = this.props;
+		const { feature, getNamespace, namespace, store, withNamespace } = this.props;
+		const { features } = this.context;
 
 		// TODO: Handle changes in props and context values.
 		this.state = mergeContextValues(this.context, {
-			features: { [feature]: namespace },
+			features: { [feature]: getNamespace ? getNamespace(features.namespaces) : namespace },
 			store,
 			withNamespace,
 		});

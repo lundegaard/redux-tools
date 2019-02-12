@@ -13,7 +13,7 @@ const withInjectorContext = ({ feature = 'namespaces' } = {}) => NextComponent =
 		render() {
 			return (
 				<InjectorContext.Consumer>
-					{({ features, store, withNamespace = identity }) => {
+					{({ features = {}, store, withNamespace = identity }) => {
 						// NOTE: React's reconciliation process would otherwise think that we're rendering
 						// two different components (because we would be creating a new one each render).
 						if (!this.WrappedComponent) {
@@ -24,7 +24,7 @@ const withInjectorContext = ({ feature = 'namespaces' } = {}) => NextComponent =
 						return (
 							<this.WrappedComponent
 								store={store}
-								{...(features ? { namespace: features[feature] } : {})}
+								{...(features[feature] ? { namespace: features[feature] } : {})}
 								{...this.props}
 							/>
 						);

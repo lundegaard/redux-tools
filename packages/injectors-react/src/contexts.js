@@ -3,6 +3,6 @@ import { identity } from 'ramda';
 
 export const InjectorContext = createContext({
 	store: null,
-	namespace: null,
+	features: {},
 	withNamespace: identity,
 });

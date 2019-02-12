@@ -1,5 +1,5 @@
 import React from 'react';
-import { compose, o, cond, apply, __, isNil, binary, useWith, T, map, omit } from 'ramda';
+import { compose, o, cond, apply, __, isNil, T, map, omit } from 'ramda';
 import { alwaysEmptyObject, isFunction, isObject } from 'ramda-extension';
 import { getStateByNamespace } from '@redux-tools/reducers';
 import { withInjectorContext } from '@redux-tools/injectors-react';
@@ -32,21 +32,28 @@ export const wrapMapDispatchToProps = mapDispatchToProps => (dispatch, ownProps)
 	])(mapDispatchToProps);
 };
 
-// NOTE: `binary()` allows calling the fn with 0-1 args as well (it supplies the remaining args)
-const rawNamespacedConnect = binary(
-	useWith(connect, [wrapMapStateToProps, wrapMapDispatchToProps])
-);
+const rawNamespacedConnect = (mapStateToProps, mapDispatchToProps, ...args) =>
+	connect(
+		wrapMapStateToProps(mapStateToProps),
+		wrapMapDispatchToProps(mapDispatchToProps),
+		...args
+	);
 
 const omitStore = omit(['store']);
 
 // eslint-disable-next-line react/display-name
 const withOmitStore = Component => props => <Component {...omitStore(props)} />;
 
-const namespacedConnect = (...args) =>
+const namespacedConnect = (
+	mapStateToProps,
+	mapDispatchToProps,
+	mergeProps,
+	{ feature, ...options } = {}
+) =>
 	compose(
-		withInjectorContext,
+		withInjectorContext({ feature }),
 		withOmitStore,
-		rawNamespacedConnect(...args)
+		rawNamespacedConnect(mapStateToProps, mapDispatchToProps, mergeProps, options)
 	);
 
 export default namespacedConnect;

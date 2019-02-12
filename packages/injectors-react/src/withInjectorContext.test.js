@@ -10,7 +10,7 @@ const withFooNamespace = Component => props => <Component namespace="foo" {...pr
 describe('withInjectorContext', () => {
 	it('passes the store as a prop to the wrapped component', () => {
 		const Root = () => null;
-		const WrappedRoot = withInjectorContext(Root);
+		const WrappedRoot = withInjectorContext()(Root);
 
 		const wrapper = mount(
 			<InjectorContext.Provider value={{ store: { foo: 'bar' } }}>
@@ -23,7 +23,7 @@ describe('withInjectorContext', () => {
 
 	it('wraps the component in a `withNamespace` from context', () => {
 		const Root = () => null;
-		const WrappedRoot = withInjectorContext(Root);
+		const WrappedRoot = withInjectorContext()(Root);
 
 		const wrapper = mount(
 			<InjectorContext.Provider value={{ withNamespace: withFooNamespace }}>
@@ -36,7 +36,7 @@ describe('withInjectorContext', () => {
 
 	it('reuses the component decorated by `withNamespace` for multiple renders', () => {
 		const Root = () => null;
-		const WrappedRoot = withInjectorContext(Root);
+		const WrappedRoot = withInjectorContext()(Root);
 
 		const element = (
 			<InjectorContext.Provider value={{ withNamespace: withFooNamespace }}>
@@ -52,16 +52,35 @@ describe('withInjectorContext', () => {
 		expect(first).toBe(second);
 	});
 
-	it('uses `namespace` with a higher priority than `withNamespace`', () => {
+	it('uses namespace with a higher priority than `withNamespace`', () => {
 		const Root = () => null;
-		const WrappedRoot = withInjectorContext(Root);
+		const WrappedRoot = withInjectorContext()(Root);
+		const contextValue = { features: { namespaces: 'bar' }, withNamespace: withFooNamespace };
 
 		const wrapper = mount(
-			<InjectorContext.Provider value={{ namespace: 'bar', withNamespace: withFooNamespace }}>
+			<InjectorContext.Provider value={contextValue}>
 				<WrappedRoot />
 			</InjectorContext.Provider>
 		);
 
 		expect(wrapper.find(Root).prop('namespace')).toEqual('bar');
+	});
+
+	it('uses correct namespace when feature is passed', () => {
+		const Root = () => null;
+		const WrappedRoot = withInjectorContext({ feature: 'grids' })(Root);
+
+		const contextValue = {
+			features: { namespaces: 'bar', grids: 'first-one' },
+			withNamespace: withFooNamespace,
+		};
+
+		const wrapper = mount(
+			<InjectorContext.Provider value={contextValue}>
+				<WrappedRoot />
+			</InjectorContext.Provider>
+		);
+
+		expect(wrapper.find(Root).prop('namespace')).toEqual('first-one');
 	});
 });

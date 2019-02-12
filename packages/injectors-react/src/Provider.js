@@ -1,29 +1,34 @@
 import React, { Component } from 'react';
-import { mergeWith, or, flip } from 'ramda';
+import { mergeDeepWith, or, flip } from 'ramda';
 import PropTypes from 'prop-types';
 import { Provider as StoreProvider } from 'react-redux';
 
 import { InjectorContext } from './contexts';
 
-const mergeContextValues = mergeWith(flip(or));
+const mergeContextValues = mergeDeepWith(flip(or));
 
 class Provider extends Component {
 	static propTypes = {
 		children: PropTypes.node.isRequired,
+		feature: PropTypes.string,
 		namespace: PropTypes.string,
 		store: PropTypes.object,
 		withNamespace: PropTypes.func,
+	};
+
+	static defaultProps = {
+		feature: 'namespaces',
 	};
 
 	static contextType = InjectorContext;
 
 	constructor(...args) {
 		super(...args);
-		const { namespace, store, withNamespace } = this.props;
+		const { feature, namespace, store, withNamespace } = this.props;
 
 		// TODO: Handle changes in props and context values.
 		this.state = mergeContextValues(this.context, {
-			namespace,
+			features: { [feature]: namespace },
 			store,
 			withNamespace,
 		});

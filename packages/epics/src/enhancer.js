@@ -14,13 +14,13 @@ export default function enhancer({ epicMiddleware, streamCreator }) {
 
 		const rootEpic = makeRootEpic({ inject$, eject$, store, streamCreator });
 
-		store.injectEpics = (epics, namespace, version) => {
-			forEach(entry => inject$.next(entry), createEntries(epics, namespace, version));
+		store.injectEpics = (epics, { namespace, version }) => {
+			forEach(entry => inject$.next(entry), createEntries(epics, { namespace, version }));
 			store.dispatch(epicsInjected({ epics: keys(epics), namespace, version }));
 		};
 
-		store.ejectEpics = (epics, namespace, version) => {
-			forEach(entry => eject$.next(entry), createEntries(epics, namespace, version));
+		store.ejectEpics = (epics, { namespace, version }) => {
+			forEach(entry => eject$.next(entry), createEntries(epics, { namespace, version }));
 			store.dispatch(epicsEjected({ epics: keys(epics), namespace, version }));
 		};
 

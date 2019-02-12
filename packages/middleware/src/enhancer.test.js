@@ -21,13 +21,13 @@ describe('enhancer', () => {
 	});
 
 	it('handles multiple calls to store.injectMiddleware', () => {
-		store.injectMiddleware({ foo: identity }, 'ns', 0);
+		store.injectMiddleware({ foo: identity }, { namespace: 'ns', version: 0 });
 
 		expect(store._middlewareEntries).toEqual([
 			{ key: 'foo', value: identity, namespace: 'ns', version: 0 },
 		]);
 
-		store.injectMiddleware({ foo: identity }, 'ns', 1);
+		store.injectMiddleware({ foo: identity }, { namespace: 'ns', version: 1 });
 
 		expect(store._middlewareEntries).toEqual([
 			{ key: 'foo', value: identity, namespace: 'ns', version: 0 },
@@ -36,19 +36,19 @@ describe('enhancer', () => {
 	});
 
 	it('dispatches an action when store.injectMiddleware is called', () => {
-		store.injectMiddleware({ foo: identity }, 'ns', 0);
+		store.injectMiddleware({ foo: identity }, { namespace: 'ns', version: 0 });
 		expect(store.dispatch).toHaveBeenCalled();
 	});
 
 	it('handles successive calls to store.injectReducers and store.ejectReducers', () => {
-		store.injectMiddleware({ foo: identity }, 'ns', 0);
+		store.injectMiddleware({ foo: identity }, { namespace: 'ns', version: 0 });
 
 		expect(store._middlewareEntries).toEqual([
 			{ key: 'foo', value: identity, namespace: 'ns', version: 0 },
 		]);
 
-		store.injectMiddleware({ bar: identity }, 'ns', 0);
-		store.ejectMiddleware({ foo: identity }, 'ns', 0);
+		store.injectMiddleware({ bar: identity }, { namespace: 'ns', version: 0 });
+		store.ejectMiddleware({ foo: identity }, { namespace: 'ns', version: 0 });
 
 		expect(store._middlewareEntries).toEqual([
 			{ key: 'bar', value: identity, namespace: 'ns', version: 0 },
@@ -56,7 +56,7 @@ describe('enhancer', () => {
 	});
 
 	it('dispatches an action when store.ejectMiddleware is called', () => {
-		store.ejectMiddleware({ foo: identity }, 'ns', 0);
+		store.ejectMiddleware({ foo: identity }, { namespace: 'ns', version: 0 });
 		expect(store.dispatch).toHaveBeenCalled();
 	});
 
@@ -69,7 +69,7 @@ describe('enhancer', () => {
 		};
 
 		const store = actualCreateStore(identity, null, enhancer());
-		store.injectMiddleware({ foo: middleware }, 'ns', 0);
+		store.injectMiddleware({ foo: middleware }, { namespace: 'ns', version: 0 });
 		store.dispatch({ payload: 'Yo', type: 'MESSAGE' });
 		expect(mock).toHaveBeenCalledWith('Yoyo');
 	});
@@ -94,16 +94,16 @@ describe('enhancer', () => {
 		};
 
 		const store = actualCreateStore(identity, null, enhancer());
-		store.injectMiddleware({ foo: middlewareA }, 'ns', 0);
+		store.injectMiddleware({ foo: middlewareA }, { namespace: 'ns', version: 0 });
 		store.dispatch({ payload: 'Yo', type: 'MESSAGE' });
 		expect(mock).toHaveBeenCalledWith('A');
 
 		jest.clearAllMocks();
-		store.ejectMiddleware({ foo: middlewareA }, 'ns', 0);
+		store.ejectMiddleware({ foo: middlewareA }, { namespace: 'ns', version: 0 });
 		expect(mock).not.toHaveBeenCalled();
 
-		store.injectMiddleware({ foo: middlewareA }, 'ns', 0);
-		store.injectMiddleware({ foo: middlewareB }, 'ns', 0);
+		store.injectMiddleware({ foo: middlewareA }, { namespace: 'ns', version: 0 });
+		store.injectMiddleware({ foo: middlewareB }, { namespace: 'ns', version: 0 });
 
 		store.dispatch({ payload: 'Yo', type: 'MESSAGE' });
 
@@ -126,8 +126,8 @@ describe('enhancer', () => {
 		};
 
 		const store = actualCreateStore(identity, null, enhancer());
-		store.injectMiddleware({ foo: middlewareA }, 'A', 0);
-		store.injectMiddleware({ foo: middlewareB }, 'B', 0);
+		store.injectMiddleware({ foo: middlewareA }, { namespace: 'A', version: 0 });
+		store.injectMiddleware({ foo: middlewareB }, { namespace: 'B', version: 0 });
 		store.dispatch({ payload: 'AaA', type: 'MESSAGE', meta: { namespace: 'A' } });
 		store.dispatch({ payload: 'BbB', type: 'MESSAGE', meta: { namespace: 'B' } });
 		expect(mockA).toHaveBeenCalledWith('AaA');
@@ -165,8 +165,8 @@ describe('enhancer', () => {
 			)
 		);
 
-		store.injectMiddleware({ foo: middlewareA }, null, 0);
-		store.injectMiddleware({ foo: middlewareB }, null, 0);
+		store.injectMiddleware({ foo: middlewareA }, { namespace: null, version: 0 });
+		store.injectMiddleware({ foo: middlewareB }, { namespace: null, version: 0 });
 		store.dispatch({ type: 'MESSAGE' });
 		expect(mockA).toHaveBeenCalledTimes(2);
 		expect(mockB).toHaveBeenCalledTimes(2);

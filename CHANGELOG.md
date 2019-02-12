@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## Unreleased
+
+### Added
+
+- (_reducers_): Support for features! This allows using @redux-tools with a feature-based state structure, similar to when using e.g. Redux Form.
+
+### Changed
+
+- The injection API was changed from `(injectables, namespace, version)` to `(injectables, { namespace, version })`.
+
 ## [0.4.0] – 2019-02-07
 
 ### Added

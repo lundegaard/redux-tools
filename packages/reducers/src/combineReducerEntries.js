@@ -10,12 +10,8 @@ export const deepCombineReducers = ifElse(
 	o(shallowCombineReducers, map(when(isPlainObject, object => deepCombineReducers(object))))
 );
 
-const entryReducer = (schema, { value, key, namespace }) =>
-	assocPath(
-		namespace ? ['namespaces', namespace, key] : [key],
-		filterReducer(value, namespace),
-		schema
-	);
+const entryReducer = (schema, { value, key, namespace, feature = 'namespaces' }) =>
+	assocPath(namespace ? [feature, namespace, key] : [key], filterReducer(value, namespace), schema);
 
 const combineReducerEntries = o(deepCombineReducers, reduce(entryReducer, {}));
 

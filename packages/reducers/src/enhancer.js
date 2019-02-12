@@ -11,24 +11,28 @@ export default function enhancer() {
 
 		let reducerEntries = [];
 
-		store.injectReducers = (reducers, namespace, version) => {
-			reducerEntries = concat(reducerEntries, createEntries(reducers, namespace, version));
+		store.injectReducers = (reducers, { namespace, version, feature }) => {
+			reducerEntries = concat(
+				reducerEntries,
+				createEntries(reducers, { namespace, version, feature })
+			);
+
 			store.replaceReducer(composeReducers(reducer, combineReducerEntries(reducerEntries)));
-			store.dispatch(reducersInjected({ reducers: keys(reducers), namespace, version }));
+			store.dispatch(reducersInjected({ reducers: keys(reducers), namespace, version, feature }));
 			store._reducerEntries = reducerEntries;
 		};
 
-		store.ejectReducers = (reducers, namespace, version) => {
+		store.ejectReducers = (reducers, { namespace, version, feature }) => {
 			reducerEntries = reject(
 				both(
 					isEntryEjectableByVersion(version),
-					isEntryIncluded(createEntries(reducers, namespace, version))
+					isEntryIncluded(createEntries(reducers, { namespace, version, feature }))
 				),
 				reducerEntries
 			);
 
 			store.replaceReducer(composeReducers(reducer, combineReducerEntries(reducerEntries)));
-			store.dispatch(reducersEjected({ reducers: keys(reducers), namespace, version }));
+			store.dispatch(reducersEjected({ reducers: keys(reducers), namespace, version, feature }));
 			store._reducerEntries = reducerEntries;
 		};
 

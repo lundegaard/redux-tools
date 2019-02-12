@@ -22,7 +22,7 @@ describe('enhancer', () => {
 
 	it('calls inject$.next under the hood when injectEpics is called', () => {
 		const epic = jest.fn();
-		store.injectEpics({ epic }, 'ns', 1);
+		store.injectEpics({ epic }, { namespace: 'ns', version: 1 });
 		const inject$ = Subject.mock.instances[0];
 		expect(inject$.next).toHaveBeenCalledTimes(1);
 		expect(inject$.next.mock.calls[0][0]).toEqual({
@@ -35,7 +35,7 @@ describe('enhancer', () => {
 
 	it('dispatches an action when injectEpics is called', () => {
 		const epic = jest.fn();
-		store.injectEpics({ epic }, 'ns', 1);
+		store.injectEpics({ epic }, { namespace: 'ns', version: 1 });
 		expect(store.dispatch).toHaveBeenCalledWith(
 			epicsInjected({ epics: ['epic'], namespace: 'ns', version: 1 })
 		);
@@ -43,7 +43,7 @@ describe('enhancer', () => {
 
 	it('calls eject$.next under the hood when ejectEpics is called', () => {
 		const epic = jest.fn();
-		store.ejectEpics({ epic }, 'ns', 1);
+		store.ejectEpics({ epic }, { namespace: 'ns', version: 1 });
 		const eject$ = Subject.mock.instances[1];
 		expect(eject$.next).toHaveBeenCalledTimes(1);
 		expect(eject$.next.mock.calls[0][0]).toEqual({
@@ -56,7 +56,7 @@ describe('enhancer', () => {
 
 	it('dispatches an action when ejectEpics is called', () => {
 		const epic = jest.fn();
-		store.ejectEpics({ epic }, 'ns', 1);
+		store.ejectEpics({ epic }, { namespace: 'ns', version: 1 });
 		expect(store.dispatch).toHaveBeenCalledWith(
 			epicsEjected({ epics: ['epic'], namespace: 'ns', version: 1 })
 		);

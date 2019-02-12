@@ -26,17 +26,21 @@ export default function enhancer() {
 		const enhancer = o(applyMiddleware(middleware), previousEnhancer);
 		const store = createStore(reducer, preloadedState, enhancer);
 
-		store.injectMiddleware = (middleware, namespace, version) => {
-			middlewareEntries = concat(middlewareEntries, createEntries(middleware, namespace, version));
+		store.injectMiddleware = (middleware, { namespace, version }) => {
+			middlewareEntries = concat(
+				middlewareEntries,
+				createEntries(middleware, { namespace, version })
+			);
+
 			store.dispatch(middlewareInjected({ middleware: keys(middleware), namespace, version }));
 			store._middlewareEntries = middlewareEntries;
 		};
 
-		store.ejectMiddleware = (middleware, namespace, version) => {
+		store.ejectMiddleware = (middleware, { namespace, version }) => {
 			middlewareEntries = reject(
 				both(
 					isEntryEjectableByVersion(version),
-					isEntryIncluded(createEntries(middleware, namespace, version))
+					isEntryIncluded(createEntries(middleware, { namespace, version }))
 				),
 				middlewareEntries
 			);

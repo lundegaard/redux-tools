@@ -86,3 +86,9 @@ render(
 ```
 
 And that's it!
+
+## Resources
+* [Beyond Simplicity: Using Redux in Dynamic Applications](https://medium.com/@wafflepie/beyond-simplicity-using-redux-in-dynamic-applications-ae9e0aea928c)
+
+## Related projects
+* [react-union](https://github.com/lundegaard/react-union)

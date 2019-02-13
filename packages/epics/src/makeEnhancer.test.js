@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import enhancer from './enhancer';
+import makeEnhancer from './makeEnhancer';
 import { epicsInjected, epicsEjected } from './actions';
 
 const createStore = jest.fn(() => ({ dispatch: jest.fn() }));
@@ -9,10 +9,10 @@ let store;
 jest.mock('rxjs');
 jest.mock('./makeRootEpic', () => () => 'rootEpicImpl');
 
-describe('enhancer', () => {
+describe('makeEnhancer', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
-		store = enhancer({ epicMiddleware })(createStore)();
+		store = makeEnhancer({ epicMiddleware })(createStore)();
 	});
 
 	it('returns a Redux store with defined functions', () => {

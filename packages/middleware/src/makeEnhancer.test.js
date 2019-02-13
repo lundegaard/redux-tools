@@ -1,18 +1,18 @@
 import { identity, compose } from 'ramda';
 import { createStore as actualCreateStore, applyMiddleware } from 'redux';
 
-import injectableMiddleware from './enhancer';
+import makeEnhancer from './makeEnhancer';
 
 const createStore = jest.fn(() => ({
 	dispatch: jest.fn(),
 }));
 
-describe('enhancer', () => {
+describe('makeEnhancer', () => {
 	let store;
 
 	beforeEach(() => {
 		jest.clearAllMocks();
-		store = injectableMiddleware()(createStore)();
+		store = makeEnhancer()(createStore)();
 	});
 
 	it('returns a Redux store with defined functions', () => {
@@ -68,7 +68,7 @@ describe('enhancer', () => {
 			next(action);
 		};
 
-		const enhancer = injectableMiddleware();
+		const enhancer = makeEnhancer();
 		const store = actualCreateStore(
 			identity,
 			null,
@@ -102,7 +102,7 @@ describe('enhancer', () => {
 			}
 		};
 
-		const enhancer = injectableMiddleware();
+		const enhancer = makeEnhancer();
 		const store = actualCreateStore(
 			identity,
 			null,
@@ -143,7 +143,7 @@ describe('enhancer', () => {
 			mockB(action.payload);
 		};
 
-		const enhancer = injectableMiddleware();
+		const enhancer = makeEnhancer();
 		const store = actualCreateStore(
 			identity,
 			null,
@@ -183,7 +183,7 @@ describe('enhancer', () => {
 			}
 		};
 
-		const enhancer = injectableMiddleware();
+		const enhancer = makeEnhancer();
 		const store = actualCreateStore(
 			identity,
 			null,

@@ -4,7 +4,7 @@ A Redux store enhancer for asynchronous injection of reducers.
 
 ## API Reference
 
-### `enhancer`
+### `makeEnhancer`
 
 Function which creates an enhancer to pass to `createStore()`.
 
@@ -20,10 +20,10 @@ This function accepts no arguments.
 
 ```js
 import { createStore } from 'redux';
-import { enhancer as injectableReducers } from '@redux-tools/reducers';
+import { makeEnhancer as makeReducersEnhancer } from '@redux-tools/reducers';
 import { identity } from 'ramda';
 
-const store = createStore(identity, injectableReducers());
+const store = createStore(identity, makeReducersEnhancer());
 ```
 
 ### `store.injectReducers`

@@ -4,7 +4,7 @@ A Redux store enhancer for asynchronous injection of epics.
 
 ## API Reference
 
-### `enhancer`
+### `makeEnhancer`
 
 Function which creates an enhancer to pass to `createStore()`.
 
@@ -23,14 +23,14 @@ Function which creates an enhancer to pass to `createStore()`.
 ```js
 import { createStore, applyMiddleware } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
-import { enhancer as injectableEpics } from '@redux-tools/epics';
+import { makeEnhancer } from '@redux-tools/epics';
 import { identity, compose } from 'ramda';
 
 const epicMiddleware = createEpicMiddleware();
 const store = createStore(
 	identity,
 	compose(
-		injectableEpics({ epicMiddleware }),
+		makeEnhancer({ epicMiddleware }),
 		applyMiddleware(epicMiddleware)
 	)
 );

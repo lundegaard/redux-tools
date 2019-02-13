@@ -67,14 +67,14 @@ export default enhance(Counter);
 import React from 'react';
 import { render } from 'react-dom';
 import { createStore } from 'redux';
-import { enhancer as injectableReducers } from '@redux-tools/reducers';
+import { makeEnhancer as makeReducersEnhancer } from '@redux-tools/reducers';
 import { Provider } from '@redux-tools/reducers-react';
 import { identity } from 'ramda';
 
 import Counter from './Counter';
 
-// `injectableReducers()` is an enhancer just like `applyMiddleware()`, so they're composable!
-const store = createStore(identity, injectableReducers());
+// `makeReducersEnhancer()` is an enhancer just like `applyMiddleware()`, so they're composable!
+const store = createStore(identity, makeReducersEnhancer());
 
 render(
 	<Provider store={store}>
@@ -89,7 +89,9 @@ render(
 And that's it!
 
 ## Resources
-* [Beyond Simplicity: Using Redux in Dynamic Applications](https://medium.com/@wafflepie/beyond-simplicity-using-redux-in-dynamic-applications-ae9e0aea928c)
+
+- [Beyond Simplicity: Using Redux in Dynamic Applications](https://medium.com/@wafflepie/beyond-simplicity-using-redux-in-dynamic-applications-ae9e0aea928c)
 
 ## Related projects
-* [react-union](https://github.com/lundegaard/react-union)
+
+- [react-union](https://github.com/lundegaard/react-union)

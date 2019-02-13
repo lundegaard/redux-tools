@@ -67,7 +67,8 @@ export default enhance(Counter);
 import React from 'react';
 import { render } from 'react-dom';
 import { createStore } from 'redux';
-import { Provider, enhancer as injectableReducers } from '@redux-tools/reducers';
+import { enhancer as injectableReducers } from '@redux-tools/reducers';
+import { Provider } from '@redux-tools/reducers-react';
 import { identity } from 'ramda';
 
 import Counter from './Counter';
@@ -77,9 +78,9 @@ const store = createStore(identity, injectableReducers());
 
 render(
 	<Provider store={store}>
-		<CounterContainer namespace="foo" />
-		<CounterContainer namespace="bar" />
-		<CounterContainer namespace="baz" />
+		<Counter namespace="foo" />
+		<Counter namespace="bar" />
+		<Counter namespace="baz" />
 	</Provider>,
 	document.getElementById('root')
 );

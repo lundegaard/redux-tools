@@ -5,7 +5,7 @@ import { createEntries } from '@redux-tools/injectors';
 import { epicsInjected, epicsEjected } from './actions';
 import makeRootEpic from './makeRootEpic';
 
-export default function enhancer({ epicMiddleware, streamCreator }) {
+export default function injectableEpics({ epicMiddleware, streamCreator }) {
 	return createStore => (...args) => {
 		const store = createStore(...args);
 

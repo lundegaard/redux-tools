@@ -1,7 +1,7 @@
 import { identity, compose } from 'ramda';
 import { createStore as actualCreateStore, applyMiddleware } from 'redux';
 
-import enhancer from './enhancer';
+import injectableMiddleware from './enhancer';
 
 const createStore = jest.fn(() => ({
 	dispatch: jest.fn(),
@@ -12,7 +12,7 @@ describe('enhancer', () => {
 
 	beforeEach(() => {
 		jest.clearAllMocks();
-		store = enhancer()(createStore)();
+		store = injectableMiddleware()(createStore)();
 	});
 
 	it('returns a Redux store with defined functions', () => {
@@ -68,7 +68,16 @@ describe('enhancer', () => {
 			next(action);
 		};
 
-		const store = actualCreateStore(identity, null, enhancer());
+		const enhancer = injectableMiddleware();
+		const store = actualCreateStore(
+			identity,
+			null,
+			compose(
+				enhancer,
+				applyMiddleware(enhancer.injectedMiddleware)
+			)
+		);
+
 		store.injectMiddleware({ foo: middleware }, { namespace: 'ns', version: 0 });
 		store.dispatch({ payload: 'Yo', type: 'MESSAGE' });
 		expect(mock).toHaveBeenCalledWith('Yoyo');
@@ -93,7 +102,16 @@ describe('enhancer', () => {
 			}
 		};
 
-		const store = actualCreateStore(identity, null, enhancer());
+		const enhancer = injectableMiddleware();
+		const store = actualCreateStore(
+			identity,
+			null,
+			compose(
+				enhancer,
+				applyMiddleware(enhancer.injectedMiddleware)
+			)
+		);
+
 		store.injectMiddleware({ foo: middlewareA }, { namespace: 'ns', version: 0 });
 		store.dispatch({ payload: 'Yo', type: 'MESSAGE' });
 		expect(mock).toHaveBeenCalledWith('A');
@@ -125,7 +143,16 @@ describe('enhancer', () => {
 			mockB(action.payload);
 		};
 
-		const store = actualCreateStore(identity, null, enhancer());
+		const enhancer = injectableMiddleware();
+		const store = actualCreateStore(
+			identity,
+			null,
+			compose(
+				enhancer,
+				applyMiddleware(enhancer.injectedMiddleware)
+			)
+		);
+
 		store.injectMiddleware({ foo: middlewareA }, { namespace: 'A', version: 0 });
 		store.injectMiddleware({ foo: middlewareB }, { namespace: 'B', version: 0 });
 		store.dispatch({ payload: 'AaA', type: 'MESSAGE', meta: { namespace: 'A' } });
@@ -156,12 +183,13 @@ describe('enhancer', () => {
 			}
 		};
 
+		const enhancer = injectableMiddleware();
 		const store = actualCreateStore(
 			identity,
 			null,
 			compose(
-				applyMiddleware(middlewareA, middlewareB),
-				enhancer()
+				enhancer,
+				applyMiddleware(middlewareA, enhancer.injectedMiddleware, middlewareB)
 			)
 		);
 

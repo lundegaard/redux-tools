@@ -4,7 +4,7 @@ import { isActionFromNamespace, attachNamespace } from '@redux-tools/namespaces'
 
 import { middlewareInjected, middlewareEjected } from './actions';
 
-export default function injectableMiddleware() {
+export default function makeEnhancer() {
 	let middlewareEntries = [];
 
 	const injectedMiddleware = middlewareAPI => next => action => {

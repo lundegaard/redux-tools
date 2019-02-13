@@ -4,7 +4,7 @@ A Redux store enhancer for asynchronous injection of middleware.
 
 ## API Reference
 
-### `enhancer`
+### `makeEnhancer`
 
 Function which creates an enhancer to pass to `createStore()`.
 
@@ -20,17 +20,17 @@ This function accepts no arguments.
 
 ```js
 import { createStore, applyMiddleware } from 'redux';
-import { enhancer as makeInjectableMiddleware } from '@redux-tools/middleware';
+import { makeEnhancer as makeMiddlewareEnhancer } from '@redux-tools/middleware';
 import { identity, compose } from 'ramda';
 
-const injectableMiddleware = makeInjectableMiddleware();
-const { injectedMiddleware } = injectableMiddleware;
+const middlewareEnhancer = makeMiddlewareEnhancer();
+const { injectedMiddleware } = middlewareEnhancer;
 
 const store = createStore(
 	identity,
 	compose(
 		applyMiddleware(injectedMiddleware),
-		injectableMiddleware
+		middlewareEnhancer
 	)
 );
 ```

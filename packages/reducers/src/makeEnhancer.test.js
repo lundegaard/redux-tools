@@ -1,18 +1,18 @@
 import { identity } from 'ramda';
 
-import enhancer from './enhancer';
+import makeEnhancer from './makeEnhancer';
 
 const createStore = jest.fn(() => ({
 	dispatch: jest.fn(),
 	replaceReducer: jest.fn(),
 }));
 
-describe('enhancer', () => {
+describe('makeEnhancer', () => {
 	let store;
 
 	beforeEach(() => {
 		jest.clearAllMocks();
-		store = enhancer()(createStore)();
+		store = makeEnhancer()(createStore)();
 	});
 
 	it('returns a Redux store with defined functions', () => {

@@ -1,1 +1,1 @@
-export { default as enhancer } from './enhancer';
+export { default as makeEnhancer } from './makeEnhancer';

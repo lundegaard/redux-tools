@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - The injection API was changed from `(injectables, namespace, version)` to `(injectables, { namespace, version })`.
+- All the `enhancer` exports were changed to `makeEnhancer` because of ambiguity in the injectable middleware enhancer.
+- Injectable middleware enhancer now has an `injectedMiddleware` property, which you must use to signify the execution point of the middleware.
 
 ## [0.4.0] – 2019-02-07
 

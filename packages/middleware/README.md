@@ -14,16 +14,25 @@ This function accepts no arguments.
 
 #### Returns
 
-(_Enhancer_): A Redux store enhancer which you can pass to `createStore()`.
+(_Enhancer_): A Redux store enhancer which you can pass to `createStore()`. This enhancer has a `injectedMiddleware` property, which you should `compose` with the enhancer via `applyMiddleware`.
 
 #### Example
 
 ```js
-import { createStore } from 'redux';
-import { enhancer as injectableMiddleware } from '@redux-tools/middleware';
-import { identity } from 'ramda';
+import { createStore, applyMiddleware } from 'redux';
+import { enhancer as makeInjectableMiddleware } from '@redux-tools/middleware';
+import { identity, compose } from 'ramda';
 
-const store = createStore(identity, injectableMiddleware());
+const injectableMiddleware = makeInjectableMiddleware();
+const { injectedMiddleware } = injectableMiddleware;
+
+const store = createStore(
+	identity,
+	compose(
+		applyMiddleware(injectedMiddleware),
+		injectableMiddleware
+	)
+);
 ```
 
 ### `store.injectMiddleware`

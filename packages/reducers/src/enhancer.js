@@ -5,7 +5,7 @@ import { reducersInjected, reducersEjected } from './actions';
 import combineReducerEntries from './combineReducerEntries';
 import composeReducers from './composeReducers';
 
-export default function enhancer() {
+export default function injectableReducers() {
 	return createStore => (reducer = identity, ...args) => {
 		const store = createStore(reducer, ...args);
 

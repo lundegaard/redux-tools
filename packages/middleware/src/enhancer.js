@@ -1,30 +1,28 @@
-import { concat, both, reject, keys, o, identity, map, compose, isEmpty } from 'ramda';
-import { applyMiddleware } from 'redux';
+import { concat, both, reject, keys, o, map, compose, isEmpty } from 'ramda';
 import { createEntries, isEntryEjectableByVersion, isEntryIncluded } from '@redux-tools/injectors';
 import { isActionFromNamespace, attachNamespace } from '@redux-tools/namespaces';
 
 import { middlewareInjected, middlewareEjected } from './actions';
 
-export default function enhancer() {
-	return createStore => (reducer, preloadedState, previousEnhancer = identity) => {
-		let middlewareEntries = [];
+export default function injectableMiddleware() {
+	let middlewareEntries = [];
 
-		const middleware = store => next => action => {
-			const chain = map(
-				({ namespace, value }) => next => action =>
-					isActionFromNamespace(namespace, action)
-						? value(store)(o(next, attachNamespace(namespace)))(action)
-						: next(action),
-				middlewareEntries
-			);
+	const injectedMiddleware = middlewareAPI => next => action => {
+		const chain = map(
+			({ namespace, value }) => next => action =>
+				isActionFromNamespace(namespace, action)
+					? value(middlewareAPI)(o(next, attachNamespace(namespace)))(action)
+					: next(action),
+			middlewareEntries
+		);
 
-			const composableChain = isEmpty(chain) ? [next => action => next(action)] : chain;
+		const composableChain = isEmpty(chain) ? [next => action => next(action)] : chain;
 
-			return compose(...composableChain)(next)(action);
-		};
+		return compose(...composableChain)(next)(action);
+	};
 
-		const enhancer = o(applyMiddleware(middleware), previousEnhancer);
-		const store = createStore(reducer, preloadedState, enhancer);
+	const enhancer = createStore => (...args) => {
+		const store = createStore(...args);
 
 		store.injectMiddleware = (middleware, { namespace, version }) => {
 			middlewareEntries = concat(
@@ -51,4 +49,8 @@ export default function enhancer() {
 
 		return store;
 	};
+
+	enhancer.injectedMiddleware = injectedMiddleware;
+
+	return enhancer;
 }

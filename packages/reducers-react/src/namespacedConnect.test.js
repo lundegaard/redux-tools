@@ -15,22 +15,36 @@ const state = {
 		foo: { value: 'Foo' },
 		bar: { qux: { value: 'Qux' } },
 	},
+	grids: {
+		baz: { value: 'Baz' },
+	},
 };
 
 describe('wrapMapStateToProps', () => {
 	it('gets correct state slice', () => {
 		const mapStateToProps = wrapMapStateToProps(R.identity);
-		expect(mapStateToProps(state, { namespace: 'foo' })).toEqual({ value: 'Foo' });
+		expect(mapStateToProps(state, { feature: 'namespaces', namespace: 'foo' })).toEqual({
+			value: 'Foo',
+		});
+	});
+
+	it('gets correct state slice if feature is set', () => {
+		const mapStateToProps = wrapMapStateToProps(R.identity);
+		expect(mapStateToProps(state, { feature: 'grids', namespace: 'baz' })).toEqual({
+			value: 'Baz',
+		});
 	});
 
 	it('applies passed mapStateToProps', () => {
 		const mapStateToProps = wrapMapStateToProps(R.prop('qux'));
-		expect(mapStateToProps(state, { namespace: 'bar' })).toEqual({ value: 'Qux' });
+		expect(mapStateToProps(state, { feature: 'namespaces', namespace: 'bar' })).toEqual({
+			value: 'Qux',
+		});
 	});
 
 	it('returns an object when mapStateToProps is undefined', () => {
 		const mapStateToProps = wrapMapStateToProps(null);
-		expect(mapStateToProps(state, { namespace: 'foo' })).toEqual({});
+		expect(mapStateToProps(state, { feature: 'namespaces', namespace: 'foo' })).toEqual({});
 	});
 });
 
@@ -42,9 +56,15 @@ describe('wrapMapDispatchToProps', () => {
 
 		const dispatch = jest.fn();
 
-		const { actionCreator } = mapDispatchToProps(dispatch, { namespace: 'foo' });
+		const { actionCreator } = mapDispatchToProps(dispatch, {
+			feature: 'namespaces',
+			namespace: 'foo',
+		});
 		actionCreator();
-		expect(dispatch).toHaveBeenCalledWith({ type: 'TEST', meta: { namespace: 'foo' } });
+		expect(dispatch).toHaveBeenCalledWith({
+			type: 'TEST',
+			meta: { feature: 'namespaces', namespace: 'foo' },
+		});
 	});
 
 	it('handles a function', () => {
@@ -54,9 +74,15 @@ describe('wrapMapDispatchToProps', () => {
 
 		const dispatch = jest.fn();
 
-		const { actionCreator } = mapDispatchToProps(dispatch, { namespace: 'foo' });
+		const { actionCreator } = mapDispatchToProps(dispatch, {
+			feature: 'namespaces',
+			namespace: 'foo',
+		});
 		actionCreator();
-		expect(dispatch).toHaveBeenCalledWith({ type: 'TEST', meta: { namespace: 'foo' } });
+		expect(dispatch).toHaveBeenCalledWith({
+			type: 'TEST',
+			meta: { feature: 'namespaces', namespace: 'foo' },
+		});
 	});
 
 	it('handles nil', () => {
@@ -106,6 +132,9 @@ describe('namespacedConnect', () => {
 		);
 
 		wrapper.find(Root).prop('actionCreator')();
-		expect(store.dispatch).toHaveBeenCalledWith({ type: 'TEST', meta: { namespace: 'bar' } });
+		expect(store.dispatch).toHaveBeenCalledWith({
+			type: 'TEST',
+			meta: { feature: 'namespaces', namespace: 'bar' },
+		});
 	});
 });

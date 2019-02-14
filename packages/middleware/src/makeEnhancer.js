@@ -11,7 +11,7 @@ export default function makeEnhancer() {
 		const chain = map(
 			({ namespace, value }) => next => action =>
 				isActionFromNamespace(namespace, action)
-					? value(middlewareAPI)(o(next, attachNamespace(namespace)))(action)
+					? value(middlewareAPI)(o(next, attachNamespace('namespaces', namespace)))(action)
 					: next(action),
 			middlewareEntries
 		);

@@ -61,7 +61,7 @@ describe('makeRootEpic', () => {
 		marbles(m => {
 			inject$.next({ key: 'id', value: identity, namespace: 'ns' });
 			const action$ = m.cold('a', { a: {} });
-			const expected$ = m.cold('a', { a: { meta: { namespace: 'ns' } } });
+			const expected$ = m.cold('a', { a: { meta: { feature: 'namespaces', namespace: 'ns' } } });
 			const actual$ = rootEpic(action$);
 			m.expect(actual$).toBeObservable(expected$);
 		})
@@ -70,8 +70,8 @@ describe('makeRootEpic', () => {
 	it(
 		'passes only valid actions to a namespaced epic',
 		marbles(m => {
-			inject$.next({ key: 'id', value: identity, namespace: 'ns' });
-			const valid = { meta: { namespace: 'ns' } };
+			inject$.next({ key: 'id', value: identity, feature: 'namespaces', namespace: 'ns' });
+			const valid = { meta: { feature: 'namespaces', namespace: 'ns' } };
 			const invalid = { meta: { namespace: 'wrong' } };
 			const action$ = m.cold('vi', { v: valid, i: invalid });
 			const expected$ = m.cold('v-', { v: valid });

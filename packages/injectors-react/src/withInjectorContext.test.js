@@ -83,4 +83,22 @@ describe('withInjectorContext', () => {
 
 		expect(wrapper.find(Root).prop('namespace')).toEqual('first-one');
 	});
+
+	it('passes down correct feature name', () => {
+		const Root = () => null;
+		const WrappedRoot = withInjectorContext({ feature: 'grids' })(Root);
+
+		const contextValue = {
+			features: { namespaces: 'bar', grids: 'first-one' },
+			withNamespace: withFooNamespace,
+		};
+
+		const wrapper = mount(
+			<InjectorContext.Provider value={contextValue}>
+				<WrappedRoot />
+			</InjectorContext.Provider>
+		);
+
+		expect(wrapper.find(Root).prop('feature')).toEqual('grids');
+	});
 });

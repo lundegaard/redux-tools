@@ -8,13 +8,15 @@ const state = {
 
 describe('getStateByAction', () => {
 	it('retrieves correct state slice when namespace matches', () => {
-		expect(getStateByAction({ meta: { namespace: 'foo' } }, state)).toEqual({
+		expect(getStateByAction({ meta: { feature: 'namespaces', namespace: 'foo' } }, state)).toEqual({
 			value: 'Wassup',
 		});
 	});
 
 	it('returns undefined when a nonexistent namespace is passed', () => {
-		expect(getStateByAction({ meta: { namespace: 'bar' } }, state)).toBeUndefined();
+		expect(
+			getStateByAction({ meta: { feature: 'namespaces', namespace: 'bar' } }, state)
+		).toBeUndefined();
 	});
 
 	it('returns undefined when no namespace is passed', () => {

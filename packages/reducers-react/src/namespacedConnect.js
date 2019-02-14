@@ -8,7 +8,11 @@ import { connect } from 'react-redux';
 
 export const wrapMapStateToProps = mapStateToProps => (state, ownProps) =>
 	mapStateToProps
-		? mapStateToProps(getStateByNamespace(ownProps.namespace, state), ownProps, state)
+		? mapStateToProps(
+				getStateByNamespace(ownProps.feature, ownProps.namespace, state),
+				ownProps,
+				state
+		  )
 		: {};
 
 const wrapActionCreator = wrappedDispatch => actionCreator =>
@@ -22,7 +26,7 @@ const throwTypeError = () => {
 };
 
 export const wrapMapDispatchToProps = mapDispatchToProps => (dispatch, ownProps) => {
-	const wrappedDispatch = o(dispatch, attachNamespace(ownProps.namespace));
+	const wrappedDispatch = o(dispatch, attachNamespace(ownProps.feature, ownProps.namespace));
 
 	return cond([
 		[isNil, alwaysEmptyObject],

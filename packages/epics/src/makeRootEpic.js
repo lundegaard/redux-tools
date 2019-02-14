@@ -23,8 +23,8 @@ const makeRootEpic = ({ inject$, eject$, streamCreator }) => {
 			Rx.tap(entry => (epicEntries = append(entry, epicEntries))),
 			Rx.filter(entry => isEntryIncludedTimes(1, epicEntries, entry)),
 			Rx.mergeMap(entry => {
-				const { value: epic, namespace } = entry;
-				const action$ = globalAction$.pipe(Rx.filter(isActionFromNamespace(namespace)));
+				const { value: epic, feature, namespace } = entry;
+				const action$ = globalAction$.pipe(Rx.filter(isActionFromNamespace(feature, namespace)));
 
 				const outputAction$ = streamCreator
 					? epic(
@@ -36,7 +36,7 @@ const makeRootEpic = ({ inject$, eject$, streamCreator }) => {
 					: epic(action$, state$, dependencies);
 
 				return outputAction$.pipe(
-					Rx.map(attachNamespace(namespace)),
+					Rx.map(attachNamespace(feature, namespace)),
 					// NOTE: takeUntil should ALWAYS be the last operator in `.pipe()`
 					// https://blog.angularindepth.com/rxjs-avoiding-takeuntil-leaks-fb5182d047ef
 					Rx.takeUntil(

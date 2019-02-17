@@ -1,6 +1,6 @@
-import { concat, both, reject, keys, o, map, compose, isEmpty } from 'ramda';
+import { concat, both, reject, keys, map, compose, isEmpty } from 'ramda';
 import { createEntries, isEntryEjectableByVersion, isEntryIncluded } from '@redux-tools/injectors';
-import { isActionFromNamespace, attachNamespace } from '@redux-tools/namespaces';
+import { isActionFromNamespace, attachNamespace, attachFeature } from '@redux-tools/namespaces';
 
 import { middlewareInjected, middlewareEjected } from './actions';
 
@@ -9,9 +9,15 @@ export default function makeEnhancer() {
 
 	const injectedMiddleware = middlewareAPI => next => action => {
 		const chain = map(
-			({ namespace, value }) => next => action =>
+			({ namespace, value, feature }) => next => action =>
 				isActionFromNamespace(namespace, action)
-					? value(middlewareAPI)(o(next, attachNamespace('namespaces', namespace)))(action)
+					? value(middlewareAPI)(
+							compose(
+								next,
+								attachFeature(feature),
+								attachNamespace(namespace)
+							)
+					  )(action)
 					: next(action),
 			middlewareEntries
 		);
@@ -24,26 +30,42 @@ export default function makeEnhancer() {
 	const enhancer = createStore => (...args) => {
 		const store = createStore(...args);
 
-		store.injectMiddleware = (middleware, { namespace, version }) => {
+		store.injectMiddleware = (middleware, { namespace, version, feature = 'namespaces' }) => {
 			middlewareEntries = concat(
 				middlewareEntries,
-				createEntries(middleware, { namespace, version })
+				createEntries(middleware, { namespace, version, feature })
 			);
 
-			store.dispatch(middlewareInjected({ middleware: keys(middleware), namespace, version }));
+			store.dispatch(
+				middlewareInjected({
+					middleware: keys(middleware),
+					namespace,
+					version,
+					feature,
+				})
+			);
+
 			store._middlewareEntries = middlewareEntries;
 		};
 
-		store.ejectMiddleware = (middleware, { namespace, version }) => {
+		store.ejectMiddleware = (middleware, { namespace, version, feature = 'namespaces' }) => {
 			middlewareEntries = reject(
 				both(
 					isEntryEjectableByVersion(version),
-					isEntryIncluded(createEntries(middleware, { namespace, version }))
+					isEntryIncluded(createEntries(middleware, { namespace, version, feature }))
 				),
 				middlewareEntries
 			);
 
-			store.dispatch(middlewareEjected({ middleware: keys(middleware), namespace, version }));
+			store.dispatch(
+				middlewareEjected({
+					middleware: keys(middleware),
+					namespace,
+					version,
+					feature,
+				})
+			);
+
 			store._middlewareEntries = middlewareEntries;
 		};
 

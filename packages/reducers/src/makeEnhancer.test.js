@@ -25,15 +25,15 @@ describe('makeEnhancer', () => {
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(1);
 		expect(store._reducerEntries).toEqual([
-			{ key: 'foo', value: identity, namespace: 'ns', version: 0 },
+			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: 'namespaces' },
 		]);
 
 		store.injectReducers({ foo: identity }, { namespace: 'ns', version: 1 });
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(2);
 		expect(store._reducerEntries).toEqual([
-			{ key: 'foo', value: identity, namespace: 'ns', version: 0 },
-			{ key: 'foo', value: identity, namespace: 'ns', version: 1 },
+			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: 'namespaces' },
+			{ key: 'foo', value: identity, namespace: 'ns', version: 1, feature: 'namespaces' },
 		]);
 	});
 
@@ -47,7 +47,7 @@ describe('makeEnhancer', () => {
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(1);
 		expect(store._reducerEntries).toEqual([
-			{ key: 'foo', value: identity, namespace: 'ns', version: 0 },
+			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: 'namespaces' },
 		]);
 
 		store.injectReducers({ bar: identity }, { namespace: 'ns', version: 0 });
@@ -55,7 +55,7 @@ describe('makeEnhancer', () => {
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(3);
 		expect(store._reducerEntries).toEqual([
-			{ key: 'bar', value: identity, namespace: 'ns', version: 0 },
+			{ key: 'bar', value: identity, namespace: 'ns', version: 0, feature: 'namespaces' },
 		]);
 	});
 

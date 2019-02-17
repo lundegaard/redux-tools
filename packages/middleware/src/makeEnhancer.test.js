@@ -24,14 +24,14 @@ describe('makeEnhancer', () => {
 		store.injectMiddleware({ foo: identity }, { namespace: 'ns', version: 0 });
 
 		expect(store._middlewareEntries).toEqual([
-			{ key: 'foo', value: identity, namespace: 'ns', version: 0 },
+			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: 'namespaces' },
 		]);
 
 		store.injectMiddleware({ foo: identity }, { namespace: 'ns', version: 1 });
 
 		expect(store._middlewareEntries).toEqual([
-			{ key: 'foo', value: identity, namespace: 'ns', version: 0 },
-			{ key: 'foo', value: identity, namespace: 'ns', version: 1 },
+			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: 'namespaces' },
+			{ key: 'foo', value: identity, namespace: 'ns', version: 1, feature: 'namespaces' },
 		]);
 	});
 
@@ -44,14 +44,14 @@ describe('makeEnhancer', () => {
 		store.injectMiddleware({ foo: identity }, { namespace: 'ns', version: 0 });
 
 		expect(store._middlewareEntries).toEqual([
-			{ key: 'foo', value: identity, namespace: 'ns', version: 0 },
+			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: 'namespaces' },
 		]);
 
 		store.injectMiddleware({ bar: identity }, { namespace: 'ns', version: 0 });
 		store.ejectMiddleware({ foo: identity }, { namespace: 'ns', version: 0 });
 
 		expect(store._middlewareEntries).toEqual([
-			{ key: 'bar', value: identity, namespace: 'ns', version: 0 },
+			{ key: 'bar', value: identity, namespace: 'ns', version: 0, feature: 'namespaces' },
 		]);
 	});
 

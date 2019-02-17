@@ -30,7 +30,7 @@ class Provider extends Component {
 
 		// TODO: Handle changes in props and context values.
 		this.state = mergeContextValues(this.context, {
-			features: { [feature]: getNamespace ? getNamespace(features.namespaces) : namespace },
+			features: { [feature]: getNamespace ? getNamespace(features) : namespace },
 			store,
 			withNamespace,
 		});

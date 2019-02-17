@@ -57,11 +57,11 @@ describe('makeRootEpic', () => {
 	);
 
 	it(
-		'adds namespace to emitted actions',
+		'adds namespace and feature to emitted actions',
 		marbles(m => {
-			inject$.next({ key: 'id', value: identity, namespace: 'ns' });
+			inject$.next({ key: 'id', value: identity, namespace: 'ns', feature: 'grids' });
 			const action$ = m.cold('a', { a: {} });
-			const expected$ = m.cold('a', { a: { meta: { feature: 'namespaces', namespace: 'ns' } } });
+			const expected$ = m.cold('a', { a: { meta: { feature: 'grids', namespace: 'ns' } } });
 			const actual$ = rootEpic(action$);
 			m.expect(actual$).toBeObservable(expected$);
 		})

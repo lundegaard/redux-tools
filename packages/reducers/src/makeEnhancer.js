@@ -11,7 +11,7 @@ export default function makeEnhancer() {
 
 		let reducerEntries = [];
 
-		store.injectReducers = (reducers, { namespace, version, feature }) => {
+		store.injectReducers = (reducers, { namespace, version, feature = 'namespaces' }) => {
 			reducerEntries = concat(
 				reducerEntries,
 				createEntries(reducers, { namespace, version, feature })
@@ -22,7 +22,7 @@ export default function makeEnhancer() {
 			store._reducerEntries = reducerEntries;
 		};
 
-		store.ejectReducers = (reducers, { namespace, version, feature }) => {
+		store.ejectReducers = (reducers, { namespace, version, feature = 'namespaces' }) => {
 			reducerEntries = reject(
 				both(
 					isEntryEjectableByVersion(version),

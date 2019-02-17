@@ -30,6 +30,7 @@ describe('makeEnhancer', () => {
 			value: epic,
 			namespace: 'ns',
 			version: 1,
+			feature: 'namespaces',
 		});
 	});
 
@@ -37,7 +38,7 @@ describe('makeEnhancer', () => {
 		const epic = jest.fn();
 		store.injectEpics({ epic }, { namespace: 'ns', version: 1 });
 		expect(store.dispatch).toHaveBeenCalledWith(
-			epicsInjected({ epics: ['epic'], namespace: 'ns', version: 1 })
+			epicsInjected({ epics: ['epic'], namespace: 'ns', version: 1, feature: 'namespaces' })
 		);
 	});
 
@@ -51,6 +52,7 @@ describe('makeEnhancer', () => {
 			value: epic,
 			namespace: 'ns',
 			version: 1,
+			feature: 'namespaces',
 		});
 	});
 
@@ -58,7 +60,7 @@ describe('makeEnhancer', () => {
 		const epic = jest.fn();
 		store.ejectEpics({ epic }, { namespace: 'ns', version: 1 });
 		expect(store.dispatch).toHaveBeenCalledWith(
-			epicsEjected({ epics: ['epic'], namespace: 'ns', version: 1 })
+			epicsEjected({ epics: ['epic'], namespace: 'ns', version: 1, feature: 'namespaces' })
 		);
 	});
 

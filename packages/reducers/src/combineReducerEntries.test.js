@@ -34,8 +34,8 @@ describe('combineReducerEntries', () => {
 
 	it('handles multiple reducers in same namespace', () => {
 		const reducer = combineReducerEntries([
-			{ key: 'foo', value: incReducer, namespace: 'ns' },
-			{ key: 'bar', value: decReducer, namespace: 'ns' },
+			{ key: 'foo', value: incReducer, namespace: 'ns', feature: 'namespaces' },
+			{ key: 'bar', value: decReducer, namespace: 'ns', feature: 'namespaces' },
 		]);
 
 		expect(reducer()).toEqual({
@@ -59,8 +59,8 @@ describe('combineReducerEntries', () => {
 
 	it('handles multiple namespaces', () => {
 		const reducer = combineReducerEntries([
-			{ key: 'foo', value: incReducer, namespace: 'a' },
-			{ key: 'bar', value: decReducer, namespace: 'b' },
+			{ key: 'foo', value: incReducer, namespace: 'a', feature: 'namespaces' },
+			{ key: 'bar', value: decReducer, namespace: 'b', feature: 'namespaces' },
 		]);
 
 		expect(reducer()).toEqual({

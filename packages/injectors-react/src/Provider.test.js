@@ -69,7 +69,7 @@ describe('Provider', () => {
 	it('supports `getNamespace` to allow using features within widgets', () => {
 		mount(
 			<Provider namespace="ns" store={store}>
-				<Provider getNamespace={namespace => `${namespace}-grid`} feature="grids">
+				<Provider getNamespace={({ namespaces }) => `${namespaces}-grid`} feature="grids">
 					<InjectorContext.Consumer>{renderProp}</InjectorContext.Consumer>
 				</Provider>
 			</Provider>

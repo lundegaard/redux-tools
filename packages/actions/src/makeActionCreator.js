@@ -1,4 +1,4 @@
-import { curry, o, applySpec, always, ifElse, is, T } from 'ramda';
+import { curry, compose, o, applySpec, always, ifElse, is, T } from 'ramda';
 import { alwaysNull, rejectNil } from 'ramda-extension';
 
 /**
@@ -13,7 +13,7 @@ import { alwaysNull, rejectNil } from 'ramda-extension';
  *    const fetchItems = makeActionCreator("FETCH_ITEMS", R.prop("items"), R.always({ page: 0 }))
  */
 const makeActionCreator = curry((type, getPayload, getMeta) =>
-	o(
+	compose(
 		rejectNil,
 		applySpec({
 			type: always(type),

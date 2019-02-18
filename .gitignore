@@ -6,6 +6,25 @@ packages/*/build/*
 # Created by https://www.gitignore.io/api/code,node,linux,macos,windows,intellij,sublimetext
 # Edit at https://www.gitignore.io/?templates=code,node,linux,macos,windows,intellij,sublimetext
 
+### Vim ###
+# Swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# Session
+Session.vim
+
+# Temporary
+.netrwhist
+*~
+# Auto-generated tag files
+tags
+# Persistent undo
+[._]*.un~
+
 ### Code ###
 # Visual Studio Code - https://code.visualstudio.com/
 .settings/

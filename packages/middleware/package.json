@@ -1,6 +1,6 @@
 {
   "name": "@redux-tools/middleware",
-  "version": "0.5.0-alpha.3",
+  "version": "0.5.0-alpha.4",
   "license": "MIT",
   "main": "lib/redux-tools-middleware.js",
   "module": "es/redux-tools-middleware.js",
@@ -12,9 +12,9 @@
     "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
   ],
   "dependencies": {
-    "@redux-tools/actions": "^0.4.0",
-    "@redux-tools/injectors": "^0.5.0-alpha.3",
-    "@redux-tools/namespaces": "^0.5.0-alpha.3",
+    "@redux-tools/actions": "^0.5.0-alpha.4",
+    "@redux-tools/injectors": "^0.5.0-alpha.4",
+    "@redux-tools/namespaces": "^0.5.0-alpha.4",
     "ramda": "^0.26.1",
     "ramda-extension": "^0.7.1"
   },

@@ -12,6 +12,15 @@ describe('makeActionCreator', () => {
 		});
 	});
 
+	it('creates variadic action creator', () => {
+		const actionCreator = makeActionCreator('TYPE', x => x, (_, y) => y);
+
+		expect(actionCreator({ foo: 'Foo', bar: 'Bar' }, 'Baz')).toEqual({
+			type: 'TYPE',
+			payload: { foo: 'Foo', bar: 'Bar' },
+			meta: 'Baz',
+		});
+	});
 	it('correctly applies the `error` prop', () => {
 		const actionCreator = makeActionCreator('TYPE', identity, alwaysNull);
 		const error = new Error();

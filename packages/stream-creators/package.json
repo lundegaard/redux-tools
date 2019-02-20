@@ -12,8 +12,7 @@
     "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
   ],
   "dependencies": {
-    "nanoutils": "0.1.2",
-    "ramda": "^0.26.1"
+    "nanoutils": "0.1.2"
   },
   "peerDependencies": {
     "@redux-tools/epics": "^0.3.0",

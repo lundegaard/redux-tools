@@ -24,7 +24,8 @@ const withInjectorContext = ({ feature = 'namespaces' } = {}) => NextComponent =
 						return (
 							<this.WrappedComponent
 								store={store}
-								{...(features[feature] ? { feature, namespace: features[feature] } : {})}
+								feature={feature}
+								{...(features[feature] ? { namespace: features[feature] } : {})}
 								{...this.props}
 							/>
 						);

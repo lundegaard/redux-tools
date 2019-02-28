@@ -9,11 +9,11 @@ import { curry, path } from 'ramda';
  * @returns {?Object} namespaced Redux state
  */
 const getStateByNamespace = curry((feature, namespace, state) => {
-	if (!namespace || !feature) {
+	if (!namespace) {
 		return undefined;
 	}
 
-	return path([feature, namespace], state);
+	return path([feature || 'namespaces', namespace], state);
 });
 
 export default getStateByNamespace;

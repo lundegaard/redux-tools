@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 export const wrapMapStateToProps = mapStateToProps => (state, ownProps) =>
 	mapStateToProps
 		? mapStateToProps(
-				getStateByNamespace(ownProps.feature, ownProps.namespace, state),
+				getStateByNamespace(ownProps.feature || 'namespaces', ownProps.namespace, state),
 				ownProps,
 				state
 		  )
@@ -56,7 +56,7 @@ const namespacedConnect = (
 	mapStateToProps,
 	mapDispatchToProps,
 	mergeProps,
-	{ feature, ...options } = {}
+	{ feature = 'namespaces', ...options } = {}
 ) =>
 	compose(
 		withInjectorContext({ feature }),

@@ -11,7 +11,7 @@ makeInjector.resetCounter = () => (counter = 0);
 const omitStore = omit(['store']);
 
 export default function makeInjector(inject, eject) {
-	return (injectables, { persist, global, feature } = {}) => NextComponent => {
+	return (injectables, { persist, global, feature = 'namespaces' } = {}) => NextComponent => {
 		class Injector extends Component {
 			static propTypes = {
 				namespace: PropTypes.string,
@@ -24,12 +24,13 @@ export default function makeInjector(inject, eject) {
 				super(props);
 
 				this.namespace = global ? null : props.namespace;
+				this.feature = global ? null : feature;
 				this.version = counter++;
 
 				inject(props.store)(injectables, {
 					namespace: this.namespace,
 					version: this.version,
-					feature,
+					feature: this.feature,
 				});
 			}
 
@@ -40,7 +41,7 @@ export default function makeInjector(inject, eject) {
 					eject(store)(injectables, {
 						namespace: this.namespace,
 						version: this.version,
-						feature,
+						feature: this.feature,
 					});
 				}
 			}

@@ -28,7 +28,10 @@ describe('makeInjector', () => {
 			</InjectorContext.Provider>
 		);
 
-		expect(store.inject).toHaveBeenCalledWith({ test: identity }, { namespace: 'foo', version: 0 });
+		expect(store.inject).toHaveBeenCalledWith(
+			{ test: identity },
+			{ feature: 'namespaces', namespace: 'foo', version: 0 }
+		);
 	});
 
 	it('ejects injectables upon unmounting', () => {
@@ -40,7 +43,10 @@ describe('makeInjector', () => {
 		);
 
 		wrapper.unmount();
-		expect(store.eject).toHaveBeenCalledWith({ test: identity }, { namespace: 'foo', version: 0 });
+		expect(store.eject).toHaveBeenCalledWith(
+			{ test: identity },
+			{ feature: 'namespaces', namespace: 'foo', version: 0 }
+		);
 	});
 
 	it('does not eject injectables when persist is true', () => {
@@ -63,8 +69,14 @@ describe('makeInjector', () => {
 			</InjectorContext.Provider>
 		);
 
-		expect(store.inject).toHaveBeenCalledWith({ test: identity }, { namespace: null, version: 0 });
+		expect(store.inject).toHaveBeenCalledWith(
+			{ test: identity },
+			{ feature: null, namespace: null, version: 0 }
+		);
 		wrapper.unmount();
-		expect(store.eject).toHaveBeenCalledWith({ test: identity }, { namespace: null, version: 0 });
+		expect(store.eject).toHaveBeenCalledWith(
+			{ test: identity },
+			{ feature: null, namespace: null, version: 0 }
+		);
 	});
 });

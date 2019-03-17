@@ -1,6 +1,11 @@
 import { concat, both, reject, keys, map, compose, isEmpty } from 'ramda';
 import { createEntries, isEntryEjectableByVersion, isEntryIncluded } from '@redux-tools/injectors';
-import { isActionFromNamespace, attachNamespace, attachFeature } from '@redux-tools/namespaces';
+import {
+	isActionFromNamespace,
+	attachNamespace,
+	attachFeature,
+	DEFAULT_FEATURE,
+} from '@redux-tools/namespaces';
 
 import { middlewareInjected, middlewareEjected } from './actions';
 
@@ -30,7 +35,7 @@ export default function makeEnhancer() {
 	const enhancer = createStore => (...args) => {
 		const store = createStore(...args);
 
-		store.injectMiddleware = (middleware, { namespace, version, feature = 'namespaces' }) => {
+		store.injectMiddleware = (middleware, { namespace, version, feature = DEFAULT_FEATURE }) => {
 			middlewareEntries = concat(
 				middlewareEntries,
 				createEntries(middleware, { namespace, version, feature })
@@ -48,7 +53,7 @@ export default function makeEnhancer() {
 			store._middlewareEntries = middlewareEntries;
 		};
 
-		store.ejectMiddleware = (middleware, { namespace, version, feature = 'namespaces' }) => {
+		store.ejectMiddleware = (middleware, { namespace, version, feature = DEFAULT_FEATURE }) => {
 			middlewareEntries = reject(
 				both(
 					isEntryEjectableByVersion(version),

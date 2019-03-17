@@ -79,4 +79,17 @@ describe('makeInjector', () => {
 			{ feature: null, namespace: null, version: 0 }
 		);
 	});
+
+	it('warns in console when global = false and no namespace is received', () => {
+		const WrappedRoot = injector({ test: identity })(Root);
+		const consoleWarnSpy = jest.spyOn(global.console, 'warn');
+		mount(
+			<InjectorContext.Provider value={{ store }}>
+				<WrappedRoot />
+			</InjectorContext.Provider>
+		);
+
+		expect(consoleWarnSpy).toHaveBeenCalled();
+		expect(consoleWarnSpy.mock.calls[0][0]).toContain('Root');
+	});
 });

@@ -27,6 +27,15 @@ export default function makeInjector(inject, eject) {
 				this.feature = global ? null : feature;
 				this.version = counter++;
 
+				if (!this.namespace && !global) {
+					console.warn(
+						`This warning occured while wrapping ${getDisplayName(NextComponent)}.`,
+						"You're using a @redux-tools injector with `global: false` and no namespace! " +
+							'It will behave like a global injector. If this is intended, consider passing ' +
+							'`global: true` to the injector, e.g. `withReducers(reducers, { global: true })`.'
+					);
+				}
+
 				inject(props.store)(injectables, {
 					namespace: this.namespace,
 					version: this.version,

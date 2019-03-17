@@ -1,4 +1,5 @@
 import { identity } from 'ramda';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import makeEnhancer from './makeEnhancer';
 
@@ -25,15 +26,15 @@ describe('makeEnhancer', () => {
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(1);
 		expect(store._reducerEntries).toEqual([
-			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: 'namespaces' },
+			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: DEFAULT_FEATURE },
 		]);
 
 		store.injectReducers({ foo: identity }, { namespace: 'ns', version: 1 });
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(2);
 		expect(store._reducerEntries).toEqual([
-			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: 'namespaces' },
-			{ key: 'foo', value: identity, namespace: 'ns', version: 1, feature: 'namespaces' },
+			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: DEFAULT_FEATURE },
+			{ key: 'foo', value: identity, namespace: 'ns', version: 1, feature: DEFAULT_FEATURE },
 		]);
 	});
 
@@ -47,7 +48,7 @@ describe('makeEnhancer', () => {
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(1);
 		expect(store._reducerEntries).toEqual([
-			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: 'namespaces' },
+			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: DEFAULT_FEATURE },
 		]);
 
 		store.injectReducers({ bar: identity }, { namespace: 'ns', version: 0 });
@@ -55,7 +56,7 @@ describe('makeEnhancer', () => {
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(3);
 		expect(store._reducerEntries).toEqual([
-			{ key: 'bar', value: identity, namespace: 'ns', version: 0, feature: 'namespaces' },
+			{ key: 'bar', value: identity, namespace: 'ns', version: 0, feature: DEFAULT_FEATURE },
 		]);
 	});
 

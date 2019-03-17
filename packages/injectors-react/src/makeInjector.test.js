@@ -1,6 +1,7 @@
 import { mount } from 'enzyme';
 import React from 'react';
 import { prop, identity } from 'ramda';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import { InjectorContext } from './contexts';
 import makeInjector from './makeInjector';
@@ -30,7 +31,7 @@ describe('makeInjector', () => {
 
 		expect(store.inject).toHaveBeenCalledWith(
 			{ test: identity },
-			{ feature: 'namespaces', namespace: 'foo', version: 0 }
+			{ feature: DEFAULT_FEATURE, namespace: 'foo', version: 0 }
 		);
 	});
 
@@ -45,7 +46,7 @@ describe('makeInjector', () => {
 		wrapper.unmount();
 		expect(store.eject).toHaveBeenCalledWith(
 			{ test: identity },
-			{ feature: 'namespaces', namespace: 'foo', version: 0 }
+			{ feature: DEFAULT_FEATURE, namespace: 'foo', version: 0 }
 		);
 	});
 

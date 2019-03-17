@@ -1,4 +1,4 @@
-import { concat, both, reject, keys, map, compose, isEmpty } from 'ramda';
+import { concat, both, reject, keys, map, compose, isEmpty, identity } from 'ramda';
 import { createEntries, isEntryEjectableByVersion, isEntryIncluded } from '@redux-tools/injectors';
 import {
 	isActionFromNamespace,
@@ -9,14 +9,14 @@ import {
 
 import { middlewareInjected, middlewareEjected } from './actions';
 
-export default function makeEnhancer() {
+export default function makeEnhancer({ getMiddlewareAPI = identity } = {}) {
 	let middlewareEntries = [];
 
-	const injectedMiddleware = middlewareAPI => next => action => {
+	const injectedMiddleware = ({ getState, dispatch }) => next => action => {
 		const chain = map(
 			({ namespace, value, feature }) => next => action =>
 				isActionFromNamespace(namespace, action)
-					? value(middlewareAPI)(
+					? value(getMiddlewareAPI({ getState, dispatch, action, namespace, feature }))(
 							compose(
 								next,
 								attachFeature(feature),

@@ -1,4 +1,12 @@
-import { applySpec, nth, map, toPairs, compose, merge } from 'ramda';
+import { applySpec, nth, map, toPairs, compose, merge, ifElse } from 'ramda';
+import { isFunction } from 'ramda-extension';
+
+import { FUNCTION_KEY } from './constants';
+
+const createEntry = applySpec({
+	key: nth(0),
+	value: nth(1),
+});
 
 /**
  * Converts the input of `store.injectSomething()` or `store.ejectSomething()`
@@ -9,16 +17,21 @@ import { applySpec, nth, map, toPairs, compose, merge } from 'ramda';
  * @returns {Object[]} an array of entries
  */
 const createEntries = (injectables, props) => {
-	const createEntry = applySpec({
-		key: nth(0),
-		value: nth(1),
-	});
-
-	return compose(
+	const createEntriesFromObject = compose(
 		map(merge(props)),
 		map(createEntry),
 		toPairs
-	)(injectables);
+	);
+
+	const createEntriesFromFunction = injectable => [
+		{
+			key: FUNCTION_KEY,
+			value: injectable,
+			...props,
+		},
+	];
+
+	return ifElse(isFunction, createEntriesFromFunction, createEntriesFromObject)(injectables);
 };
 
 export default createEntries;

@@ -4,3 +4,4 @@ export { default as isEntryEjectableByVersion } from './isEntryEjectableByVersio
 export { default as isEntryIncluded } from './isEntryIncluded';
 export { default as isEntryIncludedTimes } from './isEntryIncludedTimes';
 export { default as isEntryNotIncluded } from './isEntryNotIncluded';
+export * from './constants';

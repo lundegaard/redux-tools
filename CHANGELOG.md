@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - (_reducers_): Support for features! This allows using @redux-tools with a feature-based state structure, similar to when using e.g. Redux Form.
+- [warn when using withReducers with global: false and no namespace](https://github.com/lundegaard/redux-tools/pull/47) 
+
 
 ### Changed
 

@@ -32,6 +32,21 @@ Of course!
 
 Absolutely!
 
+## Redux DevTools have stopped working for me. How do I fix them?
+
+You might need to configure the DevTools slightly.
+
+```js
+import { composeWithDevTools } from 'redux-devtools-extension/logOnlyInProduction';
+
+const composeEnhancers = composeWithDevTools({
+	latency: 0,
+	shouldHotReload: false, // NOTE: This might not be necessary, based on the version of your DevTools.
+});
+```
+
+See the [API Documentation](https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md) for more info.
+
 ## Why do you add versions to all the injectables?
 
 Oh boy, here we go.

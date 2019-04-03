@@ -2,6 +2,7 @@ import { identity, inc, dec } from 'ramda';
 import { marbles } from 'rxjs-marbles/jest';
 import * as Rx from 'rxjs/operators';
 import { ReplaySubject, Subject, Observable } from 'rxjs';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import makeRootEpic from './makeRootEpic';
 
@@ -70,8 +71,8 @@ describe('makeRootEpic', () => {
 	it(
 		'passes only valid actions to a namespaced epic',
 		marbles(m => {
-			inject$.next({ key: 'id', value: identity, feature: 'namespaces', namespace: 'ns' });
-			const valid = { meta: { feature: 'namespaces', namespace: 'ns' } };
+			inject$.next({ key: 'id', value: identity, feature: DEFAULT_FEATURE, namespace: 'ns' });
+			const valid = { meta: { feature: DEFAULT_FEATURE, namespace: 'ns' } };
 			const invalid = { meta: { namespace: 'wrong' } };
 			const action$ = m.cold('vi', { v: valid, i: invalid });
 			const expected$ = m.cold('v-', { v: valid });

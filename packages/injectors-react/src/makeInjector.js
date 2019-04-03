@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { omit } from 'ramda';
 import PropTypes from 'prop-types';
 import { getDisplayName } from '@redux-tools/utils';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import withInjectorContext from './withInjectorContext';
 
@@ -11,7 +12,7 @@ makeInjector.resetCounter = () => (counter = 0);
 const omitStore = omit(['store']);
 
 export default function makeInjector(inject, eject) {
-	return (injectables, { persist, global, feature = 'namespaces' } = {}) => NextComponent => {
+	return (injectables, { persist, global, feature = DEFAULT_FEATURE } = {}) => NextComponent => {
 		class Injector extends Component {
 			static propTypes = {
 				namespace: PropTypes.string,

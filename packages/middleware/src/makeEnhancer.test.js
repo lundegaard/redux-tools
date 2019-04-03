@@ -1,5 +1,6 @@
 import { identity, compose } from 'ramda';
 import { createStore as actualCreateStore, applyMiddleware } from 'redux';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import makeEnhancer from './makeEnhancer';
 
@@ -24,14 +25,14 @@ describe('makeEnhancer', () => {
 		store.injectMiddleware({ foo: identity }, { namespace: 'ns', version: 0 });
 
 		expect(store._middlewareEntries).toEqual([
-			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: 'namespaces' },
+			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: DEFAULT_FEATURE },
 		]);
 
 		store.injectMiddleware({ foo: identity }, { namespace: 'ns', version: 1 });
 
 		expect(store._middlewareEntries).toEqual([
-			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: 'namespaces' },
-			{ key: 'foo', value: identity, namespace: 'ns', version: 1, feature: 'namespaces' },
+			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: DEFAULT_FEATURE },
+			{ key: 'foo', value: identity, namespace: 'ns', version: 1, feature: DEFAULT_FEATURE },
 		]);
 	});
 
@@ -44,14 +45,14 @@ describe('makeEnhancer', () => {
 		store.injectMiddleware({ foo: identity }, { namespace: 'ns', version: 0 });
 
 		expect(store._middlewareEntries).toEqual([
-			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: 'namespaces' },
+			{ key: 'foo', value: identity, namespace: 'ns', version: 0, feature: DEFAULT_FEATURE },
 		]);
 
 		store.injectMiddleware({ bar: identity }, { namespace: 'ns', version: 0 });
 		store.ejectMiddleware({ foo: identity }, { namespace: 'ns', version: 0 });
 
 		expect(store._middlewareEntries).toEqual([
-			{ key: 'bar', value: identity, namespace: 'ns', version: 0, feature: 'namespaces' },
+			{ key: 'bar', value: identity, namespace: 'ns', version: 0, feature: DEFAULT_FEATURE },
 		]);
 	});
 

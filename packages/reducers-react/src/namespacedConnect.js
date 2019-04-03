@@ -3,13 +3,13 @@ import { compose, cond, apply, __, isNil, T, map, omit } from 'ramda';
 import { alwaysEmptyObject, isFunction, isObject } from 'ramda-extension';
 import { getStateByNamespace } from '@redux-tools/reducers';
 import { withInjectorContext } from '@redux-tools/injectors-react';
-import { attachNamespace, attachFeature } from '@redux-tools/namespaces';
+import { attachNamespace, attachFeature, DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import { connect } from 'react-redux';
 
 export const wrapMapStateToProps = mapStateToProps => (state, ownProps) =>
 	mapStateToProps
 		? mapStateToProps(
-				getStateByNamespace(ownProps.feature || 'namespaces', ownProps.namespace, state),
+				getStateByNamespace(ownProps.feature || DEFAULT_FEATURE, ownProps.namespace, state),
 				ownProps,
 				state
 		  )
@@ -56,7 +56,7 @@ const namespacedConnect = (
 	mapStateToProps,
 	mapDispatchToProps,
 	mergeProps,
-	{ feature = 'namespaces', ...options } = {}
+	{ feature = DEFAULT_FEATURE, ...options } = {}
 ) =>
 	compose(
 		withInjectorContext({ feature }),

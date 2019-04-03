@@ -1,5 +1,6 @@
 import { o, inc, dec, defaultTo } from 'ramda';
 import { FUNCTION_KEY } from '@redux-tools/injectors';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import combineReducerEntries, { deepCombineReducers } from './combineReducerEntries';
 
@@ -36,24 +37,24 @@ describe('combineReducerEntries', () => {
 
 	it('handles multiple reducers in same namespace', () => {
 		const reducer = combineReducerEntries([
-			{ key: 'foo', value: incReducer, namespace: 'ns', feature: 'namespaces' },
-			{ key: 'bar', value: decReducer, namespace: 'ns', feature: 'namespaces' },
+			{ key: 'foo', value: incReducer, namespace: 'ns', feature: DEFAULT_FEATURE },
+			{ key: 'bar', value: decReducer, namespace: 'ns', feature: DEFAULT_FEATURE },
 		]);
 
 		expect(reducer()).toEqual({
-			namespaces: {
+			[DEFAULT_FEATURE]: {
 				ns: { foo: 1, bar: -1 },
 			},
 		});
 
 		expect(
 			reducer({
-				namespaces: {
+				[DEFAULT_FEATURE]: {
 					ns: { foo: 1, bar: -1 },
 				},
 			})
 		).toEqual({
-			namespaces: {
+			[DEFAULT_FEATURE]: {
 				ns: { foo: 2, bar: -2 },
 			},
 		});
@@ -61,12 +62,12 @@ describe('combineReducerEntries', () => {
 
 	it('handles multiple namespaces', () => {
 		const reducer = combineReducerEntries([
-			{ key: 'foo', value: incReducer, namespace: 'a', feature: 'namespaces' },
-			{ key: 'bar', value: decReducer, namespace: 'b', feature: 'namespaces' },
+			{ key: 'foo', value: incReducer, namespace: 'a', feature: DEFAULT_FEATURE },
+			{ key: 'bar', value: decReducer, namespace: 'b', feature: DEFAULT_FEATURE },
 		]);
 
 		expect(reducer()).toEqual({
-			namespaces: {
+			[DEFAULT_FEATURE]: {
 				a: { foo: 1 },
 				b: { bar: -1 },
 			},
@@ -74,13 +75,13 @@ describe('combineReducerEntries', () => {
 
 		expect(
 			reducer({
-				namespaces: {
+				[DEFAULT_FEATURE]: {
 					a: { foo: 1 },
 					b: { bar: -1 },
 				},
 			})
 		).toEqual({
-			namespaces: {
+			[DEFAULT_FEATURE]: {
 				a: { foo: 2 },
 				b: { bar: -2 },
 			},

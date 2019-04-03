@@ -2,6 +2,7 @@ import { both, keys, concat, reject, identity } from 'ramda';
 import { createEntries, isEntryEjectableByVersion, isEntryIncluded } from '@redux-tools/injectors';
 import { isFunction } from 'ramda-extension';
 import invariant from 'invariant';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import { reducersInjected, reducersEjected } from './actions';
 import combineReducerEntries from './combineReducerEntries';
@@ -13,7 +14,7 @@ export default function makeEnhancer() {
 
 		let reducerEntries = [];
 
-		store.injectReducers = (reducers, { namespace, version, feature = 'namespaces' }) => {
+		store.injectReducers = (reducers, { namespace, version, feature = DEFAULT_FEATURE }) => {
 			invariant(
 				namespace || !isFunction(reducers),
 				'You can only inject reducers as functions if you specify a namespace.'
@@ -29,7 +30,7 @@ export default function makeEnhancer() {
 			store._reducerEntries = reducerEntries;
 		};
 
-		store.ejectReducers = (reducers, { namespace, version, feature = 'namespaces' }) => {
+		store.ejectReducers = (reducers, { namespace, version, feature = DEFAULT_FEATURE }) => {
 			reducerEntries = reject(
 				both(
 					isEntryEjectableByVersion(version),

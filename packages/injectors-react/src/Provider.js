@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { mergeDeepWith, or, flip } from 'ramda';
 import PropTypes from 'prop-types';
 import { Provider as StoreProvider } from 'react-redux';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import { InjectorContext } from './contexts';
 
@@ -18,7 +19,7 @@ class Provider extends Component {
 	};
 
 	static defaultProps = {
-		feature: 'namespaces',
+		feature: DEFAULT_FEATURE,
 	};
 
 	static contextType = InjectorContext;

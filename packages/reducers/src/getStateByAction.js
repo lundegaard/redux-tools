@@ -1,8 +1,9 @@
 import { path, o, defaultTo } from 'ramda';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import getStateByNamespace from './getStateByNamespace';
 
-const getFeature = o(defaultTo('namespaces'), path(['meta', 'feature']));
+const getFeature = o(defaultTo(DEFAULT_FEATURE), path(['meta', 'feature']));
 const getNamespace = path(['meta', 'namespace']);
 /**
  * Returns Redux state by action namespace.

@@ -4,6 +4,7 @@ import * as R_ from 'ramda-extension';
 import { mount } from 'enzyme';
 import { createStore } from 'redux';
 import { Provider } from '@redux-tools/injectors-react';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import namespacedConnect, {
 	wrapMapStateToProps,
@@ -11,7 +12,7 @@ import namespacedConnect, {
 } from './namespacedConnect';
 
 const state = {
-	namespaces: {
+	[DEFAULT_FEATURE]: {
 		foo: { value: 'Foo' },
 		bar: { qux: { value: 'Qux' } },
 	},
@@ -23,7 +24,7 @@ const state = {
 describe('wrapMapStateToProps', () => {
 	it('gets correct state slice', () => {
 		const mapStateToProps = wrapMapStateToProps(R.identity);
-		expect(mapStateToProps(state, { feature: 'namespaces', namespace: 'foo' })).toEqual({
+		expect(mapStateToProps(state, { feature: DEFAULT_FEATURE, namespace: 'foo' })).toEqual({
 			value: 'Foo',
 		});
 	});
@@ -37,14 +38,14 @@ describe('wrapMapStateToProps', () => {
 
 	it('applies passed mapStateToProps', () => {
 		const mapStateToProps = wrapMapStateToProps(R.prop('qux'));
-		expect(mapStateToProps(state, { feature: 'namespaces', namespace: 'bar' })).toEqual({
+		expect(mapStateToProps(state, { feature: DEFAULT_FEATURE, namespace: 'bar' })).toEqual({
 			value: 'Qux',
 		});
 	});
 
 	it('returns an object when mapStateToProps is undefined', () => {
 		const mapStateToProps = wrapMapStateToProps(null);
-		expect(mapStateToProps(state, { feature: 'namespaces', namespace: 'foo' })).toEqual({});
+		expect(mapStateToProps(state, { feature: DEFAULT_FEATURE, namespace: 'foo' })).toEqual({});
 	});
 });
 
@@ -57,7 +58,7 @@ describe('wrapMapDispatchToProps', () => {
 		const dispatch = jest.fn();
 
 		const { actionCreator } = mapDispatchToProps(dispatch, {
-			feature: 'namespaces',
+			feature: DEFAULT_FEATURE,
 			namespace: 'foo',
 		});
 		actionCreator();
@@ -75,7 +76,7 @@ describe('wrapMapDispatchToProps', () => {
 		const dispatch = jest.fn();
 
 		const { actionCreator } = mapDispatchToProps(dispatch, {
-			feature: 'namespaces',
+			feature: DEFAULT_FEATURE,
 			namespace: 'foo',
 		});
 		actionCreator();

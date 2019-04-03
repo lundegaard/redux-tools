@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { identity } from 'ramda';
 import { getDisplayName } from '@redux-tools/utils';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import { InjectorContext } from './contexts';
 
-const withInjectorContext = ({ feature = 'namespaces' } = {}) => NextComponent =>
+const withInjectorContext = ({ feature = DEFAULT_FEATURE } = {}) => NextComponent =>
 	class WithInjectorContext extends Component {
 		static displayName = `WithInjectorContext(${getDisplayName(NextComponent)})`;
 

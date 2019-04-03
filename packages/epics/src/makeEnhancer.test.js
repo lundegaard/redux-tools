@@ -1,4 +1,6 @@
 import { Subject } from 'rxjs';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
+
 import makeEnhancer from './makeEnhancer';
 import { epicsInjected, epicsEjected } from './actions';
 
@@ -30,7 +32,7 @@ describe('makeEnhancer', () => {
 			value: epic,
 			namespace: 'ns',
 			version: 1,
-			feature: 'namespaces',
+			feature: DEFAULT_FEATURE,
 		});
 	});
 
@@ -38,7 +40,12 @@ describe('makeEnhancer', () => {
 		const epic = jest.fn();
 		store.injectEpics({ epic }, { namespace: 'ns', version: 1 });
 		expect(store.dispatch).toHaveBeenCalledWith(
-			epicsInjected({ epics: ['epic'], namespace: 'ns', version: 1, feature: 'namespaces' })
+			epicsInjected({
+				epics: ['epic'],
+				namespace: 'ns',
+				version: 1,
+				feature: DEFAULT_FEATURE,
+			})
 		);
 	});
 
@@ -52,7 +59,7 @@ describe('makeEnhancer', () => {
 			value: epic,
 			namespace: 'ns',
 			version: 1,
-			feature: 'namespaces',
+			feature: DEFAULT_FEATURE,
 		});
 	});
 
@@ -60,7 +67,12 @@ describe('makeEnhancer', () => {
 		const epic = jest.fn();
 		store.ejectEpics({ epic }, { namespace: 'ns', version: 1 });
 		expect(store.dispatch).toHaveBeenCalledWith(
-			epicsEjected({ epics: ['epic'], namespace: 'ns', version: 1, feature: 'namespaces' })
+			epicsEjected({
+				epics: ['epic'],
+				namespace: 'ns',
+				version: 1,
+				feature: DEFAULT_FEATURE,
+			})
 		);
 	});
 

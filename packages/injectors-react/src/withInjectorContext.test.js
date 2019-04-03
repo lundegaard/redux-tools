@@ -1,5 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import { InjectorContext } from './contexts';
 import withInjectorContext from './withInjectorContext';
@@ -55,7 +56,10 @@ describe('withInjectorContext', () => {
 	it('uses namespace with a higher priority than `withNamespace`', () => {
 		const Root = () => null;
 		const WrappedRoot = withInjectorContext()(Root);
-		const contextValue = { features: { namespaces: 'bar' }, withNamespace: withFooNamespace };
+		const contextValue = {
+			features: { [DEFAULT_FEATURE]: 'bar' },
+			withNamespace: withFooNamespace,
+		};
 
 		const wrapper = mount(
 			<InjectorContext.Provider value={contextValue}>
@@ -71,7 +75,7 @@ describe('withInjectorContext', () => {
 		const WrappedRoot = withInjectorContext({ feature: 'grids' })(Root);
 
 		const contextValue = {
-			features: { namespaces: 'bar', grids: 'first-one' },
+			features: { [DEFAULT_FEATURE]: 'bar', grids: 'first-one' },
 			withNamespace: withFooNamespace,
 		};
 
@@ -89,7 +93,7 @@ describe('withInjectorContext', () => {
 		const WrappedRoot = withInjectorContext({ feature: 'grids' })(Root);
 
 		const contextValue = {
-			features: { namespaces: 'bar', grids: 'first-one' },
+			features: { [DEFAULT_FEATURE]: 'bar', grids: 'first-one' },
 			withNamespace: withFooNamespace,
 		};
 

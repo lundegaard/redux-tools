@@ -1,4 +1,5 @@
 import { curry, path } from 'ramda';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 /**
  * Returns Redux state by namespace. Returns undefined if namespace is undefined.
@@ -13,7 +14,7 @@ const getStateByNamespace = curry((feature, namespace, state) => {
 		return undefined;
 	}
 
-	return path([feature || 'namespaces', namespace], state);
+	return path([feature || DEFAULT_FEATURE, namespace], state);
 });
 
 export default getStateByNamespace;

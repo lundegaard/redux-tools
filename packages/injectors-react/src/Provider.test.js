@@ -2,6 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { identity } from 'ramda';
 import { noop, alwaysNull } from 'ramda-extension';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import Provider from './Provider';
 import { InjectorContext } from './contexts';
@@ -21,7 +22,7 @@ describe('Provider', () => {
 
 		expect(renderProp).toHaveBeenCalledWith({
 			store,
-			features: { namespaces: 'ns' },
+			features: { [DEFAULT_FEATURE]: 'ns' },
 			withNamespace: identity,
 		});
 	});
@@ -41,7 +42,7 @@ describe('Provider', () => {
 
 		expect(renderProp).toHaveBeenCalledWith({
 			store,
-			features: { namespaces: 'yo' },
+			features: { [DEFAULT_FEATURE]: 'yo' },
 			withNamespace: identity,
 		});
 	});
@@ -61,7 +62,7 @@ describe('Provider', () => {
 
 		expect(renderProp).toHaveBeenCalledWith({
 			store,
-			features: { namespaces: 'yo', grids: 'ns' },
+			features: { [DEFAULT_FEATURE]: 'yo', grids: 'ns' },
 			withNamespace: identity,
 		});
 	});
@@ -77,7 +78,7 @@ describe('Provider', () => {
 
 		expect(renderProp).toHaveBeenCalledWith({
 			store,
-			features: { namespaces: 'ns', grids: 'ns-grid' },
+			features: { [DEFAULT_FEATURE]: 'ns', grids: 'ns-grid' },
 			withNamespace: identity,
 		});
 	});

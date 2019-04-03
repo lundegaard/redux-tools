@@ -1,6 +1,12 @@
-import { concat, both, reject, keys, map, compose, isEmpty } from 'ramda';
-import { createEntries, isEntryEjectableByVersion, isEntryIncluded } from '@redux-tools/injectors';
-import { isActionFromNamespace, attachNamespace, attachFeature } from '@redux-tools/namespaces';
+import { o, concat, both, reject, keys, map, compose, isEmpty, uniqWith } from 'ramda';
+import {
+	createEntries,
+	isEntryEjectableByVersion,
+	isEntryIncluded,
+	areEntriesEqual,
+} from '@redux-tools/injectors';
+import { isActionFromNamespace, attachNamespace } from '@redux-tools/namespaces';
+import { memoizeWithIdentity } from 'ramda-extension';
 
 import { middlewareInjected, middlewareEjected } from './actions';
 
@@ -8,20 +14,18 @@ export default function makeEnhancer() {
 	let middlewareEntries = [];
 
 	const injectedMiddleware = middlewareAPI => next => action => {
-		const chain = map(
-			({ namespace, value, feature }) => next => action =>
-				isActionFromNamespace(namespace, action)
-					? value(middlewareAPI)(
-							compose(
-								next,
-								attachFeature(feature),
-								attachNamespace(namespace)
-							)
-					  )(action)
-					: next(action),
-			middlewareEntries
+		const makeChain = memoizeWithIdentity(
+			o(
+				map(({ namespace, value }) => next => action =>
+					isActionFromNamespace(namespace, action)
+						? value(middlewareAPI)(o(next, attachNamespace(namespace)))(action)
+						: next(action)
+				),
+				uniqWith(areEntriesEqual)
+			)
 		);
 
+		const chain = makeChain(middlewareEntries);
 		const composableChain = isEmpty(chain) ? [next => action => next(action)] : chain;
 
 		return compose(...composableChain)(next)(action);

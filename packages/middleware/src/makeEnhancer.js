@@ -1,6 +1,6 @@
-import { concat, both, reject, keys, map, compose, isEmpty } from 'ramda';
+import { o, concat, both, reject, keys, map, compose, isEmpty } from 'ramda';
 import { createEntries, isEntryEjectableByVersion, isEntryIncluded } from '@redux-tools/injectors';
-import { isActionFromNamespace, attachNamespace, attachFeature } from '@redux-tools/namespaces';
+import { isActionFromNamespace, attachNamespace } from '@redux-tools/namespaces';
 
 import { middlewareInjected, middlewareEjected } from './actions';
 
@@ -9,15 +9,9 @@ export default function makeEnhancer() {
 
 	const injectedMiddleware = middlewareAPI => next => action => {
 		const chain = map(
-			({ namespace, value, feature }) => next => action =>
+			({ namespace, value }) => next => action =>
 				isActionFromNamespace(namespace, action)
-					? value(middlewareAPI)(
-							compose(
-								next,
-								attachFeature(feature),
-								attachNamespace(namespace)
-							)
-					  )(action)
+					? value(middlewareAPI)(o(next, attachNamespace(namespace)))(action)
 					: next(action),
 			middlewareEntries
 		);

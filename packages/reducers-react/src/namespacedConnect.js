@@ -1,9 +1,9 @@
 import React from 'react';
-import { compose, cond, apply, __, isNil, T, map, omit } from 'ramda';
+import { compose, cond, apply, __, isNil, T, map, omit, o } from 'ramda';
 import { alwaysEmptyObject, isFunction, isObject } from 'ramda-extension';
 import { getStateByNamespace } from '@redux-tools/reducers';
 import { withInjectorContext } from '@redux-tools/injectors-react';
-import { attachNamespace, attachFeature } from '@redux-tools/namespaces';
+import { attachNamespace } from '@redux-tools/namespaces';
 import { connect } from 'react-redux';
 
 export const wrapMapStateToProps = mapStateToProps => (state, ownProps) =>
@@ -26,11 +26,7 @@ const throwTypeError = () => {
 };
 
 export const wrapMapDispatchToProps = mapDispatchToProps => (dispatch, ownProps) => {
-	const wrappedDispatch = compose(
-		dispatch,
-		attachFeature(ownProps.feature),
-		attachNamespace(ownProps.namespace)
-	);
+	const wrappedDispatch = o(dispatch, attachNamespace(ownProps.namespace));
 
 	return cond([
 		[isNil, alwaysEmptyObject],

@@ -63,7 +63,7 @@ describe('wrapMapDispatchToProps', () => {
 		actionCreator();
 		expect(dispatch).toHaveBeenCalledWith({
 			type: 'TEST',
-			meta: { feature: 'namespaces', namespace: 'foo' },
+			meta: { namespace: 'foo' },
 		});
 	});
 
@@ -81,7 +81,7 @@ describe('wrapMapDispatchToProps', () => {
 		actionCreator();
 		expect(dispatch).toHaveBeenCalledWith({
 			type: 'TEST',
-			meta: { feature: 'namespaces', namespace: 'foo' },
+			meta: { namespace: 'foo' },
 		});
 	});
 
@@ -134,7 +134,7 @@ describe('namespacedConnect', () => {
 		wrapper.find(Root).prop('actionCreator')();
 		expect(store.dispatch).toHaveBeenCalledWith({
 			type: 'TEST',
-			meta: { feature: 'namespaces', namespace: 'bar' },
+			meta: { namespace: 'bar' },
 		});
 	});
 });

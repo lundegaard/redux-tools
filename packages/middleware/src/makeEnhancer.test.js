@@ -200,4 +200,31 @@ describe('makeEnhancer', () => {
 		expect(mockA).toHaveBeenCalledTimes(2);
 		expect(mockB).toHaveBeenCalledTimes(2);
 	});
+
+	it('only allows a middleware to be injected once (with same key and value)', () => {
+		const mockA = jest.fn();
+
+		const middlewareA = () => next => action => {
+			next(action);
+
+			if (action.type === 'MESSAGE') {
+				mockA(action.payload);
+			}
+		};
+
+		const enhancer = makeEnhancer();
+		const store = actualCreateStore(
+			identity,
+			null,
+			compose(
+				enhancer,
+				applyMiddleware(enhancer.injectedMiddleware)
+			)
+		);
+
+		store.injectMiddleware({ foo: middlewareA }, { namespace: null, version: 0 });
+		store.injectMiddleware({ foo: middlewareA }, { namespace: null, version: 1 });
+		store.dispatch({ type: 'MESSAGE' });
+		expect(mockA).toHaveBeenCalledTimes(1);
+	});
 });

@@ -1,12 +1,13 @@
 import { map } from 'rxjs/operators';
 import { prop } from 'ramda';
 import { getStateByNamespace } from '@redux-tools/reducers';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 /**
  * Stream creator to pass as `streamCreator` to the enhancer. Adds a `namespacedState$` argument
  * to each epic, allowing access to state based on the namespace of the epic.
  */
-export const namespacedState$ = ({ feature, namespace, state$ }) =>
+export const namespacedState$ = ({ feature = DEFAULT_FEATURE, namespace, state$ }) =>
 	state$.pipe(map(getStateByNamespace(feature, namespace)));
 
 /**

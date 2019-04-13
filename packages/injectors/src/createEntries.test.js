@@ -10,13 +10,12 @@ describe('createEntries', () => {
 				},
 				{
 					namespace: 'ns',
-					version: 1,
 					feature: 'grid',
 				}
 			)
 		).toEqual([
-			{ key: 'foo', value: 'bar', namespace: 'ns', version: 1, feature: 'grid' },
-			{ key: 'bar', value: 'baz', namespace: 'ns', version: 1, feature: 'grid' },
+			{ key: 'foo', value: 'bar', namespace: 'ns', feature: 'grid' },
+			{ key: 'bar', value: 'baz', namespace: 'ns', feature: 'grid' },
 		]);
 	});
 });

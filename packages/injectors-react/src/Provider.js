@@ -1,52 +1,42 @@
-import React, { Component } from 'react';
-import { mergeDeepWith, or, flip } from 'ramda';
+import React, { useContext, useMemo } from 'react';
+import { mergeDeepWith, flip, or } from 'ramda';
 import PropTypes from 'prop-types';
 import { Provider as StoreProvider } from 'react-redux';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import { InjectorContext } from './contexts';
 
+// NOTE: `flip(or)` gives priority to second argument.
 const mergeContextValues = mergeDeepWith(flip(or));
 
-class Provider extends Component {
-	static propTypes = {
-		children: PropTypes.node.isRequired,
-		feature: PropTypes.string,
-		getNamespace: PropTypes.func,
-		namespace: PropTypes.string,
-		store: PropTypes.object,
-		withNamespace: PropTypes.func,
-	};
+const Provider = ({ children, feature, namespace, store, useNamespace }) => {
+	const injectorContext = useContext(InjectorContext);
 
-	static defaultProps = {
-		feature: DEFAULT_FEATURE,
-	};
+	const contextValues = useMemo(
+		() =>
+			mergeContextValues(injectorContext, {
+				// NOTE: Defaulting here is safer than using `Provider.defaultProps`,
+				// because passing `null` would not result in a fallback to `DEFAULT_FEATURE`.
+				namespaces: { [feature || DEFAULT_FEATURE]: namespace },
+				store,
+				useNamespace,
+			}),
+		[feature, injectorContext, namespace, store, useNamespace]
+	);
 
-	static contextType = InjectorContext;
+	const providerElement = (
+		<InjectorContext.Provider value={contextValues}>{children}</InjectorContext.Provider>
+	);
 
-	constructor(...args) {
-		super(...args);
-		const { feature, getNamespace, namespace, store, withNamespace } = this.props;
-		const { features } = this.context;
+	return store ? <StoreProvider store={store}>{providerElement}</StoreProvider> : providerElement;
+};
 
-		// TODO: Handle changes in props and context values.
-		this.state = mergeContextValues(this.context, {
-			features: { [feature]: getNamespace ? getNamespace(features) : namespace },
-			store,
-			withNamespace,
-		});
-	}
-
-	render() {
-		const { children } = this.props;
-		const { store } = this.state;
-
-		const providerElement = (
-			<InjectorContext.Provider value={this.state}>{children}</InjectorContext.Provider>
-		);
-
-		return store ? <StoreProvider store={store}>{providerElement}</StoreProvider> : providerElement;
-	}
-}
+Provider.propTypes = {
+	children: PropTypes.node.isRequired,
+	feature: PropTypes.string,
+	namespace: PropTypes.string,
+	store: PropTypes.object,
+	useNamespace: PropTypes.func,
+};
 
 export default Provider;

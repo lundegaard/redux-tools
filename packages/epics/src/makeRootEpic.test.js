@@ -2,7 +2,6 @@ import { identity, inc, dec } from 'ramda';
 import { marbles } from 'rxjs-marbles/jest';
 import * as Rx from 'rxjs/operators';
 import { ReplaySubject, Subject, Observable } from 'rxjs';
-import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import makeRootEpic from './makeRootEpic';
 
@@ -13,13 +12,15 @@ describe('makeRootEpic', () => {
 	let inject$;
 	let eject$;
 	let rootEpic;
+	let store;
 
 	beforeEach(() => {
 		// NOTE: We need to use ReplaySubjects, because when we call `next()` in tests,
 		// no subscriptions are active yet, so nothing would happen.
 		inject$ = new ReplaySubject();
 		eject$ = new ReplaySubject();
-		rootEpic = makeRootEpic({ inject$, eject$ });
+		store = { epicEntries: [] };
+		rootEpic = makeRootEpic({ inject$, eject$, store });
 	});
 
 	it(
@@ -58,9 +59,9 @@ describe('makeRootEpic', () => {
 	);
 
 	it(
-		'adds namespace and feature to emitted actions',
+		'adds namespace to emitted actions',
 		marbles(m => {
-			inject$.next({ key: 'id', value: identity, namespace: 'ns', feature: 'grids' });
+			inject$.next({ key: 'id', value: identity, namespace: 'ns' });
 			const action$ = m.cold('a', { a: {} });
 			const expected$ = m.cold('a', { a: { meta: { namespace: 'ns' } } });
 			const actual$ = rootEpic(action$);
@@ -71,23 +72,11 @@ describe('makeRootEpic', () => {
 	it(
 		'passes only valid actions to a namespaced epic',
 		marbles(m => {
-			inject$.next({ key: 'id', value: identity, feature: DEFAULT_FEATURE, namespace: 'ns' });
-			const valid = { meta: { feature: DEFAULT_FEATURE, namespace: 'ns' } };
+			inject$.next({ key: 'id', value: identity, namespace: 'ns' });
+			const valid = { meta: { namespace: 'ns' } };
 			const invalid = { meta: { namespace: 'wrong' } };
 			const action$ = m.cold('vi', { v: valid, i: invalid });
 			const expected$ = m.cold('v-', { v: valid });
-			const actual$ = rootEpic(action$);
-			m.expect(actual$).toBeObservable(expected$);
-		})
-	);
-
-	it(
-		'handles multiple injections of the same epic with increasing version',
-		marbles(m => {
-			inject$.next({ key: 'id', value: identity, version: 0 });
-			inject$.next({ key: 'id', value: identity, version: 1 });
-			const action$ = m.cold('a', { a: 0 });
-			const expected$ = m.cold('a', { a: 0 });
 			const actual$ = rootEpic(action$);
 			m.expect(actual$).toBeObservable(expected$);
 		})
@@ -104,34 +93,18 @@ describe('makeRootEpic', () => {
 		expect(result).toEqual([true]);
 	});
 
-	it('handles successive injections and ejections (asynchronous React rendering)', () => {
+	it('handles successive injections and ejections of same entries', () => {
 		const result = [];
 		const action$ = new Subject();
 		rootEpic(action$).subscribe(result.push.bind(result));
-		inject$.next({ key: 'id', value: identity, version: 0 });
-		inject$.next({ key: 'id', value: identity, version: 1 });
+		inject$.next({ key: 'id', value: identity });
+		inject$.next({ key: 'id', value: identity });
 		action$.next(true);
-		eject$.next({ key: 'id', value: identity, version: 1 });
+		eject$.next({ key: 'id', value: identity });
 		action$.next(false);
-		expect(result).toEqual([true]);
-	});
-
-	it('handles successive injections and ejections (changing a key of a React component)', () => {
-		const result = [];
-		const action$ = new Subject();
-		rootEpic(action$).subscribe(result.push.bind(result));
-		// NOTE: This is the first possible order
-		inject$.next({ key: 'id', value: identity, version: 0 });
-		inject$.next({ key: 'id', value: identity, version: 1 });
-		eject$.next({ key: 'id', value: identity, version: 0 });
-		action$.next('hello');
-
-		// NOTE: This is the second possible order
-		eject$.next({ key: 'id', value: identity, version: 1 });
-		inject$.next({ key: 'id', value: identity, version: 2 });
-		action$.next('world');
-
-		expect(result).toEqual(['hello', 'world']);
+		eject$.next({ key: 'id', value: identity });
+		action$.next(false);
+		expect(result).toEqual([true, false]);
 	});
 
 	it('passes correct arguments to the epic when streamCreator is omitted', () => {
@@ -140,7 +113,7 @@ describe('makeRootEpic', () => {
 		const action$ = new Subject();
 		const state$ = 'state$';
 		const dependencies = 'dependencies';
-		rootEpic = makeRootEpic({ inject$, eject$ });
+		rootEpic = makeRootEpic({ inject$, eject$, store });
 		rootEpic(action$, state$, dependencies).subscribe();
 		expect(epic).toHaveBeenCalledTimes(1);
 		expect(epic.mock.calls[0][0]).toBeInstanceOf(Observable);
@@ -155,7 +128,7 @@ describe('makeRootEpic', () => {
 		const action$ = new Subject();
 		const state$ = 'state$';
 		const dependencies = 'dependencies';
-		rootEpic = makeRootEpic({ inject$, eject$, streamCreator });
+		rootEpic = makeRootEpic({ inject$, eject$, streamCreator, store });
 		rootEpic(action$, state$, dependencies).subscribe();
 		expect(epic).toHaveBeenCalledTimes(1);
 		expect(epic.mock.calls[0][0]).toBeInstanceOf(Observable);

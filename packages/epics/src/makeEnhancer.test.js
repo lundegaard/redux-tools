@@ -1,5 +1,4 @@
 import { Subject } from 'rxjs';
-import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import makeEnhancer from './makeEnhancer';
 import { epicsInjected, epicsEjected } from './actions';
@@ -24,54 +23,46 @@ describe('makeEnhancer', () => {
 
 	it('calls inject$.next under the hood when injectEpics is called', () => {
 		const epic = jest.fn();
-		store.injectEpics({ epic }, { namespace: 'ns', version: 1 });
+		store.injectEpics({ epic }, { namespace: 'ns' });
 		const inject$ = Subject.mock.instances[0];
 		expect(inject$.next).toHaveBeenCalledTimes(1);
 		expect(inject$.next.mock.calls[0][0]).toEqual({
 			key: 'epic',
-			value: epic,
 			namespace: 'ns',
-			version: 1,
-			feature: DEFAULT_FEATURE,
+			value: epic,
 		});
 	});
 
 	it('dispatches an action when injectEpics is called', () => {
 		const epic = jest.fn();
-		store.injectEpics({ epic }, { namespace: 'ns', version: 1 });
+		store.injectEpics({ epic }, { namespace: 'ns' });
 		expect(store.dispatch).toHaveBeenCalledWith(
 			epicsInjected({
 				epics: ['epic'],
 				namespace: 'ns',
-				version: 1,
-				feature: DEFAULT_FEATURE,
 			})
 		);
 	});
 
 	it('calls eject$.next under the hood when ejectEpics is called', () => {
 		const epic = jest.fn();
-		store.ejectEpics({ epic }, { namespace: 'ns', version: 1 });
+		store.ejectEpics({ epic }, { namespace: 'ns' });
 		const eject$ = Subject.mock.instances[1];
 		expect(eject$.next).toHaveBeenCalledTimes(1);
 		expect(eject$.next.mock.calls[0][0]).toEqual({
 			key: 'epic',
 			value: epic,
 			namespace: 'ns',
-			version: 1,
-			feature: DEFAULT_FEATURE,
 		});
 	});
 
 	it('dispatches an action when ejectEpics is called', () => {
 		const epic = jest.fn();
-		store.ejectEpics({ epic }, { namespace: 'ns', version: 1 });
+		store.ejectEpics({ epic }, { namespace: 'ns' });
 		expect(store.dispatch).toHaveBeenCalledWith(
 			epicsEjected({
 				epics: ['epic'],
 				namespace: 'ns',
-				version: 1,
-				feature: DEFAULT_FEATURE,
 			})
 		);
 	});

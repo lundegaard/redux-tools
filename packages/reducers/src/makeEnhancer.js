@@ -1,6 +1,6 @@
-import { both, keys, concat, reject, identity } from 'ramda';
-import { createEntries, isEntryEjectableByVersion, isEntryIncluded } from '@redux-tools/injectors';
-import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
+import { keys, concat, identity } from 'ramda';
+import { createEntries } from '@redux-tools/injectors';
+import { withoutOnce } from '@redux-tools/utils';
 
 import { reducersInjected, reducersEjected } from './actions';
 import combineReducerEntries from './combineReducerEntries';
@@ -10,31 +10,18 @@ export default function makeEnhancer() {
 	return createStore => (reducer = identity, ...args) => {
 		const store = createStore(reducer, ...args);
 
-		let reducerEntries = [];
+		store.reducerEntries = [];
 
-		store.injectReducers = (reducers, { namespace, version, feature = DEFAULT_FEATURE }) => {
-			reducerEntries = concat(
-				reducerEntries,
-				createEntries(reducers, { namespace, version, feature })
-			);
-
-			store.replaceReducer(composeReducers(reducer, combineReducerEntries(reducerEntries)));
-			store.dispatch(reducersInjected({ reducers: keys(reducers), namespace, version, feature }));
-			store._reducerEntries = reducerEntries;
+		store.injectReducers = (reducers, props) => {
+			store.reducerEntries = concat(store.reducerEntries, createEntries(reducers, props));
+			store.replaceReducer(composeReducers(reducer, combineReducerEntries(store.reducerEntries)));
+			store.dispatch(reducersInjected({ reducers: keys(reducers), ...props }));
 		};
 
-		store.ejectReducers = (reducers, { namespace, version, feature = DEFAULT_FEATURE }) => {
-			reducerEntries = reject(
-				both(
-					isEntryEjectableByVersion(version),
-					isEntryIncluded(createEntries(reducers, { namespace, version, feature }))
-				),
-				reducerEntries
-			);
-
-			store.replaceReducer(composeReducers(reducer, combineReducerEntries(reducerEntries)));
-			store.dispatch(reducersEjected({ reducers: keys(reducers), namespace, version, feature }));
-			store._reducerEntries = reducerEntries;
+		store.ejectReducers = (reducers, props) => {
+			store.reducerEntries = withoutOnce(createEntries(reducers, props), store.reducerEntries);
+			store.replaceReducer(composeReducers(reducer, combineReducerEntries(store.reducerEntries)));
+			store.dispatch(reducersEjected({ reducers: keys(reducers), ...props }));
 		};
 
 		return store;

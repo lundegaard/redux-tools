@@ -1,6 +1,7 @@
-import { prop } from 'ramda';
-import { makeInjector } from '@redux-tools/injectors-react';
+import { makeDecorator } from '@redux-tools/injectors-react';
 
-const withMiddleware = makeInjector(prop('injectMiddleware'), prop('ejectMiddleware'));
+import configuration from './configuration';
+
+const withMiddleware = makeDecorator(configuration);
 
 export default withMiddleware;

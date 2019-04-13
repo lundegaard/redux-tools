@@ -1,10 +1,10 @@
-import React from 'react';
-import { compose, cond, apply, __, isNil, T, map, omit, o } from 'ramda';
+import { compose, cond, apply, __, isNil, T, map, o } from 'ramda';
 import { alwaysEmptyObject, isFunction, isObject } from 'ramda-extension';
 import { getStateByNamespace } from '@redux-tools/reducers';
-import { withInjectorContext } from '@redux-tools/injectors-react';
+import { useInjectorContext } from '@redux-tools/injectors-react';
 import { attachNamespace, DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import { connect } from 'react-redux';
+import { withProps } from '@redux-tools/utils';
 
 export const wrapMapStateToProps = mapStateToProps => (state, ownProps) =>
 	mapStateToProps
@@ -43,20 +43,14 @@ const rawNamespacedConnect = (mapStateToProps, mapDispatchToProps, ...args) =>
 		...args
 	);
 
-const omitStore = omit(['store']);
-
-// eslint-disable-next-line react/display-name
-const withOmitStore = Component => props => <Component {...omitStore(props)} />;
-
 const namespacedConnect = (
 	mapStateToProps,
 	mapDispatchToProps,
 	mergeProps,
 	{ feature = DEFAULT_FEATURE, ...options } = {}
 ) =>
-	compose(
-		withInjectorContext({ feature }),
-		withOmitStore,
+	o(
+		withProps(() => ({ feature, namespace: useInjectorContext(feature).namespace })),
 		rawNamespacedConnect(mapStateToProps, mapDispatchToProps, mergeProps, options)
 	);
 

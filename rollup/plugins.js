@@ -27,9 +27,7 @@ export const terser = terserPlugin({
 	},
 });
 
-export const nodeResolve = nodeResolvePlugin({
-	jsnext: true,
-});
+export const nodeResolve = nodeResolvePlugin();
 
 export const babel = babelPlugin({
 	cwd: LERNA_ROOT_PATH,

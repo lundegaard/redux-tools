@@ -1,6 +1,7 @@
-import { prop } from 'ramda';
-import { makeInjector } from '@redux-tools/injectors-react';
+import { makeDecorator } from '@redux-tools/injectors-react';
 
-const withEpics = makeInjector(prop('injectEpics'), prop('ejectEpics'));
+import configuration from './configuration';
+
+const withEpics = makeDecorator(configuration);
 
 export default withEpics;

@@ -1,6 +1,7 @@
-import { prop } from 'ramda';
-import { makeInjector } from '@redux-tools/injectors-react';
+import { makeDecorator } from '@redux-tools/injectors-react';
 
-const withReducers = makeInjector(prop('injectReducers'), prop('ejectReducers'));
+import configuration from './configuration';
+
+const withReducers = makeDecorator(configuration);
 
 export default withReducers;

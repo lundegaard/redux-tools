@@ -17,7 +17,7 @@
     "react": "^16.8.6"
   },
   "devDependencies": {
-    "enzyme": "^3.9.0"
+    "enzyme": "3.9.0"
   },
   "publishConfig": {
     "access": "public"

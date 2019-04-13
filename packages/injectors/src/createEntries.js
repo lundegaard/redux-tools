@@ -5,10 +5,10 @@ import { applySpec, nth, map, toPairs, compose, merge } from 'ramda';
  * to an array of standalone entries.
  *
  * @param {Object} injectables an object with injectables as values
- * @param {Object} props props to store in the entry, e.g. `namespace` or `version`
+ * @param {Object} props props to store in the entry, e.g. `namespace` or `feature`
  * @returns {Object[]} an array of entries
  */
-const createEntries = (injectables, props) => {
+const createEntries = (injectables, props = {}) => {
 	const createEntry = applySpec({
 		key: nth(0),
 		value: nth(1),

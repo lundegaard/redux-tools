@@ -8,7 +8,7 @@ import { createEntries } from '@redux-tools/injectors';
 import useInjectorContext from './useInjectorContext';
 
 const makeHook = (configuration = {}) => (injectables, options = {}) => {
-	const { eject, getEntries = alwaysEmptyArray, inject, name = 'injectables' } = configuration;
+	const { eject, getEntries = alwaysEmptyArray, inject, type = 'injectables' } = configuration;
 
 	invariant(eject, 'The ejection handler must be defined.');
 	invariant(inject, 'The injection handler must be defined.');
@@ -25,8 +25,8 @@ const makeHook = (configuration = {}) => (injectables, options = {}) => {
 
 	useEffect(() => {
 		const resolvedNamespace = global ? null : namespace;
-		const hookName = `use${toPascalCase(name)}`;
-		const locationMessage = `Attempting to inject ${keys(injectables)} ${name}.`;
+		const hookName = `use${toPascalCase(type)}`;
+		const locationMessage = `Attempting to inject following ${type}: ${keys(injectables)}.`;
 
 		invariant(
 			!feature || !global,
@@ -38,7 +38,7 @@ const makeHook = (configuration = {}) => (injectables, options = {}) => {
 				locationMessage,
 				"You're using a @redux-tools injector with 'global: false' and no namespace! " +
 					'It will behave like a global injector. If this is intended, consider passing ' +
-					`'global: true' to the injector, e.g. '${hookName}(${name}, { global: true })'.`
+					`'global: true' to the injector, e.g. '${hookName}(${type}, { global: true })'.`
 			);
 		}
 

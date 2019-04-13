@@ -8,8 +8,8 @@ import useInjectorContext from './useInjectorContext';
 
 const makeDecorator = (configuration = {}) => {
 	const useInjectables = makeHook(configuration);
-	const { name } = configuration;
-	const decoratorName = name ? `With${toPascalCase(name)}` : 'Injector';
+	const { type } = configuration;
+	const decoratorName = type ? `With${toPascalCase(type)}` : 'Injector';
 
 	return (injectables, options = {}) => {
 		const { feature = DEFAULT_FEATURE } = options;

@@ -4,5 +4,5 @@ export default {
 	inject: prop('injectEpics'),
 	eject: prop('ejectEpics'),
 	getEntries: prop('epicEntries'),
-	name: 'epics',
+	type: 'epics',
 };

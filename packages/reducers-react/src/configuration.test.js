@@ -5,6 +5,6 @@ describe('configuration', () => {
 		expect(configuration.inject).toBeInstanceOf(Function);
 		expect(configuration.eject).toBeInstanceOf(Function);
 		expect(configuration.getEntries).toBeInstanceOf(Function);
-		expect(typeof configuration.name).toBe('string');
+		expect(typeof configuration.type).toBe('string');
 	});
 });

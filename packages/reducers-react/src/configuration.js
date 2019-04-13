@@ -4,5 +4,5 @@ export default {
 	inject: prop('injectReducers'),
 	eject: prop('ejectReducers'),
 	getEntries: prop('reducerEntries'),
-	name: 'reducers',
+	type: 'reducers',
 };

@@ -4,5 +4,5 @@ export default {
 	inject: prop('injectMiddleware'),
 	eject: prop('ejectMiddleware'),
 	getEntries: prop('middlewareEntries'),
-	name: 'middleware',
+	type: 'middleware',
 };

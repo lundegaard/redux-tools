@@ -1,4 +1,4 @@
-describe('makeEnhancer', () => {
+describe('enhanceStore', () => {
 	it('works', () => {
 		// TODO: Write tests.
 	});

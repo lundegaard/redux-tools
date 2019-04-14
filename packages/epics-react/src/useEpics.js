@@ -1,7 +1,5 @@
 import { makeHook } from '@redux-tools/injectors-react';
 
-import configuration from './configuration';
-
-const useEpics = makeHook(configuration);
+const useEpics = makeHook('epics');
 
 export default useEpics;

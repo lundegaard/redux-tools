@@ -1,7 +1,5 @@
 import { makeHook } from '@redux-tools/injectors-react';
 
-import configuration from './configuration';
-
-const useMiddleware = makeHook(configuration);
+const useMiddleware = makeHook('middleware');
 
 export default useMiddleware;

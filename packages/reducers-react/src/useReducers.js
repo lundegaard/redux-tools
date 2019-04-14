@@ -1,7 +1,5 @@
 import { makeHook } from '@redux-tools/injectors-react';
 
-import configuration from './configuration';
-
-const useReducers = makeHook(configuration);
+const useReducers = makeHook('reducers');
 
 export default useReducers;

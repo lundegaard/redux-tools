@@ -8,9 +8,8 @@ import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import makeHook from './makeHook';
 import useInjectorContext from './useInjectorContext';
 
-const makeDecorator = (configuration = {}) => {
-	const useInjectables = makeHook(configuration);
-	const { type } = configuration;
+const makeDecorator = type => {
+	const useInjectables = makeHook(type);
 	const decoratorName = type ? `With${toPascalCase(type)}` : 'Injector';
 
 	return (injectables, options = {}) => NextComponent => {

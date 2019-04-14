@@ -1,7 +1,5 @@
 import { makeDecorator } from '@redux-tools/injectors-react';
 
-import configuration from './configuration';
-
-const withMiddleware = makeDecorator(configuration);
+const withMiddleware = makeDecorator('middleware');
 
 export default withMiddleware;

@@ -1,10 +1,7 @@
-import { o, concat, keys, map, compose, isEmpty, uniq, identity } from 'ramda';
-import { createEntries } from '@redux-tools/injectors';
+import { o, map, compose, isEmpty, uniq, identity } from 'ramda';
+import { enhanceStore } from '@redux-tools/injectors';
 import { isActionFromNamespace, attachNamespace } from '@redux-tools/namespaces';
 import { memoizeWithIdentity } from 'ramda-extension';
-import { withoutOnce } from '@redux-tools/utils';
-
-import { middlewareInjected, middlewareEjected } from './actions';
 
 export default function makeEnhancer({ getMiddlewareAPI = identity } = {}) {
 	let entries = [];
@@ -32,24 +29,12 @@ export default function makeEnhancer({ getMiddlewareAPI = identity } = {}) {
 	const enhancer = createStore => (...args) => {
 		const store = createStore(...args);
 
-		store.middlewareEntries = [];
+		const handler = () => (entries = store.entries.middleware);
 
-		store.injectMiddleware = (middleware, props = {}) => {
-			store.middlewareEntries = concat(store.middlewareEntries, createEntries(middleware, props));
-
-			store.dispatch(middlewareInjected({ middleware: keys(middleware), ...props }));
-			entries = store.middlewareEntries;
-		};
-
-		store.ejectMiddleware = (middleware, props = {}) => {
-			store.middlewareEntries = withoutOnce(
-				createEntries(middleware, props),
-				store.middlewareEntries
-			);
-
-			store.dispatch(middlewareEjected({ middleware: keys(middleware), ...props }));
-			entries = store.middlewareEntries;
-		};
+		enhanceStore(store, 'middleware', {
+			onInjected: handler,
+			onEjected: handler,
+		});
 
 		return store;
 	};

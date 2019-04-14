@@ -1,7 +1,5 @@
 import { makeDecorator } from '@redux-tools/injectors-react';
 
-import configuration from './configuration';
-
-const withEpics = makeDecorator(configuration);
+const withEpics = makeDecorator('epics');
 
 export default withEpics;

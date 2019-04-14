@@ -26,14 +26,14 @@ describe('makeEnhancer', () => {
 		store.injectReducers({ foo: identity }, { namespace: 'ns' });
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(1);
-		expect(store.reducerEntries).toEqual([
+		expect(store.entries.reducers).toEqual([
 			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
 		]);
 
 		store.injectReducers({ foo: identity }, { namespace: 'ns' });
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(2);
-		expect(store.reducerEntries).toEqual([
+		expect(store.entries.reducers).toEqual([
 			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
 			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
 		]);
@@ -48,7 +48,7 @@ describe('makeEnhancer', () => {
 		store.injectReducers({ foo: identity }, { namespace: 'ns' });
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(1);
-		expect(store.reducerEntries).toEqual([
+		expect(store.entries.reducers).toEqual([
 			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
 		]);
 
@@ -56,7 +56,7 @@ describe('makeEnhancer', () => {
 		store.ejectReducers({ foo: identity }, { namespace: 'ns' });
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(3);
-		expect(store.reducerEntries).toEqual([
+		expect(store.entries.reducers).toEqual([
 			{ key: 'bar', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
 		]);
 	});
@@ -70,14 +70,14 @@ describe('makeEnhancer', () => {
 		store.injectReducers(identity, { namespace: 'ns' });
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(1);
-		expect(store.reducerEntries).toEqual([
+		expect(store.entries.reducers).toEqual([
 			{ key: FUNCTION_KEY, value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
 		]);
 
 		store.ejectReducers(identity, { namespace: 'ns' });
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(2);
-		expect(store.reducerEntries).toEqual([]);
+		expect(store.entries.reducers).toEqual([]);
 	});
 
 	it('throws when injecting a function without a namespace', () => {

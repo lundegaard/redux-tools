@@ -24,13 +24,13 @@ describe('makeEnhancer', () => {
 	it('handles multiple calls to store.injectMiddleware', () => {
 		store.injectMiddleware({ foo: identity }, { namespace: 'ns' });
 
-		expect(store.middlewareEntries).toEqual([
+		expect(store.entries.middleware).toEqual([
 			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
 		]);
 
 		store.injectMiddleware({ foo: identity }, { namespace: 'ns' });
 
-		expect(store.middlewareEntries).toEqual([
+		expect(store.entries.middleware).toEqual([
 			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
 			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
 		]);
@@ -44,14 +44,14 @@ describe('makeEnhancer', () => {
 	it('handles successive calls to store.injectReducers and store.ejectReducers', () => {
 		store.injectMiddleware({ foo: identity }, { namespace: 'ns' });
 
-		expect(store.middlewareEntries).toEqual([
+		expect(store.entries.middleware).toEqual([
 			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
 		]);
 
 		store.injectMiddleware({ bar: identity }, { namespace: 'ns' });
 		store.ejectMiddleware({ foo: identity }, { namespace: 'ns' });
 
-		expect(store.middlewareEntries).toEqual([
+		expect(store.entries.middleware).toEqual([
 			{ key: 'bar', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
 		]);
 	});

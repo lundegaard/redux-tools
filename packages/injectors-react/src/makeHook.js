@@ -1,9 +1,9 @@
 import { useLayoutEffect, useState, useEffect } from 'react';
 import { keys, all, includes, omit } from 'ramda';
-import { toPascalCase, isNotNil, alwaysEmptyArray, rejectNil } from 'ramda-extension';
+import { toPascalCase, isNotNil, rejectNil } from 'ramda-extension';
 import invariant from 'invariant';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
-import { createEntries } from '@redux-tools/injectors';
+import { createEntries, makeConfiguration } from '@redux-tools/injectors';
 
 import useInjectorContext from './useInjectorContext';
 import { IS_SERVER } from './constants';
@@ -11,8 +11,10 @@ import { IS_SERVER } from './constants';
 const useUniversalLayoutEffect = IS_SERVER ? useEffect : useLayoutEffect;
 const getOtherProps = omit(['isGlobal', 'global', 'isPersistent', 'persist']);
 
-const makeHook = (configuration = {}) => {
-	const { eject, getEntries = alwaysEmptyArray, inject, type = 'injectables' } = configuration;
+const makeHook = type => {
+	invariant(type, 'The hook type must be defined.');
+
+	const { eject, getEntries, inject } = makeConfiguration(type);
 
 	invariant(eject, 'The ejection handler must be defined.');
 	invariant(inject, 'The injection handler must be defined.');

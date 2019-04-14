@@ -2,6 +2,7 @@ import React from 'react';
 import { toPascalCase } from 'ramda-extension';
 import { getDisplayName } from '@redux-tools/utils';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
+import hoistNonReactStatics from 'hoist-non-react-statics';
 
 import makeHook from './makeHook';
 import useInjectorContext from './useInjectorContext';
@@ -25,6 +26,8 @@ const makeDecorator = (configuration = {}) => {
 
 				return null;
 			};
+
+			hoistNonReactStatics(Injector, NextComponent);
 
 			Injector.displayName = `${decoratorName}(${getDisplayName(NextComponent)})`;
 

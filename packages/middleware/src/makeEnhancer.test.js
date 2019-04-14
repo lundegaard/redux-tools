@@ -1,5 +1,6 @@
 import { identity, compose } from 'ramda';
 import { createStore as actualCreateStore, applyMiddleware } from 'redux';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import makeEnhancer from './makeEnhancer';
 
@@ -23,13 +24,15 @@ describe('makeEnhancer', () => {
 	it('handles multiple calls to store.injectMiddleware', () => {
 		store.injectMiddleware({ foo: identity }, { namespace: 'ns' });
 
-		expect(store.middlewareEntries).toEqual([{ key: 'foo', value: identity, namespace: 'ns' }]);
+		expect(store.middlewareEntries).toEqual([
+			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
+		]);
 
 		store.injectMiddleware({ foo: identity }, { namespace: 'ns' });
 
 		expect(store.middlewareEntries).toEqual([
-			{ key: 'foo', value: identity, namespace: 'ns' },
-			{ key: 'foo', value: identity, namespace: 'ns' },
+			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
+			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
 		]);
 	});
 
@@ -41,12 +44,16 @@ describe('makeEnhancer', () => {
 	it('handles successive calls to store.injectReducers and store.ejectReducers', () => {
 		store.injectMiddleware({ foo: identity }, { namespace: 'ns' });
 
-		expect(store.middlewareEntries).toEqual([{ key: 'foo', value: identity, namespace: 'ns' }]);
+		expect(store.middlewareEntries).toEqual([
+			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
+		]);
 
 		store.injectMiddleware({ bar: identity }, { namespace: 'ns' });
 		store.ejectMiddleware({ foo: identity }, { namespace: 'ns' });
 
-		expect(store.middlewareEntries).toEqual([{ key: 'bar', value: identity, namespace: 'ns' }]);
+		expect(store.middlewareEntries).toEqual([
+			{ key: 'bar', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
+		]);
 	});
 
 	it('dispatches an action when store.ejectMiddleware is called', () => {

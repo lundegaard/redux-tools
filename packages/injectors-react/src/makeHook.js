@@ -31,24 +31,18 @@ const makeHook = (configuration = {}) => {
 			// NOTE: `options.global` and `options.persist` are deprecated.
 			const isGlobal = options.isGlobal || options.global || false;
 			const isPersistent = options.isPersistent || options.persist || false;
-
-			const { feature } = options;
-			// NOTE: Only use `DEFAULT_FEATURE` here, because we don't have any defaulting
-			// in `createEntries()`. We need `store.injectSomething()` and `useInjectables()`
-			// to create the same entries (i.e. without the default feature).
-			const { namespace, store } = useInjectorContext(feature || DEFAULT_FEATURE);
+			const feature = options.feature || DEFAULT_FEATURE;
+			const injectorContext = useInjectorContext(feature);
+			const { store } = injectorContext;
+			const namespace = isGlobal ? null : options.namespace || injectorContext.namespace;
 
 			// NOTE: On the server, the injectables should be injected beforehand.
 			const [isInitialized, setIsInitialized] = useState(IS_SERVER);
 
-			const resolvedFeature = isGlobal ? null : feature;
-			const resolvedNamespace = isGlobal ? null : namespace;
-			const otherProps = getOtherProps(options);
-
 			const props = rejectNil({
-				...otherProps,
-				feature: resolvedFeature,
-				namespace: resolvedNamespace,
+				...getOtherProps(options),
+				feature,
+				namespace,
 			});
 
 			if (IS_SERVER) {
@@ -70,11 +64,14 @@ const makeHook = (configuration = {}) => {
 
 			// NOTE: This doesn't run on the server, but won't trigger `useLayoutEffect` warnings either.
 			useUniversalLayoutEffect(() => {
-				if (feature && isGlobal) {
-					warn(`You cannot use a feature with global ${type}, it will be ignored.`);
+				if (isGlobal && feature !== DEFAULT_FEATURE) {
+					warn(
+						`You are using a feature (${feature}) with global ${type}.`,
+						'This will have no effect.'
+					);
 				}
 
-				if (!resolvedNamespace && !isGlobal) {
+				if (!namespace && !isGlobal) {
 					warn(
 						`You're injecting ${type} with no namespace!`,
 						'They will be injected globally. If this is intended, consider passing',

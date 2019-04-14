@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { toPascalCase } from 'ramda-extension';
 import { getDisplayName } from '@redux-tools/utils';
-import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import hoistNonReactStatics from 'hoist-non-react-statics';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import makeHook from './makeHook';
 import useInjectorContext from './useInjectorContext';
@@ -12,27 +13,37 @@ const makeDecorator = (configuration = {}) => {
 	const { type } = configuration;
 	const decoratorName = type ? `With${toPascalCase(type)}` : 'Injector';
 
-	return (injectables, options = {}) => {
-		const { feature = DEFAULT_FEATURE } = options;
+	return (injectables, options = {}) => NextComponent => {
+		const Injector = ({ feature: featureProp, namespace: namespaceProp, ...otherProps }) => {
+			const feature = options.feature || featureProp || DEFAULT_FEATURE;
+			const injectorContext = useInjectorContext(feature);
+			const namespace = options.namespace || namespaceProp || injectorContext.namespace;
+			const isInitialized = useInjectables(injectables, { ...options, feature, namespace });
 
-		return NextComponent => {
-			const Injector = props => {
-				const { namespace } = useInjectorContext(feature);
-				const isInitialized = useInjectables(injectables, options);
+			if (isInitialized) {
+				return (
+					<NextComponent
+						feature={feature}
+						key={String([feature, namespace])}
+						namespace={namespace}
+						{...otherProps}
+					/>
+				);
+			}
 
-				if (isInitialized) {
-					return <NextComponent key={String([feature, namespace])} {...props} />;
-				}
-
-				return null;
-			};
-
-			hoistNonReactStatics(Injector, NextComponent);
-
-			Injector.displayName = `${decoratorName}(${getDisplayName(NextComponent)})`;
-
-			return Injector;
+			return null;
 		};
+
+		Injector.propTypes = {
+			feature: PropTypes.string,
+			namespace: PropTypes.string,
+		};
+
+		hoistNonReactStatics(Injector, NextComponent);
+
+		Injector.displayName = `${decoratorName}(${getDisplayName(NextComponent)})`;
+
+		return Injector;
 	};
 };
 

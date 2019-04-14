@@ -1,5 +1,6 @@
 import { identity } from 'ramda';
 import { FUNCTION_KEY } from '@redux-tools/injectors';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import makeEnhancer from './makeEnhancer';
 
@@ -25,14 +26,16 @@ describe('makeEnhancer', () => {
 		store.injectReducers({ foo: identity }, { namespace: 'ns' });
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(1);
-		expect(store.reducerEntries).toEqual([{ key: 'foo', value: identity, namespace: 'ns' }]);
+		expect(store.reducerEntries).toEqual([
+			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
+		]);
 
 		store.injectReducers({ foo: identity }, { namespace: 'ns' });
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(2);
 		expect(store.reducerEntries).toEqual([
-			{ key: 'foo', value: identity, namespace: 'ns' },
-			{ key: 'foo', value: identity, namespace: 'ns' },
+			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
+			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
 		]);
 	});
 
@@ -45,13 +48,17 @@ describe('makeEnhancer', () => {
 		store.injectReducers({ foo: identity }, { namespace: 'ns' });
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(1);
-		expect(store.reducerEntries).toEqual([{ key: 'foo', value: identity, namespace: 'ns' }]);
+		expect(store.reducerEntries).toEqual([
+			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
+		]);
 
 		store.injectReducers({ bar: identity }, { namespace: 'ns' });
 		store.ejectReducers({ foo: identity }, { namespace: 'ns' });
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(3);
-		expect(store.reducerEntries).toEqual([{ key: 'bar', value: identity, namespace: 'ns' }]);
+		expect(store.reducerEntries).toEqual([
+			{ key: 'bar', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
+		]);
 	});
 
 	it('dispatches an action when store.ejectReducers is called', () => {
@@ -63,7 +70,9 @@ describe('makeEnhancer', () => {
 		store.injectReducers(identity, { namespace: 'ns' });
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(1);
-		expect(store.reducerEntries).toEqual([{ key: FUNCTION_KEY, value: identity, namespace: 'ns' }]);
+		expect(store.reducerEntries).toEqual([
+			{ key: FUNCTION_KEY, value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
+		]);
 
 		store.ejectReducers(identity, { namespace: 'ns' });
 

@@ -30,8 +30,12 @@ const getReducerPath = (feature, namespace, key) => {
 	return [feature, namespace, key];
 };
 
-const entryReducer = (schema, { value, key, namespace, feature = DEFAULT_FEATURE }) =>
-	assocPath(getReducerPath(feature, namespace, key), filterReducer(value, namespace), schema);
+const entryReducer = (schema, { value, key, namespace, feature }) =>
+	assocPath(
+		getReducerPath(feature || DEFAULT_FEATURE, namespace, key),
+		filterReducer(value, namespace),
+		schema
+	);
 
 const combineReducerEntries = o(deepCombineReducers, reduce(entryReducer, {}));
 

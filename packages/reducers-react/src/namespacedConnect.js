@@ -9,7 +9,7 @@ import { withProps } from '@redux-tools/utils';
 export const wrapMapStateToProps = mapStateToProps => (state, ownProps) =>
 	mapStateToProps
 		? mapStateToProps(
-				getStateByNamespace(ownProps.feature || DEFAULT_FEATURE, ownProps.namespace, state),
+				getStateByNamespace(ownProps.feature, ownProps.namespace, state),
 				ownProps,
 				state
 		  )
@@ -47,10 +47,18 @@ const namespacedConnect = (
 	mapStateToProps,
 	mapDispatchToProps,
 	mergeProps,
-	{ feature = DEFAULT_FEATURE, ...options } = {}
+	{ feature: featureOption, namespace: namespaceOption, ...options } = {}
 ) =>
 	o(
-		withProps(() => ({ feature, namespace: useInjectorContext(feature).namespace })),
+		withProps(({ feature: featureProp, namespace: namespaceProp }) => {
+			const feature = featureOption || featureProp || DEFAULT_FEATURE;
+			const { namespace: namespaceContext } = useInjectorContext(feature);
+
+			return {
+				feature,
+				namespace: namespaceOption || namespaceProp || namespaceContext,
+			};
+		}),
 		rawNamespacedConnect(mapStateToProps, mapDispatchToProps, mergeProps, options)
 	);
 

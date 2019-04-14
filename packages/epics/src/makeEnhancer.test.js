@@ -1,4 +1,5 @@
 import { Subject } from 'rxjs';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import makeEnhancer from './makeEnhancer';
 import { epicsInjected, epicsEjected } from './actions';
@@ -30,6 +31,7 @@ describe('makeEnhancer', () => {
 			key: 'epic',
 			namespace: 'ns',
 			value: epic,
+			feature: DEFAULT_FEATURE,
 		});
 	});
 
@@ -53,6 +55,7 @@ describe('makeEnhancer', () => {
 			key: 'epic',
 			value: epic,
 			namespace: 'ns',
+			feature: DEFAULT_FEATURE,
 		});
 	});
 

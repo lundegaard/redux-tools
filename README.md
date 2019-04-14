@@ -24,6 +24,7 @@ The following packages are used internally and are not meant to be used directly
 - [injectors](packages/injectors/README.md) – Internal reusable logic for the injection mechanism itself.
 - [injectors-react](packages/injectors-react/README.md) – Core React injector functionality.
 - [utils](packages/utils/README.md) – Various utility functions not tied to the @redux-tools domain.
+- [utils-react](packages/utils-react/README.md) – Various React-specifc utility functions not tied to the @redux-tools domain.
 
 ## Usage
 

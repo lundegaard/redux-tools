@@ -1,11 +1,11 @@
 {
-  "name": "@redux-tools/utils",
+  "name": "@redux-tools/utils-react",
   "version": "0.4.0",
   "license": "MIT",
-  "main": "lib/redux-tools-utils.js",
-  "module": "es/redux-tools-utils.js",
-  "unpkg": "dist/redux-tools-utils.js",
-  "description": "Utility functions for @redux-tools packages.",
+  "main": "lib/redux-tools-utils-react.js",
+  "module": "es/redux-tools-utils-react.js",
+  "unpkg": "dist/redux-tools-utils-react.js",
+  "description": "React-specific utility functions for @redux-tools packages.",
   "repository": "https://github.com/lundegaard/redux-tools",
   "contributors": [
     "Tomas Konrady <tomas.konrady@lundegaard.eu>",
@@ -14,6 +14,12 @@
   "dependencies": {
     "ramda": "^0.26.1",
     "ramda-extension": "^0.7.2"
+  },
+  "devDependencies": {
+    "enzyme": "3.9.0"
+  },
+  "peerDependencies": {
+    "react": "^16.8.6"
   },
   "publishConfig": {
     "access": "public"

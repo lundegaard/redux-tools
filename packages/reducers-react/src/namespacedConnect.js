@@ -4,7 +4,7 @@ import { getStateByNamespace } from '@redux-tools/reducers';
 import { useInjectorContext } from '@redux-tools/injectors-react';
 import { attachNamespace, DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import { connect } from 'react-redux';
-import { withProps } from '@redux-tools/utils';
+import { withProps } from '@redux-tools/utils-react';
 
 export const wrapMapStateToProps = mapStateToProps => (state, ownProps) =>
 	mapStateToProps

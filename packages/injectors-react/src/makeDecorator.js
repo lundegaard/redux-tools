@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { toPascalCase } from 'ramda-extension';
-import { getDisplayName } from '@redux-tools/utils';
+import { getDisplayName } from '@redux-tools/utils-react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 

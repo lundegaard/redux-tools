@@ -26,15 +26,3 @@ export const ActionTypes = prefixedValueMirror('duck', ['INCREMENT']);
 
 ActionTypes.INCREMENT; // "duck/INCREMENT"
 ```
-
-## `getDisplayName`
-
-Extracts the display name of a React component.
-
-### Arguments
-
-1. `Component` (_React.Component_): React component to get the display name of.
-
-### Returns
-
-(_string_): Display name of the component

@@ -2,7 +2,7 @@
 
 exports[`constants should not be changed 1`] = `
 Object {
-  "IS_SERVER": true,
+  "FUNCTION_KEY": "@@redux-tools/injectors/FUNCTION_KEY",
   "__esModule": true,
 }
 `;

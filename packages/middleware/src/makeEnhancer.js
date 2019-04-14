@@ -34,14 +34,14 @@ export default function makeEnhancer({ getMiddlewareAPI = identity } = {}) {
 
 		store.middlewareEntries = [];
 
-		store.injectMiddleware = (middleware, props) => {
+		store.injectMiddleware = (middleware, props = {}) => {
 			store.middlewareEntries = concat(store.middlewareEntries, createEntries(middleware, props));
 
 			store.dispatch(middlewareInjected({ middleware: keys(middleware), ...props }));
 			entries = store.middlewareEntries;
 		};
 
-		store.ejectMiddleware = (middleware, props) => {
+		store.ejectMiddleware = (middleware, props = {}) => {
 			store.middlewareEntries = withoutOnce(
 				createEntries(middleware, props),
 				store.middlewareEntries

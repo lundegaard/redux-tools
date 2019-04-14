@@ -14,12 +14,12 @@ export default function makeEnhancer({ epicMiddleware, streamCreator }) {
 
 		const rootEpic = makeRootEpic({ inject$, eject$, store, streamCreator });
 
-		store.injectEpics = (epics, props) => {
+		store.injectEpics = (epics, props = {}) => {
 			forEach(entry => inject$.next(entry), createEntries(epics, props));
 			store.dispatch(epicsInjected({ epics: keys(epics), ...props }));
 		};
 
-		store.ejectEpics = (epics, props) => {
+		store.ejectEpics = (epics, props = {}) => {
 			forEach(entry => eject$.next(entry), createEntries(epics, props));
 			store.dispatch(epicsEjected({ epics: keys(epics), ...props }));
 		};

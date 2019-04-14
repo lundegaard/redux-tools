@@ -1,4 +1,7 @@
+import { noop } from 'ramda-extension';
+
 import createEntries from './createEntries';
+import { FUNCTION_KEY } from './constants';
 
 describe('createEntries', () => {
 	it('correctly creates an array of entries', () => {
@@ -17,5 +20,15 @@ describe('createEntries', () => {
 			{ key: 'foo', value: 'bar', namespace: 'ns', feature: 'grid' },
 			{ key: 'bar', value: 'baz', namespace: 'ns', feature: 'grid' },
 		]);
+	});
+
+	it('handles functions', () => {
+		expect(
+			createEntries(noop, {
+				namespace: 'ns',
+				version: 1,
+				feature: 'grid',
+			})
+		).toEqual([{ key: FUNCTION_KEY, value: noop, namespace: 'ns', version: 1, feature: 'grid' }]);
 	});
 });

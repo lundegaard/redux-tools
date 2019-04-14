@@ -1,4 +1,5 @@
 import { o, inc, dec, defaultTo } from 'ramda';
+import { FUNCTION_KEY } from '@redux-tools/injectors';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import combineReducerEntries, { deepCombineReducers } from './combineReducerEntries';
@@ -83,6 +84,40 @@ describe('combineReducerEntries', () => {
 			[DEFAULT_FEATURE]: {
 				a: { foo: 2 },
 				b: { bar: -2 },
+			},
+		});
+	});
+
+	it('handles function keys', () => {
+		const reducer = combineReducerEntries([
+			{ key: 'foo', value: incReducer, namespace: 'a', feature: 'namespaces' },
+			{ key: FUNCTION_KEY, value: decReducer, namespace: 'b', feature: 'grids' },
+		]);
+
+		expect(reducer()).toEqual({
+			namespaces: {
+				a: { foo: 1 },
+			},
+			grids: {
+				b: -1,
+			},
+		});
+
+		expect(
+			reducer({
+				namespaces: {
+					a: { foo: 1 },
+				},
+				grids: {
+					b: -1,
+				},
+			})
+		).toEqual({
+			namespaces: {
+				a: { foo: 2 },
+			},
+			grids: {
+				b: -2,
 			},
 		});
 	});

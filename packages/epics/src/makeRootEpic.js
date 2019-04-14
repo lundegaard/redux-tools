@@ -6,11 +6,11 @@ import { includesTimes, withoutOnce } from '@redux-tools/utils';
 const makeRootEpic = ({ inject$, eject$, store, streamCreator }) => {
 	store.epicEntries = [];
 
+	inject$.subscribe(entry => (store.epicEntries = append(entry, store.epicEntries)));
 	eject$.subscribe(entry => (store.epicEntries = withoutOnce([entry], store.epicEntries)));
 
 	return (globalAction$, state$, dependencies) =>
 		inject$.pipe(
-			Rx.tap(entry => (store.epicEntries = append(entry, store.epicEntries))),
 			Rx.filter(entry => includesTimes(1, entry, store.epicEntries)),
 			Rx.mergeMap(entry => {
 				const { value: epic, namespace, ...otherProps } = entry;

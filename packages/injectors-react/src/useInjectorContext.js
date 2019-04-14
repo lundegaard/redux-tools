@@ -9,8 +9,10 @@ const useInjectorContext = (feature = DEFAULT_FEATURE) => {
 	const namespace = useNamespace(feature, namespaces);
 
 	return {
-		store,
 		namespace: namespaces[feature] || namespace || namespaces[DEFAULT_FEATURE],
+		namespaces,
+		store,
+		useNamespace,
 	};
 };
 

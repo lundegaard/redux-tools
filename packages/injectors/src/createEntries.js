@@ -1,4 +1,5 @@
 import { applySpec, nth, map, toPairs, compose, merge } from 'ramda';
+import { rejectNil } from 'ramda-extension';
 
 /**
  * Converts the input of `store.injectSomething()` or `store.ejectSomething()`
@@ -14,8 +15,10 @@ const createEntries = (injectables, props = {}) => {
 		value: nth(1),
 	});
 
+	const sanitizedProps = rejectNil(props);
+
 	return compose(
-		map(merge(props)),
+		map(merge(sanitizedProps)),
 		map(createEntry),
 		toPairs
 	)(injectables);

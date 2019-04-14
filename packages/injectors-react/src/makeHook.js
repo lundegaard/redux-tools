@@ -1,75 +1,112 @@
-import { useEffect, useState } from 'react';
-import { all, keys, includes, isNil } from 'ramda';
-import { toPascalCase, alwaysEmptyArray, isNotNil } from 'ramda-extension';
+import { useLayoutEffect, useState, useEffect } from 'react';
+import { keys, all, includes, omit } from 'ramda';
+import { toPascalCase, isNotNil, alwaysEmptyArray, rejectNil } from 'ramda-extension';
 import invariant from 'invariant';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import { createEntries } from '@redux-tools/injectors';
 
 import useInjectorContext from './useInjectorContext';
+import { IS_SERVER } from './constants';
 
-const makeHook = (configuration = {}) => (injectables, options = {}) => {
+const useUniversalLayoutEffect = IS_SERVER ? useEffect : useLayoutEffect;
+const getOtherProps = omit(['isGlobal', 'global', 'isPersistent', 'persist']);
+
+const makeHook = (configuration = {}) => {
 	const { eject, getEntries = alwaysEmptyArray, inject, type = 'injectables' } = configuration;
 
 	invariant(eject, 'The ejection handler must be defined.');
 	invariant(inject, 'The injection handler must be defined.');
 
-	const { feature = DEFAULT_FEATURE } = options;
-	const isGlobal = options.isGlobal || options.global || false;
-	const shouldEject = isNil(options.shouldEject) || options.shouldEject || !options.persist;
+	const hookName = `use${toPascalCase(type)}`;
 
-	const { store, namespace } = useInjectorContext(feature);
+	// HACK: https://stackoverflow.com/questions/5905492/dynamic-function-name-in-javascript
+	const useInjectables = {
+		[hookName]: (injectables, options = {}) => {
+			const locationMessage =
+				`@redux-tools: This warning happened while injecting the following ${type}: ` +
+				`${keys(injectables)}.`;
 
-	const [isInitialized, setIsInitialized] = useState(() =>
-		all(entry => includes(entry, getEntries(store)), createEntries(injectables, { feature }))
-	);
+			const warn = (...args) => console.warn(locationMessage, ...args);
 
-	useEffect(() => {
-		const resolvedNamespace = isGlobal ? null : namespace;
-		const hookName = `use${toPascalCase(type)}`;
-		const locationMessage = `Attempting to inject following ${type}: ${keys(injectables)}.`;
+			// NOTE: `options.global` and `options.persist` are deprecated.
+			const isGlobal = options.isGlobal || options.global || false;
+			const isPersistent = options.isPersistent || options.persist || false;
 
-		invariant(
-			!feature || !isGlobal,
-			`${locationMessage} You cannot pass a feature to global ${type}.`
-		);
+			const { feature } = options;
+			// NOTE: Only use `DEFAULT_FEATURE` here, because we don't have any defaulting
+			// in `createEntries()`. We need `store.injectSomething()` and `useInjectables()`
+			// to create the same entries (i.e. without the default feature).
+			const { namespace, store } = useInjectorContext(feature || DEFAULT_FEATURE);
 
-		if (!resolvedNamespace && !isGlobal) {
-			console.warn(
-				locationMessage,
-				"You're using a @redux-tools injector with no namespace!",
-				'It will behave like a global injector. If this is intended, consider passing',
-				`'isGlobal: true' to the injector, e.g. '${hookName}(${type}, { isGlobal: true })'.`
-			);
-		}
+			// NOTE: On the server, the injectables should be injected beforehand.
+			const [isInitialized, setIsInitialized] = useState(IS_SERVER);
 
-		if (isNotNil(options.global)) {
-			console.warn(`'global: ${options.global}' is deprecated. Use 'isGlobal: ${options.global}'.`);
-		}
+			const resolvedFeature = isGlobal ? null : feature;
+			const resolvedNamespace = isGlobal ? null : namespace;
+			const otherProps = getOtherProps(options);
 
-		if (isNotNil(options.persist)) {
-			console.warn(
-				`'persist: ${options.persist}' is deprecated. Use 'shouldEject: ${!options.persist}'.`
-			);
-		}
+			const props = rejectNil({
+				...otherProps,
+				feature: resolvedFeature,
+				namespace: resolvedNamespace,
+			});
 
-		inject(store)(injectables, {
-			namespace: resolvedNamespace,
-			feature,
-		});
+			if (IS_SERVER) {
+				const areEntriesAlreadyInjected = all(
+					entry => includes(entry, getEntries(store)),
+					createEntries(injectables, props)
+				);
 
-		setIsInitialized(true);
-
-		return () => {
-			if (shouldEject) {
-				eject(store)(injectables, {
-					namespace: resolvedNamespace,
-					feature,
-				});
+				if (!areEntriesAlreadyInjected) {
+					warn(
+						`When rendering on the server, inject all ${type} before calling`,
+						"'ReactDOMServer.renderToString()'. You should do this inside an",
+						"'async getInitialProps()' function, i.e. where you fetch data and",
+						'do other side effects. If you need to do server-side injections',
+						'during rendering, open an issue.'
+					);
+				}
 			}
-		};
-	}, []);
 
-	return isInitialized;
+			// NOTE: This doesn't run on the server, but won't trigger `useLayoutEffect` warnings either.
+			useUniversalLayoutEffect(() => {
+				if (feature && isGlobal) {
+					warn(`You cannot use a feature with global ${type}, it will be ignored.`);
+				}
+
+				if (!resolvedNamespace && !isGlobal) {
+					warn(
+						`You're injecting ${type} with no namespace!`,
+						'They will be injected globally. If this is intended, consider passing',
+						`'isGlobal: true' to the injector, e.g. '${hookName}(${type}, { isGlobal: true })'.`
+					);
+				}
+
+				if (isNotNil(options.global)) {
+					warn(`'global: ${options.global}' is deprecated. Use 'isGlobal: ${options.global}'.`);
+				}
+
+				if (isNotNil(options.persist)) {
+					warn(
+						`'persist: ${options.persist}' is deprecated. Use 'isPersistent: ${options.persist}'.`
+					);
+				}
+
+				inject(store)(injectables, props);
+				setIsInitialized(true);
+
+				return () => {
+					if (!isPersistent) {
+						eject(store)(injectables, props);
+					}
+				};
+			}, []);
+
+			return isInitialized;
+		},
+	}[hookName];
+
+	return useInjectables;
 };
 
 export default makeHook;

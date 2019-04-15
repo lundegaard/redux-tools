@@ -1,64 +1,25 @@
 import { identity, compose } from 'ramda';
-import { createStore as actualCreateStore, applyMiddleware } from 'redux';
-import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
+import { createStore, applyMiddleware } from 'redux';
 
 import makeEnhancer from './makeEnhancer';
 
-const createStore = jest.fn(() => ({
-	dispatch: jest.fn(),
-}));
-
 describe('makeEnhancer', () => {
-	let store;
-
 	beforeEach(() => {
 		jest.clearAllMocks();
-		store = makeEnhancer()(createStore)();
 	});
 
 	it('returns a Redux store with defined functions', () => {
+		const enhancer = makeEnhancer();
+		const store = createStore(
+			identity,
+			compose(
+				enhancer,
+				applyMiddleware(enhancer.injectedMiddleware)
+			)
+		);
+
 		expect(store.injectMiddleware).toBeInstanceOf(Function);
 		expect(store.ejectMiddleware).toBeInstanceOf(Function);
-	});
-
-	it('handles multiple calls to store.injectMiddleware', () => {
-		store.injectMiddleware({ foo: identity }, { namespace: 'ns' });
-
-		expect(store.entries.middleware).toEqual([
-			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
-		]);
-
-		store.injectMiddleware({ foo: identity }, { namespace: 'ns' });
-
-		expect(store.entries.middleware).toEqual([
-			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
-			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
-		]);
-	});
-
-	it('dispatches an action when store.injectMiddleware is called', () => {
-		store.injectMiddleware({ foo: identity }, { namespace: 'ns' });
-		expect(store.dispatch).toHaveBeenCalled();
-	});
-
-	it('handles successive calls to store.injectReducers and store.ejectReducers', () => {
-		store.injectMiddleware({ foo: identity }, { namespace: 'ns' });
-
-		expect(store.entries.middleware).toEqual([
-			{ key: 'foo', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
-		]);
-
-		store.injectMiddleware({ bar: identity }, { namespace: 'ns' });
-		store.ejectMiddleware({ foo: identity }, { namespace: 'ns' });
-
-		expect(store.entries.middleware).toEqual([
-			{ key: 'bar', value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
-		]);
-	});
-
-	it('dispatches an action when store.ejectMiddleware is called', () => {
-		store.ejectMiddleware({ foo: identity }, { namespace: 'ns' });
-		expect(store.dispatch).toHaveBeenCalled();
 	});
 
 	it('passes actions to the injected middleware', () => {
@@ -70,9 +31,8 @@ describe('makeEnhancer', () => {
 		};
 
 		const enhancer = makeEnhancer();
-		const store = actualCreateStore(
+		const store = createStore(
 			identity,
-			null,
 			compose(
 				enhancer,
 				applyMiddleware(enhancer.injectedMiddleware)
@@ -104,9 +64,8 @@ describe('makeEnhancer', () => {
 		};
 
 		const enhancer = makeEnhancer();
-		const store = actualCreateStore(
+		const store = createStore(
 			identity,
-			null,
 			compose(
 				enhancer,
 				applyMiddleware(enhancer.injectedMiddleware)
@@ -145,9 +104,8 @@ describe('makeEnhancer', () => {
 		};
 
 		const enhancer = makeEnhancer();
-		const store = actualCreateStore(
+		const store = createStore(
 			identity,
-			null,
 			compose(
 				enhancer,
 				applyMiddleware(enhancer.injectedMiddleware)
@@ -185,9 +143,8 @@ describe('makeEnhancer', () => {
 		};
 
 		const enhancer = makeEnhancer();
-		const store = actualCreateStore(
+		const store = createStore(
 			identity,
-			null,
 			compose(
 				enhancer,
 				applyMiddleware(middlewareA, enhancer.injectedMiddleware, middlewareB)
@@ -213,9 +170,8 @@ describe('makeEnhancer', () => {
 		};
 
 		const enhancer = makeEnhancer();
-		const store = actualCreateStore(
+		const store = createStore(
 			identity,
-			null,
 			compose(
 				enhancer,
 				applyMiddleware(enhancer.injectedMiddleware)

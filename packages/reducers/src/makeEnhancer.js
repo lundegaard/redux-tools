@@ -1,10 +1,12 @@
 import { identity } from 'ramda';
-import { enhanceStore } from '@redux-tools/injectors';
+import { enhanceStore, makeConfig } from '@redux-tools/injectors';
 import { isFunction } from 'ramda-extension';
 import invariant from 'invariant';
 
 import combineReducerEntries from './combineReducerEntries';
 import composeReducers from './composeReducers';
+
+export const config = makeConfig('reducers');
 
 const makeEnhancer = () => createStore => (reducer = identity, ...args) => {
 	const prevStore = createStore(reducer, ...args);
@@ -16,11 +18,11 @@ const makeEnhancer = () => createStore => (reducer = identity, ...args) => {
 		);
 
 		nextStore.replaceReducer(
-			composeReducers(reducer, combineReducerEntries(nextStore.entries.reducers))
+			composeReducers(reducer, combineReducerEntries(config.getEntries(nextStore)))
 		);
 	};
 
-	const nextStore = enhanceStore(prevStore, 'reducers', {
+	const nextStore = enhanceStore(prevStore, config, {
 		onInjected: handler,
 		onEjected: handler,
 	});

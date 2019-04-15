@@ -1,15 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { toPascalCase } from 'ramda-extension';
+import { toPascalCase, isObject } from 'ramda-extension';
 import { getDisplayName } from '@redux-tools/utils-react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
+import invariant from 'invariant';
 
 import makeHook from './makeHook';
 import useInjectorContext from './useInjectorContext';
 
-const makeDecorator = type => {
-	const useInjectables = makeHook(type);
+const makeDecorator = config => {
+	invariant(isObject(config), 'The injector config is undefined.');
+
+	const useInjectables = makeHook(config);
+	const { type } = config;
 	const decoratorName = type ? `With${toPascalCase(type)}` : 'Injector';
 
 	return (injectables, options = {}) => NextComponent => {

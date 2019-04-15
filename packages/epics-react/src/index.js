@@ -1,6 +1,7 @@
 import { makeHook, makeDecorator, Provider } from '@redux-tools/injectors-react';
+import { config } from '@redux-tools/epics';
 
 export { Provider };
-export const TYPE = 'epics';
-export const useEpics = makeHook(TYPE);
-export const withEpics = makeDecorator(TYPE);
+
+export const useEpics = makeHook(config);
+export const withEpics = makeDecorator(config);

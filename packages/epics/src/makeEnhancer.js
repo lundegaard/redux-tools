@@ -2,8 +2,10 @@ import { Subject } from 'rxjs';
 import * as Rx from 'rxjs/operators';
 import { isActionFromNamespace, attachNamespace } from '@redux-tools/namespaces';
 import { includesTimes } from '@redux-tools/utils';
-import { enhanceStore } from '@redux-tools/injectors';
+import { enhanceStore, makeConfig } from '@redux-tools/injectors';
 import { equals, includes } from 'ramda';
+
+export const config = makeConfig('epics');
 
 const makeEnhancer = ({ epicMiddleware, streamCreator }) => createStore => (...args) => {
 	const prevStore = createStore(...args);
@@ -14,7 +16,7 @@ const makeEnhancer = ({ epicMiddleware, streamCreator }) => createStore => (...a
 	const rootEpic = (globalAction$, state$, dependencies) =>
 		injectedEntries$.pipe(
 			Rx.mergeAll(),
-			Rx.filter(injectedEntry => includesTimes(1, injectedEntry, nextStore.entries.epics)),
+			Rx.filter(injectedEntry => includesTimes(1, injectedEntry, config.getEntries(nextStore))),
 			Rx.mergeMap(injectedEntry => {
 				const { value: epic, namespace, ...otherProps } = injectedEntry;
 				const action$ = globalAction$.pipe(Rx.filter(isActionFromNamespace(namespace)));
@@ -36,7 +38,7 @@ const makeEnhancer = ({ epicMiddleware, streamCreator }) => createStore => (...a
 						ejectedEntries$.pipe(
 							Rx.mergeAll(),
 							Rx.filter(equals(injectedEntry)),
-							Rx.filter(ejectedEntry => !includes(ejectedEntry, nextStore.entries.epics))
+							Rx.filter(ejectedEntry => !includes(ejectedEntry, config.getEntries(nextStore)))
 						)
 					)
 				);
@@ -45,7 +47,7 @@ const makeEnhancer = ({ epicMiddleware, streamCreator }) => createStore => (...a
 
 	epicMiddleware.run(rootEpic);
 
-	const nextStore = enhanceStore(prevStore, 'epics', {
+	const nextStore = enhanceStore(prevStore, config, {
 		onInjected: ({ entries }) => injectedEntries$.next(entries),
 		onEjected: ({ entries }) => ejectedEntries$.next(entries),
 	});

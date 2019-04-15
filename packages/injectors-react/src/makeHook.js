@@ -1,9 +1,9 @@
 import { useLayoutEffect, useState, useEffect, useDebugValue } from 'react';
 import { keys, all, includes, omit } from 'ramda';
-import { toPascalCase, isNotNil, rejectNil } from 'ramda-extension';
+import { toPascalCase, isNotNil, rejectNil, isObject } from 'ramda-extension';
 import invariant from 'invariant';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
-import { createEntries, makeConfiguration } from '@redux-tools/injectors';
+import { createEntries } from '@redux-tools/injectors';
 
 import useInjectorContext from './useInjectorContext';
 import { IS_SERVER } from './constants';
@@ -11,11 +11,10 @@ import { IS_SERVER } from './constants';
 const useUniversalLayoutEffect = IS_SERVER ? useEffect : useLayoutEffect;
 const getOtherProps = omit(['isGlobal', 'global', 'isPersistent', 'persist']);
 
-const makeHook = type => {
-	invariant(type, 'The hook type must be defined.');
+const makeHook = config => {
+	invariant(isObject(config), 'The injector config is undefined.');
 
-	const configuration = makeConfiguration(type);
-	const { getEject, getEntries, getInject, ejectMethodName, injectMethodName } = configuration;
+	const { getEject, getEntries, getInject, ejectMethodName, injectMethodName, type } = config;
 
 	const pascalCaseType = toPascalCase(type);
 	const hookName = `use${pascalCaseType}`;

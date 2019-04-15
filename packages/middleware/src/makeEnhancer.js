@@ -1,7 +1,9 @@
 import { o, map, compose, isEmpty, uniq, identity } from 'ramda';
-import { enhanceStore } from '@redux-tools/injectors';
+import { enhanceStore, makeConfig } from '@redux-tools/injectors';
 import { isActionFromNamespace, attachNamespace } from '@redux-tools/namespaces';
 import { memoizeWithIdentity } from 'ramda-extension';
+
+export const config = makeConfig('middleware');
 
 const makeEnhancer = ({ getMiddlewareAPI = identity } = {}) => {
 	let entries = [];
@@ -28,9 +30,9 @@ const makeEnhancer = ({ getMiddlewareAPI = identity } = {}) => {
 
 	const enhancer = createStore => (...args) => {
 		const prevStore = createStore(...args);
-		const handler = () => (entries = nextStore.entries.middleware);
+		const handler = () => (entries = config.getEntries(nextStore));
 
-		const nextStore = enhanceStore(prevStore, 'middleware', {
+		const nextStore = enhanceStore(prevStore, config, {
 			onInjected: handler,
 			onEjected: handler,
 		});

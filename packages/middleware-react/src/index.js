@@ -1,3 +1,6 @@
-export { Provider } from '@redux-tools/injectors-react';
-export { default as withMiddleware } from './withMiddleware';
-export { default as useMiddleware } from './useMiddleware';
+import { makeHook, makeDecorator, Provider } from '@redux-tools/injectors-react';
+
+export { Provider };
+export const TYPE = 'middleware';
+export const useMiddleware = makeHook(TYPE);
+export const withMiddleware = makeDecorator(TYPE);

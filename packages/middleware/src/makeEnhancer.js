@@ -3,7 +3,7 @@ import { enhanceStore } from '@redux-tools/injectors';
 import { isActionFromNamespace, attachNamespace } from '@redux-tools/namespaces';
 import { memoizeWithIdentity } from 'ramda-extension';
 
-export default function makeEnhancer({ getMiddlewareAPI = identity } = {}) {
+const makeEnhancer = ({ getMiddlewareAPI = identity } = {}) => {
 	let entries = [];
 
 	const injectedMiddleware = ({ getState, dispatch }) => next => action => {
@@ -27,19 +27,20 @@ export default function makeEnhancer({ getMiddlewareAPI = identity } = {}) {
 	};
 
 	const enhancer = createStore => (...args) => {
-		const store = createStore(...args);
+		const prevStore = createStore(...args);
+		const handler = () => (entries = nextStore.entries.middleware);
 
-		const handler = () => (entries = store.entries.middleware);
-
-		enhanceStore(store, 'middleware', {
+		const nextStore = enhanceStore(prevStore, 'middleware', {
 			onInjected: handler,
 			onEjected: handler,
 		});
 
-		return store;
+		return nextStore;
 	};
 
 	enhancer.injectedMiddleware = injectedMiddleware;
 
 	return enhancer;
-}
+};
+
+export default makeEnhancer;

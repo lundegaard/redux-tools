@@ -5,39 +5,52 @@ import invariant from 'invariant';
 
 import createEntries from './createEntries';
 
-const enhanceStore = (store, type, { onEjected = noop, onInjected = noop } = {}) => {
-	invariant(isObject(store), 'You must pass a store to `enhanceStore()`');
-	invariant(isString(type), 'You must pass a string type to `enhanceStore()`');
+const enhanceStore = (prevStore, type, { onEjected = noop, onInjected = noop } = {}) => {
+	invariant(
+		isObject(prevStore),
+		'You must pass a Redux store as the first argument to `enhanceStore()`'
+	);
 
-	if (!store.entries) {
-		store.entries = {};
-	}
+	invariant(
+		isString(type),
+		'You must pass a string type (e.g. `reducers`) as the second argument to `enhanceStore()`'
+	);
 
-	store.entries[type] = [];
-
-	store[`inject${toPascalCase(type)}`] = (injectables, props = {}) => {
+	const inject = (injectables, props = {}) => {
 		const entries = createEntries(injectables, props);
-		store.entries[type] = concat(store.entries[type], entries);
+		nextStore.entries[type] = concat(nextStore.entries[type], entries);
 		onInjected({ injectables, props, entries });
 
-		store.dispatch({
+		nextStore.dispatch({
 			type: `@redux-tools/${toUpper(type)}_INJECTED`,
-			[type]: keys(injectables),
-			...props,
+			payload: keys(injectables),
+			meta: props,
 		});
 	};
 
-	store[`eject${toPascalCase(type)}`] = (injectables, props = {}) => {
+	const eject = (injectables, props = {}) => {
 		const entries = createEntries(injectables, props);
-		store.entries[type] = withoutOnce(entries, store.entries[type]);
+		nextStore.entries[type] = withoutOnce(entries, nextStore.entries[type]);
 		onEjected({ injectables, props, entries });
 
-		store.dispatch({
+		nextStore.dispatch({
 			type: `@redux-tools/${toUpper(type)}_EJECTED`,
-			[type]: keys(injectables),
-			...props,
+			payload: keys(injectables),
+			meta: props,
 		});
 	};
+
+	const nextStore = {
+		...prevStore,
+		[`inject${toPascalCase(type)}`]: inject,
+		[`eject${toPascalCase(type)}`]: eject,
+		entries: {
+			...prevStore.entries,
+			[type]: [],
+		},
+	};
+
+	return nextStore;
 };
 
 export default enhanceStore;

@@ -14,15 +14,15 @@ const getOtherProps = omit(['isGlobal', 'global', 'isPersistent', 'persist']);
 const makeHook = type => {
 	invariant(type, 'The hook type must be defined.');
 
-	const { eject, getEntries, inject } = makeConfiguration(type);
+	const configuration = makeConfiguration(type);
+	const { getEject, getEntries, getInject, ejectMethodName, injectMethodName } = configuration;
 
-	invariant(eject, 'The ejection handler must be defined.');
-	invariant(inject, 'The injection handler must be defined.');
-
-	const hookName = `use${toPascalCase(type)}`;
+	const pascalCaseType = toPascalCase(type);
+	const hookName = `use${pascalCaseType}`;
 
 	const useInjectables = (injectables, options = {}) => {
 		const injectableKeys = keys(injectables);
+
 		const locationMessage =
 			`@redux-tools: This warning happened while injecting the following ${type}: ` +
 			`${injectableKeys}.`;
@@ -36,6 +36,8 @@ const makeHook = type => {
 		const injectorContext = useInjectorContext(feature);
 		const { store } = injectorContext;
 		const namespace = isGlobal ? null : options.namespace || injectorContext.namespace;
+		const inject = getInject(store);
+		const eject = getEject(store);
 
 		// NOTE: On the server, the injectables should be injected beforehand.
 		const [isInitialized, setIsInitialized] = useState(IS_SERVER);
@@ -51,7 +53,7 @@ const makeHook = type => {
 			String([
 				`Namespace: ${namespace}`,
 				`Feature: ${feature}`,
-				`${toPascalCase(type)}: ${injectableKeys}`,
+				`${pascalCaseType}: ${injectableKeys}`,
 				`Initialized: ${isInitialized}`,
 			])
 		);
@@ -100,12 +102,22 @@ const makeHook = type => {
 				);
 			}
 
-			inject(store)(injectables, props);
+			invariant(
+				inject,
+				`'store.${injectMethodName}' is missing. Are you using the enhancer correctly?`
+			);
+
+			invariant(
+				eject,
+				`'store.${ejectMethodName}' is missing. Are you using the enhancer correctly?`
+			);
+
+			inject(injectables, props);
 			setIsInitialized(true);
 
 			return () => {
 				if (!isPersistent) {
-					eject(store)(injectables, props);
+					eject(injectables, props);
 				}
 			};
 		}, []);

@@ -41,7 +41,8 @@ import { composeWithDevTools } from 'redux-devtools-extension/logOnlyInProductio
 
 const composeEnhancers = composeWithDevTools({
 	latency: 0,
-	shouldHotReload: false, // NOTE: This might not be necessary, based on the version of your DevTools.
+	// NOTE: This might help in some versions of Redux DevTools.
+	// shouldHotReload: false,
 });
 ```
 

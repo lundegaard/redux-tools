@@ -1,9 +1,12 @@
-import { toPascalCase, noop, isObject, isString } from 'ramda-extension';
-import { keys, concat, toUpper } from 'ramda';
+import { toPascalCase, noop, isObject, isString, toScreamingSnakeCase } from 'ramda-extension';
+import { keys, concat } from 'ramda';
 import { withoutOnce } from '@redux-tools/utils';
 import invariant from 'invariant';
 
 import createEntries from './createEntries';
+
+export const getEjectMethodName = type => `eject${toPascalCase(type)}`;
+export const getInjectMethodName = type => `inject${toPascalCase(type)}`;
 
 const enhanceStore = (prevStore, type, { onEjected = noop, onInjected = noop } = {}) => {
 	invariant(
@@ -16,13 +19,15 @@ const enhanceStore = (prevStore, type, { onEjected = noop, onInjected = noop } =
 		'You must pass a string type (e.g. `reducers`) as the second argument to `enhanceStore()`'
 	);
 
+	const actionType = toScreamingSnakeCase(type);
+
 	const inject = (injectables, props = {}) => {
 		const entries = createEntries(injectables, props);
 		nextStore.entries[type] = concat(nextStore.entries[type], entries);
 		onInjected({ injectables, props, entries });
 
 		nextStore.dispatch({
-			type: `@redux-tools/${toUpper(type)}_INJECTED`,
+			type: `@redux-tools/${actionType}_INJECTED`,
 			payload: keys(injectables),
 			meta: props,
 		});
@@ -34,7 +39,7 @@ const enhanceStore = (prevStore, type, { onEjected = noop, onInjected = noop } =
 		onEjected({ injectables, props, entries });
 
 		nextStore.dispatch({
-			type: `@redux-tools/${toUpper(type)}_EJECTED`,
+			type: `@redux-tools/${actionType}_EJECTED`,
 			payload: keys(injectables),
 			meta: props,
 		});
@@ -42,8 +47,8 @@ const enhanceStore = (prevStore, type, { onEjected = noop, onInjected = noop } =
 
 	const nextStore = {
 		...prevStore,
-		[`inject${toPascalCase(type)}`]: inject,
-		[`eject${toPascalCase(type)}`]: eject,
+		[getInjectMethodName(type)]: inject,
+		[getEjectMethodName(type)]: eject,
 		entries: {
 			...prevStore.entries,
 			[type]: [],

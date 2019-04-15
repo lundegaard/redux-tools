@@ -25,7 +25,9 @@
     "rxjs": "^6.3.3"
   },
   "devDependencies": {
-    "rxjs-marbles": "5.0.0"
+    "redux": "4.0.1",
+    "redux-observable": "1.1.0",
+    "rxjs": "6.4.0"
   },
   "publishConfig": {
     "access": "public"

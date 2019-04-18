@@ -12,18 +12,22 @@
     "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
   ],
   "dependencies": {
+    "@redux-tools/injectors": "^0.5.0-alpha.3",
     "@redux-tools/namespaces": "^0.5.0-alpha.3",
     "@redux-tools/utils": "^0.4.0",
-    "prop-types": "^15.6.2",
+    "@redux-tools/utils-react": "^0.4.0",
+    "hoist-non-react-statics": "^3.3.0",
+    "invariant": "^2.2.4",
+    "prop-types": "^15.7.2",
     "ramda": "^0.26.1",
-    "ramda-extension": "^0.7.1"
+    "ramda-extension": "^0.7.2"
   },
   "peerDependencies": {
-    "react": "^16.6.0",
-    "react-redux": "^5.1.1 || ^6.0.0"
+    "react": ">=16.8.4",
+    "react-redux": "^5.1.1 || ^6.0.0 || ^7.0.0"
   },
   "devDependencies": {
-    "enzyme": "3.8.0"
+    "enzyme": "3.9.0"
   },
   "publishConfig": {
     "access": "public"

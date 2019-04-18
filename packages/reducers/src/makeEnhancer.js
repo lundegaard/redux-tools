@@ -1,42 +1,33 @@
-import { both, keys, concat, reject, identity } from 'ramda';
-import { createEntries, isEntryEjectableByVersion, isEntryIncluded } from '@redux-tools/injectors';
-import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
+import { identity } from 'ramda';
+import { enhanceStore, makeConfig } from '@redux-tools/injectors';
+import { isFunction } from 'ramda-extension';
+import invariant from 'invariant';
 
-import { reducersInjected, reducersEjected } from './actions';
 import combineReducerEntries from './combineReducerEntries';
 import composeReducers from './composeReducers';
 
-export default function makeEnhancer() {
-	return createStore => (reducer = identity, ...args) => {
-		const store = createStore(reducer, ...args);
+export const config = makeConfig('reducers');
 
-		let reducerEntries = [];
+const makeEnhancer = () => createStore => (reducer = identity, ...args) => {
+	const prevStore = createStore(reducer, ...args);
 
-		store.injectReducers = (reducers, { namespace, version, feature = DEFAULT_FEATURE }) => {
-			reducerEntries = concat(
-				reducerEntries,
-				createEntries(reducers, { namespace, version, feature })
-			);
+	const handler = ({ props, reducers }) => {
+		invariant(
+			props.namespace || !isFunction(reducers),
+			'You can only inject reducers as functions if you specify a namespace.'
+		);
 
-			store.replaceReducer(composeReducers(reducer, combineReducerEntries(reducerEntries)));
-			store.dispatch(reducersInjected({ reducers: keys(reducers), namespace, version, feature }));
-			store._reducerEntries = reducerEntries;
-		};
-
-		store.ejectReducers = (reducers, { namespace, version, feature = DEFAULT_FEATURE }) => {
-			reducerEntries = reject(
-				both(
-					isEntryEjectableByVersion(version),
-					isEntryIncluded(createEntries(reducers, { namespace, version, feature }))
-				),
-				reducerEntries
-			);
-
-			store.replaceReducer(composeReducers(reducer, combineReducerEntries(reducerEntries)));
-			store.dispatch(reducersEjected({ reducers: keys(reducers), namespace, version, feature }));
-			store._reducerEntries = reducerEntries;
-		};
-
-		return store;
+		nextStore.replaceReducer(
+			composeReducers(reducer, combineReducerEntries(config.getEntries(nextStore)))
+		);
 	};
-}
+
+	const nextStore = enhanceStore(prevStore, config, {
+		onInjected: handler,
+		onEjected: handler,
+	});
+
+	return nextStore;
+};
+
+export default makeEnhancer;

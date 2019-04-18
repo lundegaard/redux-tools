@@ -1,8 +1,8 @@
 import { createContext } from 'react';
-import { identity } from 'ramda';
+import { alwaysNull } from 'ramda-extension';
 
 export const InjectorContext = createContext({
 	store: null,
-	features: {},
-	withNamespace: identity,
+	namespaces: {},
+	useNamespace: alwaysNull,
 });

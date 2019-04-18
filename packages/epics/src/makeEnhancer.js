@@ -1,32 +1,58 @@
-import { keys, forEach } from 'ramda';
 import { Subject } from 'rxjs';
-import { createEntries } from '@redux-tools/injectors';
-import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
+import * as Rx from 'rxjs/operators';
+import { isActionFromNamespace, attachNamespace } from '@redux-tools/namespaces';
+import { includesTimes } from '@redux-tools/utils';
+import { enhanceStore, makeConfig } from '@redux-tools/injectors';
+import { equals, includes } from 'ramda';
 
-import { epicsInjected, epicsEjected } from './actions';
-import makeRootEpic from './makeRootEpic';
+export const config = makeConfig('epics');
 
-export default function makeEnhancer({ epicMiddleware, streamCreator }) {
-	return createStore => (...args) => {
-		const store = createStore(...args);
+const makeEnhancer = ({ epicMiddleware, streamCreator }) => createStore => (...args) => {
+	const prevStore = createStore(...args);
 
-		const inject$ = new Subject();
-		const eject$ = new Subject();
+	const injectedEntries$ = new Subject();
+	const ejectedEntries$ = new Subject();
 
-		const rootEpic = makeRootEpic({ inject$, eject$, store, streamCreator });
+	const rootEpic = (globalAction$, state$, dependencies) =>
+		injectedEntries$.pipe(
+			Rx.mergeAll(),
+			Rx.filter(injectedEntry => includesTimes(1, injectedEntry, config.getEntries(nextStore))),
+			Rx.mergeMap(injectedEntry => {
+				const { value: epic, namespace, ...otherProps } = injectedEntry;
+				const action$ = globalAction$.pipe(Rx.filter(isActionFromNamespace(namespace)));
 
-		store.injectEpics = (epics, { namespace, version, feature = DEFAULT_FEATURE }) => {
-			forEach(entry => inject$.next(entry), createEntries(epics, { namespace, version, feature }));
-			store.dispatch(epicsInjected({ epics: keys(epics), namespace, version, feature }));
-		};
+				const outputAction$ = streamCreator
+					? epic(
+							action$,
+							state$,
+							streamCreator({ namespace, action$, globalAction$, state$, ...otherProps }),
+							dependencies
+					  )
+					: epic(action$, state$, dependencies);
 
-		store.ejectEpics = (epics, { namespace, version, feature = DEFAULT_FEATURE }) => {
-			forEach(entry => eject$.next(entry), createEntries(epics, { namespace, version, feature }));
-			store.dispatch(epicsEjected({ epics: keys(epics), namespace, version, feature }));
-		};
+				return outputAction$.pipe(
+					Rx.map(attachNamespace(namespace)),
+					// NOTE: takeUntil should ALWAYS be the last operator in `.pipe()`
+					// https://blog.angularindepth.com/rxjs-avoiding-takeuntil-leaks-fb5182d047ef
+					Rx.takeUntil(
+						ejectedEntries$.pipe(
+							Rx.mergeAll(),
+							Rx.filter(equals(injectedEntry)),
+							Rx.filter(ejectedEntry => !includes(ejectedEntry, config.getEntries(nextStore)))
+						)
+					)
+				);
+			})
+		);
 
-		epicMiddleware.run(rootEpic);
+	epicMiddleware.run(rootEpic);
 
-		return store;
-	};
-}
+	const nextStore = enhanceStore(prevStore, config, {
+		onInjected: ({ entries }) => injectedEntries$.next(entries),
+		onEjected: ({ entries }) => ejectedEntries$.next(entries),
+	});
+
+	return nextStore;
+};
+
+export default makeEnhancer;

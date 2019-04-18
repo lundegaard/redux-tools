@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`constants should not be changed 1`] = `
+Object {
+  "IS_SERVER": true,
+  "__esModule": true,
+}
+`;

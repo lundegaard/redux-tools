@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { identity } from 'ramda';
+import { always } from 'ramda';
 import { noop, alwaysNull } from 'ramda-extension';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
@@ -10,20 +10,21 @@ import { InjectorContext } from './contexts';
 describe('Provider', () => {
 	const store = { subscribe: noop, dispatch: noop, getState: noop };
 	const renderProp = jest.fn(alwaysNull);
+	const alwaysFoo = always('foo');
 
 	beforeEach(() => jest.resetAllMocks());
 
 	it('passes props to InjectorContext correctly', () => {
 		mount(
-			<Provider namespace="ns" store={store} withNamespace={identity}>
+			<Provider namespace="ns" store={store} useNamespace={alwaysFoo}>
 				<InjectorContext.Consumer>{renderProp}</InjectorContext.Consumer>
 			</Provider>
 		);
 
 		expect(renderProp).toHaveBeenCalledWith({
 			store,
-			features: { [DEFAULT_FEATURE]: 'ns' },
-			withNamespace: identity,
+			namespaces: { [DEFAULT_FEATURE]: 'ns' },
+			useNamespace: alwaysFoo,
 		});
 	});
 
@@ -31,7 +32,7 @@ describe('Provider', () => {
 		mount(
 			<Provider namespace="ns">
 				<Provider store={store}>
-					<Provider withNamespace={identity}>
+					<Provider useNamespace={alwaysFoo}>
 						<Provider namespace="yo">
 							<InjectorContext.Consumer>{renderProp}</InjectorContext.Consumer>
 						</Provider>
@@ -42,8 +43,8 @@ describe('Provider', () => {
 
 		expect(renderProp).toHaveBeenCalledWith({
 			store,
-			features: { [DEFAULT_FEATURE]: 'yo' },
-			withNamespace: identity,
+			namespaces: { [DEFAULT_FEATURE]: 'yo' },
+			useNamespace: alwaysFoo,
 		});
 	});
 
@@ -51,7 +52,7 @@ describe('Provider', () => {
 		mount(
 			<Provider namespace="ns" feature="grids">
 				<Provider store={store}>
-					<Provider withNamespace={identity}>
+					<Provider useNamespace={alwaysFoo}>
 						<Provider namespace="yo">
 							<InjectorContext.Consumer>{renderProp}</InjectorContext.Consumer>
 						</Provider>
@@ -62,24 +63,8 @@ describe('Provider', () => {
 
 		expect(renderProp).toHaveBeenCalledWith({
 			store,
-			features: { [DEFAULT_FEATURE]: 'yo', grids: 'ns' },
-			withNamespace: identity,
-		});
-	});
-
-	it('supports `getNamespace` to allow using features within widgets', () => {
-		mount(
-			<Provider namespace="ns" store={store}>
-				<Provider getNamespace={({ namespaces }) => `${namespaces}-grid`} feature="grids">
-					<InjectorContext.Consumer>{renderProp}</InjectorContext.Consumer>
-				</Provider>
-			</Provider>
-		);
-
-		expect(renderProp).toHaveBeenCalledWith({
-			store,
-			features: { [DEFAULT_FEATURE]: 'ns', grids: 'ns-grid' },
-			withNamespace: identity,
+			namespaces: { [DEFAULT_FEATURE]: 'yo', grids: 'ns' },
+			useNamespace: alwaysFoo,
 		});
 	});
 });

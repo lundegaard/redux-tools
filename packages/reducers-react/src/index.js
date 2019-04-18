@@ -1,3 +1,8 @@
-export { Provider } from '@redux-tools/injectors-react';
+import { makeHook, makeDecorator, Provider } from '@redux-tools/injectors-react';
+import { config } from '@redux-tools/reducers';
+
 export { default as namespacedConnect } from './namespacedConnect';
-export { default as withReducers } from './withReducers';
+export { Provider };
+
+export const useReducers = makeHook(config);
+export const withReducers = makeDecorator(config);

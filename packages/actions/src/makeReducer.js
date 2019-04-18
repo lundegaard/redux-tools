@@ -42,15 +42,15 @@ const mergeReducers = ([typePredicate, reducer, errorReducer]) => {
  * @example
  *
  *    const initialState = 1
- *    const counter = switchReducer([
- *      ["INCREMENT", (state, action) => state + action.payload],
+ *    const reducer = makeReducer([
+ *      ["ADD", (state, action) => state + action.payload],
  *      ["RESET", always(initialState)],
  *    ], initialState);
  *
- *    counter(undefined, {}) // 1
- *    counter(3, { type: "INCREMENT", payload: 2 }) // 5
- *    counter(3, { type: "RESET" }) // 1
- *    counter(3, { type: "LOAD_ITEMS" }) // 3
+ *    reducer(undefined, {}) // 1
+ *    reducer(3, { type: "ADD", payload: 2 }) // 5
+ *    reducer(3, { type: "RESET" }) // 1
+ *    reducer(3, { type: "LOAD_ITEMS" }) // 3
  */
 const makeReducer = (tuples, initialState) =>
 	compose(

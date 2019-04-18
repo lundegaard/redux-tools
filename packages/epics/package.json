@@ -15,8 +15,9 @@
     "@redux-tools/actions": "^0.4.0",
     "@redux-tools/injectors": "^0.5.0-alpha.3",
     "@redux-tools/namespaces": "^0.5.0-alpha.3",
+    "@redux-tools/utils": "^0.4.0",
     "ramda": "^0.26.1",
-    "ramda-extension": "^0.7.1"
+    "ramda-extension": "^0.7.2"
   },
   "peerDependencies": {
     "redux": "^4.0.1",
@@ -24,7 +25,9 @@
     "rxjs": "^6.3.3"
   },
   "devDependencies": {
-    "rxjs-marbles": "5.0.0"
+    "redux": "4.0.1",
+    "redux-observable": "1.1.0",
+    "rxjs": "6.4.0"
   },
   "publishConfig": {
     "access": "public"

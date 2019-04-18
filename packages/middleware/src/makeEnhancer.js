@@ -1,84 +1,48 @@
-import { o, concat, both, reject, keys, map, compose, isEmpty, uniqWith, identity } from 'ramda';
-import {
-	createEntries,
-	isEntryEjectableByVersion,
-	isEntryIncluded,
-	areEntriesEqual,
-} from '@redux-tools/injectors';
-import { isActionFromNamespace, attachNamespace, DEFAULT_FEATURE } from '@redux-tools/namespaces';
+import { o, map, compose, isEmpty, uniq, identity } from 'ramda';
+import { enhanceStore, makeConfig } from '@redux-tools/injectors';
+import { isActionFromNamespace, attachNamespace } from '@redux-tools/namespaces';
 import { memoizeWithIdentity } from 'ramda-extension';
 
-import { middlewareInjected, middlewareEjected } from './actions';
+export const config = makeConfig('middleware');
 
-export default function makeEnhancer({ getMiddlewareAPI = identity } = {}) {
-	let middlewareEntries = [];
+const makeEnhancer = ({ getMiddlewareAPI = identity } = {}) => {
+	let entries = [];
 
 	const injectedMiddleware = ({ getState, dispatch }) => next => action => {
 		const makeChain = memoizeWithIdentity(
 			o(
-				map(({ feature, namespace, value }) => next => action =>
+				map(({ namespace, value, ...otherProps }) => next => action =>
 					isActionFromNamespace(namespace, action)
-						? value(getMiddlewareAPI({ getState, dispatch, action, namespace, feature }))(
+						? value(getMiddlewareAPI({ getState, dispatch, action, namespace, ...otherProps }))(
 								o(next, attachNamespace(namespace))
 						  )(action)
 						: next(action)
 				),
-				uniqWith(areEntriesEqual)
+				uniq
 			)
 		);
 
-		const chain = makeChain(middlewareEntries);
+		const chain = makeChain(entries);
 		const composableChain = isEmpty(chain) ? [next => action => next(action)] : chain;
 
 		return compose(...composableChain)(next)(action);
 	};
 
 	const enhancer = createStore => (...args) => {
-		const store = createStore(...args);
+		const prevStore = createStore(...args);
+		const handler = () => (entries = config.getEntries(nextStore));
 
-		store.injectMiddleware = (middleware, { namespace, version, feature = DEFAULT_FEATURE }) => {
-			middlewareEntries = concat(
-				middlewareEntries,
-				createEntries(middleware, { namespace, version, feature })
-			);
+		const nextStore = enhanceStore(prevStore, config, {
+			onInjected: handler,
+			onEjected: handler,
+		});
 
-			store.dispatch(
-				middlewareInjected({
-					middleware: keys(middleware),
-					namespace,
-					version,
-					feature,
-				})
-			);
-
-			store._middlewareEntries = middlewareEntries;
-		};
-
-		store.ejectMiddleware = (middleware, { namespace, version, feature = DEFAULT_FEATURE }) => {
-			middlewareEntries = reject(
-				both(
-					isEntryEjectableByVersion(version),
-					isEntryIncluded(createEntries(middleware, { namespace, version, feature }))
-				),
-				middlewareEntries
-			);
-
-			store.dispatch(
-				middlewareEjected({
-					middleware: keys(middleware),
-					namespace,
-					version,
-					feature,
-				})
-			);
-
-			store._middlewareEntries = middlewareEntries;
-		};
-
-		return store;
+		return nextStore;
 	};
 
 	enhancer.injectedMiddleware = injectedMiddleware;
 
 	return enhancer;
-}
+};
+
+export default makeEnhancer;

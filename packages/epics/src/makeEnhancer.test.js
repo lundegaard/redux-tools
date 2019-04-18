@@ -1,20 +1,41 @@
-import { Subject } from 'rxjs';
-import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
+import * as Rx from 'rxjs/operators';
+import { createStore, applyMiddleware } from 'redux';
+import { identity, compose } from 'ramda';
+import { createEpicMiddleware, ofType } from 'redux-observable';
+import { Subject, Observable } from 'rxjs';
 
 import makeEnhancer from './makeEnhancer';
-import { epicsInjected, epicsEjected } from './actions';
 
-const createStore = jest.fn(() => ({ dispatch: jest.fn() }));
-const epicMiddleware = { run: jest.fn() };
-let store;
-
-jest.mock('rxjs');
-jest.mock('./makeRootEpic', () => () => 'rootEpicImpl');
+const incrementEpic = action$ =>
+	action$.pipe(
+		ofType('PING'),
+		Rx.map(action => ({
+			type: 'PONG',
+			payload: action.payload + 1,
+		}))
+	);
 
 describe('makeEnhancer', () => {
+	let store;
+	let epicMiddleware;
+	const logger = jest.fn();
+	const dependencies = { dependency: 'dependency' };
+
+	const loggerMiddleware = () => next => action => {
+		next(action);
+		logger(action);
+	};
+
 	beforeEach(() => {
 		jest.clearAllMocks();
-		store = makeEnhancer({ epicMiddleware })(createStore)();
+		epicMiddleware = createEpicMiddleware({ dependencies });
+		store = createStore(
+			identity,
+			compose(
+				makeEnhancer({ epicMiddleware }),
+				applyMiddleware(epicMiddleware, loggerMiddleware)
+			)
+		);
 	});
 
 	it('returns a Redux store with defined functions', () => {
@@ -22,61 +43,103 @@ describe('makeEnhancer', () => {
 		expect(store.ejectEpics).toBeInstanceOf(Function);
 	});
 
-	it('calls inject$.next under the hood when injectEpics is called', () => {
-		const epic = jest.fn();
-		store.injectEpics({ epic }, { namespace: 'ns', version: 1 });
-		const inject$ = Subject.mock.instances[0];
-		expect(inject$.next).toHaveBeenCalledTimes(1);
-		expect(inject$.next.mock.calls[0][0]).toEqual({
-			key: 'epic',
-			value: epic,
-			namespace: 'ns',
-			version: 1,
-			feature: DEFAULT_FEATURE,
+	it('runs an epic in the supplied middleware', () => {
+		epicMiddleware = jest.fn();
+		epicMiddleware.run = jest.fn();
+		const enhancer = makeEnhancer({ epicMiddleware });
+		createStore(identity, enhancer);
+		expect(epicMiddleware.run).toHaveBeenCalled();
+	});
+
+	it('passes actions to an injected epic', () => {
+		store.injectEpics(incrementEpic);
+		jest.clearAllMocks();
+		store.dispatch({ type: 'PING', payload: 1 });
+		expect(logger).toHaveBeenCalledTimes(2);
+		expect(logger.mock.calls[1][0]).toEqual({ type: 'PONG', payload: 2 });
+	});
+
+	it('handles same epics with different keys', () => {
+		store.injectEpics({ foo: incrementEpic });
+		store.injectEpics({ bar: incrementEpic });
+		jest.clearAllMocks();
+		store.dispatch({ type: 'PING', payload: 1 });
+		expect(logger).toHaveBeenCalledTimes(3);
+		expect(logger.mock.calls[1][0]).toEqual({ type: 'PONG', payload: 2 });
+		expect(logger.mock.calls[2][0]).toEqual({ type: 'PONG', payload: 2 });
+	});
+
+	it('adds namespace to emitted actions', () => {
+		store.injectEpics({ foo: incrementEpic }, { namespace: 'ns' });
+		jest.clearAllMocks();
+		store.dispatch({ type: 'PING', payload: 1 });
+		expect(logger).toHaveBeenCalledTimes(2);
+		expect(logger.mock.calls[1][0]).toEqual({
+			type: 'PONG',
+			payload: 2,
+			meta: { namespace: 'ns' },
 		});
 	});
 
-	it('dispatches an action when injectEpics is called', () => {
-		const epic = jest.fn();
-		store.injectEpics({ epic }, { namespace: 'ns', version: 1 });
-		expect(store.dispatch).toHaveBeenCalledWith(
-			epicsInjected({
-				epics: ['epic'],
-				namespace: 'ns',
-				version: 1,
-				feature: DEFAULT_FEATURE,
-			})
-		);
-	});
+	it('passes only valid actions to a namespaced epic', () => {
+		store.injectEpics({ foo: incrementEpic }, { namespace: 'ns' });
+		jest.clearAllMocks();
+		store.dispatch({ type: 'PING', payload: 1 });
+		store.dispatch({ type: 'PING', payload: 2, meta: { namespace: 'ns' } });
+		store.dispatch({ type: 'PING', payload: 3, meta: { namespace: 'other' } });
+		expect(logger).toHaveBeenCalledTimes(5);
 
-	it('calls eject$.next under the hood when ejectEpics is called', () => {
-		const epic = jest.fn();
-		store.ejectEpics({ epic }, { namespace: 'ns', version: 1 });
-		const eject$ = Subject.mock.instances[1];
-		expect(eject$.next).toHaveBeenCalledTimes(1);
-		expect(eject$.next.mock.calls[0][0]).toEqual({
-			key: 'epic',
-			value: epic,
-			namespace: 'ns',
-			version: 1,
-			feature: DEFAULT_FEATURE,
+		expect(logger.mock.calls[1][0]).toEqual({
+			type: 'PONG',
+			payload: 2,
+			meta: { namespace: 'ns' },
+		});
+
+		expect(logger.mock.calls[3][0]).toEqual({
+			type: 'PONG',
+			payload: 3,
+			meta: { namespace: 'ns' },
 		});
 	});
 
-	it('dispatches an action when ejectEpics is called', () => {
-		const epic = jest.fn();
-		store.ejectEpics({ epic }, { namespace: 'ns', version: 1 });
-		expect(store.dispatch).toHaveBeenCalledWith(
-			epicsEjected({
-				epics: ['epic'],
-				namespace: 'ns',
-				version: 1,
-				feature: DEFAULT_FEATURE,
-			})
-		);
+	it('stops an epic when ejected', () => {
+		store.injectEpics({ foo: incrementEpic }, { namespace: 'ns' });
+		store.ejectEpics({ foo: incrementEpic }, { namespace: 'ns' });
+		jest.clearAllMocks();
+		store.dispatch({ type: 'PING', payload: 1 });
+		expect(logger).toHaveBeenCalledTimes(1);
 	});
 
-	it('runs the rootEpic in the supplied middleware', () => {
-		expect(epicMiddleware.run).toHaveBeenCalledWith('rootEpicImpl');
+	it('passes correct arguments to the epic when streamCreator is omitted', () => {
+		const epic = jest.fn(() => new Subject());
+		store.injectEpics({ foo: epic }, { namespace: 'ns' });
+		expect(epic).toHaveBeenCalledTimes(1);
+		expect(epic.mock.calls[0][0]).toBeInstanceOf(Observable);
+		expect(epic.mock.calls[0][1]).toBeInstanceOf(Observable);
+		expect(epic.mock.calls[0][2]).toEqual(dependencies);
+	});
+
+	it('passes correct arguments to the epic when streamCreator is defined', () => {
+		const streamCreator = jest.fn(() => 'streamCreator');
+		epicMiddleware = createEpicMiddleware({ dependencies });
+		const enhancer = makeEnhancer({ epicMiddleware, streamCreator });
+
+		store = createStore(
+			identity,
+			compose(
+				enhancer,
+				applyMiddleware(epicMiddleware, loggerMiddleware)
+			)
+		);
+
+		const epic = jest.fn(() => new Subject());
+		store.injectEpics({ foo: epic }, { namespace: 'ns' });
+		expect(epic).toHaveBeenCalledTimes(1);
+		expect(epic.mock.calls[0][0]).toBeInstanceOf(Observable);
+		expect(epic.mock.calls[0][1]).toBeInstanceOf(Observable);
+		expect(epic.mock.calls[0][2]).toEqual('streamCreator');
+		expect(epic.mock.calls[0][3]).toEqual(dependencies);
+
+		expect(streamCreator).toHaveBeenCalledTimes(1);
 	});
 });

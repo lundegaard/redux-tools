@@ -2,13 +2,13 @@ import { identity } from 'ramda';
 import { FUNCTION_KEY } from '@redux-tools/injectors';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
-import makeEnhancer, { config } from './makeEnhancer';
+import makeEnhancer, { storeInterface } from './makeEnhancer';
 
 const createStore = () => ({
 	replaceReducer: jest.fn(),
 });
 
-const { getEntries } = config;
+const { getEntries } = storeInterface;
 
 describe('makeEnhancer', () => {
 	let store;

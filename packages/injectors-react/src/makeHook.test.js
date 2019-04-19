@@ -1,12 +1,12 @@
 import React from 'react';
-import { makeConfig } from '@redux-tools/injectors';
+import { makeStoreInterface } from '@redux-tools/injectors';
 import { noop } from 'ramda-extension';
 import { mount } from 'enzyme';
 
 import makeHook from './makeHook';
 import Provider from './Provider';
 
-const config = makeConfig('things');
+const config = makeStoreInterface('things');
 const useThings = makeHook(config);
 
 jest.mock('./constants', () => ({ IS_SERVER: false }));

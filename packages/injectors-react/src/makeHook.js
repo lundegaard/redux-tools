@@ -11,10 +11,10 @@ import { IS_SERVER } from './constants';
 const useUniversalLayoutEffect = IS_SERVER ? useEffect : useLayoutEffect;
 const getOtherProps = omit(['isGlobal', 'global', 'isPersistent', 'persist']);
 
-const makeHook = config => {
-	invariant(isObject(config), 'The injector config is undefined.');
+const makeHook = storeInterface => {
+	invariant(isObject(storeInterface), 'The store interface is undefined.');
 
-	const { getEject, getEntries, getInject, ejectMethodName, injectMethodName, type } = config;
+	const { getEntries, ejectionKey, injectionKey, type } = storeInterface;
 
 	const pascalCaseType = toPascalCase(type);
 	const hookName = `use${pascalCaseType}`;
@@ -35,8 +35,8 @@ const makeHook = config => {
 		const injectorContext = useInjectorContext(feature);
 		const { store } = injectorContext;
 		const namespace = isGlobal ? null : options.namespace || injectorContext.namespace;
-		const inject = getInject(store);
-		const eject = getEject(store);
+		const inject = store[injectionKey];
+		const eject = store[ejectionKey];
 
 		// NOTE: On the server, the injectables should be injected beforehand.
 		const [isInitialized, setIsInitialized] = useState(IS_SERVER);
@@ -101,15 +101,8 @@ const makeHook = config => {
 				);
 			}
 
-			invariant(
-				inject,
-				`'store.${injectMethodName}' is missing. Are you using the enhancer correctly?`
-			);
-
-			invariant(
-				eject,
-				`'store.${ejectMethodName}' is missing. Are you using the enhancer correctly?`
-			);
+			invariant(inject, `'store.${injectionKey}' missing. Are you using the enhancer correctly?`);
+			invariant(eject, `'store.${ejectionKey}' missing. Are you using the enhancer correctly?`);
 
 			inject(injectables, props);
 			setIsInitialized(true);

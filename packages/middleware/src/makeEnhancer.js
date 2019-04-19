@@ -8,7 +8,7 @@ export const config = makeConfig('middleware');
 const makeEnhancer = ({ getMiddlewareAPI = identity } = {}) => {
 	let entries = [];
 
-	const injectedMiddleware = ({ getState, dispatch }) => next => action => {
+	const injectedMiddleware = ({ getState, dispatch }) => {
 		const makeChain = memoizeWithIdentity(
 			o(
 				map(({ namespace, value, ...otherProps }) => next => action =>
@@ -22,10 +22,12 @@ const makeEnhancer = ({ getMiddlewareAPI = identity } = {}) => {
 			)
 		);
 
-		const chain = makeChain(entries);
-		const composableChain = isEmpty(chain) ? [next => action => next(action)] : chain;
+		return next => action => {
+			const chain = makeChain(entries);
+			const composableChain = isEmpty(chain) ? [next => action => next(action)] : chain;
 
-		return compose(...composableChain)(next)(action);
+			return compose(...composableChain)(next)(action);
+		};
 	};
 
 	const enhancer = createStore => (...args) => {

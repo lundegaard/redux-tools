@@ -1,7 +1,7 @@
-import { makeHook, makeDecorator, Provider } from '@redux-tools/injectors-react';
+import { makeHook, makeDecorator, Provider, useNamespace } from '@redux-tools/injectors-react';
 import { config } from '@redux-tools/epics';
 
-export { Provider };
+export { Provider, useNamespace };
 
 export const useEpics = makeHook(config);
 export const withEpics = makeDecorator(config);

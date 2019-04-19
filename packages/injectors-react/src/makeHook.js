@@ -1,11 +1,12 @@
-import { useLayoutEffect, useState, useEffect, useDebugValue } from 'react';
+import { useLayoutEffect, useState, useEffect, useDebugValue, useContext } from 'react';
 import { keys, all, includes, omit } from 'ramda';
 import { toPascalCase, isNotNil, rejectNil, isObject } from 'ramda-extension';
 import invariant from 'invariant';
+import { ReactReduxContext } from 'react-redux';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import { createEntries } from '@redux-tools/injectors';
 
-import useInjectorContext from './useInjectorContext';
+import useNamespace from './useNamespace';
 import { IS_SERVER } from './constants';
 
 const useUniversalLayoutEffect = IS_SERVER ? useEffect : useLayoutEffect;
@@ -32,9 +33,9 @@ const makeHook = config => {
 		const isGlobal = options.isGlobal || options.global || false;
 		const isPersistent = options.isPersistent || options.persist || false;
 		const feature = options.feature || DEFAULT_FEATURE;
-		const injectorContext = useInjectorContext(feature);
-		const { store } = injectorContext;
-		const namespace = isGlobal ? null : options.namespace || injectorContext.namespace;
+		const contextNamespace = useNamespace(feature);
+		const { store } = useContext(ReactReduxContext);
+		const namespace = isGlobal ? null : options.namespace || contextNamespace;
 		const inject = getInject(store);
 		const eject = getEject(store);
 

@@ -7,7 +7,7 @@ import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import invariant from 'invariant';
 
 import makeHook from './makeHook';
-import useInjectorContext from './useInjectorContext';
+import useNamespace from './useNamespace';
 
 const makeDecorator = config => {
 	invariant(isObject(config), 'The injector config is undefined.');
@@ -17,10 +17,10 @@ const makeDecorator = config => {
 	const decoratorName = type ? `With${toPascalCase(type)}` : 'Injector';
 
 	return (injectables, options = {}) => NextComponent => {
-		const Injector = ({ feature: featureProp, namespace: namespaceProp, ...otherProps }) => {
-			const feature = options.feature || featureProp || DEFAULT_FEATURE;
-			const injectorContext = useInjectorContext(feature);
-			const namespace = options.namespace || namespaceProp || injectorContext.namespace;
+		const Injector = ({ feature: propFeature, namespace: propNamespace, ...otherProps }) => {
+			const feature = options.feature || propFeature || DEFAULT_FEATURE;
+			const contextNamespace = useNamespace(feature);
+			const namespace = options.namespace || propNamespace || contextNamespace;
 			const isInitialized = useInjectables(injectables, { ...options, feature, namespace });
 
 			if (isInitialized) {

@@ -16,7 +16,7 @@ const enhanceStore = (prevStore, config, { onEjected = noop, onInjected = noop }
 		'You must pass an injector config as the second argument to `enhanceStore()`'
 	);
 
-	const { injectMethodName, ejectMethodName, getEntries, setEntries, type } = config;
+	const { injectionKey, ejectionKey, getEntries, setEntries, type } = config;
 	const { dispatch = noop } = prevStore;
 	const actionType = toScreamingSnakeCase(type);
 
@@ -48,8 +48,8 @@ const enhanceStore = (prevStore, config, { onEjected = noop, onInjected = noop }
 
 	const nextStore = {
 		...prevStore,
-		[injectMethodName]: inject,
-		[ejectMethodName]: eject,
+		[injectionKey]: inject,
+		[ejectionKey]: eject,
 	};
 
 	setEntries([], nextStore);

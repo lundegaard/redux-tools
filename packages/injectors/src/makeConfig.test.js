@@ -1,5 +1,3 @@
-import { noop } from 'ramda-extension';
-
 import makeConfig from './makeConfig';
 
 describe('makeConfig', () => {
@@ -11,13 +9,11 @@ describe('makeConfig', () => {
 
 	it('passes correct string attributes down', () => {
 		expect(config.type).toBe('things');
-		expect(config.injectMethodName).toBe('injectThings');
-		expect(config.ejectMethodName).toBe('ejectThings');
+		expect(config.injectionKey).toBe('injectThings');
+		expect(config.ejectionKey).toBe('ejectThings');
 	});
 
 	it('passes correct getters down', () => {
-		expect(config.getInject({ injectThings: noop })).toBe(noop);
-		expect(config.getEject({ ejectThings: noop })).toBe(noop);
 		expect(config.getEntries({ entries: { things: ['foo'] } })).toEqual(['foo']);
 		expect(config.getEntries({})).toEqual([]);
 	});

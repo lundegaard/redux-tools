@@ -13,8 +13,9 @@ describe('enhanceStore', () => {
 	});
 
 	it('spreads passed store to new store', () => {
-		const store = enhanceStore({ dispatch: noop }, config);
+		const store = enhanceStore({ dispatch: noop, getState: noop }, config);
 		expect(store.dispatch).toBe(noop);
+		expect(store.getState).toBe(noop);
 	});
 
 	it('sets injection methods based on type', () => {

@@ -18,7 +18,8 @@ const makeEnhancer = () => {
 	// from scopes and closures. This is ugly, but I don't think we can solve this differently.
 	let outerNext;
 
-	// NOTE: This is necessary to ensure that the middleware works even without any injections.
+	// NOTE: This default implementation is necessary to ensure that the middleware works even without
+	// any injected middleware.
 	let enhancerNext = action => {
 		invariant(outerNext, 'You need to apply the enhancer to a Redux store.');
 		outerNext(action);
@@ -32,11 +33,14 @@ const makeEnhancer = () => {
 		return action => enhancerNext(action);
 	};
 
+	// NOTE: composeEntries :: [Entry] -> Next
 	const composeEntries = entries => {
 		const chain = map(entry => {
 			const { namespace } = entry;
 
+			// NOTE: `innerNext` is either the next injected middleware or `outerNext`.
 			return innerNext => {
+				// NOTE: `entryNext` is a wrapper over the currently iterated-over injected middleware.
 				const entryNext = initializedEntries.get(entry)(o(innerNext, attachNamespace(namespace)));
 
 				return action =>
@@ -59,7 +63,7 @@ const makeEnhancer = () => {
 		const handleEntriesChanged = () => {
 			const nextEntries = [
 				...uniq(config.getEntries(nextStore)),
-				// NOTE: This is just a safeguard, because although `compose` is variadic,
+				// NOTE: This is just a safeguard, because although `R.compose` is variadic,
 				// it still needs at least one function as an argument.
 				noopEntry,
 			];

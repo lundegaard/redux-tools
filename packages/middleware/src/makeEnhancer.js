@@ -1,42 +1,88 @@
-import { o, map, compose, isEmpty, uniq, identity } from 'ramda';
+import { map, compose, uniq, o, forEach } from 'ramda';
 import { enhanceStore, makeConfig } from '@redux-tools/injectors';
 import { isActionFromNamespace, attachNamespace } from '@redux-tools/namespaces';
-import { memoizeWithIdentity } from 'ramda-extension';
+import invariant from 'invariant';
 
 export const config = makeConfig('middleware');
 
-const makeEnhancer = ({ getMiddlewareAPI = identity } = {}) => {
-	let entries = [];
+const noopEntry = {
+	key: '@redux-tools/NOOP_MIDDLEWARE',
+	value: () => next => action => next(action),
+};
 
-	const injectedMiddleware = ({ getState, dispatch }) => {
-		const makeChain = memoizeWithIdentity(
-			o(
-				map(({ namespace, value, ...otherProps }) => next => action =>
-					isActionFromNamespace(namespace, action)
-						? value(getMiddlewareAPI({ getState, dispatch, action, namespace, ...otherProps }))(
-								o(next, attachNamespace(namespace))
-						  )(action)
-						: next(action)
-				),
-				uniq
-			)
-		);
+const makeEnhancer = () => {
+	// NOTE: Keys are entries, values are middleware with bound `dispatch` and `getState`.
+	let initializedEntries = new Map();
 
-		return next => action => {
-			const chain = makeChain(entries);
-			const composableChain = isEmpty(chain) ? [next => action => next(action)] : chain;
+	// NOTE: Sadly, because of how enhancers and middleware work, we need some escape hatches
+	// from scopes and closures. This is ugly, but I don't think we can solve this differently.
+	let outerNext;
 
-			return compose(...composableChain)(next)(action);
-		};
+	// NOTE: This is necessary to ensure that the middleware works even without any injections.
+	let enhancerNext = action => {
+		invariant(outerNext, 'You need to apply the enhancer to a Redux store.');
+		outerNext(action);
+	};
+
+	const injectedMiddleware = () => next => {
+		if (!outerNext) {
+			outerNext = next;
+		}
+
+		return action => enhancerNext(action);
+	};
+
+	const composeEntries = entries => {
+		const chain = map(entry => {
+			const { namespace } = entry;
+
+			return innerNext => {
+				const entryNext = initializedEntries.get(entry)(o(innerNext, attachNamespace(namespace)));
+
+				return action =>
+					isActionFromNamespace(namespace, action) ? entryNext(action) : innerNext(action);
+			};
+		}, entries);
+
+		return compose(...chain)(outerNext);
 	};
 
 	const enhancer = createStore => (...args) => {
 		const prevStore = createStore(...args);
-		const handler = () => (entries = config.getEntries(nextStore));
+
+		// NOTE: All of this logic is just to achieve the following behaviour:
+		// Every middleware is curried. In standard Redux, the first two arguments are bound immediately.
+		// However, when injecting the middleware, we are not able to easily provide the second argument
+		// immediately, because it changes whenever an entry is injected or ejected. That's why we only
+		// bind the first argument and then provide `next` once per any injection call. This behaviour
+		// is covered by unit tests, which may help explain this better.
+		const handleEntriesChanged = () => {
+			const nextEntries = [
+				...uniq(config.getEntries(nextStore)),
+				// NOTE: This is just a safeguard, because although `compose` is variadic,
+				// it still needs at least one function as an argument.
+				noopEntry,
+			];
+
+			const nextInitializedEntries = new Map();
+
+			// NOTE: We copy all necessary entries because it's simpler/faster than finding what has changed.
+			forEach(
+				entry =>
+					nextInitializedEntries.set(
+						entry,
+						initializedEntries.get(entry) || entry.value(nextStore)
+					),
+				nextEntries
+			);
+
+			initializedEntries = nextInitializedEntries;
+			enhancerNext = composeEntries(nextEntries);
+		};
 
 		const nextStore = enhanceStore(prevStore, config, {
-			onInjected: handler,
-			onEjected: handler,
+			onInjected: handleEntriesChanged,
+			onEjected: handleEntriesChanged,
 		});
 
 		return nextStore;

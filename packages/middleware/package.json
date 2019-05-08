@@ -14,6 +14,7 @@
   "dependencies": {
     "@redux-tools/injectors": "^0.5.0-alpha.3",
     "@redux-tools/namespaces": "^0.5.0-alpha.3",
+    "invariant": "^2.2.4",
     "ramda": "^0.26.1",
     "ramda-extension": "^0.7.2"
   },

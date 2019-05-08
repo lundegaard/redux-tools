@@ -14,21 +14,22 @@ const makeEnhancer = () => {
 	// NOTE: Keys are entries, values are middleware with bound `dispatch` and `getState`.
 	let initializedEntries = new Map();
 
-	// NOTE: Sadly, because of how enhancers and middleware work, we need some escape hatches
+	// NOTE: Sadly, because of how enhancers and middleware are structured, we need some escape hatches
 	// from scopes and closures. This is ugly, but I don't think we can solve this differently.
+	// NOTE: `outerNext` is either the next middleware in `applyMiddleware` or `store.dispatch`.
 	let outerNext;
 
 	// NOTE: This default implementation is necessary to ensure that the middleware works even without
 	// any injected middleware.
+	// NOTE `enhancerNext` calls all injected middleware and then `outerNext`.
 	let enhancerNext = action => {
 		invariant(outerNext, 'You need to apply the enhancer to a Redux store.');
 		outerNext(action);
 	};
 
 	const injectedMiddleware = () => next => {
-		if (!outerNext) {
-			outerNext = next;
-		}
+		invariant(!outerNext, 'You cannot apply the injected middleware to multiple Redux stores.');
+		outerNext = next;
 
 		return action => enhancerNext(action);
 	};

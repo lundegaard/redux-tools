@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Hook-based API. You can now use `useMiddleware`, `useEpics` and `useReducers` with a caveat: don't dispatch any actions until the injectables are injected (based on hook return value). Hooks are also used under the hood for better structure and performance.
 - Loads of new useful warnings when injecting and ejecting.
 - You can now define namespaces and features statically (or using props) in `withMiddleware`, `withEpics` and `withReducers`.
+- You can now inject functions in addition to objects. Note that a function (reducer, middleware or epic) will only be initialized once per namespace/feature.
 - (_reducers_): Support for features! This allows using @redux-tools with a feature-based state structure, similar to when using e.g. Redux Form.
 - (_reducers-react_): [Warn when using withReducers with global: false and no namespace.](https://github.com/lundegaard/redux-tools/pull/47)
 

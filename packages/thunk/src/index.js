@@ -1,12 +1,19 @@
 import { o } from 'ramda';
 import { isFunction } from 'ramda-extension';
 import { getNamespaceByAction, attachNamespace } from '@redux-tools/namespaces';
+import { getStateByNamespace } from '@redux-tools/reducers';
 
-const makeThunkMiddleware = extraArgument => ({ dispatch, getState }) => next => action => {
+const makeThunkMiddleware = dependencies => ({ dispatch, getState }) => next => action => {
 	if (isFunction(action)) {
 		const namespace = getNamespaceByAction(action);
 
-		return action(o(dispatch, attachNamespace(namespace)), getState, extraArgument);
+		return action({
+			dispatch: o(dispatch, attachNamespace(namespace)),
+			getState,
+			getNamespacedState: feature => getStateByNamespace(feature, namespace, getState()),
+			namespace,
+			...dependencies,
+		});
 	}
 
 	return next(action);
@@ -14,6 +21,6 @@ const makeThunkMiddleware = extraArgument => ({ dispatch, getState }) => next =>
 
 const thunkMiddleware = makeThunkMiddleware();
 
-thunkMiddleware.withExtraArgument = makeThunkMiddleware;
+thunkMiddleware.withDependencies = makeThunkMiddleware;
 
 export default thunkMiddleware;

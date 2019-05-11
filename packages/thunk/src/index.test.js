@@ -27,7 +27,7 @@ describe('thunkMiddleware', () => {
 	it('handles thunks without a namespace', () => {
 		const action = { type: 'BEETS' };
 
-		store.dispatch(dispatch => {
+		store.dispatch(({ dispatch }) => {
 			dispatch(action);
 		});
 
@@ -38,7 +38,7 @@ describe('thunkMiddleware', () => {
 		const action = { type: 'BATTLESTAR_GALACTICA' };
 
 		store.dispatch(
-			attachNamespace('MICHAEL', dispatch => {
+			attachNamespace('MICHAEL', ({ dispatch }) => {
 				dispatch(action);
 			})
 		);

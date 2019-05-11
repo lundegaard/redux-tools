@@ -15,10 +15,7 @@ const attachNamespace = curry((namespace, action) => {
 	if (isFunction(action)) {
 		const nextAction = (...args) => action(...args);
 
-		nextAction.meta = {
-			...nextAction.meta,
-			namespace,
-		};
+		nextAction.meta = { namespace };
 
 		return nextAction;
 	}

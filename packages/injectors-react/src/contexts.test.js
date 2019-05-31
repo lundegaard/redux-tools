@@ -1,8 +1,8 @@
-import { InjectorContext } from './contexts';
+import { NamespaceContext } from './contexts';
 
-describe('InjectorContext', () => {
+describe('NamespaceContext', () => {
 	it('is a React context', () => {
-		expect(InjectorContext.Consumer).toBeDefined();
-		expect(InjectorContext.Provider).toBeDefined();
+		expect(NamespaceContext.Consumer).toBeDefined();
+		expect(NamespaceContext.Provider).toBeDefined();
 	});
 });

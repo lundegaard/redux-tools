@@ -24,7 +24,7 @@
   },
   "peerDependencies": {
     "react": ">=16.8.4",
-    "react-redux": "^5.1.1 || ^6.0.0 || ^7.0.0"
+    "react-redux": "^6.0.0 || ^7.0.0"
   },
   "devDependencies": {
     "enzyme": "3.9.0"

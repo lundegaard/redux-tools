@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Loads of new useful warnings when injecting and ejecting.
 - You can now define namespaces and features statically (or using props) in `withMiddleware`, `withEpics` and `withReducers`.
 - You can now inject functions in addition to objects. Note that a function (reducer, middleware or epic) will only be initialized once per namespace/feature.
+- Support for Redux Thunk! Just use our clone instead of the official implementation to enable automatic namespace passthrough via thunks.
 - (_reducers_): Support for features! This allows using @redux-tools with a feature-based state structure, similar to when using e.g. Redux Form.
 - (_reducers-react_): [Warn when using withReducers with global: false and no namespace.](https://github.com/lundegaard/redux-tools/pull/47)
 

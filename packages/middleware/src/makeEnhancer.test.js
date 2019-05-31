@@ -151,8 +151,8 @@ describe('makeEnhancer', () => {
 			)
 		);
 
-		store.injectMiddleware({ foo: middlewareA }, { namespace: null });
-		store.injectMiddleware({ foo: middlewareB }, { namespace: null });
+		store.injectMiddleware({ foo: middlewareA });
+		store.injectMiddleware({ foo: middlewareB });
 		store.dispatch({ type: 'MESSAGE' });
 		expect(mockA).toHaveBeenCalledTimes(2);
 		expect(mockB).toHaveBeenCalledTimes(2);
@@ -178,9 +178,84 @@ describe('makeEnhancer', () => {
 			)
 		);
 
-		store.injectMiddleware({ foo: middlewareA }, { namespace: null });
-		store.injectMiddleware({ foo: middlewareA }, { namespace: null });
+		store.injectMiddleware({ foo: middlewareA });
+		store.injectMiddleware({ foo: middlewareA });
 		store.dispatch({ type: 'MESSAGE' });
 		expect(mockA).toHaveBeenCalledTimes(1);
+	});
+
+	it('correctly initializes injected middleware', () => {
+		const reduxAPIMockA = jest.fn();
+		const nextMockA = jest.fn();
+		const reduxAPIMockB = jest.fn();
+		const nextMockB = jest.fn();
+
+		const middlewareA = reduxAPI => {
+			reduxAPIMockA(reduxAPI);
+
+			return next => {
+				nextMockA(next);
+
+				return action => {
+					next(action);
+				};
+			};
+		};
+
+		const middlewareB = reduxAPI => {
+			reduxAPIMockB(reduxAPI);
+
+			return next => {
+				nextMockB(next);
+
+				return action => {
+					next(action);
+				};
+			};
+		};
+
+		const enhancer = makeEnhancer();
+		const store = createStore(
+			identity,
+			compose(
+				enhancer,
+				applyMiddleware(enhancer.injectedMiddleware)
+			)
+		);
+
+		store.injectMiddleware({ foo: middlewareA });
+
+		expect(reduxAPIMockA).toHaveBeenCalledTimes(1);
+		expect(nextMockA).toHaveBeenCalledTimes(1);
+
+		expect(reduxAPIMockA.mock.calls[0][0].getState).toBeInstanceOf(Function);
+		expect(reduxAPIMockA.mock.calls[0][0].dispatch).toBeInstanceOf(Function);
+		expect(nextMockA.mock.calls[0][0]).toBeInstanceOf(Function);
+
+		store.dispatch({ type: 'MESSAGE' });
+
+		expect(reduxAPIMockA).toHaveBeenCalledTimes(1);
+		expect(nextMockA).toHaveBeenCalledTimes(1);
+
+		store.injectMiddleware({ foo: middlewareB });
+
+		expect(reduxAPIMockA).toHaveBeenCalledTimes(1);
+		expect(nextMockA).toHaveBeenCalledTimes(2);
+
+		expect(reduxAPIMockB).toHaveBeenCalledTimes(1);
+		expect(nextMockB).toHaveBeenCalledTimes(1);
+	});
+
+	it('works without any injected middleware', () => {
+		const enhancer = makeEnhancer();
+		const store = createStore(
+			identity,
+			compose(
+				enhancer,
+				applyMiddleware(enhancer.injectedMiddleware)
+			)
+		);
+
+		expect(() => store.dispatch({ payload: 'Yo', type: 'MESSAGE' })).not.toThrow();
 	});
 });

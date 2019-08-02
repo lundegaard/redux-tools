@@ -11,6 +11,7 @@ Creates a component decorator which handles the lifecycle of passed reducers, mo
 #### Arguments
 
 1. `reducers` (_Object_): The reducers to use.
+2. [`options`] \(_Object_): Options for the decorator. Possible options: `isGlobal: boolean`, `isPersistent: boolean`, `feature: string`, and `namespace: string`.
 
 #### Returns
 

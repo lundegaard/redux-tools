@@ -11,6 +11,7 @@ Creates a component decorator which handles the lifecycle of passed middleware, 
 #### Arguments
 
 1. `middleware` (_Object_): The middleware to use.
+2. [`options`] \(_Object_): Options for the decorator. Possible options: `isGlobal: boolean`, `isPersistent: boolean`, `feature: string`, and `namespace: string`.
 
 #### Returns
 

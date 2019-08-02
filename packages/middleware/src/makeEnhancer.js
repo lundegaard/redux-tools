@@ -1,9 +1,9 @@
-import { map, compose, uniq, o, forEach } from 'ramda';
-import { enhanceStore, makeConfig } from '@redux-tools/injectors';
+import { o, map, compose, uniq, forEach } from 'ramda';
+import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
 import { isActionFromNamespace, attachNamespace } from '@redux-tools/namespaces';
 import invariant from 'invariant';
 
-export const config = makeConfig('middleware');
+export const storeInterface = makeStoreInterface('middleware');
 
 const noopEntry = {
 	key: '@redux-tools/NOOP_MIDDLEWARE',
@@ -63,7 +63,7 @@ const makeEnhancer = () => {
 		// is covered by unit tests, which may help explain this better.
 		const handleEntriesChanged = () => {
 			const nextEntries = [
-				...uniq(config.getEntries(nextStore)),
+				...uniq(storeInterface.getEntries(nextStore)),
 				// NOTE: This is just a safeguard, because although `R.compose` is variadic,
 				// it still needs at least one function as an argument.
 				noopEntry,
@@ -85,7 +85,7 @@ const makeEnhancer = () => {
 			enhancerNext = composeEntries(nextEntries);
 		};
 
-		const nextStore = enhanceStore(prevStore, config, {
+		const nextStore = enhanceStore(prevStore, storeInterface, {
 			onInjected: handleEntriesChanged,
 			onEjected: handleEntriesChanged,
 		});

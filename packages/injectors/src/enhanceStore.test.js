@@ -2,29 +2,30 @@ import { noop } from 'ramda-extension';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import enhanceStore from './enhanceStore';
-import makeConfig from './makeConfig';
+import makeStoreInterface from './makeStoreInterface';
 
 describe('enhanceStore', () => {
-	const config = makeConfig('things');
+	const storeInterface = makeStoreInterface('things');
 
 	it('sets entries based on type', () => {
-		const store = enhanceStore({}, config);
+		const store = enhanceStore({}, storeInterface);
 		expect(store.entries.things).toEqual([]);
 	});
 
 	it('spreads passed store to new store', () => {
-		const store = enhanceStore({ dispatch: noop }, config);
+		const store = enhanceStore({ dispatch: noop, getState: noop }, storeInterface);
 		expect(store.dispatch).toBe(noop);
+		expect(store.getState).toBe(noop);
 	});
 
 	it('sets injection methods based on type', () => {
-		const store = enhanceStore({}, config);
+		const store = enhanceStore({}, storeInterface);
 		expect(store.injectThings).toBeInstanceOf(Function);
 		expect(store.ejectThings).toBeInstanceOf(Function);
 	});
 
 	it('updates entries on injection', () => {
-		const store = enhanceStore({}, config);
+		const store = enhanceStore({}, storeInterface);
 		store.injectThings({ foo: noop }, { namespace: 'bar' });
 		expect(store.entries.things).toEqual([
 			{ key: 'foo', value: noop, namespace: 'bar', feature: DEFAULT_FEATURE },
@@ -35,7 +36,7 @@ describe('enhanceStore', () => {
 
 	it('dispatches actions on injection', () => {
 		const dispatch = jest.fn();
-		const store = enhanceStore({ dispatch }, config);
+		const store = enhanceStore({ dispatch }, storeInterface);
 		store.injectThings({ foo: noop }, { namespace: 'bar' });
 		expect(dispatch).toHaveBeenCalledTimes(1);
 		const injectedAction = dispatch.mock.calls[0][0];
@@ -54,7 +55,7 @@ describe('enhanceStore', () => {
 	it('calls handlers on ejection', () => {
 		const onInjected = jest.fn();
 		const onEjected = jest.fn();
-		const store = enhanceStore({}, config, { onInjected, onEjected });
+		const store = enhanceStore({}, storeInterface, { onInjected, onEjected });
 		store.injectThings({ foo: noop }, { namespace: 'bar' });
 		expect(onInjected).toHaveBeenCalledTimes(1);
 		expect(onEjected).not.toHaveBeenCalled();
@@ -65,7 +66,7 @@ describe('enhanceStore', () => {
 	});
 
 	it('throws when the value is not a function', () => {
-		const store = enhanceStore({}, config, {});
+		const store = enhanceStore({}, storeInterface, {});
 		expect(() => store.injectThings({ foo: null }, { namespace: 'bar' })).toThrow();
 	});
 });

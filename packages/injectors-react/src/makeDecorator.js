@@ -6,14 +6,12 @@ import hoistNonReactStatics from 'hoist-non-react-statics';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import invariant from 'invariant';
 
-import makeHook from './makeHook';
 import useNamespace from './useNamespace';
 
-const makeDecorator = config => {
-	invariant(isObject(config), 'The injector config is undefined.');
+const makeDecorator = (storeInterface, useInjectables) => {
+	invariant(isObject(storeInterface), 'The store interface is undefined.');
 
-	const useInjectables = makeHook(config);
-	const { type } = config;
+	const { type } = storeInterface;
 	const decoratorName = type ? `With${toPascalCase(type)}` : 'Injector';
 
 	return (injectables, options = {}) => NextComponent => {

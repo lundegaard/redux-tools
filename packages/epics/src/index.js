@@ -1,1 +1,1 @@
-export { default as makeEnhancer, config } from './makeEnhancer';
+export { default as makeEnhancer, storeInterface } from './makeEnhancer';

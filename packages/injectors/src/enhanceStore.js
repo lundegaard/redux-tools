@@ -5,18 +5,18 @@ import invariant from 'invariant';
 
 import createEntries from './createEntries';
 
-const enhanceStore = (prevStore, config, { onEjected = noop, onInjected = noop } = {}) => {
+const enhanceStore = (prevStore, storeInterface, { onEjected = noop, onInjected = noop } = {}) => {
 	invariant(
 		isObject(prevStore),
 		'You must pass a Redux store as the first argument to `enhanceStore()`'
 	);
 
 	invariant(
-		isObject(config),
-		'You must pass an injector config as the second argument to `enhanceStore()`'
+		isObject(storeInterface),
+		'You must pass a store interface as the second argument to `enhanceStore()`'
 	);
 
-	const { injectMethodName, ejectMethodName, getEntries, setEntries, type } = config;
+	const { injectionKey, ejectionKey, getEntries, setEntries, type } = storeInterface;
 	const { dispatch = noop } = prevStore;
 	const actionType = toScreamingSnakeCase(type);
 
@@ -59,8 +59,8 @@ const enhanceStore = (prevStore, config, { onEjected = noop, onInjected = noop }
 
 	const nextStore = {
 		...prevStore,
-		[injectMethodName]: inject,
-		[ejectMethodName]: eject,
+		[injectionKey]: inject,
+		[ejectionKey]: eject,
 	};
 
 	setEntries([], nextStore);

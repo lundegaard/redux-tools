@@ -1,34 +1,37 @@
 import React, { useContext, useMemo } from 'react';
 import { mergeDeepWith, flip, or } from 'ramda';
 import PropTypes from 'prop-types';
-import { Provider as StoreProvider } from 'react-redux';
+import { Provider as ReactReduxProvider } from 'react-redux';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
-import { InjectorContext } from './contexts';
+import { NamespaceContext } from './contexts';
 
 // NOTE: `flip(or)` gives priority to second argument.
 const mergeContextValues = mergeDeepWith(flip(or));
 
 const Provider = ({ children, feature, namespace, store, useNamespace }) => {
-	const injectorContext = useContext(InjectorContext);
+	const context = useContext(NamespaceContext);
 
-	const contextValues = useMemo(
+	const nextContext = useMemo(
 		() =>
-			mergeContextValues(injectorContext, {
+			mergeContextValues(context, {
 				// NOTE: Defaulting here is safer than using `Provider.defaultProps`,
 				// because passing `null` would not result in a fallback to `DEFAULT_FEATURE`.
 				namespaces: { [feature || DEFAULT_FEATURE]: namespace },
-				store,
 				useNamespace,
 			}),
-		[feature, injectorContext, namespace, store, useNamespace]
+		[context, feature, namespace, useNamespace]
 	);
 
 	const providerElement = (
-		<InjectorContext.Provider value={contextValues}>{children}</InjectorContext.Provider>
+		<NamespaceContext.Provider value={nextContext}>{children}</NamespaceContext.Provider>
 	);
 
-	return store ? <StoreProvider store={store}>{providerElement}</StoreProvider> : providerElement;
+	return store ? (
+		<ReactReduxProvider store={store}>{providerElement}</ReactReduxProvider>
+	) : (
+		providerElement
+	);
 };
 
 Provider.propTypes = {

@@ -64,4 +64,9 @@ describe('enhanceStore', () => {
 		expect(onEjected).toHaveBeenCalledTimes(1);
 		expect(onInjected).not.toHaveBeenCalled();
 	});
+
+	it('throws when the value is not a function', () => {
+		const store = enhanceStore({}, storeInterface, {});
+		expect(() => store.injectThings({ foo: null }, { namespace: 'bar' })).toThrow();
+	});
 });

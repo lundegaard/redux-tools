@@ -8,15 +8,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Hook-based API. You can now use `useMiddleware`, `useEpics` and `useReducers` with a caveat: don't dispatch any actions until the injectables are injected (based on hook return value). Hooks are also used under the hood for better structure and performance.
+- Loads of new useful warnings when injecting and ejecting.
+- You can now define namespaces and features statically (or using props) in `withMiddleware`, `withEpics` and `withReducers`.
+- You can now inject functions in addition to objects. Note that a function (reducer, middleware or epic) will only be initialized once per namespace/feature.
+- Support for Redux Thunk! Just use our clone instead of the official implementation to enable automatic namespace passthrough via thunks.
 - (_reducers_): Support for features! This allows using @redux-tools with a feature-based state structure, similar to when using e.g. Redux Form.
-- [warn when using withReducers with global: false and no namespace](https://github.com/lundegaard/redux-tools/pull/47) 
-
+- (_reducers-react_): [Warn when using withReducers with global: false and no namespace.](https://github.com/lundegaard/redux-tools/pull/47)
 
 ### Changed
 
-- The injection API was changed from `(injectables, namespace, version)` to `(injectables, { namespace, version })`.
+- The injection API was changed from `(injectables, namespace, version)` to `(injectables, { namespace, feature })`.
 - All the `enhancer` exports were changed to `makeEnhancer` because of ambiguity in the injectable middleware enhancer.
-- Injectable middleware enhancer now has an `injectedMiddleware` property, which you must use to signify the execution point of the middleware.
+- Loads of internal refactoring under the hood to reduce duplicate code and improve tests maintainability.
+- `global` and `persist` options in decorators were renamed to `isGlobal` and `isPersistent`.
+- (_middleware_): Injectable middleware enhancer now has an `injectedMiddleware` property, which you must use to signify the execution point of the middleware.
+
+### Fixed
+
+- (_middleware_): Correctly skip duplicate middleware.
 
 ## [0.4.0] – 2019-02-07
 

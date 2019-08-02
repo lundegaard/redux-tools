@@ -6,8 +6,8 @@ import { mount } from 'enzyme';
 import makeHook from './makeHook';
 import Provider from './Provider';
 
-const config = makeStoreInterface('things');
-const useThings = makeHook(config);
+const storeInterface = makeStoreInterface('things');
+const useThings = makeHook(storeInterface);
 
 jest.mock('./constants', () => ({ IS_SERVER: false }));
 

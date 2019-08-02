@@ -17,6 +17,7 @@ They offer seamless integration with React and React-union. See the [packages](/
 - [stream-creators](packages/stream-creators/README.md) – Collection of stream creators for the epics package.
 - [middleware](packages/middleware/README.md) – Redux store enhancer for asynchronous injection of middleware.
 - [middleware-react](packages/middleware-react/README.md) – React bindings for the middleware package.
+- [thunk](packages/thunk/README.md) – Clone of the awesome (and extremely simple) Redux Thunk library.
 
 The following packages are used internally and are not meant to be used directly in your application code. You might want to use them for some custom features or more advanced integration, though.
 

@@ -21,6 +21,7 @@ const globals = {
 	'@redux-tools/reducers': 'ReduxToolsReducers',
 	'@redux-tools/reducers-react': 'ReduxToolsReducersReact',
 	'@redux-tools/stream-creators': 'ReduxToolsStreamCreators',
+	'@redux-tools/thunk': 'ReduxToolsThunk',
 	'@redux-tools/utils': 'ReduxToolsUtils',
 	'@redux-tools/utils-react': 'ReduxToolsUtilsReact',
 	'hoist-non-react-statics': 'HoistNonReactStatics',

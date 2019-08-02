@@ -1,7 +1,7 @@
 import { compose, cond, apply, __, isNil, T, map, o } from 'ramda';
 import { alwaysEmptyObject, isFunction, isObject } from 'ramda-extension';
 import { getStateByNamespace } from '@redux-tools/reducers';
-import { useInjectorContext } from '@redux-tools/injectors-react';
+import { useNamespace } from '@redux-tools/injectors-react';
 import { attachNamespace, DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import { connect } from 'react-redux';
 import { withProps } from '@redux-tools/utils-react';
@@ -47,16 +47,16 @@ const namespacedConnect = (
 	mapStateToProps,
 	mapDispatchToProps,
 	mergeProps,
-	{ feature: featureOption, namespace: namespaceOption, ...options } = {}
+	{ feature: optionFeature, namespace: optionNamespace, ...options } = {}
 ) =>
 	o(
-		withProps(({ feature: featureProp, namespace: namespaceProp }) => {
-			const feature = featureOption || featureProp || DEFAULT_FEATURE;
-			const { namespace: namespaceContext } = useInjectorContext(feature);
+		withProps(({ feature: propFeature, namespace: propNamespace }) => {
+			const feature = optionFeature || propFeature || DEFAULT_FEATURE;
+			const contextNamespace = useNamespace(feature);
 
 			return {
 				feature,
-				namespace: namespaceOption || namespaceProp || namespaceContext,
+				namespace: optionNamespace || propNamespace || contextNamespace,
 			};
 		}),
 		rawNamespacedConnect(mapStateToProps, mapDispatchToProps, mergeProps, options)

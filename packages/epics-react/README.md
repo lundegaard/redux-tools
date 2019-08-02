@@ -11,6 +11,7 @@ Creates a component decorator which handles the lifecycle of passed epics, mount
 #### Arguments
 
 1. `epics` (_Object_): The epics to use.
+2. [`options`] \(_Object_): Options for the decorator. Possible options: `isGlobal: boolean`, `isPersistent: boolean`, `feature: string`, and `namespace: string`.
 
 #### Returns
 

@@ -85,8 +85,8 @@ describe('makeEnhancer', () => {
 
 		store.dispatch({ payload: 'Yo', type: 'MESSAGE' });
 
-		expect(mock.mock.calls[0][0]).toEqual('B');
-		expect(mock.mock.calls[1][0]).toEqual('A');
+		expect(mock.mock.calls[0][0]).toEqual('A');
+		expect(mock.mock.calls[1][0]).toEqual('B');
 	});
 
 	it('correctly filters actions based on the namespace', () => {
@@ -156,6 +156,40 @@ describe('makeEnhancer', () => {
 		store.dispatch({ type: 'MESSAGE' });
 		expect(mockA).toHaveBeenCalledTimes(2);
 		expect(mockB).toHaveBeenCalledTimes(2);
+	});
+
+	it('calls the middleware in the order of injection', () => {
+		const callOrder = [];
+
+		const middlewareA = () => next => action => {
+			next(action);
+
+			if (action.type === 'MESSAGE') {
+				callOrder.push('a');
+			}
+		};
+
+		const middlewareB = () => next => action => {
+			next(action);
+
+			if (action.type === 'MESSAGE') {
+				callOrder.push('b');
+			}
+		};
+
+		const enhancer = makeEnhancer();
+		const store = createStore(
+			identity,
+			compose(
+				enhancer,
+				applyMiddleware(enhancer.injectedMiddleware)
+			)
+		);
+
+		store.injectMiddleware({ foo: middlewareA });
+		store.injectMiddleware({ foo: middlewareB });
+		store.dispatch({ type: 'MESSAGE' });
+		expect(callOrder).toEqual(['a', 'b']);
 	});
 
 	it('only allows a middleware to be injected once (with same key and value)', () => {
@@ -257,5 +291,67 @@ describe('makeEnhancer', () => {
 		);
 
 		expect(() => store.dispatch({ payload: 'Yo', type: 'MESSAGE' })).not.toThrow();
+	});
+
+	it('does not modify actions if the middleware is namespaced', () => {
+		const mock = jest.fn();
+
+		const middlewareA = () => next => action => {
+			next(action);
+		};
+
+		const middlewareB = () => () => action => {
+			mock(action);
+		};
+
+		const enhancer = makeEnhancer();
+		const store = createStore(
+			identity,
+			compose(
+				enhancer,
+				applyMiddleware(middlewareA, enhancer.injectedMiddleware, middlewareB)
+			)
+		);
+
+		store.injectMiddleware({ foo: middlewareA });
+		store.injectMiddleware({ foo: middlewareB });
+		const action = { type: 'MESSAGE' };
+		store.dispatch(action);
+		expect(mock).toHaveBeenCalledWith(action);
+	});
+
+	it('defaults namespace of dispatched actions from namespaced middleware', () => {
+		const mock = jest.fn();
+
+		const middlewareA = ({ dispatch }) => next => action => {
+			next(action);
+
+			if (action.type === 'MESSAGE') {
+				dispatch({ type: 'MESSAGE_REACTION' });
+			}
+		};
+
+		const middlewareB = () => next => action => {
+			next(action);
+
+			if (action.type === 'MESSAGE_REACTION') {
+				mock(action);
+			}
+		};
+
+		const enhancer = makeEnhancer();
+		const store = createStore(
+			identity,
+			compose(
+				enhancer,
+				applyMiddleware(enhancer.injectedMiddleware)
+			)
+		);
+
+		store.injectMiddleware({ foo: middlewareA }, { namespace: 'ns' });
+		store.injectMiddleware({ foo: middlewareB });
+		const action = { type: 'MESSAGE' };
+		store.dispatch(action);
+		expect(mock.mock.calls[0][0].meta.namespace).toBe('ns');
 	});
 });

@@ -1,6 +1,6 @@
 import { o } from 'ramda';
 import { isFunction } from 'ramda-extension';
-import { getNamespaceByAction, attachNamespace } from '@redux-tools/namespaces';
+import { getNamespaceByAction, defaultNamespace } from '@redux-tools/namespaces';
 import { getStateByNamespace } from '@redux-tools/reducers';
 
 const makeThunkMiddleware = dependencies => ({ dispatch, getState }) => next => action => {
@@ -8,7 +8,7 @@ const makeThunkMiddleware = dependencies => ({ dispatch, getState }) => next => 
 		const namespace = getNamespaceByAction(action);
 
 		return action({
-			dispatch: o(dispatch, attachNamespace(namespace)),
+			dispatch: o(dispatch, defaultNamespace(namespace)),
 			getState,
 			getNamespacedState: feature => getStateByNamespace(feature, namespace, getState()),
 			namespace,

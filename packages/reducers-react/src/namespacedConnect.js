@@ -2,7 +2,7 @@ import { compose, cond, apply, __, isNil, T, map, o } from 'ramda';
 import { alwaysEmptyObject, isFunction, isObject } from 'ramda-extension';
 import { getStateByNamespace } from '@redux-tools/reducers';
 import { useNamespace } from '@redux-tools/injectors-react';
-import { attachNamespace, DEFAULT_FEATURE } from '@redux-tools/namespaces';
+import { defaultNamespace, DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import { connect } from 'react-redux';
 import { withProps } from '@redux-tools/utils-react';
 
@@ -26,7 +26,7 @@ const throwTypeError = () => {
 };
 
 export const wrapMapDispatchToProps = mapDispatchToProps => (dispatch, ownProps) => {
-	const wrappedDispatch = o(dispatch, attachNamespace(ownProps.namespace));
+	const wrappedDispatch = o(dispatch, defaultNamespace(ownProps.namespace));
 
 	return cond([
 		[isNil, alwaysEmptyObject],

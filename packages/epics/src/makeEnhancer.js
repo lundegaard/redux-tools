@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 import * as Rx from 'rxjs/operators';
-import { isActionFromNamespace, attachNamespace } from '@redux-tools/namespaces';
+import { isActionFromNamespace, defaultNamespace } from '@redux-tools/namespaces';
 import { includesTimes } from '@redux-tools/utils';
 import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
 import { equals, includes } from 'ramda';
@@ -33,7 +33,7 @@ const makeEnhancer = ({ epicMiddleware, streamCreator }) => createStore => (...a
 					: epic(action$, state$, dependencies);
 
 				return outputAction$.pipe(
-					Rx.map(attachNamespace(namespace)),
+					Rx.map(defaultNamespace(namespace)),
 					// NOTE: takeUntil should ALWAYS be the last operator in `.pipe()`
 					// https://blog.angularindepth.com/rxjs-avoiding-takeuntil-leaks-fb5182d047ef
 					Rx.takeUntil(

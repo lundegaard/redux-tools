@@ -1,13 +1,7 @@
-import { curry, mergeDeepRight } from 'ramda';
+import { curry, mergeDeepRight, mergeDeepLeft } from 'ramda';
 import { isFunction } from 'ramda-extension';
 
-/**
- * Associates an action with a namespace.
- *
- * @param {?string} namespace namespace to attach
- * @param {Object} action action to add the namespace to
- */
-const attachNamespace = curry((namespace, action) => {
+const mergeNamespace = curry((isForced, namespace, action) => {
 	if (!namespace) {
 		return action;
 	}
@@ -20,7 +14,25 @@ const attachNamespace = curry((namespace, action) => {
 		return nextAction;
 	}
 
+	if (isForced) {
+		return mergeDeepLeft({ meta: { namespace } }, action);
+	}
+
 	return mergeDeepRight({ meta: { namespace } }, action);
 });
 
-export default attachNamespace;
+/**
+ * Associates an action with a namespace, overwriting any previous namespace.
+ *
+ * @param {?string} namespace namespace to attach
+ * @param {Object} action action to add the namespace to
+ */
+export const attachNamespace = mergeNamespace(true);
+
+/**
+ * Associates an action with a namespace unless it is already associated with some namespace.
+ *
+ * @param {?string} namespace namespace to attach
+ * @param {Object} action action to add the namespace to
+ */
+export const defaultNamespace = mergeNamespace(false);

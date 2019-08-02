@@ -1,6 +1,6 @@
-import { o, map, compose, uniq, forEach } from 'ramda';
+import { map, pipe, uniq, forEach, o } from 'ramda';
 import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
-import { isActionFromNamespace, attachNamespace } from '@redux-tools/namespaces';
+import { isActionFromNamespace, defaultNamespace } from '@redux-tools/namespaces';
 import invariant from 'invariant';
 
 export const storeInterface = makeStoreInterface('middleware');
@@ -42,14 +42,15 @@ const makeEnhancer = () => {
 			// NOTE: `innerNext` is either the next injected middleware or `outerNext`.
 			return innerNext => {
 				// NOTE: `entryNext` is a wrapper over the currently iterated-over injected middleware.
-				const entryNext = initializedEntries.get(entry)(o(innerNext, attachNamespace(namespace)));
+				const entryNext = initializedEntries.get(entry)(innerNext);
 
 				return action =>
 					isActionFromNamespace(namespace, action) ? entryNext(action) : innerNext(action);
 			};
 		}, entries);
 
-		return compose(...chain)(outerNext);
+		// NOTE: `pipe` is used to preserve injection order.
+		return pipe(...chain)(outerNext);
 	};
 
 	const enhancer = createStore => (...args) => {
@@ -76,7 +77,11 @@ const makeEnhancer = () => {
 				entry =>
 					nextInitializedEntries.set(
 						entry,
-						initializedEntries.get(entry) || entry.value(nextStore)
+						initializedEntries.get(entry) ||
+							entry.value({
+								...nextStore,
+								dispatch: o(nextStore.dispatch, defaultNamespace(entry.namespace)),
+							})
 					),
 				nextEntries
 			);

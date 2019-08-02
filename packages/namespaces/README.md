@@ -37,12 +37,25 @@ There are essentially two edge cases:
 
 ### `attachNamespace`
 
-Associates an action with a namespace.
+Associates an action with a namespace, overwriting any previous namespace.
 
 #### Arguments
 
 1. [`namespace`] \(_string_): The namespace to attach.
 2. `action` (_Action_): Action to attach the namespace to.
+
+#### Returns
+
+(_Action_): A new Redux action with a `meta.namespace` property.
+
+### `defaultNamespace`
+
+Associates an action with a namespace unless it is already associated with some namespace.
+
+#### Arguments
+
+1. [`namespace`] \(_string_): The namespace to default to.
+2. `action` (_Action_): Action to default the namespace of.
 
 #### Returns
 

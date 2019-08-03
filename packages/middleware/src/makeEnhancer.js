@@ -1,6 +1,7 @@
 import { map, pipe, uniq, forEach, o } from 'ramda';
 import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
 import { isActionFromNamespace, defaultNamespace } from '@redux-tools/namespaces';
+import { getStateByNamespace } from '@redux-tools/reducers';
 import invariant from 'invariant';
 
 export const storeInterface = makeStoreInterface('middleware');
@@ -73,18 +74,23 @@ const makeEnhancer = () => {
 			const nextInitializedEntries = new Map();
 
 			// NOTE: We copy all necessary entries because it's simpler/faster than finding what has changed.
-			forEach(
-				entry =>
-					nextInitializedEntries.set(
-						entry,
-						initializedEntries.get(entry) ||
-							entry.value({
-								...nextStore,
-								dispatch: o(nextStore.dispatch, defaultNamespace(entry.namespace)),
-							})
-					),
-				nextEntries
-			);
+			forEach(entry => {
+				const { namespace } = entry;
+				const { dispatch, getState } = nextStore;
+
+				nextInitializedEntries.set(
+					entry,
+					initializedEntries.get(entry) ||
+						entry.value({
+							namespace,
+							dispatch: o(dispatch, defaultNamespace(namespace)),
+							getState: nextStore.getState,
+							getNamespacedState: namespace
+								? (feature = entry.feature) => getStateByNamespace(feature, namespace, getState())
+								: null,
+						})
+				);
+			}, nextEntries);
 
 			initializedEntries = nextInitializedEntries;
 			enhancerNext = composeEntries(nextEntries);

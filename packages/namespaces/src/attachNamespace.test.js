@@ -46,4 +46,12 @@ describe('defaultNamespace', () => {
 			meta: { namespace: 'yo' },
 		});
 	});
+
+	it('does not overwrite namespace of a function', () => {
+		const thunk = () => 'YOLO';
+		thunk.meta = { namespace: 'yo' };
+		const wrappedThunk = defaultNamespace('what', thunk);
+		expect(wrappedThunk.meta.namespace).toBe('yo');
+		expect(wrappedThunk()).toBe('YOLO');
+	});
 });

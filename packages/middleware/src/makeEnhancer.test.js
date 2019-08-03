@@ -1,4 +1,4 @@
-import { identity, compose } from 'ramda';
+import { identity, compose, always } from 'ramda';
 import { createStore, applyMiddleware } from 'redux';
 
 import makeEnhancer from './makeEnhancer';
@@ -278,6 +278,43 @@ describe('makeEnhancer', () => {
 
 		expect(reduxAPIMockB).toHaveBeenCalledTimes(1);
 		expect(nextMockB).toHaveBeenCalledTimes(1);
+	});
+
+	it('has working getState and getNamespacedState', () => {
+		const stateMock = jest.fn();
+		const namespacedStateMock = jest.fn();
+		const differentFeatureMock = jest.fn();
+
+		const middleware = ({ getState, getNamespacedState }) => () => () => {
+			stateMock(getState());
+			namespacedStateMock(getNamespacedState());
+			differentFeatureMock(getNamespacedState('random'));
+		};
+
+		const enhancer = makeEnhancer();
+
+		const state = {
+			yolo: {
+				foo: { bar: 'baz' },
+			},
+			random: {
+				foo: { bar: 'baz' },
+			},
+		};
+
+		const store = createStore(
+			always(state),
+			compose(
+				enhancer,
+				applyMiddleware(enhancer.injectedMiddleware)
+			)
+		);
+
+		store.injectMiddleware({ foo: middleware }, { namespace: 'foo', feature: 'yolo' });
+		store.dispatch({ type: 'MESSAGE' });
+		expect(stateMock).toHaveBeenCalledWith(state);
+		expect(namespacedStateMock).toHaveBeenCalledWith(state.yolo.foo);
+		expect(differentFeatureMock).toHaveBeenCalledWith(state.random.foo);
 	});
 
 	it('works without any injected middleware', () => {

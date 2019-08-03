@@ -1,6 +1,8 @@
 import { curry, mergeDeepRight, mergeDeepLeft } from 'ramda';
 import { isFunction } from 'ramda-extension';
 
+import getNamespaceByAction from './getNamespaceByAction';
+
 const mergeNamespace = curry((isForced, namespace, action) => {
 	if (!namespace) {
 		return action;
@@ -9,7 +11,11 @@ const mergeNamespace = curry((isForced, namespace, action) => {
 	if (isFunction(action)) {
 		const nextAction = (...args) => action(...args);
 
-		nextAction.meta = { namespace };
+		if (isForced) {
+			nextAction.meta = { namespace };
+		} else {
+			nextAction.meta = { namespace: getNamespaceByAction(action) || namespace };
+		}
 
 		return nextAction;
 	}

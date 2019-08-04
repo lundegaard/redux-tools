@@ -8,6 +8,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- (_namespaces_): Added `attachNamespace`, which always overwrites the original namespace.
+- (_middleware_): Middleware now automatically sets the namespace of each dispatched action.
+- (_middleware_): `getNamespacedState` and `namespace` are now available in the first argument in all injected middleware.
+
+### Changed
+
+- (_namespaces_): Renamed `attachNamespace` to `defaultNamespace`.
+
+### Fixed
+
+- (_middleware_): Injected middleware are now properly called in the order of injection.
+- (_middleware_): Middleware no longer automatically sets the namespace of each action via `next()`.
+
+### Removed
+
+- (_namespaces_): Unnecessary utility functions (`attachFeature` and `getFeatureByAction`).
+
+## [0.5.0] – 2019-05-31
+
+### Added
+
 - Hook-based API. You can now use `useMiddleware`, `useEpics` and `useReducers` with a caveat: don't dispatch any actions until the injectables are injected (based on hook return value). Hooks are also used under the hood for better structure and performance.
 - Loads of new useful warnings when injecting and ejecting.
 - You can now define namespaces and features statically (or using props) in `withMiddleware`, `withEpics` and `withReducers`.

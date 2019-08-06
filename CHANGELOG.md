@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+Nothing :)
+
+## [0.6.0] – 2019-08-06
+
 ### Added
 
 - (_namespaces_): Added `attachNamespace`, which always overwrites the original namespace.

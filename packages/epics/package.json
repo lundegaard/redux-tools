@@ -17,7 +17,7 @@
     "@redux-tools/namespaces": "^0.6.0",
     "@redux-tools/utils": "^0.6.0",
     "ramda": "^0.26.1",
-    "ramda-extension": "^0.7.2"
+    "ramda-extension": "^0.9.1"
   },
   "peerDependencies": {
     "redux": "^4.0.1",

@@ -7048,10 +7048,15 @@ railroad-diagrams@^1.0.0:
   resolved "https://registry.yarnpkg.com/railroad-diagrams/-/railroad-diagrams-1.0.0.tgz#eb7e6267548ddedfb899c1b90e57374559cddb7e"
   integrity sha1-635iZ1SN3t+4mcG5Dlc3RVnN234=
 
-ramda-extension@0.7.2, ramda-extension@^0.7.2:
+ramda-extension@0.7.2:
   version "0.7.2"
   resolved "https://registry.yarnpkg.com/ramda-extension/-/ramda-extension-0.7.2.tgz#dd84a112b39f57c8d2d3cd27192057e52934ef58"
   integrity sha512-3fyZ+u/7IxkdKFlrVk34oKVtDlIxBc2ihius8BEDqsbBziL01P3+QbXncAgFAQPWgpv9dTgM8oRYwINvsnnorQ==
+
+ramda-extension@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/ramda-extension/-/ramda-extension-0.9.1.tgz#27d0651d2e4a3b650689ccdbc352f76e24063942"
+  integrity sha512-+7Xt2daNBpMwu04Eot248/05HUz8DPhC9IxfXO+OYw1JYn7t8pTghSlxOdEAhxYVz3ydulI8TxHqZ7qTUm53vg==
 
 ramda@0.26.1, ramda@^0.26.1:
   version "0.26.1"

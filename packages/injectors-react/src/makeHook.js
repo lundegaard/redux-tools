@@ -38,6 +38,10 @@ const makeHook = storeInterface => {
 		const namespace = isGlobal ? null : options.namespace || contextNamespace;
 		const inject = store[injectionKey];
 		const eject = store[ejectionKey];
+		// NOTE: We use a string instead of comparing the objects by reference to avoid remounting
+		// when `useInjectables({ something })` is used (new object with same entries).
+		// TODO: Support partial changes in the `injectables` object.
+		const injectablesHash = JSON.stringify(injectableKeys);
 
 		// NOTE: On the server, the injectables should be injected beforehand.
 		const [isInitialized, setIsInitialized] = useState(IS_SERVER);
@@ -74,6 +78,16 @@ const makeHook = storeInterface => {
 				);
 			}
 		}
+
+		const effectDependencies = [
+			namespace,
+			feature,
+			isGlobal,
+			isPersistent,
+			inject,
+			eject,
+			injectablesHash,
+		];
 
 		// NOTE: This doesn't run on the server, but won't trigger `useLayoutEffect` warnings either.
 		useUniversalLayoutEffect(() => {
@@ -113,7 +127,7 @@ const makeHook = storeInterface => {
 					eject(injectables, props);
 				}
 			};
-		}, []);
+		}, effectDependencies);
 
 		return isInitialized;
 	};

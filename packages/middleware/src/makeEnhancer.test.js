@@ -391,4 +391,58 @@ describe('makeEnhancer', () => {
 		store.dispatch(action);
 		expect(mock.mock.calls[0][0].meta.namespace).toBe('ns');
 	});
+
+	it('does not modify action object without middleware', () => {
+		const enhancer = makeEnhancer();
+		const store = createStore(
+			identity,
+			compose(
+				enhancer,
+				applyMiddleware(enhancer.injectedMiddleware)
+			)
+		);
+
+		const action = { type: 'MESSAGE' };
+		const returnedAction = store.dispatch(action);
+
+		expect(action).toBe(returnedAction);
+	});
+
+	it('does not modify action object with injected middleware', () => {
+		const middleware = () => next => action => next(action);
+
+		const enhancer = makeEnhancer();
+		const store = createStore(
+			identity,
+			compose(
+				enhancer,
+				applyMiddleware(enhancer.injectedMiddleware)
+			)
+		);
+
+		store.injectMiddleware({ foo: middleware }, { namespace: 'ns' });
+		const action = { type: 'MESSAGE' };
+		const returnedAction = store.dispatch(action);
+
+		expect(action).toBe(returnedAction);
+	});
+
+	it('modifies action object with injected middleware', () => {
+		const middleware = () => next => action => next({ ...action, payload: 'Foo' });
+
+		const enhancer = makeEnhancer();
+		const store = createStore(
+			identity,
+			compose(
+				enhancer,
+				applyMiddleware(enhancer.injectedMiddleware)
+			)
+		);
+
+		store.injectMiddleware({ foo: middleware }, { namespace: 'ns' });
+		const action = { type: 'MESSAGE' };
+		const returnedAction = store.dispatch(action);
+
+		expect(action).not.toBe(returnedAction);
+	});
 });

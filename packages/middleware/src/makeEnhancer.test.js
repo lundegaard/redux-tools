@@ -1,4 +1,4 @@
-import { identity, compose, always } from 'ramda';
+import { identity, compose, always, prop, propEq } from 'ramda';
 import { createStore, applyMiddleware } from 'redux';
 
 import makeEnhancer from './makeEnhancer';
@@ -48,19 +48,19 @@ describe('makeEnhancer', () => {
 		const mock = jest.fn();
 
 		const middlewareA = () => next => action => {
-			next(action);
-
 			if (action.type === 'MESSAGE') {
 				mock('A');
 			}
+
+			next(action);
 		};
 
 		const middlewareB = () => next => action => {
-			next(action);
-
 			if (action.type === 'MESSAGE') {
 				mock('B');
 			}
+
+			next(action);
 		};
 
 		const enhancer = makeEnhancer();
@@ -162,19 +162,19 @@ describe('makeEnhancer', () => {
 		const callOrder = [];
 
 		const middlewareA = () => next => action => {
-			next(action);
-
 			if (action.type === 'MESSAGE') {
 				callOrder.push('a');
 			}
+
+			next(action);
 		};
 
 		const middlewareB = () => next => action => {
-			next(action);
-
 			if (action.type === 'MESSAGE') {
 				callOrder.push('b');
 			}
+
+			next(action);
 		};
 
 		const enhancer = makeEnhancer();
@@ -390,5 +390,108 @@ describe('makeEnhancer', () => {
 		const action = { type: 'MESSAGE' };
 		store.dispatch(action);
 		expect(mock.mock.calls[0][0].meta.namespace).toBe('ns');
+	});
+
+	it('does not modify action object without middleware', () => {
+		const enhancer = makeEnhancer();
+		const store = createStore(
+			identity,
+			compose(
+				enhancer,
+				applyMiddleware(enhancer.injectedMiddleware)
+			)
+		);
+
+		const action = { type: 'MESSAGE' };
+		const returnedAction = store.dispatch(action);
+
+		expect(action).toBe(returnedAction);
+	});
+
+	it('does not modify action object with injected middleware', () => {
+		const middleware = () => next => action => next(action);
+
+		const enhancer = makeEnhancer();
+		const store = createStore(
+			identity,
+			compose(
+				enhancer,
+				applyMiddleware(enhancer.injectedMiddleware)
+			)
+		);
+
+		store.injectMiddleware({ foo: middleware }, { namespace: 'ns' });
+		const action = { type: 'MESSAGE' };
+		const returnedAction = store.dispatch(action);
+
+		expect(action).toBe(returnedAction);
+	});
+
+	it('modifies action object with injected middleware', () => {
+		const middleware = () => next => action => next({ ...action, payload: 'Foo' });
+
+		const enhancer = makeEnhancer();
+		const store = createStore(
+			identity,
+			compose(
+				enhancer,
+				applyMiddleware(enhancer.injectedMiddleware)
+			)
+		);
+
+		store.injectMiddleware({ foo: middleware }, { namespace: 'ns' });
+		const action = { type: 'MESSAGE' };
+		const returnedAction = store.dispatch(action);
+
+		expect(action).not.toBe(returnedAction);
+	});
+
+	it('returns value of outermost middleware injected', () => {
+		const propPayload = prop('payload');
+		const isMessageType = propEq('type', 'MESSAGE');
+
+		const middlewareA = () => next => action => {
+			if (isMessageType(action)) {
+				expect(propPayload(action)).toBe('Foo');
+			}
+
+			const result = next(action);
+
+			if (isMessageType(action)) {
+				expect(propPayload(result)).toBe('Bar');
+			}
+			return result;
+		};
+
+		const middlewareB = () => next => action => {
+			if (isMessageType(action)) {
+				expect(propPayload(action)).toBe('Foo');
+			}
+
+			const result = next({ ...action, payload: 'Bar' });
+
+			if (isMessageType(action)) {
+				expect(propPayload(result)).toBe('Bar');
+			}
+			return result;
+		};
+
+		const enhancer = makeEnhancer();
+		const store = createStore(
+			identity,
+			compose(
+				enhancer,
+				applyMiddleware(enhancer.injectedMiddleware)
+			)
+		);
+
+		store.injectMiddleware({ foo: middlewareA }, { namespace: 'ns' });
+		store.injectMiddleware({ baz: middlewareB }, { namespace: 'ns' });
+
+		const action = { type: 'MESSAGE', payload: 'Foo' };
+		const returnedAction = store.dispatch(action);
+
+		expect(action).not.toBe(returnedAction);
+		expect(propPayload(returnedAction)).toBe('Bar');
 	});
 });

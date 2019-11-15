@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Appropriate dependencies added to `useEffect` in injection hooks.
+- (_middleware_): Injected middleware are now properly called in the order of injection.
 
 ## [0.6.0] – 2019-08-06
 

@@ -18,7 +18,7 @@
     "ramda-extension": "^0.9.1"
   },
   "devDependencies": {
-    "redux": "4.0.1"
+    "redux": "4.0.4"
   },
   "publishConfig": {
     "access": "public"

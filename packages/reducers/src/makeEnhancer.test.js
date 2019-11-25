@@ -7,12 +7,13 @@ import makeEnhancer, { storeInterface } from './makeEnhancer';
 
 const createStore = () => ({
 	replaceReducer: jest.fn(),
-	state: {},
 });
 
 const { getEntries } = storeInterface;
 
 describe('makeEnhancer', () => {
+	const reducerA = (state = { name: 'a' }) => state;
+	const reducerB = (state = { name: 'b' }) => state;
 	let store;
 
 	beforeEach(() => {
@@ -48,7 +49,6 @@ describe('makeEnhancer', () => {
 
 	it('removes data from state after reducer ejecting', () => {
 		const store = createStoreRedux(identity, makeEnhancer());
-		const reducerA = (state = { name: 'a' }) => state;
 
 		store.injectReducers({ a: reducerA }, { namespace: 'nsA' });
 		expect(store.getState()).toEqual({
@@ -57,7 +57,30 @@ describe('makeEnhancer', () => {
 			},
 		});
 
-		store.ejectReducers(identity, { namespace: 'nsB' });
+		store.ejectReducers({ a: reducerA }, { namespace: 'nsA' });
 		expect(store.getState()).toEqual({});
+	});
+
+	it('does not touch state of other reducers after reducer ejecting', () => {
+		const store = createStoreRedux(identity, makeEnhancer());
+
+		store.injectReducers({ a: reducerA }, { namespace: 'nsA' });
+		store.injectReducers({ b: reducerB }, { namespace: 'nsB' });
+		expect(store.getState()).toEqual({
+			namespaces: {
+				nsA: { a: { name: 'a' } },
+				nsB: { b: { name: 'b' } },
+			},
+		});
+		store.ejectReducers({ a: reducerA }, { namespace: 'nsA' });
+		expect(store.getState()).toEqual({
+			namespaces: {
+				nsB: { b: { name: 'b' } },
+			},
+		});
+	});
+
+	it('throws when injecting a function without a namespace', () => {
+		expect(() => store.injectReducers(identity)).toThrow();
 	});
 });

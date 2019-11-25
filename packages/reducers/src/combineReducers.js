@@ -5,7 +5,7 @@ export default reducers => {
 	const finalReducers = pickBy(isFunction, reducers);
 	const finalReducerKeys = keys(finalReducers);
 
-	return function combination(state = {}, action) {
+	return (state = {}, action) => {
 		let hasChanged = false;
 		const nextState = {};
 

@@ -1,5 +1,5 @@
 import { noop, isObject, toScreamingSnakeCase } from 'ramda-extension';
-import { keys, concat, forEach } from 'ramda';
+import { keys, concat, forEach, length, o } from 'ramda';
 import { withoutOnce } from '@redux-tools/utils';
 import invariant from 'invariant';
 
@@ -53,7 +53,10 @@ const enhanceStore = (prevStore, storeInterface, { onEjected = noop, onInjected 
 		dispatch({
 			type: `@redux-tools/${actionType}_EJECTED`,
 			payload: keys(injectables),
-			meta: props,
+			meta: {
+				...props,
+				isFunctionReducer: o(length, keys)(injectables) === 0 && length(entries) > 0,
+			},
 		});
 	};
 

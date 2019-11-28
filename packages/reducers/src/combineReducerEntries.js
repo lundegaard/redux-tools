@@ -1,5 +1,5 @@
-import { ifElse, always, o, map, when, isEmpty, reduce, assocPath } from 'ramda';
-import { alwaysEmptyObject, isPlainObject } from 'ramda-extension';
+import { o, map, when, reduce, assocPath } from 'ramda';
+import { isPlainObject } from 'ramda-extension';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import { FUNCTION_KEY } from '@redux-tools/injectors';
 import invariant from 'invariant';
@@ -7,10 +7,9 @@ import invariant from 'invariant';
 import combineReducers from './combineReducers';
 import filterReducer from './filterReducer';
 
-export const deepCombineReducers = ifElse(
-	isEmpty,
-	always(alwaysEmptyObject),
-	o(combineReducers, map(when(isPlainObject, object => deepCombineReducers(object))))
+export const deepCombineReducers = o(
+	combineReducers,
+	map(when(isPlainObject, object => deepCombineReducers(object)))
 );
 
 const getReducerPath = (feature, namespace, key) => {

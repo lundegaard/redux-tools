@@ -7,7 +7,7 @@ export default reducers => {
 
 	return (state = {}, action) => {
 		let hasChanged = false;
-		const nextState = {};
+		const nextState = { ...state };
 
 		mapObjIndexed(key => {
 			const reducer = finalReducers[key];

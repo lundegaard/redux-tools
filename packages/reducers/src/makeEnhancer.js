@@ -1,21 +1,24 @@
 import {
 	reduce,
-	path,
 	dissocPath,
 	identity,
 	isEmpty,
 	when,
-	compose,
 	o,
 	always,
-	concat,
-	__,
 	append,
 	either,
+	pathOr,
+	isNil,
+	lensPath,
+	view,
+	over,
+	omit,
+	reject,
 } from 'ramda';
 import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
-import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
-import { isFunction } from 'ramda-extension';
+import { DEFAULT_FEATURE, getNamespaceByAction } from '@redux-tools/namespaces';
+import { isArray, isFunction } from 'ramda-extension';
 import invariant from 'invariant';
 
 import combineReducerEntries from './combineReducerEntries';
@@ -23,27 +26,36 @@ import composeReducers from './composeReducers';
 
 export const storeInterface = makeStoreInterface('reducers');
 
-const cleanUpReducer = (state, action) => {
-	if (action.type !== '@redux-tools/REDUCERS_EJECTED') return state;
+const cleanupReducer = (state, action) => {
+	if (action.type !== '@redux-tools/REDUCERS_EJECTED') {
+		return state;
+	}
 
-	const namespaceGroup = action.meta.feature || DEFAULT_FEATURE;
+	const feature = pathOr(DEFAULT_FEATURE, ['meta', 'feature'], action);
+	const pathToNamespace = [feature, getNamespaceByAction(action)];
+	const pathToReducer = getNamespaceByAction(action) ? pathToNamespace : [];
 
-	const pathToNamespace = [namespaceGroup, action.meta.namespace];
-	const pathToReducer = when(always(action.meta.namespace), concat(pathToNamespace))([]);
+	const removeEjectedState = prevState =>
+		isArray(action.payload)
+			? reduce(
+					(nextState, reducerKey) => dissocPath(append(reducerKey, pathToReducer), nextState),
+					prevState,
+					action.payload
+			  )
+			: prevState;
 
-	const cleanReducers = reduce((state, reducerName) =>
-		dissocPath(append(reducerName, pathToReducer), state)
-	)(__, action.payload);
+	const lensForFeature = lensPath([feature]);
+	const lensForNamespace = lensPath(pathToNamespace);
 
-	const cleanEmptyObjects = compose(
-		when(o(isEmpty, path([namespaceGroup])), dissocPath([namespaceGroup])),
+	const cleanEmptyObjects = o(
+		when(o(isEmpty, view(lensForFeature)), reject(isEmpty)),
 		when(
-			either(o(isEmpty, path(pathToNamespace)), always(action.meta.isFunctionReducer)),
-			dissocPath(pathToNamespace)
+			either(o(isEmpty, view(lensForNamespace)), always(isNil(action.payload))),
+			over(lensForFeature, omit([getNamespaceByAction(action)]))
 		)
 	);
 
-	return o(cleanEmptyObjects, cleanReducers)(state);
+	return o(cleanEmptyObjects, removeEjectedState)(state);
 };
 
 const makeEnhancer = () => createStore => (reducer = identity, ...args) => {
@@ -59,7 +71,7 @@ const makeEnhancer = () => createStore => (reducer = identity, ...args) => {
 			composeReducers(
 				reducer,
 				combineReducerEntries(storeInterface.getEntries(nextStore)),
-				cleanUpReducer
+				cleanupReducer
 			)
 		);
 	};

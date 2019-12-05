@@ -1,15 +1,15 @@
-import { length, mapObjIndexed, pickBy, keys, o } from 'ramda';
-import { isFunction } from 'ramda-extension';
+import { length, forEachObjIndexed, keys } from 'ramda';
+import { pickByFunction, getKeysLength } from '@redux-tools/utils';
 
 export default reducers => {
-	const finalReducers = pickBy(isFunction, reducers);
+	const finalReducers = pickByFunction(reducers);
 	const finalReducerKeys = keys(finalReducers);
 
 	return (state = {}, action) => {
 		let hasChanged = false;
 		const nextState = { ...state };
 
-		mapObjIndexed(key => {
+		forEachObjIndexed(key => {
 			const reducer = finalReducers[key];
 			const previousStateForKey = state[key];
 			const nextStateForKey = reducer(previousStateForKey, action);
@@ -17,7 +17,7 @@ export default reducers => {
 			hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
 		}, finalReducerKeys);
 
-		hasChanged = hasChanged || length(finalReducerKeys) !== o(length, keys)(state);
+		hasChanged = hasChanged || length(finalReducerKeys) !== getKeysLength(state);
 		return hasChanged ? nextState : state;
 	};
 };

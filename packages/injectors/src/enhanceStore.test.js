@@ -49,7 +49,7 @@ describe('enhanceStore', () => {
 		const ejectedAction = dispatch.mock.calls[0][0];
 		expect(ejectedAction.type).toBe('@redux-tools/THINGS_EJECTED');
 		expect(ejectedAction.payload).toEqual(['foo']);
-		expect(ejectedAction.meta).toEqual({ namespace: 'bar', isFunctionReducer: false });
+		expect(ejectedAction.meta).toEqual({ namespace: 'bar' });
 	});
 
 	it('calls handlers on ejection', () => {

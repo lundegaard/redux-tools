@@ -33,12 +33,12 @@ const cleanupReducer = (state, action) => {
 
 	const feature = pathOr(DEFAULT_FEATURE, ['meta', 'feature'], action);
 	const pathToNamespace = [feature, getNamespaceByAction(action)];
-	const pathToReducer = getNamespaceByAction(action) ? pathToNamespace : [];
+	const pathToSliceRoot = getNamespaceByAction(action) ? pathToNamespace : [];
 
 	const removeEjectedState = prevState =>
 		isArray(action.payload)
 			? reduce(
-					(nextState, reducerKey) => dissocPath(append(reducerKey, pathToReducer), nextState),
+					(nextState, reducerKey) => dissocPath(append(reducerKey, pathToSliceRoot), nextState),
 					prevState,
 					action.payload
 			  )

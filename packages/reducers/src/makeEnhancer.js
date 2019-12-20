@@ -13,7 +13,7 @@ import {
 	lensPath,
 	view,
 	over,
-	omit,
+	dissoc,
 	reject,
 } from 'ramda';
 import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
@@ -51,7 +51,7 @@ const cleanupReducer = (state, action) => {
 		when(o(isEmpty, view(lensForFeature)), reject(isEmpty)),
 		when(
 			either(o(isEmpty, view(lensForNamespace)), always(isNil(action.payload))),
-			over(lensForFeature, omit([getNamespaceByAction(action)]))
+			over(lensForFeature, dissoc(getNamespaceByAction(action)))
 		)
 	);
 

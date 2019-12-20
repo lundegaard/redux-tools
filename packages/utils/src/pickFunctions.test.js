@@ -1,4 +1,4 @@
-import pickByFunction from './pickByFunction';
+import pickFunctions from './pickFunctions';
 
 const functionA = () => 'a';
 const functionB = () => 'b';
@@ -12,6 +12,6 @@ const entryA = {
 
 describe('pickByFunction', () => {
 	it('correctly picks functions from source object', () => {
-		expect(pickByFunction(entryA)).toEqual({ a: functionA, b: functionB });
+		expect(pickFunctions(entryA)).toEqual({ a: functionA, b: functionB });
 	});
 });

@@ -1,8 +1,8 @@
 import { length, forEachObjIndexed, keys } from 'ramda';
-import { pickByFunction, getKeysLength } from '@redux-tools/utils';
+import { pickFunctions, getKeysLength } from '@redux-tools/utils';
 
 export default reducers => {
-	const finalReducers = pickByFunction(reducers);
+	const finalReducers = pickFunctions(reducers);
 	const finalReducerKeys = keys(finalReducers);
 
 	return (state = {}, action) => {

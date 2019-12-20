@@ -7,6 +7,6 @@ import { isFunction } from 'ramda-extension';
  * @param {Object} from source object
  * @returns {Object} object new object containing only functions
  */
-const pickByFunction = pickBy(isFunction);
+const pickFunctions = pickBy(isFunction);
 
-export default pickByFunction;
+export default pickFunctions;

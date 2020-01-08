@@ -29,7 +29,49 @@ The following packages are used internally and are not meant to be used directly
 
 ## Usage
 
+### Basic setup
+
 This example uses React, but the tools are platform agnostic. You should already know the basics of Redux before using this library!
+
+In order to integrate `redux-tools` into your project, you first need to add necessary dependencies:
+
+```
+yarn add @redux-tools/reducers @redux-tools/reducers-react
+```
+
+(Packages contain utility functions for reducers. We highly recommend using them to unlock true potential of this project)
+
+Next, change your store initialization to the following:
+
+```js
+// configureStore.js
+import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension/logOnlyInProduction';
+import { makeEnhancer as makeReducersEnhancer } from '@redux-tools/reducers';
+
+const configureStore = () =>
+	createStore(store => store, composeWithDevTools(makeReducersEnhancer()));
+
+export default configureStore;
+```
+
+This will create an empty store.
+
+In order to dynamically inject a reducer, we need to specify the component (or top of the React component tree) which uses that reducer's data. This component should be connected to the Redux store like this:
+
+```js
+// YourComponent.js
+import { withReducers } from '@redux-tools/reducers-react';
+import reducer from '../yourReducers/reducerToInject';
+
+// YourComponent definition
+
+export default withReducers({ reducerName: reducer }, { isGlobal: true })(YourComponent);
+```
+
+And that's it! Your application now contains a basic Redux store with dynamically injected reducer.
+
+### Enhance app with redux-tools actions and reducers
 
 We will be creating a simple click counter, which will have its state stored in Redux. The catch is that we should have a variable number of isolated counters on a single page!
 

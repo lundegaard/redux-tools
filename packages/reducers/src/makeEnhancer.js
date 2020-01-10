@@ -5,16 +5,14 @@ import {
 	isEmpty,
 	when,
 	o,
-	always,
+	T,
 	append,
-	either,
 	pathOr,
 	isNil,
 	lensPath,
 	view,
 	over,
 	dissoc,
-	reject,
 } from 'ramda';
 import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
 import { DEFAULT_FEATURE, getNamespaceByAction } from '@redux-tools/namespaces';
@@ -47,15 +45,16 @@ const cleanupReducer = (state, action) => {
 	const lensForFeature = lensPath([feature]);
 	const lensForNamespace = lensPath(pathToNamespace);
 
-	const cleanEmptyObjects = o(
-		when(o(isEmpty, view(lensForFeature)), reject(isEmpty)),
-		when(
-			either(o(isEmpty, view(lensForNamespace)), always(isNil(action.payload))),
-			over(lensForFeature, dissoc(getNamespaceByAction(action)))
-		)
+	const cleanEmptyNamespace = when(
+		// NOTE: Clean if ejecting a function or if all keys have been already ejected.
+		isNil(action.payload) ? T : o(isEmpty, view(lensForNamespace)),
+		over(lensForFeature, dissoc(getNamespaceByAction(action)))
 	);
 
-	return o(cleanEmptyObjects, removeEjectedState)(state);
+	const cleanEmptyFeature = when(o(isEmpty, view(lensForFeature)), dissoc(feature));
+	const cleanEmptyStateSlices = o(cleanEmptyFeature, cleanEmptyNamespace);
+
+	return o(cleanEmptyStateSlices, removeEjectedState)(state);
 };
 
 const makeEnhancer = () => createStore => (reducer = identity, ...args) => {

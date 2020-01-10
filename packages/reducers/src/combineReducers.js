@@ -1,6 +1,7 @@
 import { reduce, keys } from 'ramda';
 import { pickFunctions } from '@redux-tools/utils';
 
+// NOTE: Custom implementation so existing keys are always preserved.
 export default reducers => {
 	const finalReducers = pickFunctions(reducers);
 	const finalReducerKeys = keys(finalReducers);

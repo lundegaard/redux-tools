@@ -1,23 +1,27 @@
-import { length, forEachObjIndexed, keys } from 'ramda';
-import { pickFunctions, getKeysLength } from '@redux-tools/utils';
+import { reduce, keys } from 'ramda';
+import { pickFunctions } from '@redux-tools/utils';
 
 export default reducers => {
 	const finalReducers = pickFunctions(reducers);
 	const finalReducerKeys = keys(finalReducers);
 
-	return (state = {}, action) => {
-		let hasChanged = false;
-		const nextState = { ...state };
+	return (state = {}, action) =>
+		reduce(
+			(previousState, reducerKey) => {
+				const reducer = finalReducers[reducerKey];
+				const previousStateForKey = previousState[reducerKey];
+				const nextStateForKey = reducer(previousStateForKey, action);
 
-		forEachObjIndexed(key => {
-			const reducer = finalReducers[key];
-			const previousStateForKey = state[key];
-			const nextStateForKey = reducer(previousStateForKey, action);
-			nextState[key] = nextStateForKey;
-			hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
-		}, finalReducerKeys);
+				if (nextStateForKey === previousStateForKey) {
+					return previousState;
+				}
 
-		hasChanged = hasChanged || length(finalReducerKeys) !== getKeysLength(state);
-		return hasChanged ? nextState : state;
-	};
+				return {
+					...previousState,
+					[reducerKey]: nextStateForKey,
+				};
+			},
+			state,
+			finalReducerKeys
+		);
 };

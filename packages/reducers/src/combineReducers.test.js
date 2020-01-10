@@ -105,6 +105,6 @@ describe('combineReducers', () => {
 		const initialState = store.getState();
 		store.replaceReducer(combineReducers({ bar }));
 		const nextState = store.getState();
-		expect(nextState).not.toBe(initialState);
+		expect(nextState).toBe(initialState);
 	});
 });

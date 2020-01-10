@@ -52,7 +52,7 @@ const enhanceStore = (prevStore, storeInterface, { onEjected = noop, onInjected 
 
 		dispatch({
 			type: `@redux-tools/${actionType}_EJECTED`,
-			payload: keys(injectables),
+			payload: typeof injectables === 'function' ? null : keys(injectables),
 			meta: props,
 		});
 	};

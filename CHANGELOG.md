@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+## [0.7.0] – 2020-01-10
+
 ### Fixed
 
 - Appropriate dependencies added to `useEffect` in injection hooks.

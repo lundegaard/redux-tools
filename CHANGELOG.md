@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Appropriate dependencies added to `useEffect` in injection hooks.
 - (_middleware_): Injected middleware are now properly called in the order of injection.
+- (_reducers_): Existing state keys are now preserved to allow preloading of global state.
+- (_reducers_): Clean up reducer state after ejection.
 
 ## [0.6.0] – 2019-08-06
 

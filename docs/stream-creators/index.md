@@ -1,5 +1,3 @@
-!> TODO: Needs a refactor with more detailed information.
-
 # Stream Creators
 
 > yarn add @redux-tools/stream-creators
@@ -51,10 +49,10 @@ const epic = (action$, state$, { namespacedState$, globalAction$ }) =>
 
 ## API Reference
 
-### namespacedState$
+### namespacedState\$
 
-A stream creator for namespaced state. Similar to `state$`, except it will always be the state 
-associated with the epic. Therefore, if you have an epic injected under the `foo` namespace, 
+A stream creator for namespaced state. Similar to `state$`, except it will always be the state
+associated with the epic. Therefore, if you have an epic injected under the `foo` namespace,
 `namespacedState$` will use `state.namespaces.foo`.
 
 **Arguments**
@@ -65,10 +63,10 @@ associated with the epic. Therefore, if you have an epic injected under the `foo
 
 ( _Observable_ ): An observable similar to `state$` in redux-observable, except using the namespaced state
 
-### globalAction$
+### globalAction\$
 
 A stream creator for global actions. By default, every injected epic only accepts actions matching
-its namespace (see `@redux-tools/namespaces` for more info). This stream creator allows you to react 
+its namespace (see `@redux-tools/namespaces` for more info). This stream creator allows you to react
 to actions from other namespaces if you need to.
 
 **Arguments**

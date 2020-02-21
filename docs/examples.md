@@ -2,7 +2,7 @@
 
 !> TODO There are no examples yet! Approximate structure could be found below:
 
-All examples with descriptions are located in `redux-tools` repository at `/examples/*`. 
+All examples with descriptions are located in `redux-tools` repository at `/examples/*`.
 
 ## Packages
 
@@ -20,5 +20,3 @@ All examples with descriptions are located in `redux-tools` repository at `/exam
 ## Other integrations
 
 - [integration-with-react-union]()
-
-!> TODO: Add links

@@ -10,7 +10,6 @@ This package is a collection of utility functions for creating [FSA-compliant](h
 import {
 	makeActionCreator,
 	makeActionTypes,
-	makeBinaryActionCreator,
 	makeConstantActionCreator,
 	makeSimpleActionCreator,
 	makeReducer,
@@ -22,9 +21,8 @@ export const ActionTypes = makeActionTypes(
 );
 
 export const add = makeSimpleActionCreator(ActionTypes.ADD);
-export const addCrazy = makeActionCreator(ActionTypes.CRAZY_ADD, 2, null);
+export const addCrazy = makeActionCreator(ActionTypes.ADD_CRAZY, 2, null);
 export const increment = makeConstantActionCreator(ActionTypes.INCREMENT);
-export const remove = makeBinaryActionCreator(ActionTypes.REMOVE, 2);
 
 // Create reducer with defined actions
 export default makeReducer(
@@ -32,7 +30,6 @@ export default makeReducer(
 		[ActionTypes.ADD, (count, action) => count + action.payload],
 		[ActionTypes.ADD_CRAZY, (count, action) => count * action.payload / 2],
 		[ActionTypes.INCREMENT, count => count + 1],
-		[ActionTypes.REMOVE, (count, action) => count - action.payload],
 	],
 	0
 );
@@ -59,21 +56,6 @@ Creates an object with values set to `prefix/key`.
 
 Creates a new unary action creator which will apply the provided functions to an argument, producing
 the `payload` and `meta` properties.
-
-**Arguments**
-
-1. `type` ( _string_ ): The action type
-2. `getPayload` ( _any –> any_ ): Payload getter
-3. `getMeta` ( _any -> any_ ): Meta getter
-
-**Returns**
-
-( _any -> Action_ ): An action creator
-
-### makeBinaryActionCreator()
-
-Creates a new binary action creator to which you can pass 0-2 arguments, producing the `payload` and
-`meta` properties.
 
 **Arguments**
 

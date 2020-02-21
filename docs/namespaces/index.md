@@ -21,7 +21,7 @@ There are essentially two edge cases:
 **Arguments**
 
 1. `action` ( _Action_ ): The Redux action to check. Should have a `meta.namespace` property.
-2. [`namespace`] ( _string_ ): The namespace to check against.
+2. [`namespace`](_string_): The namespace to check against.
 
 **Returns**
 
@@ -45,7 +45,7 @@ Associates an action with a namespace, overwriting any previous namespace.
 
 **Arguments**
 
-1. [`namespace`] ( _string_ ): The namespace to attach
+1. [`namespace`](_string_): The namespace to attach
 2. `action` ( _Action_ ): Action to attach the namespace to
 
 **Returns**
@@ -58,13 +58,9 @@ Associates an action with a namespace unless it is already associated with some 
 
 **Arguments**
 
-1. [`namespace`] ( _string_ ): The namespace to default to
+1. [`namespace`](_string_): The namespace to default to
 2. `action` ( _Action_ ): Action to default the namespace of
 
 **Returns**
 
 ( _Action_ ): A new Redux action with a `meta.namespace` property
-
-### DEFAULT_FEATURE
-
-A _string_ constant with default feature name (namespace group).  

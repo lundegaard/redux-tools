@@ -1,4 +1,4 @@
-# Redux-Tools
+# Redux Tools
 
 ![](https://img.shields.io/github/stars/lundegaard/redux-tools)
 ![](https://img.shields.io/github/issues/lundegaard/redux-tools?color=bada55)

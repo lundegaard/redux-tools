@@ -16,6 +16,6 @@ The whole **Documentation** is published at [https://lundegaard.github.io/redux-
 - [Beyond Simplicity: Using Redux in Dynamic Applications](https://medium.com/@wafflepie/beyond-simplicity-using-redux-in-dynamic-applications-ae9e0aea928c) (published 21 Jan 2019)
 - [React Union repository](https://github.com/lundegaard/react-union)
 
-## Licence
+## License
 
-All packages are distributed under MIT licence.
+All packages are distributed under the MIT license. See the license [here](https://github.com/lundegaard/redux-tools/blob/master/LICENSE).

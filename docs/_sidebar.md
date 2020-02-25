@@ -1,29 +1,28 @@
 - Getting Started
 
   - [Introduction](/)
-  - [Quick Start](/quick-start/index.md)
-  - [Examples](/examples.md)
+  - [Quick Start](/getting-started/quick-start)
+  - [Examples](/getting-started/examples)
 
 - Tutorial
 
-  - [Injection Mechanism](/tut-injection/index.md)
-  - [Namespacing](/tut-namespacing/index.md)
-  - [Multi-Instance Components](/tut-multi-instance/index.md)
-  - [Internal Lifecycle](/tut-lifecycle/index.md)
+  - [Dependency Injection](/tutorial/01-dependency-injection)
+  - [Namespaces](/tutorial/02-namespaces)
+  - [Multi-Instance Components](/tutorial/03-multi-instance-components)
 
 - FAQ
 
-  - [FAQ Index](/faq.md)
+  - [General](/faq/general 'FAQ: General - Redux Tools')
+  - [Internals](/faq/internals 'FAQ: Internals - Redux Tools')
 
 - Packages
-
-  - [Actions](/actions/index.md)
-  - [Reducers](/reducers/index.md)
-  - [Reducers (React Bindings)](/reducers-react/index.md)
-  - [Epics](/epics/index.md)
-  - [Epics (React Bindings)](/epics-react/index.md)
-  - [Stream Creators](/stream-creators/index.md)
-  - [Middleware](/middleware/index.md)
-  - [Middleware (React Bindings)](/middleware-react/index.md)
-  - [Thunk (Extended)](/thunk/index.md)
-  - [Namespaces](/namespaces/index.md)
+  - [Actions](/packages/actions)
+  - [Namespaces](/packages/namespaces)
+  - [Reducers](/packages/reducers)
+  - [Reducers (React Bindings)](/packages/reducers-react)
+  - [Epics](/packages/epics)
+  - [Epics (React Bindings)](/packages/epics-react)
+  - [Stream Creators](/packages/stream-creators)
+  - [Middleware](/packages/middleware)
+  - [Middleware (React Bindings)](/packages/middleware-react)
+  - [Thunk (Extended)](/packages/thunk)

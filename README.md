@@ -1,20 +1,19 @@
-<img align="right" width="200" src="./docs/_media/redux-tools.png">
+<img align="right" width="200" src="./docs/logo.png">
 
 # Redux Tools
 
-> Usage of these tools assumes some basic knowledge of [Redux](https://redux.js.org/) library.
+> Usage of Redux Tools assumes basic knowledge of the [Redux](https://redux.js.org/) library.
 
-Redux Tools is a collection of enhancers and utility functions for asynchronous injecting and ejecting
-of reducers, middleware and epics after store creation. It could be used independently or with
-[React](https://github.com/facebook/react/) (see `@react-tools/*-react` packages).
+A collection of [store enhancers](https://github.com/reduxjs/redux/blob/master/docs/Glossary.md#store-enhancer) and utility functions for injecting reducers, middleware, and epics into a store after the store is created.
 
-The whole **Documentation** is published at [https://lundegaard.github.io/redux-tools/](https://lundegaard.github.io/redux-tools/),
-[API reference](https://lundegaard.github.io/redux-tools/#/?id=packages).
+## Documentation & API Reference
+
+See [https://lundegaard.github.io/redux-tools/](https://lundegaard.github.io/redux-tools/)
 
 ## Resources
 
 - [Beyond Simplicity: Using Redux in Dynamic Applications](https://medium.com/@wafflepie/beyond-simplicity-using-redux-in-dynamic-applications-ae9e0aea928c) (published 21 Jan 2019)
-- [React Union repository](https://github.com/lundegaard/react-union)
+- [React Union repository](https://github.com/lundegaard/react-union) (embedding React applications into CMSs)
 
 ## License
 

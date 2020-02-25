@@ -4,7 +4,7 @@
 
 The lifecycle of all injectables (i.e. reducers, middleware, and epics) is
 always the same. Let's assume that we've got a new store with an epics enhancer (always exported as
-`makeEnhancer` from the appropriate package). It adds two methods to our `store`:
+`makeEnhancer` from the appropriate package). The enhancer has added two methods to our store:
 
 - `injectEpics()`
 - `ejectEpics()`
@@ -16,10 +16,10 @@ This enhancer also defines a `store.entries.epics` array, storing all the inject
 	"entries": {
 		"epics": []
 	}
-	// This is where the functions `dispatch`, `getState`, `replaceReducer` are as well.
-	// Remember that the Redux store is just an object – a collection of functions.
 }
 ```
+
+The object above is the same structure where the functions like `dispatch` and `getState` are – the Redux store. Remember that the Redux store is [just an object](https://redux.js.org/api/store), meaning that we can safely add any additional properties we desire. This makes it possible to see all the injected epics just by examining the store.
 
 If we inject a bunch of epics, they will get converted into entries first.
 
@@ -27,7 +27,7 @@ If we inject a bunch of epics, they will get converted into entries first.
 store.injectEpics({ someEpic, anotherEpic }, { namespace: 'foo', feature: 'bar' });
 ```
 
-Turns into:
+This call will create the following entries under the hood:
 
 ```js
 const entries = [
@@ -48,9 +48,9 @@ const entries = [
 
 These entries are added to the `store.entries.epics` array (this array is essentially a set, it allows no duplicates). New entries are processed differently based on the type of the injectable.
 
-- Epics: the root epic consumes a stream of entries.
-- Reducers: the root reducer is assembled form `store.entries.reducers` directly.
-- Middleware: the root middleware iterates over the current `store.entries.middleware` per each action.
+- Epics: the root epic consumes a stream of epics. [Sounds crazy?](https://redux-observable.js.org/docs/recipes/AddingNewEpicsAsynchronously.html)
+- Reducers: the root reducer is assembled from `store.entries.reducers` directly.
+- Middleware: the root middleware essentially iterates over current `store.entries.middleware` per each action.
 
 Here is a visual representation as well.
 

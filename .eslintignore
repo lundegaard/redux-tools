@@ -7,4 +7,4 @@ packages/*/dist/*
 packages/*/es/*
 packages/*/lib/*
 coverage/*
-docs/index.html
+docs/*

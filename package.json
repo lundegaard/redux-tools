@@ -55,20 +55,26 @@
     "rollup-plugin-replace": "2.2.0",
     "rollup-plugin-terser": "4.0.4",
     "rxjs": "6.4.0",
-    "rxjs-marbles": "5.0.0"
+    "rxjs-marbles": "5.0.0",
+    "serve": "11.3.0"
   },
   "scripts": {
     "test": "jest",
     "lint": "yarn lint:eslint",
     "lint:eslint": "eslint --ext .js ./",
     "build": "lerna exec -- rollup -c=../../rollup.config.js",
-    "prepublish": "yarn build"
+    "prepublish": "yarn build",
+    "docs": "serve docs"
   },
   "lint-staged": {
     "linters": {
       "**/*.js": [
         "prettier --ignore-path .gitignore --write",
         "yarn lint --fix",
+        "git add"
+      ],
+      "**/*.{mdx,md,html,json}": [
+        "prettier --write",
         "git add"
       ]
     }

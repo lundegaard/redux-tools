@@ -1,6 +1,6 @@
 # Quick Start
 
-Let's take a look on how we'd use Redux Tools in a simple React app.
+Let's take a look on how we'd use Redux Tools in a simple React application.
 
 ## Global Injection
 
@@ -8,7 +8,7 @@ This is the go-to way to use Redux Tools in standard SPAs.
 
 _**duck.js**_
 
-- a duck file (see [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux))
+- a duck (see [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux))
 - exports a reducer and an action creator
 
 ```js

@@ -2,8 +2,7 @@
 
 > yarn add @redux-tools/stream-creators
 
-The [`@redux-tools/epics`](/packages/epics) enhancer accepts an optional `streamCreator` option, allowing you to add
-an additional argument to all epics. This package is a collection of various useful stream creators.
+The [@redux-tools/epics](/packages/epics) enhancer accepts an optional `streamCreator` option, allowing you to add an additional argument to all epics. This package is a collection of various useful stream creators.
 
 ## Usage
 
@@ -63,9 +62,7 @@ associated with the epic. Therefore, if you have an epic injected under the `foo
 
 ### globalAction\$
 
-A stream creator for global actions. By default, every injected epic only accepts actions matching
-its namespace (see `@redux-tools/namespaces` for more info). This stream creator allows you to react
-to actions from other namespaces if you need to.
+A stream creator for global actions. By default, every injected epic only accepts actions matching its namespace (see [@redux-tools/namespaces](/packages/namespaces) for more info). This stream creator allows you to react to actions from other namespaces if you need to.
 
 **Arguments**
 

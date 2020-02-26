@@ -1,0 +1,153 @@
+# Namespacing
+
+Let's assume that we have to develop a widget that can be used multiple times on a single page. The catch: it should store its data in Redux. Furthermore, every instance of the widget should have its own isolated state. Redux Tools offer a mechanism to handle this very efficiently.
+
+Enter namespaces.
+
+The simplest example we could think of is a click counter.
+
+```js
+import React from 'react';
+import { o } from 'ramda';
+import { makeActionTypes, makeConstantActionCreator, makeReducer } from '@redux-tools/actions';
+import { withReducers, namespacedConnect } from '@redux-tools/reducers-react';
+
+const ActionTypes = makeActionTypes('duck', ['INCREMENT']);
+const increment = makeConstantActionCreator(ActionTypes.INCREMENT);
+const reducer = makeReducer([[ActionTypes.INCREMENT, count => count + 1]], 0);
+
+const Counter = ({ count, increment }) => <button onClick={increment}>{count}</button>;
+
+const mapStateToProps = namespacedState => ({ count: namespacedState.count });
+const mapDispatchToProps = { increment };
+
+const enhance = o(
+	withReducers({ count: countReducer }),
+	// NOTE: `namespacedConnect` is just like `connect`, but it works over namespaces
+	namespacedConnect(mapStateToProps, mapDispatchToProps)
+);
+
+export default enhance(Counter);
+```
+
+Okay, this is getting slightly more complex. Our enhanced counter expects a namespace to be provided to it! There are two feasible options to do so:
+
+- Pass a `namespace` prop.
+- Use a namespace context provider.
+
+First, let's render a bunch of counters using the first method.
+
+```js
+<EnhancedCounter namespace="foo" />
+<EnhancedCounter namespace="bar" />
+<EnhancedCounter namespace="baz" />
+```
+
+The state structure will look like this:
+
+```json
+{
+	"namespaces": {
+		"foo": { "count": 0 },
+		"bar": { "count": 0 },
+		"baz": { "count": 0 }
+	}
+}
+```
+
+Under the hood, `withReducers` will inject the reducers at `state.namespaces.foo` because it has received the `namespace="foo"` prop. Furthermore, `namespacedConnect` will access the `state.namespaces.foo` state, because it too has received the `namespace="foo"` prop.
+
+When the `INCREMENT` action is dispatched, the action will look like this:
+
+```js
+const action = {
+	type: 'INCREMENT',
+	meta: { namespace: 'foo' },
+};
+```
+
+The `meta.namespace` attribute was added automatically by `namespacedConnect`. What's the point of that?
+
+Because our counter was mounted three times, there are three instances of our reducers injected as well, each with a different namespace. If an action has a different namespace than the reducer's, **it will be ignored**.
+
+!> Avoid using multiple namespaces within a single widget or module.
+
+Using the `namespace` prop is pretty simple, but it doesn't scale well if you need to use `withReducers` deeper in the React component tree. That's when the namespace provider comes in handy.
+
+## The Namespace Provider
+
+There are two approaches to using this component, let's start with the simpler one.
+
+Wrap each widget separately via a `<Provider namespace={namespace} />` element. This is the go-to approach if you are rendering the widgets manually or if the widgets do not share a common React tree, i.e. they are rendered using multiple `ReactDOM.render` calls.
+
+```js
+import { Provider } from '@redux-tools/reducers-react';
+
+<Provider namespace="foo">
+  <EnhancedCounter />
+</Provider>
+
+<Provider namespace="bar">
+  <EnhancedCounter />
+</Provider>
+```
+
+Even if our counters were more complex, we will always access the correct namespace without the need to pass it down.
+
+The second approach is to wrap all the widgets in a single `<Provider useNamespace={useNamespace} />` element. This is the approach you should choose if you are able to access the current widget namespace via React hooks from anywhere.
+
+```js
+const WidgetNamespaceContext = React.createContext(null);
+
+const renderWidget = (Widget, namespace) => (
+	<WidgetNamespaceContext.Provider value={namespace}>
+		<Widget />
+	</WidgetNamespaceContext.Provider>
+);
+
+const useWidgetNamespace = () => useContext(WidgetNamespaceContext);
+
+const App = () => (
+	<Provider useNamespace={useWidgetNamespace}>
+		{renderWidget(EnhancedCounter, 'foo')}
+		{renderWidget(EnhancedCounter, 'bar')}
+		{renderWidget(EnhancedCounter, 'baz')}
+	</Provider>
+);
+
+export default App;
+```
+
+Any Redux Tools decorator inside a widget will now access the appropriate namespace without the need to wrap each widget in a separate provider.
+
+## Inter-Namespace Communication
+
+If you need to dispatch an action to a foreign namespace, use `attachNamespace` from [@redux-tools/namespaces](/packages/namespaces?id=attachNamespace). Simple enough, right?
+
+## Usage Guidelines
+
+Namespaces are awesome for developing widgets that can be mounted multiple times in a single page. That being said, if you are developing a standard React application, don't bother with namespaces in your application code. Only use them for developing [custom reusable multi-instance components](/tutorial/03-multi-instance-components).
+
+However, if your application is clearly split into isolated modules that rarely need to communicate with one another, namespaces might be a good choice for you. There is one main rule you should follow: **never use multiple namespaces within a single module**. Seriously.
+
+Compare these two state structures:
+
+```json
+{
+	"someModule": {},
+	"otherModule": {}
+}
+```
+
+```json
+{
+	"namespaces": {
+		"someModule": {},
+		"otherModule": {}
+	}
+}
+```
+
+The second approach will allow you to omit specifying `someModule` and `otherModule` in your selectors, pretty efficient! However, it will also mean that you've got to deal with yet another architectural concept, which might make it hard for developers who only know the basics of React/Redux.
+
+If you do decide to use namespaces in a standard React application, make sure all of your modules are wrapped in an appropriately configured namespace provider(s). Also, make sure to store any common state in a globally injected reducer.

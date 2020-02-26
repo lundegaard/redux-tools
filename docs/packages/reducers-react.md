@@ -2,7 +2,7 @@
 
 > yarn add @redux-tools/reducers-react
 
-This package provides React bindings for the [`@redux-tools/reducers`](/packages/reducers) package.
+This package provides React bindings for the [@redux-tools/reducers](/packages/reducers) package.
 
 ## Usage Example
 
@@ -29,7 +29,7 @@ Creates a component decorator which handles the lifecycle of passed reducers, mo
    - [`isGlobal`] \( _boolean_ ): Should be `true` if no namespace is provided.
    - [`isPersistent`] \( _boolean_ ): Define whether reducer should be auto-ejected after unmount.
    - [`feature`] \( _string_ ): Namespace to inject the reducer under. If passed, the reducer
-     will not handle actions from other namespaces..
+     will not handle actions from other namespaces.
    - [`namespace`] \( _string_ ): Namespace the reducers were injected under.
 
 **Returns**
@@ -44,6 +44,4 @@ Passes global state as the third argument to `mapStateToProps`.
 
 See [react-redux docs](https://react-redux.js.org/docs/api) for more info.
 
-### Provider
-
-!> TODO: Remove from here. See the [tutorial](/tutorial/02-namespaces).
+[](_provider.md ':include')

@@ -8,6 +8,8 @@ Let's face it, maintaining large applications is not easy, especially if everyth
 
 It is very likely that the modules are already responsible for fetching their data and defining their [npm dependencies](https://classic.yarnpkg.com/blog/2017/08/02/introducing-workspaces/), what if they could be responsible for defining their Redux dependencies (such as reducers) as well? Redux Tools make this possible.
 
+!> This tutorial assumes basic knowledge of the [Redux](https://redux.js.org/) library.
+
 First, it is necessary to prepare your store for these shenanigans. We need to go from this:
 
 ```js

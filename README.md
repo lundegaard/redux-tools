@@ -2,13 +2,20 @@
 
 # Redux Tools
 
-> Usage of Redux Tools assumes basic knowledge of the [Redux](https://redux.js.org/) library.
+A collection of tools for maintaining large Redux applications by enabling dependency injection of Redux code and development of multi-instance components by namespacing their state.
 
-A collection of [store enhancers](https://github.com/reduxjs/redux/blob/master/docs/Glossary.md#store-enhancer) and utility functions for injecting reducers, middleware, and epics into a store after the store is created.
+Redux Tools consist mainly of:
+
+- [Store enhancers](https://github.com/reduxjs/redux/blob/master/docs/Glossary.md#store-enhancer) for injecting reducers, epics, and middleware into your Redux store after the store is created.
+- Utility functions for less verbose definitions of action creators and reducers.
 
 ## Documentation & API Reference
 
-See [https://lundegaard.github.io/redux-tools/](https://lundegaard.github.io/redux-tools/)
+See [redux-tools.js.org](https://redux-tools.js.org/), powered by Docsify.
+
+## Changelog
+
+See the [CHANGELOG.md](CHANGELOG.md) file.
 
 ## Resources
 

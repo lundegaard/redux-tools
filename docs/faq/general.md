@@ -1,9 +1,5 @@
 # FAQ: General {docsify-ignore-all}
 
-## Why not use something like redux-subspace and/or redux-dynostore?
-
-We think that our implementation is simpler, more transparent and more fit for our use case, especially regarding integration with CMSs.
-
 ## How to use Redux Tools with React Union?
 
 1. Replace the react-redux `<Provider />` with one from `@redux-tools`.

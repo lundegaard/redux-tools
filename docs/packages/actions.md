@@ -8,7 +8,6 @@ This package is a collection of utility functions for creating [FSA-compliant](h
 
 ```js
 import {
-	makeActionCreator,
 	makeActionTypes,
 	makeConstantActionCreator,
 	makeSimpleActionCreator,
@@ -17,8 +16,8 @@ import {
 
 export const ActionTypes = makeActionTypes('@counter', ['ADD', 'INCREMENT']);
 
-export const add = makeSimpleActionCreator(ActionTypes.ADD); // Expects 1 arg.
-export const increment = makeConstantActionCreator(ActionTypes.INCREMENT); // Expects 0 args.
+export const add = makeSimpleActionCreator(ActionTypes.ADD); // 1 arg.
+export const increment = makeConstantActionCreator(ActionTypes.INCREMENT); // 0 args.
 
 export default makeReducer(
 	[
@@ -33,16 +32,16 @@ export default makeReducer(
 
 ### makeActionTypes()
 
-Creates an object with values set to `prefix/key`.
+Creates an object with values set to `<prefix>/<type>`.
 
 **Arguments**
 
 1. `prefix` ( _string_ ): The action prefix.
-2. `xs` ( _Array_ ): Array of values to mirror as keys.
+2. `actionTypes` ( _Array_ ): Array of values to mirror as keys.
 
 **Returns**
 
-( _Object_ ): Object with values set to `prefix/key`
+( _Object_ ): Object with values set to `<prefix>/<type>`.
 
 ### makeActionCreator()
 

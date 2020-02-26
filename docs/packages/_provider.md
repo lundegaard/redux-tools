@@ -1,6 +1,6 @@
 ### \<Provider />
 
-See the [tutorial](/tutorial/02-namespacing?id=namespace-provider) for more information about the usage.
+Provides a namespacing strategy to its children. See the [tutorial](/tutorial/02-namespacing?id=the-namespace-provider) for more information about the usage.
 
 #### Props
 
@@ -8,7 +8,7 @@ See the [tutorial](/tutorial/02-namespacing?id=namespace-provider) for more info
 - [`namespace`] \(_string_): A namespace to use for all nested components. Has priority over `useNamespace`.
 - [`feature`] \(_string_): Feature to set the namespace for.
 
-Please note that the same component is reexported from:
+This component is reexported from:
 
 - [@redux-tools/reducers-react](/packages/reducers-react)
 - [@redux-tools/epics-react](/packages/epics-react)

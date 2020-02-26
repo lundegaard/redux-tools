@@ -1,6 +1,6 @@
 # Quick Start
 
-Let's take a look on how we'd use Redux Tools in a simple React app.
+Let's take a look on how we'd use Redux Tools in a simple React application.
 
 ## Global Injection
 

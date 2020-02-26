@@ -11,7 +11,7 @@ Redux Tools consist mainly of:
 
 ## Documentation & API Reference
 
-See [https://lundegaard.github.io/redux-tools/](https://lundegaard.github.io/redux-tools/), powered by Docsify.
+See [redux-tools.js.org](https://redux-tools.js.org/), powered by Docsify.
 
 ## Changelog
 

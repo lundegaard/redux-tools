@@ -2,7 +2,7 @@
 
 > yarn add @redux-tools/epics-react
 
-This package provides React bindings for the [`@redux-tools/epics`](/packages/epics) package.
+This package provides React bindings for the [@redux-tools/epics](/packages/epics) package.
 
 ## Usage Example
 
@@ -34,8 +34,6 @@ Creates a component decorator which handles the lifecycle of passed epics, injec
 
 **Returns**
 
-( _Function_ ): A component decorator
+( _Function_ ): A component decorator.
 
-### Provider
-
-!> TODO: Remove from here. See the [tutorial](/tutorial/02-namespaces).
+[](_provider.md ':include')

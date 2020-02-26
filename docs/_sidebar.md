@@ -7,7 +7,7 @@
 - Tutorial
 
   - [Dependency Injection](/tutorial/01-dependency-injection)
-  - [Namespaces](/tutorial/02-namespaces)
+  - [Namespacing](/tutorial/02-namespacing)
   - [Multi-Instance Components](/tutorial/03-multi-instance-components)
 
 - FAQ

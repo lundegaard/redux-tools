@@ -19,11 +19,11 @@ After mounting the `<DataGridOne />` component, `state.grids.DATA_GRID_1.data` w
 - Dispatching from React components:
 
   - Use the `namespacedConnect` decorator, making sure to pass a namespace to it somehow:
-    - Wrapping the component in a @redux-tools `<Provider namespace={namespace}>`.
+    - Wrapping the component in a Redux Tools' `<Provider namespace={namespace}>`.
     - Passing a `namespace` prop to the decorated component.
-    - Using a static namespace like this: `namespacedConnect(mstp, mdtp, undefined, { namespace })`)
+    - Passing a static namespace: `namespacedConnect(mstp, mdtp, undefined, { namespace })`).
 
 - Dispatching from epics or middleware:
 
-  - The first option is to use the `attachNamespace(namespace, action)` utility function to associate an action with a namespace before dispatching it. Internally, @redux-tools will preserve this manually-set namespace.
+  - The first option is to use the `attachNamespace(namespace, action)` utility function to associate an action with a namespace before dispatching it. Internally, Redux Tools will preserve this manually-set namespace.
   - Another option is to inject the epics/middleware with the appropriate namespace (same as using the `namespacedConnect` decorator). All dispatched actions will have their namespace set automatically.

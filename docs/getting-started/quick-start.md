@@ -8,7 +8,7 @@ This is the go-to way to use Redux Tools in standard SPAs.
 
 _**duck.js**_
 
-- a duck file (see [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux))
+- a duck (see [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux))
 - exports a reducer and an action creator
 
 ```js

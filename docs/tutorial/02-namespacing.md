@@ -1,8 +1,8 @@
-# Namespaces {docsify-ignore-all}
+# Namespacing {docsify-ignore-all}
 
 Let's assume that we've got a widget that can be used multiple times on a single page. The catch: it should store its data in Redux. Furthermore, every instance of the widget should have its own isolated state. Redux Tools offer a mechanism to handle this.
 
-Enter namespaces.
+Enter [namespaces](/packages/namespaces).
 
 The simplest example we could think of is a click counter.
 
@@ -66,30 +66,27 @@ const action = {
 };
 ```
 
-The `meta.namespace` attribute was added automatically by `namespacedConnect`. What's the point?
+The `meta.namespace` attribute was added automatically by `namespacedConnect`. What's the point of that?
 
 Because our counter was mounted three times, there are three instances of our reducers injected as well, each with a different namespace. If an action has a different namespace than the reducer's, **it will be ignored**.
 
-Using the `namespace` prop is pretty simple, but it doesn't scale well if you need to use `withReducers` deep in the React component tree. That's when namespace providers come in handy.
+Using the `namespace` prop is pretty simple, but it doesn't scale well if you need to use `withReducers` deeper in the React component tree. That's when the namespace provider comes in handy.
 
 ## Namespace Provider
-
-> The same component is exported from:
->
-> - `@redux-tools/reducers-react`
-> - `@redux-tools/epics-react`
-> - `@redux-tools/middleware-react`
->
-> This component will likely be moved to `@redux-tools/namespaces-react` in the future.
 
 There are essentially three approaches to using this component:
 
 1. You do not need to handle namespacing at all.
+
    - Don't use this component.
+
 2. You are able to access the current namespace using React context from anywhere inside a widget and you are using a single virtual DOM for all widgets.
+
    - You can wrap the entire application in a single `<Provider useNamespace={useNamespace}>` component and you are done! This is the approach that should be used e.g. with React Union.
+
 3. You are not using a single virtual DOM or you cannot reliably access the namespace from a nested component.
-   - You should resort to wrapping each widget separately by using `<Provider namespace={namespace}>` instead. This is the go-to approach if you are rendering the widgets yourself.
+
+   - You should resort to wrapping each widget separately by using `<Provider namespace={namespace}>` instead. This is the go-to approach if you are rendering the widgets manually.
 
 ```js
 import { Provider } from '@redux-tools/reducers-react';

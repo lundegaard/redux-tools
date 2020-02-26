@@ -2,7 +2,7 @@
 
 > yarn add @redux-tools/middleware-react
 
-This package provides React bindings for the [`@redux-tools/middleware`](/packages/middleware) package.
+This package provides React bindings for the [@redux-tools/middleware](/packages/middleware) package.
 
 ## Usage Example
 
@@ -35,8 +35,6 @@ ejecting them automatically. The namespace of the middleware is determined based
 
 **Returns**
 
-(_Function_): A component decorator
+(_Function_): A component decorator.
 
-### Provider
-
-!> TODO: Remove from here. See the [tutorial](/tutorial/02-namespaces).
+[](_provider.md ':include')

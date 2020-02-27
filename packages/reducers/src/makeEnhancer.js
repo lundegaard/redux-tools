@@ -57,7 +57,7 @@ const cleanupReducer = (state, action) => {
 	return o(cleanEmptyStateSlices, removeEjectedState)(state);
 };
 
-const makeEnhancer = () => createStore => (reducer = identity, ...args) => {
+const makeEnhancer = ({ initialReducers } = {}) => createStore => (reducer = identity, ...args) => {
 	const prevStore = createStore(reducer, ...args);
 
 	const handler = ({ props, reducers }) => {
@@ -79,6 +79,10 @@ const makeEnhancer = () => createStore => (reducer = identity, ...args) => {
 		onInjected: handler,
 		onEjected: handler,
 	});
+
+	if (initialReducers) {
+		nextStore.injectReducers(initialReducers);
+	}
 
 	return nextStore;
 };

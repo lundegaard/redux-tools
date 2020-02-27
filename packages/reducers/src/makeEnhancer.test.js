@@ -188,4 +188,56 @@ describe('makeEnhancer', () => {
 			preloadedStateObject: 'example',
 		});
 	});
+
+	it('handles initial reducers', () => {
+		const options = {
+			initialReducers: {
+				reducerStateA: (state = { nameA: 'A' }, action) =>
+					action.type === 'exampleA'
+						? {
+								...state,
+								payload: action.payload,
+						  }
+						: state,
+			},
+		};
+
+		const store = createStoreRedux(identity, makeEnhancer(options));
+
+		expect(store.getState()).toEqual({
+			reducerStateA: { nameA: 'A' },
+		});
+
+		store.dispatch({ type: 'exampleA', payload: 'payload' });
+
+		expect(store.getState()).toEqual({
+			reducerStateA: { nameA: 'A', payload: 'payload' },
+		});
+	});
+
+	it('can process initial reducers with later injected reducers', () => {
+		const reducerMockB = (state = { nameB: 'B' }, action) =>
+			action.type === 'exampleB'
+				? {
+						...state,
+						payload: action.payload,
+				  }
+				: state;
+
+		const options = {
+			initialReducers: {
+				reducerStateA: (state = { nameA: 'A' }) => state,
+			},
+		};
+
+		const store = createStoreRedux(identity, makeEnhancer(options));
+
+		store.injectReducers({ reducerStateB: reducerMockB });
+		store.dispatch({ type: 'exampleB', payload: 'payload' });
+
+		expect(store.getState()).toEqual({
+			reducerStateA: { nameA: 'A' },
+			reducerStateB: { nameB: 'B', payload: 'payload' },
+		});
+	});
 });

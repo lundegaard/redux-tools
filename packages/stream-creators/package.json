@@ -9,7 +9,9 @@
   "repository": "https://github.com/lundegaard/redux-tools",
   "contributors": [
     "Tomas Konrady <tomas.konrady@lundegaard.eu>",
-    "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
+    "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>",
+    "Martin Kadlec <martin.kadlec@lundegaard.eu>",
+    "Sergey Dunaevskiy <sergey.dunaevskiy@lundegaard.eu>"
   ],
   "dependencies": {
     "@redux-tools/epics": "^0.7.0",

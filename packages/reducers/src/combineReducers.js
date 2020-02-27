@@ -1,23 +1,28 @@
-import { length, mapObjIndexed, pickBy, keys, o } from 'ramda';
-import { isFunction } from 'ramda-extension';
+import { reduce, keys } from 'ramda';
+import { pickFunctions } from '@redux-tools/utils';
 
+// NOTE: Custom implementation so existing keys are always preserved.
 export default reducers => {
-	const finalReducers = pickBy(isFunction, reducers);
+	const finalReducers = pickFunctions(reducers);
 	const finalReducerKeys = keys(finalReducers);
 
-	return (state = {}, action) => {
-		let hasChanged = false;
-		const nextState = { ...state };
+	return (state = {}, action) =>
+		reduce(
+			(previousState, reducerKey) => {
+				const reducer = finalReducers[reducerKey];
+				const previousStateForKey = previousState[reducerKey];
+				const nextStateForKey = reducer(previousStateForKey, action);
 
-		mapObjIndexed(key => {
-			const reducer = finalReducers[key];
-			const previousStateForKey = state[key];
-			const nextStateForKey = reducer(previousStateForKey, action);
-			nextState[key] = nextStateForKey;
-			hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
-		}, finalReducerKeys);
+				if (nextStateForKey === previousStateForKey) {
+					return previousState;
+				}
 
-		hasChanged = hasChanged || length(finalReducerKeys) !== o(length, keys)(state);
-		return hasChanged ? nextState : state;
-	};
+				return {
+					...previousState,
+					[reducerKey]: nextStateForKey,
+				};
+			},
+			state,
+			finalReducerKeys
+		);
 };

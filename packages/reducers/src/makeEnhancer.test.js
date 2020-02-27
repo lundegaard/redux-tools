@@ -51,132 +51,140 @@ describe('makeEnhancer', () => {
 	});
 
 	it('removes data from state after ejecting (object reducers without preloaded state)', () => {
-		const store = createStoreRedux(state => state, makeEnhancer());
-		expect(store.getState()).toEqual(undefined);
+		const storeRedux = createStoreRedux(identity, makeEnhancer());
+		expect(storeRedux.getState()).toEqual(undefined);
 
-		store.injectReducers({ a: reducerA });
-		expect(store.getState()).toEqual({
+		storeRedux.injectReducers({ a: reducerA });
+		expect(storeRedux.getState()).toEqual({
 			a: { name: 'a' },
 		});
 
-		store.ejectReducers({ a: reducerA });
-		expect(store.getState()).toEqual({});
+		storeRedux.ejectReducers({ a: reducerA });
+		expect(storeRedux.getState()).toEqual({});
 
-		store.injectReducers({ a: reducerA }, { namespace: 'nsA' });
-		expect(store.getState()).toEqual({
+		storeRedux.injectReducers({ a: reducerA }, { namespace: 'nsA' });
+		expect(storeRedux.getState()).toEqual({
 			namespaces: {
 				nsA: { a: { name: 'a' } },
 			},
 		});
 
-		store.ejectReducers({ a: reducerA }, { namespace: 'nsA' });
-		expect(store.getState()).toEqual({});
+		storeRedux.ejectReducers({ a: reducerA }, { namespace: 'nsA' });
+		expect(storeRedux.getState()).toEqual({});
 
-		store.injectReducers({ a: reducerA }, { namespace: 'nsA', feature: 'nsGroup' });
-		expect(store.getState()).toEqual({
-			nsGroup: {
+		storeRedux.injectReducers({ a: reducerA }, { namespace: 'nsA', feature: 'featureA' });
+		expect(storeRedux.getState()).toEqual({
+			featureA: {
 				nsA: { a: { name: 'a' } },
 			},
 		});
 
-		store.ejectReducers({ a: reducerA }, { namespace: 'nsA', feature: 'nsGroup' });
-		expect(store.getState()).toEqual({});
+		storeRedux.ejectReducers({ a: reducerA }, { namespace: 'nsA', feature: 'featureA' });
+		expect(storeRedux.getState()).toEqual({});
 	});
 
-	it('removes data from state after ejecting (object reducers wit preloaded state)', () => {
-		const store = createStoreRedux(identity, { preloadedStateObject: 'example' }, makeEnhancer());
-		expect(store.getState()).toEqual({ preloadedStateObject: 'example' });
+	it('removes data from state after ejecting (object reducers with preloaded state)', () => {
+		const storeRedux = createStoreRedux(
+			identity,
+			{ preloadedStateObject: 'example' },
+			makeEnhancer()
+		);
+		expect(storeRedux.getState()).toEqual({ preloadedStateObject: 'example' });
 
-		store.injectReducers({ a: reducerA });
-		expect(store.getState()).toEqual({
+		storeRedux.injectReducers({ a: reducerA });
+		expect(storeRedux.getState()).toEqual({
 			preloadedStateObject: 'example',
 			a: { name: 'a' },
 		});
 
-		store.ejectReducers({ a: reducerA });
-		expect(store.getState()).toEqual({
+		storeRedux.ejectReducers({ a: reducerA });
+		expect(storeRedux.getState()).toEqual({
 			preloadedStateObject: 'example',
 		});
 
-		store.injectReducers({ a: reducerA }, { namespace: 'nsA' });
-		expect(store.getState()).toEqual({
+		storeRedux.injectReducers({ a: reducerA }, { namespace: 'nsA' });
+		expect(storeRedux.getState()).toEqual({
 			preloadedStateObject: 'example',
 			namespaces: {
 				nsA: { a: { name: 'a' } },
 			},
 		});
 
-		store.ejectReducers({ a: reducerA }, { namespace: 'nsA' });
-		expect(store.getState()).toEqual({
+		storeRedux.ejectReducers({ a: reducerA }, { namespace: 'nsA' });
+		expect(storeRedux.getState()).toEqual({
 			preloadedStateObject: 'example',
 		});
 
-		store.injectReducers({ a: reducerA }, { namespace: 'nsA', feature: 'nsGroup' });
-		expect(store.getState()).toEqual({
+		storeRedux.injectReducers({ a: reducerA }, { namespace: 'nsA', feature: 'featureA' });
+		expect(storeRedux.getState()).toEqual({
 			preloadedStateObject: 'example',
-			nsGroup: {
+			featureA: {
 				nsA: { a: { name: 'a' } },
 			},
 		});
 
-		store.ejectReducers({ a: reducerA }, { namespace: 'nsA', feature: 'nsGroup' });
-		expect(store.getState()).toEqual({
+		storeRedux.ejectReducers({ a: reducerA }, { namespace: 'nsA', feature: 'featureA' });
+		expect(storeRedux.getState()).toEqual({
 			preloadedStateObject: 'example',
 		});
 	});
 
 	it('removes data from state after ejecting (function reducer without preloaded state)', () => {
-		const store = createStoreRedux(state => state, makeEnhancer());
-		expect(store.getState()).toEqual(undefined);
+		const storeRedux = createStoreRedux(state => state, makeEnhancer());
+		expect(storeRedux.getState()).toEqual(undefined);
 
-		store.injectReducers(reducerA, { namespace: 'nsA' });
-		expect(store.getState()).toEqual({
+		storeRedux.injectReducers(reducerA, { namespace: 'nsA' });
+		expect(storeRedux.getState()).toEqual({
 			namespaces: {
 				nsA: { name: 'a' },
 			},
 		});
 
-		store.ejectReducers(reducerA, { namespace: 'nsA' });
-		expect(store.getState()).toEqual({});
+		storeRedux.ejectReducers(reducerA, { namespace: 'nsA' });
+		expect(storeRedux.getState()).toEqual({});
 
-		store.injectReducers(reducerA, { namespace: 'nsA', feature: 'nsGroup' });
-		expect(store.getState()).toEqual({
-			nsGroup: {
+		storeRedux.injectReducers(reducerA, { namespace: 'nsA', feature: 'featureA' });
+		expect(storeRedux.getState()).toEqual({
+			featureA: {
 				nsA: { name: 'a' },
 			},
 		});
 
-		store.ejectReducers(reducerA, { namespace: 'nsA', feature: 'nsGroup' });
-		expect(store.getState()).toEqual({});
+		storeRedux.ejectReducers(reducerA, { namespace: 'nsA', feature: 'featureA' });
+		expect(storeRedux.getState()).toEqual({});
 	});
 
 	it('removes data from state after ejecting (function reducer with preloaded state)', () => {
-		const store = createStoreRedux(identity, { preloadedStateObject: 'example' }, makeEnhancer());
-		expect(store.getState()).toEqual({ preloadedStateObject: 'example' });
+		const storeRedux = createStoreRedux(
+			identity,
+			{ preloadedStateObject: 'example' },
+			makeEnhancer()
+		);
+		expect(storeRedux.getState()).toEqual({ preloadedStateObject: 'example' });
 
-		store.injectReducers(reducerA, { namespace: 'nsA' });
-		expect(store.getState()).toEqual({
+		storeRedux.injectReducers(reducerA, { namespace: 'nsA' });
+		expect(storeRedux.getState()).toEqual({
 			preloadedStateObject: 'example',
 			namespaces: {
 				nsA: { name: 'a' },
 			},
 		});
 
-		store.ejectReducers(reducerA, { namespace: 'nsA' });
-		expect(store.getState()).toEqual({
+		storeRedux.ejectReducers(reducerA, { namespace: 'nsA' });
+		expect(storeRedux.getState()).toEqual({
 			preloadedStateObject: 'example',
 		});
 
-		store.injectReducers(reducerA, { namespace: 'nsA', feature: 'nsGroup' });
-		expect(store.getState()).toEqual({
+		storeRedux.injectReducers(reducerA, { namespace: 'nsA', feature: 'featureA' });
+		expect(storeRedux.getState()).toEqual({
 			preloadedStateObject: 'example',
-			nsGroup: {
+			featureA: {
 				nsA: { name: 'a' },
 			},
 		});
 
-		store.ejectReducers(reducerA, { namespace: 'nsA', feature: 'nsGroup' });
-		expect(store.getState()).toEqual({
+		storeRedux.ejectReducers(reducerA, { namespace: 'nsA', feature: 'featureA' });
+		expect(storeRedux.getState()).toEqual({
 			preloadedStateObject: 'example',
 		});
 	});

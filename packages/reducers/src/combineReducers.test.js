@@ -18,7 +18,6 @@ describe('combineReducers', () => {
 	});
 
 	it('ignores all props which are not a function', () => {
-		// we double-cast because these conditions can only happen in a javascript setting
 		const reducer = combineReducers({
 			fake: true,
 			broken: 'string',
@@ -26,6 +25,22 @@ describe('combineReducers', () => {
 			stack: (state = []) => state,
 		});
 		expect(Object.keys(reducer(undefined, { type: 'push' }))).toEqual(['stack']);
+	});
+
+	it('maintains referential equality if the reducers it is combining do', () => {
+		const reducer = combineReducers({
+			child1(state = {}) {
+				return state;
+			},
+			child2(state = {}) {
+				return state;
+			},
+			child3(state = {}) {
+				return state;
+			},
+		});
+		const initialState = reducer(undefined, { type: '@@INIT' });
+		expect(reducer(initialState, { type: 'FOO' })).toBe(initialState);
 	});
 
 	it('does not have referential equality if one of the reducers changes something', () => {
@@ -49,7 +64,7 @@ describe('combineReducers', () => {
 		expect(reducer(initialState, { type: 'increment' })).not.toBe(initialState);
 	});
 
-	it('should return an updated state when additional reducers are passed to combineReducers', function() {
+	it('should return an updated state when additional reducers are passed to combineReducers', () => {
 		const originalCompositeReducer = combineReducers({ foo });
 		const store = createStore(originalCompositeReducer);
 		store.dispatch(ACTION);
@@ -60,7 +75,7 @@ describe('combineReducers', () => {
 		expect(nextState).not.toBe(initialState);
 	});
 
-	it('should return an updated state when reducers passed to combineReducers are changed', function() {
+	it('should return an updated state when reducers passed to combineReducers are changed', () => {
 		const baz = (state = {}) => state;
 		const originalCompositeReducer = combineReducers({ foo, bar });
 		const store = createStore(originalCompositeReducer);
@@ -72,7 +87,7 @@ describe('combineReducers', () => {
 		expect(nextState).not.toBe(initialState);
 	});
 
-	it('should return the same state when reducers passed to combineReducers not changed', function() {
+	it('should return the same state when reducers passed to combineReducers are not changed', () => {
 		const originalCompositeReducer = combineReducers({ foo, bar });
 		const store = createStore(originalCompositeReducer);
 		store.dispatch(ACTION);
@@ -83,17 +98,13 @@ describe('combineReducers', () => {
 		expect(nextState).toBe(initialState);
 	});
 
-	it(
-		'should return an updated state when one of more reducers ' +
-			'passed to the combineReducers are removed',
-		function() {
-			const originalCompositeReducer = combineReducers({ foo, bar });
-			const store = createStore(originalCompositeReducer);
-			store.dispatch(ACTION);
-			const initialState = store.getState();
-			store.replaceReducer(combineReducers({ bar }));
-			const nextState = store.getState();
-			expect(nextState).not.toBe(initialState);
-		}
-	);
+	it('should preserve state when one or more reducers are removed', () => {
+		const originalCompositeReducer = combineReducers({ foo, bar });
+		const store = createStore(originalCompositeReducer);
+		store.dispatch(ACTION);
+		const initialState = store.getState();
+		store.replaceReducer(combineReducers({ bar }));
+		const nextState = store.getState();
+		expect(nextState).toBe(initialState);
+	});
 });

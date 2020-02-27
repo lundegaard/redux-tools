@@ -189,8 +189,8 @@ describe('makeEnhancer', () => {
 		});
 	});
 
-	it('handles initial reducers in makeEnhancer', () => {
-		const reducers = {
+	it('handles initial reducers', () => {
+		const options = {
 			initialReducers: {
 				reducerStateA: (state = { nameA: 'A' }, action) =>
 					action.type === 'exampleA'
@@ -202,7 +202,7 @@ describe('makeEnhancer', () => {
 			},
 		};
 
-		const store = createStoreRedux(identity, makeEnhancer(reducers));
+		const store = createStoreRedux(identity, makeEnhancer(options));
 
 		expect(store.getState()).toEqual({
 			reducerStateA: { nameA: 'A' },
@@ -224,13 +224,13 @@ describe('makeEnhancer', () => {
 				  }
 				: state;
 
-		const reducers = {
+		const options = {
 			initialReducers: {
 				reducerStateA: (state = { nameA: 'A' }) => state,
 			},
 		};
 
-		const store = createStoreRedux(identity, makeEnhancer(reducers));
+		const store = createStoreRedux(identity, makeEnhancer(options));
 
 		store.injectReducers({ reducerStateB: reducerMockB });
 		store.dispatch({ type: 'exampleB', payload: 'payload' });

@@ -1,6 +1,6 @@
 {
   "name": "@redux-tools/thunk",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "license": "MIT",
   "main": "lib/redux-tools-thunk.js",
   "module": "es/redux-tools-thunk.js",
@@ -12,13 +12,13 @@
     "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
   ],
   "dependencies": {
-    "@redux-tools/namespaces": "^0.6.0",
-    "@redux-tools/reducers": "^0.6.0",
+    "@redux-tools/namespaces": "^0.7.0",
+    "@redux-tools/reducers": "^0.7.0",
     "ramda": "^0.26.1",
     "ramda-extension": "^0.9.1"
   },
   "devDependencies": {
-    "redux": "4.0.1"
+    "redux": "4.0.4"
   },
   "publishConfig": {
     "access": "public"

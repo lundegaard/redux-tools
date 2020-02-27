@@ -1,4 +1,4 @@
-import { map, pipe, uniq, forEach, o } from 'ramda';
+import { map, compose, uniq, forEach, o } from 'ramda';
 import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
 import { isActionFromNamespace, defaultNamespace } from '@redux-tools/namespaces';
 import { getStateByNamespace } from '@redux-tools/reducers';
@@ -25,7 +25,7 @@ const makeEnhancer = () => {
 	// NOTE `enhancerNext` calls all injected middleware and then `outerNext`.
 	let enhancerNext = action => {
 		invariant(outerNext, 'You need to apply the enhancer to a Redux store.');
-		outerNext(action);
+		return outerNext(action);
 	};
 
 	const injectedMiddleware = () => next => {
@@ -51,7 +51,7 @@ const makeEnhancer = () => {
 		}, entries);
 
 		// NOTE: `pipe` is used to preserve injection order.
-		return pipe(...chain)(outerNext);
+		return compose(...chain)(outerNext);
 	};
 
 	const enhancer = createStore => (...args) => {

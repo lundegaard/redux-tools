@@ -1,6 +1,6 @@
 {
   "name": "@redux-tools/epics",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "license": "MIT",
   "main": "lib/redux-tools-epics.js",
   "module": "es/redux-tools-epics.js",
@@ -12,20 +12,20 @@
     "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>"
   ],
   "dependencies": {
-    "@redux-tools/actions": "^0.6.0",
-    "@redux-tools/injectors": "^0.6.0",
-    "@redux-tools/namespaces": "^0.6.0",
-    "@redux-tools/utils": "^0.6.0",
+    "@redux-tools/actions": "^0.7.0",
+    "@redux-tools/injectors": "^0.7.0",
+    "@redux-tools/namespaces": "^0.7.0",
+    "@redux-tools/utils": "^0.7.0",
     "ramda": "^0.26.1",
     "ramda-extension": "^0.9.1"
   },
   "peerDependencies": {
-    "redux": "^4.0.1",
+    "redux": "^4.0.4",
     "redux-observable": "^1.0.0",
     "rxjs": "^6.3.3"
   },
   "devDependencies": {
-    "redux": "4.0.1",
+    "redux": "4.0.4",
     "redux-observable": "1.1.0",
     "rxjs": "6.4.0"
   },

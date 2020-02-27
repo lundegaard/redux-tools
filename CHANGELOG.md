@@ -6,9 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+## [0.7.0] – 2020-01-10
+
 ### Fixed
 
 - Appropriate dependencies added to `useEffect` in injection hooks.
+- (_middleware_): Injected middleware are now properly called in the order of injection.
+- (_reducers_): Existing state keys are now preserved to allow preloading of global state.
+- (_reducers_): Clean up reducer state after ejection.
 
 ## [0.6.0] – 2019-08-06
 
@@ -40,7 +45,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - You can now define namespaces and features statically (or using props) in `withMiddleware`, `withEpics` and `withReducers`.
 - You can now inject functions in addition to objects. Note that a function (reducer, middleware or epic) will only be initialized once per namespace/feature.
 - Support for Redux Thunk! Just use our clone instead of the official implementation to enable automatic namespace passthrough via thunks.
-- (_reducers_): Support for features! This allows using @redux-tools with a feature-based state structure, similar to when using e.g. Redux Form.
+- (_reducers_): Support for features! This allows using Redux Tools with a feature-based state structure, similar to when using e.g. Redux Form.
 - (_reducers-react_): [Warn when using withReducers with global: false and no namespace.](https://github.com/lundegaard/redux-tools/pull/47)
 
 ### Changed

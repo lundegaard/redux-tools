@@ -21,7 +21,6 @@ import invariant from 'invariant';
 
 import combineReducerEntries from './combineReducerEntries';
 import composeReducers from './composeReducers';
-import combineReducers from './combineReducers';
 
 export const storeInterface = makeStoreInterface('reducers');
 
@@ -58,7 +57,7 @@ const cleanupReducer = (state, action) => {
 	return o(cleanEmptyStateSlices, removeEjectedState)(state);
 };
 
-const makeEnhancer = (initialReducers = {}) => createStore => (reducer = identity, ...args) => {
+const makeEnhancer = ({ initialReducers } = {}) => createStore => (reducer = identity, ...args) => {
 	const prevStore = createStore(reducer, ...args);
 
 	const handler = ({ props, reducers }) => {
@@ -71,8 +70,7 @@ const makeEnhancer = (initialReducers = {}) => createStore => (reducer = identit
 			composeReducers(
 				reducer,
 				combineReducerEntries(storeInterface.getEntries(nextStore)),
-				cleanupReducer,
-				combineReducers(initialReducers)
+				cleanupReducer
 			)
 		);
 	};
@@ -81,6 +79,10 @@ const makeEnhancer = (initialReducers = {}) => createStore => (reducer = identit
 		onInjected: handler,
 		onEjected: handler,
 	});
+
+	if (initialReducers) {
+		nextStore.injectReducers(initialReducers);
+	}
 
 	return nextStore;
 };

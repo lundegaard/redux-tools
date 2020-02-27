@@ -190,31 +190,54 @@ describe('makeEnhancer', () => {
 	});
 
 	it('handles initial reducers in makeEnhancer', () => {
-		const reducerMockA = jest.fn();
-		const reducerMockB = jest.fn((state = { nameB: 'B' }) => state);
-
 		const reducers = {
-			reducerStateA: (state = { nameA: 'A' }, action) => {
-				reducerMockA(state, action);
-				return state;
+			initialReducers: {
+				reducerStateA: (state = { nameA: 'A' }, action) =>
+					action.type === 'exampleA'
+						? {
+								...state,
+								payload: action.payload,
+						  }
+						: state,
 			},
 		};
 
 		const store = createStoreRedux(identity, makeEnhancer(reducers));
 
-		expect(reducerMockA.mock.calls.length).toEqual(0);
-		expect(reducerMockB.mock.calls.length).toEqual(0);
+		expect(store.getState()).toEqual({
+			reducerStateA: { nameA: 'A' },
+		});
+
+		store.dispatch({ type: 'exampleA', payload: 'payload' });
+
+		expect(store.getState()).toEqual({
+			reducerStateA: { nameA: 'A', payload: 'payload' },
+		});
+	});
+
+	it('can process initial reducers with later injected reducers', () => {
+		const reducerMockB = (state = { nameB: 'B' }, action) =>
+			action.type === 'exampleB'
+				? {
+						...state,
+						payload: action.payload,
+				  }
+				: state;
+
+		const reducers = {
+			initialReducers: {
+				reducerStateA: (state = { nameA: 'A' }) => state,
+			},
+		};
+
+		const store = createStoreRedux(identity, makeEnhancer(reducers));
 
 		store.injectReducers({ reducerStateB: reducerMockB });
+		store.dispatch({ type: 'exampleB', payload: 'payload' });
 
-		expect(reducerMockA.mock.calls.length).toEqual(2);
-		expect(reducerMockB.mock.calls.length).toEqual(2);
-
-		store.dispatch({ type: 'example' });
-
-		expect(reducerMockA.mock.calls.length).toEqual(3);
-		expect(reducerMockA.mock.calls[2][0]).toEqual({ nameA: 'A' });
-		expect(reducerMockB.mock.calls.length).toEqual(3);
-		expect(reducerMockB.mock.calls[2][0]).toEqual({ nameB: 'B' });
+		expect(store.getState()).toEqual({
+			reducerStateA: { nameA: 'A' },
+			reducerStateB: { nameB: 'B', payload: 'payload' },
+		});
 	});
 });

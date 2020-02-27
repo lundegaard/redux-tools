@@ -37,7 +37,7 @@ const enhanceStore = (prevStore, storeInterface, { onEjected = noop, onInjected 
 		setEntries(nextEntries, nextStore);
 		onInjected({ injectables, props, entries });
 
-		dispatch({
+		(nextStore.dispatch || noop)({
 			type: `@redux-tools/${actionType}_INJECTED`,
 			payload: keys(injectables),
 			meta: props,

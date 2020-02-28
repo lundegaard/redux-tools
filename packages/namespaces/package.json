@@ -14,8 +14,8 @@
     "Sergey Dunaevskiy <sergey.dunaevskiy@lundegaard.eu>"
   ],
   "dependencies": {
-    "ramda": "^0.26.1",
-    "ramda-extension": "^0.9.1"
+    "ramda": "^0.27.0",
+    "ramda-extension": "^0.10.1"
   },
   "publishConfig": {
     "access": "public"

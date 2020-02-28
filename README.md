@@ -11,7 +11,7 @@
 </h1>
 
 <h3 align="center">
-🖍️ 🛡  🚀
+🖍️ 🛡 🚀
 </h3>
 
 <h3 align="center">
@@ -30,11 +30,11 @@ A collection of tools for maintaining large Redux applications by enabling depen
    <img src="https://flat.badgen.net/badge/license/MIT/blue" alt="MIT License" />
 
    <a href="https://npmjs.com/package/@redux-tools/reducers">
-    <img src="https://flat.badgen.net/npm/v/@redux-tools/reducers" alt="Downloads" />
+    <img src="https://flat.badgen.net/npm/dm/@redux-tools/reducers" alt="Downloads" />
   </a>
 
    <a href="https://npmjs.com/package/@redux-tools/reducers">
-    <img src=" https://flat.badgen.net/npm/v/@redux-tools/reducers" alt="Version" />
+    <img src="https://flat.badgen.net/npm/v/@redux-tools/reducers" alt="Version" />
   </a>
 </p>
 
@@ -54,13 +54,12 @@ See the [CHANGELOG.md](CHANGELOG.md) file.
 ## Resources
 
 - [Beyond Simplicity: Using Redux in Dynamic Applications](https://medium.com/@wafflepie/beyond-simplicity-using-redux-in-dynamic-applications-ae9e0aea928c) (published 21 Jan 2019)
-- [React Union repository](https://github.com/lundegaard/react-union) (embedding React applications into CMSs)
 
 ## Contribution
 
 We are open to any ideas and suggestions! Feel free to make PR!
 
-See [contribution guide](https://github.com/lundegaard/redux-tools/blob/master/CONTRIBUTING.md) for guidelines.
+See the [contribution guide](https://github.com/lundegaard/redux-tools/blob/master/CONTRIBUTING.md) for guidelines.
 <br />
 <br />
 
@@ -72,6 +71,6 @@ All packages are distributed under the MIT license. See the license [here](https
 
 - [validarium](https://github.com/lundegaard/validarium) - Validations done right.
 - [lundium](https://github.com/lundegaard/lundium) - Beautiful React component library.
-- [react-union](https://github.com/lundegaard/react-union) - Intergrate React apps into various CMSs seamlessly.
+- [react-union](https://github.com/lundegaard/react-union) - Integrate React apps into various CMSs seamlessly.
 
 © 2018-2020 [Lundegaard a.s.](http://lundegaard.eu)

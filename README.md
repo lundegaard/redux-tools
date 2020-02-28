@@ -1,8 +1,42 @@
-<img align="right" width="200" src="./docs/_media/logo.png">
+<p align="center">
+  <a href="https://redux-tools.js.org">
+    <img alt="Redux Tools" src="https://redux-tools.js.org/_media/logo-transparent.png" width="300" />
+  </a>
+</p>
 
-# Redux Tools
+<h1 align="center">
+  <a href="https://lundegaard.eu">
+    <img alt="by Lundegaard" src="https://redux-tools.js.org/_media/by-lundegaard.png" width="120" />
+  </a>
+</h1>
 
+<h3 align="center">
+🖍️ 🛡  🚀
+</h3>
+
+<h3 align="center">
+Modular Redux is possible.
+</h3>
+
+<p align="center">
 A collection of tools for maintaining large Redux applications by enabling dependency injection of Redux code and development of multi-instance components by namespacing their state.
+</p>
+
+<p align="center">
+  <a href="https://github.com/lundegaard/redux-tools">
+    <img src="https://flat.badgen.net/badge/-/github?icon=github&label" alt="Github" />
+  </a>
+
+   <img src="https://flat.badgen.net/badge/license/MIT/blue" alt="MIT License" />
+
+   <a href="https://npmjs.com/package/@redux-tools/reducers">
+    <img src="https://flat.badgen.net/npm/v/@redux-tools/reducers" alt="Downloads" />
+  </a>
+
+   <a href="https://npmjs.com/package/@redux-tools/reducers">
+    <img src=" https://flat.badgen.net/npm/v/@redux-tools/reducers" alt="Version" />
+  </a>
+</p>
 
 Redux Tools consist mainly of:
 

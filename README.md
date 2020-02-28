@@ -1,4 +1,4 @@
-<img align="right" width="200" src="./docs/logo.png">
+<img align="right" width="200" src="./docs/_media/logo.png">
 
 # Redux Tools
 
@@ -25,3 +25,11 @@ See the [CHANGELOG.md](CHANGELOG.md) file.
 ## License
 
 All packages are distributed under the MIT license. See the license [here](https://github.com/lundegaard/redux-tools/blob/master/LICENSE).
+
+## Related projects
+
+- [validarium](https://github.com/lundegaard/validarium) - Validations done right.
+- [lundium](https://github.com/lundegaard/lundium) - Beautiful React component library.
+- [react-union](https://github.com/lundegaard/react-union) - Intergrate React apps into various CMSs seamlessly.
+
+© 2018-2020 [Lundegaard a.s.](http://lundegaard.eu)

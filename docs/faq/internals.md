@@ -46,7 +46,9 @@ const entries = [
 ];
 ```
 
-These entries are added to the `store.entries.epics` array (this array is essentially a set, it allows no duplicates). New entries are processed differently based on the type of the injectable.
+These entries are added to the `store.entries.epics` array, including duplicates. This is to allow having multiple decorators injecting the same entries – if one of the decorators unmounts, we want the other entries to be preserved.
+
+New entries are processed differently based on the type of the injectable.
 
 - Epics: the root epic consumes a stream of epics. [Sounds crazy?](https://redux-observable.js.org/docs/recipes/AddingNewEpicsAsynchronously.html)
 - Reducers: the root reducer is assembled from `store.entries.reducers` directly.

@@ -11,11 +11,11 @@
 </h1>
 
 <h3 align="center">
-🖍️ 🛡 🚀
+🛠 💪 💉
 </h3>
 
 <h3 align="center">
-Modular Redux is possible.
+Maintaining large Redux applications with ease.
 </h3>
 
 <p align="center">
@@ -23,17 +23,15 @@ A collection of tools for maintaining large Redux applications by enabling depen
 </p>
 
 <p align="center">
-  <a href="https://github.com/lundegaard/redux-tools">
-    <img src="https://flat.badgen.net/badge/-/github?icon=github&label" alt="Github" />
+  <a href="https://github.com/lundegaard/redux-tools/blob/master/LICENSE">
+    <img src="https://flat.badgen.net/badge/license/MIT/blue" alt="MIT License" />
   </a>
 
-   <img src="https://flat.badgen.net/badge/license/MIT/blue" alt="MIT License" />
-
-   <a href="https://npmjs.com/package/@redux-tools/reducers">
+  <a href="https://npmjs.com/package/@redux-tools/reducers">
     <img src="https://flat.badgen.net/npm/dm/@redux-tools/reducers" alt="Downloads" />
   </a>
 
-   <a href="https://npmjs.com/package/@redux-tools/reducers">
+  <a href="https://npmjs.com/package/@redux-tools/reducers">
     <img src="https://flat.badgen.net/npm/v/@redux-tools/reducers" alt="Version" />
   </a>
 </p>
@@ -60,8 +58,6 @@ See the [CHANGELOG.md](CHANGELOG.md) file.
 We are open to any ideas and suggestions! Feel free to make PR!
 
 See the [contribution guide](https://github.com/lundegaard/redux-tools/blob/master/CONTRIBUTING.md) for guidelines.
-<br />
-<br />
 
 ## License
 
@@ -69,8 +65,8 @@ All packages are distributed under the MIT license. See the license [here](https
 
 ## Related projects
 
-- [validarium](https://github.com/lundegaard/validarium) - Validations done right.
-- [lundium](https://github.com/lundegaard/lundium) - Beautiful React component library.
-- [react-union](https://github.com/lundegaard/react-union) - Integrate React apps into various CMSs seamlessly.
+- [validarium](https://github.com/lundegaard/validarium) – Validations done right.
+- [lundium](https://github.com/lundegaard/lundium) – Beautiful React component library.
+- [react-union](https://github.com/lundegaard/react-union) – Integrate React apps into various CMSs seamlessly.
 
 © 2018-2020 [Lundegaard a.s.](http://lundegaard.eu)

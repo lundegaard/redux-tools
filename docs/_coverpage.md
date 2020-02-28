@@ -1,6 +1,6 @@
 [![logo](_media/logo-transparent.png ':size=200')](#main)
 
-> Modular Redux is possible.
+> Maintaining large Redux applications with ease.
 
 [GitHub](https://github.com/lundegaard/redux-tools/)
 [Getting Started](#main)

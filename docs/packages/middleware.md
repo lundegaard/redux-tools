@@ -35,7 +35,7 @@ store.dispatch({ type: 'EXAMPLE' }); // Reducer receives `EXAMPLE_MODIFIED` unde
 
 ### makeEnhancer()
 
-A method for creating of redux enhancer (see an example above). Adds new methods to redux store:
+A function which creates an enhancer to pass to `createStore()`.
 
 #### store.injectMiddleware()
 

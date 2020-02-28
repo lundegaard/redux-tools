@@ -27,5 +27,3 @@
   - [Middleware](/packages/middleware)
   - [Middleware (React Bindings)](/packages/middleware-react)
   - [Thunk (Extended)](/packages/thunk)
-
-- [Contributing](/contributing)

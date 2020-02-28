@@ -30,6 +30,7 @@ describe('enhanceStore', () => {
 		expect(store.entries.things).toEqual([
 			{ key: 'foo', value: noop, namespace: 'bar', feature: DEFAULT_FEATURE },
 		]);
+
 		store.ejectThings({ foo: noop }, { namespace: 'bar' });
 		expect(store.entries.things).toEqual([]);
 	});

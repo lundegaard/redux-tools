@@ -13,6 +13,7 @@ jest.mock('./constants', () => ({ IS_SERVER: false }));
 
 const Test = ({ children }) => {
 	children();
+
 	return null;
 };
 

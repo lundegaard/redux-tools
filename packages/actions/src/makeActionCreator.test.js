@@ -21,6 +21,7 @@ describe('makeActionCreator', () => {
 			meta: 'Baz',
 		});
 	});
+
 	it('correctly applies the `error` prop', () => {
 		const actionCreator = makeActionCreator('TYPE', identity, alwaysNull);
 		const error = new Error();

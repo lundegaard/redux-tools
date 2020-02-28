@@ -41,14 +41,12 @@ See the [CHANGELOG.md](https://github.com/lundegaard/redux-tools/blob/master/CHA
 
 - [Beyond Simplicity: Using Redux in Dynamic Applications](https://medium.com/@wafflepie/beyond-simplicity-using-redux-in-dynamic-applications-ae9e0aea928c) (published 21 Jan 2019)
 
-## License
-
-All packages are distributed under the MIT license. See the license [here](https://github.com/lundegaard/redux-tools/blob/master/LICENSE).
-
 ## Related projects
 
 - [validarium](https://github.com/lundegaard/validarium) – Validations done right.
 - [lundium](https://github.com/lundegaard/lundium) – Beautiful React component library.
 - [react-union](https://github.com/lundegaard/react-union) – Integrate React apps into various CMSs seamlessly.
 
-© 2018-2020 [Lundegaard a.s.](http://lundegaard.eu)
+## License
+
+All packages are distributed under the MIT license. See the license [here](https://github.com/lundegaard/redux-tools/blob/master/LICENSE).

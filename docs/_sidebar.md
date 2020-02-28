@@ -16,6 +16,7 @@
   - [Internals](/faq/internals 'FAQ: Internals - Redux Tools')
 
 - Packages
+
   - [Actions](/packages/actions)
   - [Namespaces](/packages/namespaces)
   - [Reducers](/packages/reducers)
@@ -26,3 +27,5 @@
   - [Middleware](/packages/middleware)
   - [Middleware (React Bindings)](/packages/middleware-react)
   - [Thunk (Extended)](/packages/thunk)
+
+- [Contributing](/contributing)

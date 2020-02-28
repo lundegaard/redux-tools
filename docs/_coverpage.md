@@ -1,4 +1,4 @@
-[![logo](_media/logo.png ':size=200')](#main)
+[![logo](_media/logo-transparent.png ':size=200')](#main)
 
 > Modular Redux is possible.
 
@@ -7,4 +7,4 @@
 
 <!-- background color -->
 
-![color](#ffffff)
+![color](#f0f0f0)

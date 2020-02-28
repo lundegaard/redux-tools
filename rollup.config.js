@@ -18,6 +18,7 @@ const globals = {
 	'@redux-tools/middleware': 'ReduxToolsMiddleware',
 	'@redux-tools/middleware-react': 'ReduxToolsMiddlewareReact',
 	'@redux-tools/namespaces': 'ReduxToolsNamespaces',
+	'@redux-tools/react': 'ReduxToolsReact',
 	'@redux-tools/reducers': 'ReduxToolsReducers',
 	'@redux-tools/reducers-react': 'ReduxToolsReducersReact',
 	'@redux-tools/stream-creators': 'ReduxToolsStreamCreators',

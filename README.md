@@ -45,6 +45,20 @@ Redux Tools consist mainly of:
 
 See [redux-tools.js.org](https://redux-tools.js.org/), powered by Docsify.
 
+## Installation
+
+The `@redux-tools/react` package contains all the relevant store enhancers and utility functions you'll need to get started with Redux Tools in a React application.
+
+Use either of these commands based on the package manager you prefer.
+
+```sh
+yarn add @redux-tools/react
+```
+
+```sh
+npm i @redux-tools/react
+```
+
 ## Changelog
 
 See the [CHANGELOG.md](CHANGELOG.md) file.

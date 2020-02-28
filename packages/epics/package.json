@@ -14,7 +14,6 @@
     "Sergey Dunaevskiy <sergey.dunaevskiy@lundegaard.eu>"
   ],
   "dependencies": {
-    "@redux-tools/actions": "^0.7.0",
     "@redux-tools/injectors": "^0.7.0",
     "@redux-tools/namespaces": "^0.7.0",
     "@redux-tools/utils": "^0.7.0",

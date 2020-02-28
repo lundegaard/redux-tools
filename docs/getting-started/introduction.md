@@ -17,21 +17,37 @@ Although the Redux Tools core is platform-agnostic, [React](https://github.com/f
 
 ## Packages
 
-Here are the packages you'll definitely want to use in a React application:
+The Redux Tools core consists mainly of the following packages:
 
 - [@redux-tools/actions](/packages/actions), functions for creating [FSA-compliant](https://github.com/redux-utilities/flux-standard-action) action creators and reducers
+- [@redux-tools/namespaces](/packages/namespaces), logic for associating Redux actions with a namespace (if using [namespaces](/tutorial/02-namespacing))
 - [@redux-tools/reducers](/packages/reducers), store enhancer for asynchronous injection of reducers
 - [@redux-tools/reducers-react](/packages/reducers-react), React bindings for the `reducers` package
-- [@redux-tools/namespaces](/packages/namespaces), logic for associating Redux actions with a namespace (if using [namespaces](/tutorial/02-namespacing))
+- [@redux-tools/middleware](/packages/middleware), store enhancer for asynchronous injection of middleware
+- [@redux-tools/middleware-react](/packages/middleware-react), React bindings for the `middleware` package
 
 Based on your preferred method of handling asynchronous flow, choose any of the following packages as well:
 
 - [@redux-tools/epics](/packages/epics), store enhancer for asynchronous injection of epics
 - [@redux-tools/epics-react](/packages/epics-react), React bindings for the `epics` package
 - [@redux-tools/stream-creators](/packages/stream-creators), collection of stream creators for the `epics` package
-- [@redux-tools/middleware](/packages/middleware), store enhancer for asynchronous injection of middleware
-- [@redux-tools/middleware-react](/packages/middleware-react), React bindings for the `middleware` package
 - [@redux-tools/thunk](/packages/thunk), custom implementation of [Redux Thunk](https://github.com/reduxjs/redux-thunk) for namespaced usage
+
+## Installation
+
+The `@redux-tools/react` package contains all the relevant store enhancers and utility functions you'll need to get started with Redux Tools in a React application.
+
+Use either of these commands based on the package manager you prefer.
+
+```sh
+yarn add @redux-tools/react
+```
+
+```sh
+npm i @redux-tools/react
+```
+
+If you're not using React, install the individual packages separately.
 
 ## Changelog
 

@@ -12,7 +12,7 @@ _**duck.js**_
 - exports a reducer and an action creator
 
 ```js
-import { makeActionTypes, makeConstantActionCreator, makeReducer } from '@redux-tools/actions';
+import { makeActionTypes, makeConstantActionCreator, makeReducer } from '@redux-tools/react';
 
 export const ActionTypes = makeActionTypes('duck', ['INCREMENT']);
 export const increment = makeConstantActionCreator(ActionTypes.INCREMENT);
@@ -29,7 +29,7 @@ _**Counter.js**_
 ```js
 import React from 'react';
 import { o } from 'ramda';
-import { withReducers } from '@redux-tools/reducers-react';
+import { withReducers } from '@redux-tools/react';
 import { connect } from 'react-redux';
 
 import countReducer, { increment } from './duck';
@@ -57,7 +57,7 @@ _**index.js**_
 import React from 'react';
 import { render } from 'react-dom';
 import { createStore } from 'redux';
-import { makeEnhancer as makeReducersEnhancer } from '@redux-tools/reducers';
+import { makeReducersEnhancer } from '@redux-tools/react';
 import { Provider } from 'react-redux';
 import { identity } from 'ramda';
 
@@ -94,7 +94,7 @@ _**duck.js**_
 - exports a reducer and an action creator
 
 ```js
-import { makeActionTypes, makeConstantActionCreator, makeReducer } from '@redux-tools/actions';
+import { makeActionTypes, makeConstantActionCreator, makeReducer } from '@redux-tools/react';
 
 export const ActionTypes = makeActionTypes('duck', ['INCREMENT']);
 export const increment = makeConstantActionCreator(ActionTypes.INCREMENT);
@@ -112,7 +112,7 @@ _**Counter.js**_
 ```js
 import React from 'react';
 import { o } from 'ramda';
-import { withReducers, namespacedConnect } from '@redux-tools/reducers-react';
+import { withReducers, namespacedConnect } from '@redux-tools/react';
 
 import countReducer, { increment } from './duck';
 
@@ -140,7 +140,7 @@ _**index.js**_
 import React from 'react';
 import { render } from 'react-dom';
 import { createStore } from 'redux';
-import { makeEnhancer as makeReducersEnhancer } from '@redux-tools/reducers';
+import { makeReducersEnhancer } from '@redux-tools/react';
 import { Provider } from 'react-redux';
 import { identity } from 'ramda';
 

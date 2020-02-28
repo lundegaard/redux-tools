@@ -59,14 +59,12 @@ We are open to any ideas and suggestions! Feel free to make PR!
 
 See the [contribution guide](https://github.com/lundegaard/redux-tools/blob/master/CONTRIBUTING.md) for guidelines.
 
-## License
-
-All packages are distributed under the MIT license. See the license [here](https://github.com/lundegaard/redux-tools/blob/master/LICENSE).
-
 ## Related projects
 
 - [validarium](https://github.com/lundegaard/validarium) – Validations done right.
 - [lundium](https://github.com/lundegaard/lundium) – Beautiful React component library.
 - [react-union](https://github.com/lundegaard/react-union) – Integrate React apps into various CMSs seamlessly.
 
-© 2018-2020 [Lundegaard a.s.](http://lundegaard.eu)
+## License
+
+All packages are distributed under the MIT license. See the license [here](https://github.com/lundegaard/redux-tools/blob/master/LICENSE).

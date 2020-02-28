@@ -43,6 +43,8 @@ Redux Tools consist mainly of:
 
 ## Documentation & API Reference
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/lundegaard/redux-tools.svg)](https://greenkeeper.io/)
+
 See [redux-tools.js.org](https://redux-tools.js.org/), powered by Docsify.
 
 ## Installation

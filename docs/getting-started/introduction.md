@@ -3,6 +3,8 @@
 [![GitHub Stars](https://img.shields.io/github/stars/lundegaard/redux-tools)](https://github.com/lundegaard/redux-tools)
 [![GitHub Issues](https://img.shields.io/github/issues/lundegaard/redux-tools?color=bada55)](https://github.com/lundegaard/redux-tools)
 [![License](https://img.shields.io/badge/licence-MIT-ff69b4)](https://github.com/lundegaard/redux-tools)
+[![Downloads](https://badgen.net/npm/dm/@redux-tools/reducers)](https://npmjs.com/package/@redux-tools/reducers)
+[![Version](https://badgen.net/npm/v/@redux-tools/reducers)](https://npmjs.com/package/@redux-tools/reducers)
 
 A collection of tools for maintaining large Redux applications by enabling dependency injection of Redux code and development of multi-instance components by namespacing their state.
 
@@ -38,7 +40,6 @@ See the [CHANGELOG.md](https://github.com/lundegaard/redux-tools/blob/master/CHA
 ## Resources
 
 - [Beyond Simplicity: Using Redux in Dynamic Applications](https://medium.com/@wafflepie/beyond-simplicity-using-redux-in-dynamic-applications-ae9e0aea928c) (published 21 Jan 2019)
-- [React Union repository](https://github.com/lundegaard/react-union) (embedding React applications into CMSs)
 
 ## License
 
@@ -46,8 +47,8 @@ All packages are distributed under the MIT license. See the license [here](https
 
 ## Related projects
 
-- [validarium](https://github.com/lundegaard/validarium) - Validations done right.
-- [lundium](https://github.com/lundegaard/lundium) - Beautiful React component library.
-- [react-union](https://github.com/lundegaard/react-union) - Intergrate React apps into various CMSs seamlessly.
+- [validarium](https://github.com/lundegaard/validarium) – Validations done right.
+- [lundium](https://github.com/lundegaard/lundium) – Beautiful React component library.
+- [react-union](https://github.com/lundegaard/react-union) – Integrate React apps into various CMSs seamlessly.
 
 © 2018-2020 [Lundegaard a.s.](http://lundegaard.eu)

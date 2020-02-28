@@ -14,9 +14,31 @@
 		/>
 		<link type="image/x-icon" rel="shortcut icon" href="favicon.ico" />
 		<link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css" />
+		<style>
+			.app-name img {
+				width: 50%;
+			}
+
+			.by-lundegaard {
+				position: fixed;
+				bottom: 0;
+				right: 0;
+			}
+
+			.by-lundegaard img {
+				width: 160px;
+			}
+		</style>
 	</head>
 	<body>
 		<div id="app"></div>
+		<a class="by-lundegaard" href="http://lundegaard.eu" target="_blank" rel="noopener"
+			><img
+				src="/_media/by-lundegaard.png"
+				data-origin="_media/by-lundegaard.png"
+				alt="by Lundegaard"
+				width="160"
+		/></a>
 		<script>
 			// prettier-ignore
 			window.$docsify = {
@@ -29,7 +51,7 @@
 				subMaxLevel: 3,
 				auto2top: true,
 				themeColor: '#764abc',
-				logo: '/logo.png',
+				logo: '/_media/logo.png',
 				homepage: '/getting-started/introduction.md'
 			};
 		</script>

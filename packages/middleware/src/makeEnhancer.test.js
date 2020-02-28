@@ -460,6 +460,7 @@ describe('makeEnhancer', () => {
 			if (isMessageType(action)) {
 				expect(propPayload(result)).toBe('Bar');
 			}
+
 			return result;
 		};
 
@@ -473,6 +474,7 @@ describe('makeEnhancer', () => {
 			if (isMessageType(action)) {
 				expect(propPayload(result)).toBe('Bar');
 			}
+
 			return result;
 		};
 

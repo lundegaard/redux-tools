@@ -9,6 +9,7 @@ import { NamespaceContext } from './contexts';
 
 const Test = ({ children }) => {
 	children();
+
 	return null;
 };
 

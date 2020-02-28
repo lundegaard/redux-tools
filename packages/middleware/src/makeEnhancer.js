@@ -25,6 +25,7 @@ const makeEnhancer = () => {
 	// NOTE `enhancerNext` calls all injected middleware and then `outerNext`.
 	let enhancerNext = action => {
 		invariant(outerNext, 'You need to apply the enhancer to a Redux store.');
+
 		return outerNext(action);
 	};
 

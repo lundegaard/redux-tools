@@ -66,9 +66,9 @@ See the [CHANGELOG.md](CHANGELOG.md) file.
 
 - [Beyond Simplicity: Using Redux in Dynamic Applications](https://medium.com/@wafflepie/beyond-simplicity-using-redux-in-dynamic-applications-ae9e0aea928c) (published 21 Jan 2019)
 
-## Contribution
+## Contributing
 
-We are open to any ideas and suggestions! Feel free to make PR!
+We are open to all ideas and suggestions, feel free to open an issue or a pull request!
 
 See the [contribution guide](https://github.com/lundegaard/redux-tools/blob/master/CONTRIBUTING.md) for guidelines.
 

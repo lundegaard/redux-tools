@@ -31,7 +31,7 @@ To this:
 
 ```js
 import { createStore, combineReducers } from 'redux';
-import { makeEnhancer as makeReducersEnhancer } from '@redux-tools/reducers';
+import { makeReducersEnhancer } from '@redux-tools/react';
 
 export const configureStore = () => createStore(state => state, makeReducersEnhancer());
 ```
@@ -39,6 +39,8 @@ export const configureStore = () => createStore(state => state, makeReducersEnha
 Usually, your modules will expose a single React component, serving as the entry point.
 
 ```js
+import React from 'react';
+import { Router, Route } from '@awesome-project/routing';
 import UserManagement from '@awesome-project/user-management';
 import ArticleManagement from '@awesome-project/article-management';
 
@@ -50,10 +52,13 @@ const App = () => (
 );
 ```
 
-This is fine. We don't have to do anything here. As explained earlier, it is the modules themselves which should be responsible for defining their dependencies! Let's take a look at one of them.
+This is fine. We don't have to do anything here. As explained earlier, it is the modules themselves that should be responsible for defining their dependencies! Let's take a look at one of them.
 
 ```js
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { getUsers, fetchUsers } from './redux';
+import { UserGrid } from './components';
 
 const UserManagement = () => {
 	const dispatch = useDispatch();
@@ -70,8 +75,11 @@ export default UserManagement;
 Okay, now how do we use Redux Tools to define the Redux dependencies of this module?
 
 ```js
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { withReducers } from '@redux-tools/react';
 import reducer, { getUsers, fetchUsers } from './redux';
-import { withReducers } from '@redux-tools/reducers-react';
+import { UserGrid } from './components';
 
 const UserManagement = () => {
 	const dispatch = useDispatch();
@@ -82,7 +90,9 @@ const UserManagement = () => {
 	return <UserGrid users={users} />;
 };
 
-export default withReducers({ userManagement: reducer }, { isGlobal: true })(UserManagement);
+const enhance = withReducers({ userManagement: reducer }, { isGlobal: true });
+
+export default enhance(UserManagement);
 ```
 
 Looks easy enough, right? When the user management module is mounted, its reducer will be injected as well. Furthermore, when this module is unmounted, the reducer gets ejected too!

@@ -38,8 +38,9 @@ A collection of tools for maintaining large Redux applications by enabling depen
 
 Redux Tools consist mainly of:
 
-- [Store enhancers](https://github.com/reduxjs/redux/blob/master/docs/Glossary.md#store-enhancer) for injecting reducers, epics, and middleware into your Redux store after the store is created.
+- [Store enhancers](https://github.com/reduxjs/redux/blob/master/docs/Glossary.md#store-enhancer) for injecting reducers, middleware, and epics into your Redux store after the store is created.
 - Utility functions for less verbose definitions of action creators and reducers.
+- Logic for managing your state via namespaces.
 
 ## Documentation & API Reference
 
@@ -47,17 +48,15 @@ See [redux-tools.js.org](https://redux-tools.js.org/), powered by Docsify.
 
 ## Installation
 
-The `@redux-tools/react` package contains all the relevant store enhancers and utility functions you'll need to get started with Redux Tools in a React application.
-
-Use either of these commands based on the package manager you prefer.
+The `@redux-tools/react` package contains everything you'll need to get started with using Redux Tools in a React application. Use either of these commands, depending on the package manager you prefer:
 
 ```sh
 yarn add @redux-tools/react
-```
 
-```sh
 npm i @redux-tools/react
 ```
+
+Please visit [redux-tools.js.org](https://redux-tools.js.org/) to see all available packages.
 
 ## Changelog
 
@@ -67,9 +66,9 @@ See the [CHANGELOG.md](CHANGELOG.md) file.
 
 - [Beyond Simplicity: Using Redux in Dynamic Applications](https://medium.com/@wafflepie/beyond-simplicity-using-redux-in-dynamic-applications-ae9e0aea928c) (published 21 Jan 2019)
 
-## Contribution
+## Contributing
 
-We are open to any ideas and suggestions! Feel free to make PR!
+We are open to all ideas and suggestions, feel free to open an issue or a pull request!
 
 See the [contribution guide](https://github.com/lundegaard/redux-tools/blob/master/CONTRIBUTING.md) for guidelines.
 

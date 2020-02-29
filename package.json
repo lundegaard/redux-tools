@@ -10,7 +10,7 @@
     "Sergey Dunaevskiy <sergey.dunaevskiy@lundegaard.eu>"
   ],
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "workspaces": [
     "packages/*"
@@ -67,18 +67,5 @@
     "build": "lerna exec -- rollup -c=../../rollup.config.js",
     "prepublish": "yarn build",
     "docs": "serve docs"
-  },
-  "lint-staged": {
-    "linters": {
-      "**/*.js": [
-        "prettier --ignore-path .gitignore --write",
-        "yarn lint --fix",
-        "git add"
-      ],
-      "**/*.{mdx,md,html,json}": [
-        "prettier --write",
-        "git add"
-      ]
-    }
   }
 }

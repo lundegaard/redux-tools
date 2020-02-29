@@ -160,6 +160,6 @@ Compare these two state structures:
 }
 ```
 
-The second approach will allow you to omit specifying `someModule` and `otherModule` in your selectors, pretty efficient! However, it will also mean that you've got to deal with yet another architectural concept, which might make it hard for developers who only know the basics of React/Redux.
+The second approach will allow you to omit specifying `someModule` and `otherModule` in your selectors – the state slice will be resolved by the namespacing mechanism. However, you'll also have to deal with yet another architectural concept, which might make it difficult for developers who only know the basics of React or Redux.
 
-If you do decide to use namespaces in a standard React application, make sure all of your modules are wrapped in an appropriately configured namespace provider(s). Also, make sure to store any common state in a globally injected reducer.
+If you do decide to use namespaces in a standard React application, make sure all of your modules are wrapped in an appropriately configured namespace provider. Also, make sure any common state is stored in a globally injected reducer.

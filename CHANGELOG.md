@@ -6,8 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+Nothing!
+
+## [0.8.0] – 2020-02-28
+
 ### Added
 
+- [redux-tools.js.org](https://redux-tools.js.org) ❤️
+- (_react_): New package! `@redux-tools/react` reexports everything necessary to get started with Redux Tools in a React application.
 - (_reducers_): Enhancer now supports initial reducers.
 
 ## [0.7.0] – 2020-01-10

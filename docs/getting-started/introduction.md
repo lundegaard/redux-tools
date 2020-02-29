@@ -1,7 +1,7 @@
 # Redux Tools {docsify-ignore-all}
 
 [![GitHub Stars](https://img.shields.io/github/stars/lundegaard/redux-tools)](https://github.com/lundegaard/redux-tools)
-[![GitHub Issues](https://img.shields.io/github/issues/lundegaard/redux-tools?color=bada55)](https://github.com/lundegaard/redux-tools)
+[![GitHub Issues](https://img.shields.io/github/issues/lundegaard/redux-tools?color=bada55)](https://github.com/lundegaard/redux-tools/issues)
 [![License](https://img.shields.io/badge/licence-MIT-ff69b4)](https://github.com/lundegaard/redux-tools)
 [![Downloads](https://badgen.net/npm/dm/@redux-tools/reducers)](https://npmjs.com/package/@redux-tools/reducers)
 [![Version](https://badgen.net/npm/v/@redux-tools/reducers)](https://npmjs.com/package/@redux-tools/reducers)
@@ -10,44 +10,39 @@ A collection of tools for maintaining large Redux applications by enabling depen
 
 Redux Tools consist mainly of:
 
-- [Store enhancers](https://github.com/reduxjs/redux/blob/master/docs/Glossary.md#store-enhancer) for injecting reducers, epics, and middleware into your Redux store after the store is created.
+- [Store enhancers](https://github.com/reduxjs/redux/blob/master/docs/Glossary.md#store-enhancer) for injecting reducers, middleware, and epics into your Redux store after the store is created.
 - Utility functions for less verbose definitions of action creators and reducers.
+- Logic for managing your state via [namespaces](/tutorial/02-namespacing).
 
 Although the Redux Tools core is platform-agnostic, [React](https://github.com/facebook/react/) bindings are included for tying the injection mechanism to the lifecycle of your components. The [quick start guide](/getting-started/quick-start) and the [tutorial](/tutorial/01-dependency-injection) use React as the view library of choice.
 
-## Packages
-
-The Redux Tools core consists mainly of the following packages:
-
-- [@redux-tools/actions](/packages/actions), functions for creating [FSA-compliant](https://github.com/redux-utilities/flux-standard-action) action creators and reducers
-- [@redux-tools/namespaces](/packages/namespaces), logic for associating Redux actions with a namespace (if using [namespaces](/tutorial/02-namespacing))
-- [@redux-tools/reducers](/packages/reducers), store enhancer for asynchronous injection of reducers
-- [@redux-tools/reducers-react](/packages/reducers-react), React bindings for the `reducers` package
-- [@redux-tools/middleware](/packages/middleware), store enhancer for asynchronous injection of middleware
-- [@redux-tools/middleware-react](/packages/middleware-react), React bindings for the `middleware` package
-
-Based on your preferred method of handling asynchronous flow, choose any of the following packages as well:
-
-- [@redux-tools/epics](/packages/epics), store enhancer for asynchronous injection of epics
-- [@redux-tools/epics-react](/packages/epics-react), React bindings for the `epics` package
-- [@redux-tools/stream-creators](/packages/stream-creators), collection of stream creators for the `epics` package
-- [@redux-tools/thunk](/packages/thunk), custom implementation of [Redux Thunk](https://github.com/reduxjs/redux-thunk) for namespaced usage
-
 ## Installation
 
-The `@redux-tools/react` package contains all the relevant store enhancers and utility functions you'll need to get started with Redux Tools in a React application.
-
-Use either of these commands based on the package manager you prefer.
+The `@redux-tools/react` package contains everything you'll need to get started with using Redux Tools in a React application. Use either of these commands, depending on the package manager you prefer:
 
 ```sh
 yarn add @redux-tools/react
-```
 
-```sh
 npm i @redux-tools/react
 ```
 
-If you're not using React, install the individual packages separately.
+## Packages
+
+Here are the packages `@redux-tools/react` reexports:
+
+- [@redux-tools/actions](/packages/actions), functions for creating [FSA-compliant](https://github.com/redux-utilities/flux-standard-action) action creators and reducers.
+- [@redux-tools/namespaces](/packages/namespaces), logic for associating Redux actions with a namespace.
+- [@redux-tools/reducers](/packages/reducers), store enhancer for asynchronous injection of reducers.
+- [@redux-tools/reducers-react](/packages/reducers-react), React bindings for the `reducers` package.
+- [@redux-tools/middleware](/packages/middleware), store enhancer for asynchronous injection of middleware.
+- [@redux-tools/middleware-react](/packages/middleware-react), React bindings for the `middleware` package.
+
+Based on your preferred method of handling side effects, install any of the following packages as well:
+
+- [@redux-tools/epics](/packages/epics), store enhancer for asynchronous injection of epics.
+- [@redux-tools/epics-react](/packages/epics-react), React bindings for the `epics` package.
+- [@redux-tools/stream-creators](/packages/stream-creators), collection of stream creators for the `epics` package.
+- [@redux-tools/thunk](/packages/thunk), custom implementation of [Redux Thunk](https://github.com/reduxjs/redux-thunk) with namespacing support.
 
 ## Changelog
 

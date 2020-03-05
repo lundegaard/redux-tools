@@ -16,12 +16,13 @@
   "dependencies": {
     "@redux-tools/injectors-react": "^0.8.1",
     "@redux-tools/middleware": "^0.8.1",
-    "ramda": "^0.27.0",
-    "ramda-extension": "^0.10.2"
+    "ramda": ">=0.26.1",
+    "ramda-extension": ">=0.8.0"
   },
   "peerDependencies": {
-    "react": ">=16.8.4",
-    "react-redux": "^6.0.0 || ^7.0.0"
+    "react": ">=16.8.3",
+    "react-redux": "^6.0.0 || ^7.0.0",
+    "redux": "^4.0.4"
   },
   "devDependencies": {
     "enzyme": "3.11.0",

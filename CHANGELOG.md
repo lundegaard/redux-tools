@@ -6,7 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
-Nothing!
+## [0.8.2] – 2020-03-05
+
+### Fixed
+
+- `ramda` and `ramda-extension` dependency versions are now less strict.
+- All transitive peer dependencies are now listed in the appropriate packages.
 
 ## [0.8.1] – 2020-03-05
 

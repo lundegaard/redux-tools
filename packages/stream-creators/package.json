@@ -17,9 +17,11 @@
     "@redux-tools/epics": "^0.8.1",
     "@redux-tools/namespaces": "^0.8.1",
     "@redux-tools/reducers": "^0.8.1",
-    "ramda": "^0.27.0"
+    "ramda": ">=0.26.1"
   },
   "peerDependencies": {
+    "redux": "^4.0.4",
+    "redux-observable": "^1.0.0",
     "rxjs": "^6.3.3"
   },
   "publishConfig": {

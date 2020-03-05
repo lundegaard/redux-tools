@@ -1,6 +1,6 @@
 {
   "name": "@redux-tools/stream-creators",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "license": "MIT",
   "main": "lib/redux-tools-stream-creators.js",
   "module": "es/redux-tools-stream-creators.js",
@@ -14,9 +14,9 @@
     "Sergey Dunaevskiy <sergey.dunaevskiy@lundegaard.eu>"
   ],
   "dependencies": {
-    "@redux-tools/epics": "^0.8.1",
-    "@redux-tools/namespaces": "^0.8.1",
-    "@redux-tools/reducers": "^0.8.1",
+    "@redux-tools/epics": "^0.8.2",
+    "@redux-tools/namespaces": "^0.8.2",
+    "@redux-tools/reducers": "^0.8.2",
     "ramda": ">=0.26.1"
   },
   "peerDependencies": {

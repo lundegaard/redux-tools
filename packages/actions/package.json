@@ -1,6 +1,6 @@
 {
   "name": "@redux-tools/actions",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "license": "MIT",
   "main": "lib/redux-tools-actions.js",
   "module": "es/redux-tools-actions.js",
@@ -17,7 +17,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@redux-tools/utils": "^0.8.1",
+    "@redux-tools/utils": "^0.8.2",
     "invariant": "^2.2.4",
     "ramda": ">=0.26.1",
     "ramda-extension": ">=0.8.0"

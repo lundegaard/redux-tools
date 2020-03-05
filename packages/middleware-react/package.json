@@ -1,6 +1,6 @@
 {
   "name": "@redux-tools/middleware-react",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "license": "MIT",
   "main": "lib/redux-tools-middleware-react.js",
   "module": "es/redux-tools-middleware-react.js",
@@ -14,8 +14,8 @@
     "Sergey Dunaevskiy <sergey.dunaevskiy@lundegaard.eu>"
   ],
   "dependencies": {
-    "@redux-tools/injectors-react": "^0.8.1",
-    "@redux-tools/middleware": "^0.8.1",
+    "@redux-tools/injectors-react": "^0.8.2",
+    "@redux-tools/middleware": "^0.8.2",
     "ramda": ">=0.26.1",
     "ramda-extension": ">=0.8.0"
   },

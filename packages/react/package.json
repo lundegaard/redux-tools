@@ -1,6 +1,6 @@
 {
   "name": "@redux-tools/react",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "license": "MIT",
   "main": "lib/redux-tools-react.js",
   "module": "es/redux-tools-react.js",
@@ -14,12 +14,12 @@
     "Sergey Dunaevskiy <sergey.dunaevskiy@lundegaard.eu>"
   ],
   "dependencies": {
-    "@redux-tools/actions": "^0.8.1",
-    "@redux-tools/middleware": "^0.8.1",
-    "@redux-tools/middleware-react": "^0.8.1",
-    "@redux-tools/namespaces": "^0.8.1",
-    "@redux-tools/reducers": "^0.8.1",
-    "@redux-tools/reducers-react": "^0.8.1"
+    "@redux-tools/actions": "^0.8.2",
+    "@redux-tools/middleware": "^0.8.2",
+    "@redux-tools/middleware-react": "^0.8.2",
+    "@redux-tools/namespaces": "^0.8.2",
+    "@redux-tools/reducers": "^0.8.2",
+    "@redux-tools/reducers-react": "^0.8.2"
   },
   "peerDependencies": {
     "react": ">=16.8.3",

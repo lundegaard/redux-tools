@@ -15,7 +15,7 @@
   ],
   "dependencies": {
     "ramda": ">=0.26.1",
-    "ramda-extension": ">=0.8.0"
+    "ramda-extension": ">=0.10.3"
   },
   "publishConfig": {
     "access": "public"

@@ -1,6 +1,6 @@
 {
   "name": "@redux-tools/thunk",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "license": "MIT",
   "main": "lib/redux-tools-thunk.js",
   "module": "es/redux-tools-thunk.js",
@@ -14,8 +14,8 @@
     "Sergey Dunaevskiy <sergey.dunaevskiy@lundegaard.eu>"
   ],
   "dependencies": {
-    "@redux-tools/namespaces": "^0.8.0",
-    "@redux-tools/reducers": "^0.8.0",
+    "@redux-tools/namespaces": "^0.8.1",
+    "@redux-tools/reducers": "^0.8.1",
     "ramda": "^0.27.0",
     "ramda-extension": "^0.10.2"
   },

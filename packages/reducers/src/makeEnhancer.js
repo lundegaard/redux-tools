@@ -13,6 +13,9 @@ import {
 	view,
 	over,
 	dissoc,
+	pluck,
+	juxt,
+	difference,
 } from 'ramda';
 import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
 import { DEFAULT_FEATURE, getNamespaceByAction } from '@redux-tools/namespaces';
@@ -25,7 +28,7 @@ import composeReducers from './composeReducers';
 export const storeInterface = makeStoreInterface('reducers');
 
 const cleanupReducer = (state, action) => {
-	if (action.type !== '@redux-tools/REDUCERS_EJECTED') {
+	if (action.type !== '@redux-tools/CLEAN_UP_STATE') {
 		return state;
 	}
 
@@ -60,9 +63,9 @@ const cleanupReducer = (state, action) => {
 const makeEnhancer = ({ initialReducers } = {}) => createStore => (reducer = identity, ...args) => {
 	const prevStore = createStore(reducer, ...args);
 
-	const handler = ({ props, reducers }) => {
+	const handleEntriesChanged = ({ props, injectables }) => {
 		invariant(
-			props.namespace || !isFunction(reducers),
+			props.namespace || !isFunction(injectables),
 			'You can only inject reducers as functions if you specify a namespace.'
 		);
 
@@ -75,9 +78,21 @@ const makeEnhancer = ({ initialReducers } = {}) => createStore => (reducer = ide
 		);
 	};
 
+	const handleEjected = ({ injectables, entries, props }) => {
+		const nextEntries = storeInterface.getEntries(nextStore);
+		const fullyEjectedEntries = difference(entries, nextEntries);
+
+		nextStore.dispatch({
+			type: '@redux-tools/CLEAN_UP_STATE',
+			// TODO: This weird logic is to preserve the original mechanism of `cleanupReducer`.
+			payload: typeof injectables === 'function' ? null : pluck('key', fullyEjectedEntries),
+			meta: props,
+		});
+	};
+
 	const nextStore = enhanceStore(prevStore, storeInterface, {
-		onInjected: handler,
-		onEjected: handler,
+		onInjected: handleEntriesChanged,
+		onEjected: juxt([handleEntriesChanged, handleEjected]),
 	});
 
 	if (initialReducers) {

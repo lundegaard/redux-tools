@@ -7810,12 +7810,12 @@ railroad-diagrams@^1.0.0:
   resolved "https://registry.yarnpkg.com/railroad-diagrams/-/railroad-diagrams-1.0.0.tgz#eb7e6267548ddedfb899c1b90e57374559cddb7e"
   integrity sha1-635iZ1SN3t+4mcG5Dlc3RVnN234=
 
-ramda-extension@0.10.2, ramda-extension@^0.10.2:
+ramda-extension@0.10.2, ramda-extension@>=0.8.0:
   version "0.10.2"
   resolved "https://registry.yarnpkg.com/ramda-extension/-/ramda-extension-0.10.2.tgz#f8c684f69484c18db4b05652fc598d1a1195c06d"
   integrity sha512-8Gmpz3IF5kQEws4eP3bzeSXnpJ6y6FNa4oDGnhUfhNQtYWKcAexe4ne1z3UlVhwRYQlAgI28dI1g6dWig/eGXg==
 
-ramda@0.27.0, ramda@^0.27.0:
+ramda@0.27.0, ramda@>=0.26.1:
   version "0.27.0"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.27.0.tgz#915dc29865c0800bf3f69b8fd6c279898b59de43"
   integrity sha512-pVzZdDpWwWqEVVLshWUHjNwuVP7SfcmPraYuqocJp1yo2U1R7P+5QAfDhdItkuoGqIBnBYrtPp7rEPqDn9HlZA==

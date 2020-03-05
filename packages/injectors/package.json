@@ -18,7 +18,7 @@
     "@redux-tools/utils": "^0.8.2",
     "invariant": "^2.2.4",
     "ramda": ">=0.26.1",
-    "ramda-extension": ">=0.8.0"
+    "ramda-extension": ">=0.10.3"
   },
   "publishConfig": {
     "access": "public"

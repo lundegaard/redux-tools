@@ -1,4 +1,4 @@
-import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
+import { DEFAULT_FEATURE } from './constants';
 
 import getStateByAction from './getStateByAction';
 

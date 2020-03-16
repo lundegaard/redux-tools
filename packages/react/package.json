@@ -18,6 +18,7 @@
     "@redux-tools/middleware": "^0.8.2",
     "@redux-tools/middleware-react": "^0.8.2",
     "@redux-tools/namespaces": "^0.8.2",
+    "@redux-tools/namespaces-react": "^0.8.2",
     "@redux-tools/reducers": "^0.8.2",
     "@redux-tools/reducers-react": "^0.8.2"
   },

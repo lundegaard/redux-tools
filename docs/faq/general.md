@@ -2,8 +2,8 @@
 
 ## How to use Redux Tools with React Union?
 
-1. Replace the react-redux `<Provider />` with one from `@redux-tools`.
-2. Pass `() => useContext(WidgetContext).namespace` as the `useNamespace` prop.
+1. Wrap your `<Union />` component in a `<NamespaceProvider />`.
+2. Pass `() => useContext(WidgetContext).namespace` as the `useNamespace` prop to the namespace provider.
 
 That's it! Now when you use e.g. `withReducers` or `namespacedConnect` in your widget, it will always access the correct namespace.
 

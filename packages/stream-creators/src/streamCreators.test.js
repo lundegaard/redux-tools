@@ -1,4 +1,4 @@
-import { getStateByNamespace } from '@redux-tools/reducers';
+import { getStateByNamespace } from '@redux-tools/namespaces';
 import { of } from 'rxjs';
 import { globalAction$, namespacedState$ } from './streamCreators';
 

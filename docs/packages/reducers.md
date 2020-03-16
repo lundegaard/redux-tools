@@ -9,19 +9,19 @@ This package provides a store enhancer for injecting reducers into a Redux store
 ```js
 import { createStore } from 'redux';
 import { makeEnhancer, makeReducer } from '@redux-tools/reducers';
-import { someReducer } from './reducers';
+import ActionTypes from './actionTypes';
 
-const store = createStore(state => state, makeEnhancer());
-
-store.injectReducers({ some: someReducer });
-
-export default makeReducer(
+const someReducer = makeReducer(
 	[
 		[ActionTypes.ADD, (count, action) => count + action.payload],
 		[ActionTypes.INCREMENT, count => count + 1],
 	],
 	0
 );
+
+const store = createStore(state => state, makeEnhancer());
+
+store.injectReducers({ some: someReducer });
 ```
 
 ## API Reference

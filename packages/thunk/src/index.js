@@ -1,7 +1,10 @@
 import { o } from 'ramda';
 import { isFunction } from 'ramda-extension';
-import { getNamespaceByAction, defaultNamespace } from '@redux-tools/namespaces';
-import { getStateByNamespace } from '@redux-tools/reducers';
+import {
+	getNamespaceByAction,
+	defaultNamespace,
+	getStateByNamespace,
+} from '@redux-tools/namespaces';
 
 const makeThunkMiddleware = dependencies => ({ dispatch, getState }) => next => action => {
 	if (isFunction(action)) {

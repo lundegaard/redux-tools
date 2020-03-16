@@ -9,7 +9,7 @@ import { NamespaceContext } from './contexts';
 // NOTE: `flip(or)` gives priority to second argument.
 const mergeContextValues = mergeDeepWith(flip(or));
 
-const Provider = ({ children, feature, namespace, store, useNamespace }) => {
+const NamespaceProvider = ({ children, feature, namespace, store, useNamespace }) => {
 	const context = useContext(NamespaceContext);
 
 	const nextContext = useMemo(
@@ -34,7 +34,7 @@ const Provider = ({ children, feature, namespace, store, useNamespace }) => {
 	);
 };
 
-Provider.propTypes = {
+NamespaceProvider.propTypes = {
 	children: PropTypes.node.isRequired,
 	feature: PropTypes.string,
 	namespace: PropTypes.string,
@@ -42,4 +42,4 @@ Provider.propTypes = {
 	useNamespace: PropTypes.func,
 };
 
-export default Provider;
+export default NamespaceProvider;

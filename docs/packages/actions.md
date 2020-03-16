@@ -11,21 +11,12 @@ import {
 	makeActionTypes,
 	makeConstantActionCreator,
 	makeSimpleActionCreator,
-	makeReducer,
 } from '@redux-tools/actions';
 
 export const ActionTypes = makeActionTypes('@counter', ['ADD', 'INCREMENT']);
 
 export const add = makeSimpleActionCreator(ActionTypes.ADD); // 1 arg.
 export const increment = makeConstantActionCreator(ActionTypes.INCREMENT); // 0 args.
-
-export default makeReducer(
-	[
-		[ActionTypes.ADD, (count, action) => count + action.payload],
-		[ActionTypes.INCREMENT, count => count + 1],
-	],
-	0
-);
 ```
 
 ## API Reference

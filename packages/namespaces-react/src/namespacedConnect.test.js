@@ -3,13 +3,13 @@ import * as R from 'ramda';
 import * as R_ from 'ramda-extension';
 import { mount } from 'enzyme';
 import { createStore } from 'redux';
-import { Provider } from '@redux-tools/injectors-react';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import namespacedConnect, {
 	wrapMapStateToProps,
 	wrapMapDispatchToProps,
 } from './namespacedConnect';
+import NamespaceProvider from './NamespaceProvider';
 
 const state = {
 	[DEFAULT_FEATURE]: {
@@ -109,9 +109,9 @@ describe('namespacedConnect', () => {
 		const ConnectedRoot = connector(Root);
 
 		const wrapper = mount(
-			<Provider store={store} namespace="bar">
+			<NamespaceProvider store={store} namespace="bar">
 				<ConnectedRoot />
-			</Provider>
+			</NamespaceProvider>
 		);
 
 		expect(wrapper.find(Root).prop('qux')).toEqual({ value: 'Qux' });
@@ -127,9 +127,9 @@ describe('namespacedConnect', () => {
 		const ConnectedRoot = connector(Root);
 
 		const wrapper = mount(
-			<Provider store={store} namespace="bar">
+			<NamespaceProvider store={store} namespace="bar">
 				<ConnectedRoot />
-			</Provider>
+			</NamespaceProvider>
 		);
 
 		wrapper.find(Root).prop('actionCreator')();

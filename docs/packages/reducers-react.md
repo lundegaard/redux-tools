@@ -43,5 +43,3 @@ Works just like `connect()` from React Redux, except it accesses namespaced stat
 Passes global state as the third argument to `mapStateToProps`.
 
 See [react-redux docs](https://react-redux.js.org/docs/api) for more info.
-
-[](_provider.md ':include')

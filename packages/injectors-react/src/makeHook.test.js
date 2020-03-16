@@ -2,9 +2,9 @@ import React from 'react';
 import { makeStoreInterface } from '@redux-tools/injectors';
 import { noop } from 'ramda-extension';
 import { mount } from 'enzyme';
+import { NamespaceProvider } from '@redux-tools/namespaces-react';
 
 import makeHook from './makeHook';
-import Provider from './Provider';
 
 const storeInterface = makeStoreInterface('things');
 const useThings = makeHook(storeInterface);
@@ -32,9 +32,9 @@ describe('makeHook', () => {
 
 	it('calls proper store methods', () => {
 		mount(
-			<Provider store={store} namespace="yolo">
+			<NamespaceProvider store={store} namespace="yolo">
 				<Test>{() => useThings({ foo: noop })}</Test>
-			</Provider>
+			</NamespaceProvider>
 		);
 
 		expect(store.injectThings).toHaveBeenCalledTimes(1);

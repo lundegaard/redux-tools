@@ -1,5 +1,5 @@
 import { path, o, defaultTo } from 'ramda';
-import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
+import { DEFAULT_FEATURE } from './constants';
 
 import getStateByNamespace from './getStateByNamespace';
 

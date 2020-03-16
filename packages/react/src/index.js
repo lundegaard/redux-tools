@@ -5,7 +5,6 @@ export {
 	makeActionCreator,
 	makeActionTypes,
 	makeConstantActionCreator,
-	makeReducer, // TODO: Move to `reducers`.
 	makeSimpleActionCreator,
 } from '@redux-tools/actions';
 
@@ -18,19 +17,16 @@ export {
 	defaultNamespace,
 	getNamespaceByAction,
 	isActionFromNamespace,
+	getStateByAction,
+	getStateByNamespace,
 } from '@redux-tools/namespaces';
 
 export {
 	composeReducers,
-	getStateByAction, // TODO: Move to `namespaces`.
-	getStateByNamespace, // TODO: Move to `namespaces`.
 	makeEnhancer as makeReducersEnhancer,
+	makeReducer,
 } from '@redux-tools/reducers';
 
-export {
-	namespacedConnect, // TODO: Move to `namespaces-react`.
-	useNamespace, // TODO: Move to `namespaces-react`.
-	useReducers,
-	withReducers,
-	Provider, // TODO: Move to `namespaces-react`.
-} from '@redux-tools/reducers-react';
+export { useReducers, withReducers } from '@redux-tools/reducers-react';
+
+export { namespacedConnect, useNamespace, NamespaceProvider } from '@redux-tools/namespaces-react';

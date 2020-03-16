@@ -35,5 +35,3 @@ Creates a component decorator which handles the lifecycle of passed epics, injec
 **Returns**
 
 ( _Function_ ): A component decorator.
-
-[](_provider.md ':include')

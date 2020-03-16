@@ -2,10 +2,10 @@ import React from 'react';
 import { makeStoreInterface } from '@redux-tools/injectors';
 import { noop } from 'ramda-extension';
 import { mount } from 'enzyme';
+import { NamespaceProvider } from '@redux-tools/namespaces-react';
 
 import makeDecorator from './makeDecorator';
 import makeHook from './makeHook';
-import Provider from './Provider';
 
 const storeInterface = makeStoreInterface('things');
 const useThings = makeHook(storeInterface);
@@ -30,9 +30,9 @@ describe('makeDecorator', () => {
 		const Root = withThings({ foo: noop })(noop);
 
 		mount(
-			<Provider store={store} namespace="yolo">
+			<NamespaceProvider store={store} namespace="yolo">
 				<Root />
-			</Provider>
+			</NamespaceProvider>
 		);
 
 		expect(store.injectThings).toHaveBeenCalledTimes(1);

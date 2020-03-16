@@ -36,5 +36,3 @@ ejecting them automatically. The namespace of the middleware is determined based
 **Returns**
 
 (_Function_): A component decorator.
-
-[](_provider.md ':include')

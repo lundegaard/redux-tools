@@ -83,32 +83,32 @@ Using the `namespace` prop is pretty simple, but it doesn't scale well if you ne
 
 There are two approaches to using this component, let's start with the simpler one.
 
-Wrap each widget separately via a `<Provider namespace={namespace} />` element. This is the go-to approach if you are rendering the widgets manually or if the widgets do not share a common React tree, i.e. they are rendered using multiple `ReactDOM.render` calls.
+Wrap each widget separately via a `<NamespaceProvider namespace={namespace} />` element. This is the go-to approach if you are rendering the widgets manually or if the widgets do not share a common React tree, i.e. they are rendered using multiple `ReactDOM.render` calls.
 
 ```js
 import React, { Fragment } from 'react';
-import { Provider } from '@redux-tools/react';
+import { NamespaceProvider } from '@redux-tools/react';
 import { Counter } from './components';
 
 const CounterExample = () => (
 	<Fragment>
-		<Provider namespace="foo">
+		<NamespaceProvider namespace="foo">
 			<Counter />
-		</Provider>
-		<Provider namespace="bar">
+		</NamespaceProvider>
+		<NamespaceProvider namespace="bar">
 			<Counter />
-		</Provider>
+		</NamespaceProvider>
 	</Fragment>
 );
 ```
 
 Even if our counters were more complex, we will always access the correct namespace without the need to pass it down.
 
-The second approach is to wrap all the widgets in a single `<Provider useNamespace={useNamespace} />` element. This is the approach you should choose if you are able to access the current widget namespace via React hooks from anywhere.
+The second approach is to wrap all the widgets in a single `<NamespaceProvider useNamespace={useNamespace} />` element. This is the approach you should choose if you are able to access the current widget namespace via React hooks from anywhere.
 
 ```js
 import React, { createContext, useContext } from 'react';
-import { Provider } from '@redux-tools/react';
+import { NamespaceProvider } from '@redux-tools/react';
 import { Counter } from './components';
 
 const WidgetNamespaceContext = createContext(null);
@@ -122,11 +122,11 @@ const renderWidget = (Widget, namespace) => (
 const useWidgetNamespace = () => useContext(WidgetNamespaceContext);
 
 const CounterExample = () => (
-	<Provider useNamespace={useWidgetNamespace}>
+	<NamespaceProvider useNamespace={useWidgetNamespace}>
 		{renderWidget(Counter, 'foo')}
 		{renderWidget(Counter, 'bar')}
 		{renderWidget(Counter, 'baz')}
-	</Provider>
+	</NamespaceProvider>
 );
 ```
 

@@ -6,7 +6,7 @@ import { ReactReduxContext } from 'react-redux';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import { createEntries } from '@redux-tools/injectors';
 
-import useNamespace from './useNamespace';
+import { useNamespace } from '@redux-tools/namespaces-react';
 import { IS_SERVER } from './constants';
 
 const useUniversalLayoutEffect = IS_SERVER ? useEffect : useLayoutEffect;

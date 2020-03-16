@@ -1,10 +1,10 @@
 import { compose, cond, apply, __, isNil, T, map, o } from 'ramda';
 import { alwaysEmptyObject, isFunction, isObject } from 'ramda-extension';
-import { getStateByNamespace } from '@redux-tools/reducers';
-import { useNamespace } from '@redux-tools/injectors-react';
-import { defaultNamespace, DEFAULT_FEATURE } from '@redux-tools/namespaces';
+import { defaultNamespace, DEFAULT_FEATURE, getStateByNamespace } from '@redux-tools/namespaces';
 import { connect } from 'react-redux';
 import { withProps } from '@redux-tools/utils-react';
+
+import useNamespace from './useNamespace';
 
 export const wrapMapStateToProps = mapStateToProps => (state, ownProps) =>
 	mapStateToProps
@@ -16,10 +16,7 @@ export const wrapMapStateToProps = mapStateToProps => (state, ownProps) =>
 		: {};
 
 const wrapActionCreator = wrappedDispatch => actionCreator =>
-	compose(
-		wrappedDispatch,
-		actionCreator
-	);
+	compose(wrappedDispatch, actionCreator);
 
 const throwTypeError = () => {
 	throw new TypeError('mapDispatchToProps is not an object or a function');

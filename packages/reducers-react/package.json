@@ -15,10 +15,7 @@
   ],
   "dependencies": {
     "@redux-tools/injectors-react": "^0.8.2",
-    "@redux-tools/namespaces": "^0.8.2",
     "@redux-tools/reducers": "^0.8.2",
-    "@redux-tools/utils": "^0.8.2",
-    "@redux-tools/utils-react": "^0.8.2",
     "ramda": ">=0.26.1",
     "ramda-extension": ">=0.8.0"
   },

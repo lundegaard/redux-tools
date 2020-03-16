@@ -1,5 +1,5 @@
 import { curry, path } from 'ramda';
-import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
+import { DEFAULT_FEATURE } from './constants';
 
 /**
  * Returns Redux state by namespace. Returns undefined if namespace is undefined.

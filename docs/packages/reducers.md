@@ -60,7 +60,7 @@ Returns Redux state by action namespace.
 **Example**
 
 ```js
-import { getStateByAction } from '@redux-tools/reducers';
+import { getStateByAction } from '@redux-tools/namespaces';
 
 const state = {
 	namespaces: {
@@ -95,7 +95,7 @@ Returns Redux state by namespace. Returns undefined if the namespace is undefine
 **Example**
 
 ```js
-import { getStateByNamespace } from '@redux-tools/reducers';
+import { getStateByNamespace } from '@redux-tools/namespaces';
 
 const state = {
 	namespaces: {

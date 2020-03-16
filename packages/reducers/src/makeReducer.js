@@ -15,11 +15,7 @@ import {
 import { overHead } from 'ramda-extension';
 import invariant from 'invariant';
 
-const createTypeEqualsPredicate = type =>
-	compose(
-		whereEq({ type }),
-		nthArg(1)
-	);
+const createTypeEqualsPredicate = type => compose(whereEq({ type }), nthArg(1));
 
 const mergeReducers = ([typePredicate, reducer, errorReducer]) => {
 	const newReducer = (state, action) => {

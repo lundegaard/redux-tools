@@ -2,7 +2,7 @@ import { getStateByNamespace } from '@redux-tools/namespaces';
 import { of } from 'rxjs';
 import { globalAction$, namespacedState$ } from './streamCreators';
 
-jest.mock('@redux-tools/reducers');
+jest.mock('@redux-tools/namespaces');
 
 getStateByNamespace.mockImplementation((feature, namespace) => state =>
 	`${feature}-${namespace}/${state}`

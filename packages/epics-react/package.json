@@ -19,6 +19,7 @@
   "dependencies": {
     "@redux-tools/epics": "^0.8.2",
     "@redux-tools/injectors-react": "^0.8.2",
+    "@redux-tools/namespaces-react": "^0.8.2",
     "ramda": ">=0.26.1"
   },
   "peerDependencies": {

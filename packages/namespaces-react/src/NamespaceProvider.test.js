@@ -5,10 +5,10 @@ import { noop, alwaysNull } from 'ramda-extension';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import { ReactReduxContext } from 'react-redux';
 
-import Provider from './Provider';
+import NamespaceProvider from './NamespaceProvider';
 import { NamespaceContext } from './contexts';
 
-describe('Provider', () => {
+describe('NamespaceProvider', () => {
 	const store = { subscribe: noop, dispatch: noop, getState: noop };
 	const renderProp = jest.fn(alwaysNull);
 	const alwaysFoo = always('foo');
@@ -17,9 +17,9 @@ describe('Provider', () => {
 
 	it('passes props to NamespaceContext correctly', () => {
 		mount(
-			<Provider namespace="ns" useNamespace={alwaysFoo}>
+			<NamespaceProvider namespace="ns" useNamespace={alwaysFoo}>
 				<NamespaceContext.Consumer>{renderProp}</NamespaceContext.Consumer>
-			</Provider>
+			</NamespaceProvider>
 		);
 
 		expect(renderProp).toHaveBeenCalledWith({
@@ -30,13 +30,13 @@ describe('Provider', () => {
 
 	it('allows seamless nesting', () => {
 		mount(
-			<Provider namespace="ns">
-				<Provider useNamespace={alwaysFoo}>
-					<Provider namespace="yo">
+			<NamespaceProvider namespace="ns">
+				<NamespaceProvider useNamespace={alwaysFoo}>
+					<NamespaceProvider namespace="yo">
 						<NamespaceContext.Consumer>{renderProp}</NamespaceContext.Consumer>
-					</Provider>
-				</Provider>
-			</Provider>
+					</NamespaceProvider>
+				</NamespaceProvider>
+			</NamespaceProvider>
 		);
 
 		expect(renderProp).toHaveBeenCalledWith({
@@ -47,13 +47,13 @@ describe('Provider', () => {
 
 	it('allows seamless nesting with features', () => {
 		mount(
-			<Provider namespace="ns" feature="grids">
-				<Provider useNamespace={alwaysFoo}>
-					<Provider namespace="yo">
+			<NamespaceProvider namespace="ns" feature="grids">
+				<NamespaceProvider useNamespace={alwaysFoo}>
+					<NamespaceProvider namespace="yo">
 						<NamespaceContext.Consumer>{renderProp}</NamespaceContext.Consumer>
-					</Provider>
-				</Provider>
-			</Provider>
+					</NamespaceProvider>
+				</NamespaceProvider>
+			</NamespaceProvider>
 		);
 
 		expect(renderProp).toHaveBeenCalledWith({
@@ -64,9 +64,9 @@ describe('Provider', () => {
 
 	it('uses a react-redux provider if store is passed', () => {
 		mount(
-			<Provider store={store}>
+			<NamespaceProvider store={store}>
 				<ReactReduxContext.Consumer>{renderProp}</ReactReduxContext.Consumer>
-			</Provider>
+			</NamespaceProvider>
 		);
 
 		expect(renderProp.mock.calls[0][0].store).toBe(store);

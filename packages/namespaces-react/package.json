@@ -1,0 +1,35 @@
+{
+  "name": "@redux-tools/namespaces-react",
+  "version": "0.8.2",
+  "license": "MIT",
+  "main": "lib/redux-tools-namespaces-react.js",
+  "module": "es/redux-tools-namespaces-react.js",
+  "unpkg": "dist/redux-tools-namespaces-react.js",
+  "description": "React bindings for the @redux-tools/namespaces package.",
+  "repository": "https://github.com/lundegaard/redux-tools",
+  "contributors": [
+    "Tomas Konrady <tomas.konrady@lundegaard.eu>",
+    "Vaclav Jancarik <vaclav.jancarik@lundegaard.eu>",
+    "Martin Kadlec <martin.kadlec@lundegaard.eu>",
+    "Sergey Dunaevskiy <sergey.dunaevskiy@lundegaard.eu>",
+    "Veronika Wernerova <veronika.wernerova@lundegaard.eu>"
+  ],
+  "dependencies": {
+    "@redux-tools/namespaces": "^0.8.2",
+    "@redux-tools/reducers": "^0.8.2",
+    "@redux-tools/utils-react": "^0.8.2",
+    "prop-types": "^15.7.2",
+    "ramda": "0.27.0",
+    "ramda-extension": "0.10.2",
+    "react": ">=16.8.3",
+    "react-redux": "^6.0.0 || ^7.0.0"
+  },
+  "devDependencies": {
+    "enzyme": "3.11.0",
+    "redux": "^4.0.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false
+}

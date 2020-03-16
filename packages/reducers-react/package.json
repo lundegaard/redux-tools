@@ -16,6 +16,7 @@
   "dependencies": {
     "@redux-tools/injectors-react": "^0.8.2",
     "@redux-tools/namespaces": "^0.8.2",
+    "@redux-tools/namespaces-react": "^0.8.2",
     "@redux-tools/reducers": "^0.8.2",
     "@redux-tools/utils": "^0.8.2",
     "@redux-tools/utils-react": "^0.8.2",

@@ -32,6 +32,7 @@ Here are the packages `@redux-tools/react` reexports:
 
 - [@redux-tools/actions](/packages/actions), functions for creating [FSA-compliant](https://github.com/redux-utilities/flux-standard-action) action creators and reducers.
 - [@redux-tools/namespaces](/packages/namespaces), logic for associating Redux actions with a namespace.
+- [@redux-tools/namespaces-react](/packages/namespaces), React bindings for the `namespaces` package.
 - [@redux-tools/reducers](/packages/reducers), store enhancer for asynchronous injection of reducers.
 - [@redux-tools/reducers-react](/packages/reducers-react), React bindings for the `reducers` package.
 - [@redux-tools/middleware](/packages/middleware), store enhancer for asynchronous injection of middleware.

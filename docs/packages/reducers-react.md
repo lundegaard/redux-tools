@@ -35,11 +35,3 @@ Creates a component decorator which handles the lifecycle of passed reducers, mo
 **Returns**
 
 ( _Function_ ): A component decorator.
-
-### namespacedConnect()
-
-Works just like `connect()` from React Redux, except it accesses namespaced state and automatically adds the correct namespace to dispatched actions. You can use the fourth `options` argument to configure the `namespace` and `feature` used.
-
-Passes global state as the third argument to `mapStateToProps`.
-
-See [react-redux docs](https://react-redux.js.org/docs/api) for more info.

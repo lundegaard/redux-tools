@@ -9,7 +9,7 @@ import namespacedConnect, {
 	wrapMapStateToProps,
 	wrapMapDispatchToProps,
 } from './namespacedConnect';
-import { NamespaceProvider } from './NamespaceProvider';
+import NamespaceProvider from './NamespaceProvider';
 
 const state = {
 	[DEFAULT_FEATURE]: {

@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStoreInterface } from '@redux-tools/injectors';
 import { noop } from 'ramda-extension';
 import { mount } from 'enzyme';
-import NamespaceProvider from '@redux-tools/namespaces-react';
+import { NamespaceProvider } from '@redux-tools/namespaces-react';
 
 import makeDecorator from './makeDecorator';
 import makeHook from './makeHook';

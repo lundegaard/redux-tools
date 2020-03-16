@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+### Added
+
+- (_namespaces-react_): New package! Existing logic from various packages has been moved here (`useNamespace`, `NamespaceProvider` and `namespacedConnect`).
+
+### Changed
+
+- (_injectors-react_): `Provider` has been renamed to `NamespaceProvider`.
+- (_actions_): `makeReducer` has been moved to the `@redux-tools/reducers` package.
+- (_reducers_): `getStateByAction` and `getStateByNamespace` have been moved to the `@redux-tools/namespaces` package.
+
 ## [0.8.2] – 2020-03-05
 
 ### Fixed

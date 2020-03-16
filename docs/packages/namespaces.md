@@ -63,3 +63,65 @@ Associates an action with a namespace unless it is already associated with some 
 **Returns**
 
 ( _Action_ ): A new Redux action with a `meta.namespace` property.
+
+### getStateByAction()
+
+Returns Redux state by action namespace.
+
+**Arguments**
+
+1. `action` ( _Object_ ): Action with an optionally defined meta.namespace and meta.feature property.
+2. `state` ( _Object_ ): Redux state.
+
+**Returns**
+
+1. ( _Object_ ): Namespaced Redux state.
+
+**Example**
+
+```js
+import { getStateByAction } from '@redux-tools/namespaces';
+
+const state = {
+	namespaces: {
+		foo: { value: 'bar' },
+	},
+};
+
+const action = {
+	meta: {
+		feature: 'namespaces',
+		namespace: 'foo',
+	},
+};
+
+getStateByAction(action, state); // { value: 'bar' }
+```
+
+### getStateByNamespace()
+
+Returns Redux state by namespace. Returns undefined if the namespace is undefined.
+
+**Arguments**
+
+1. [`feature`] \( _string_ ): Optional feature name.
+2. [`namespace`] \( _string_ ): Optional namespace.
+3. [`state`] \( _Object_ ): Redux state.
+
+**Returns**
+
+1. ( _Object_ ): Namespaced Redux state.
+
+**Example**
+
+```js
+import { getStateByNamespace } from '@redux-tools/namespaces';
+
+const state = {
+	namespaces: {
+		foo: { value: 'bar' },
+	},
+};
+
+getStateByNamespace('namespaces', 'foo', state); // { value: 'bar' }
+```

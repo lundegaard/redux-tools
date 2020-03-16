@@ -8,12 +8,20 @@ This package provides a store enhancer for injecting reducers into a Redux store
 
 ```js
 import { createStore } from 'redux';
-import { makeEnhancer } from '@redux-tools/reducers';
+import { makeEnhancer, makeReducer } from '@redux-tools/reducers';
 import { someReducer } from './reducers';
 
 const store = createStore(state => state, makeEnhancer());
 
 store.injectReducers({ some: someReducer });
+
+export default makeReducer(
+	[
+		[ActionTypes.ADD, (count, action) => count + action.payload],
+		[ActionTypes.INCREMENT, count => count + 1],
+	],
+	0
+);
 ```
 
 ## API Reference
@@ -43,65 +51,3 @@ Opposite to `store.injectReducers`. This function will remove the injected reduc
 2. `options` ( _Object_ ): Ejection options. The following keys are supported:
    - [`namespace`] \( _string_ ): Namespace the reducers were injected under.
    - [`feature`] \( _string_ ): Namespace the reducers were injected under.
-
-### getStateByAction()
-
-Returns Redux state by action namespace.
-
-**Arguments**
-
-1. `action` ( _Object_ ): Action with an optionally defined meta.namespace and meta.feature property.
-2. `state` ( _Object_ ): Redux state.
-
-**Returns**
-
-1. ( _Object_ ): Namespaced Redux state.
-
-**Example**
-
-```js
-import { getStateByAction } from '@redux-tools/namespaces';
-
-const state = {
-	namespaces: {
-		foo: { value: 'bar' },
-	},
-};
-
-const action = {
-	meta: {
-		feature: 'namespaces',
-		namespace: 'foo',
-	},
-};
-
-getStateByAction(action, state); // { value: 'bar' }
-```
-
-### getStateByNamespace()
-
-Returns Redux state by namespace. Returns undefined if the namespace is undefined.
-
-**Arguments**
-
-1. [`feature`] \( _string_ ): Optional feature name.
-2. [`namespace`] \( _string_ ): Optional namespace.
-3. [`state`] \( _Object_ ): Redux state.
-
-**Returns**
-
-1. ( _Object_ ): Namespaced Redux state.
-
-**Example**
-
-```js
-import { getStateByNamespace } from '@redux-tools/namespaces';
-
-const state = {
-	namespaces: {
-		foo: { value: 'bar' },
-	},
-};
-
-getStateByNamespace('namespaces', 'foo', state); // { value: 'bar' }
-```

@@ -72,7 +72,7 @@ We are open to all ideas and suggestions, feel free to open an issue or a pull r
 
 See the [contribution guide](https://github.com/lundegaard/redux-tools/blob/master/CONTRIBUTING.md) for guidelines.
 
-## Related projects
+## Related Projects
 
 - [validarium](https://github.com/lundegaard/validarium) – Validations done right.
 - [lundium](https://github.com/lundegaard/lundium) – Beautiful React component library.

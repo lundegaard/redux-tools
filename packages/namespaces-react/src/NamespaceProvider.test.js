@@ -2,8 +2,9 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { always } from 'ramda';
 import { noop, alwaysNull } from 'ramda-extension';
-import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import { ReactReduxContext } from 'react-redux';
+
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import NamespaceProvider from './NamespaceProvider';
 import { NamespaceContext } from './contexts';

@@ -1,7 +1,8 @@
 import React from 'react';
-import { makeStoreInterface } from '@redux-tools/injectors';
 import { noop } from 'ramda-extension';
 import { mount } from 'enzyme';
+
+import { makeStoreInterface } from '@redux-tools/injectors';
 import { NamespaceProvider } from '@redux-tools/namespaces-react';
 
 import makeDecorator from './makeDecorator';

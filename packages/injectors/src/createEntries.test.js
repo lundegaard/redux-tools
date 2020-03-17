@@ -1,4 +1,5 @@
 import { noop } from 'ramda-extension';
+
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import createEntries from './createEntries';

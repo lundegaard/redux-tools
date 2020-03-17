@@ -17,10 +17,11 @@ import {
 	juxt,
 	difference,
 } from 'ramda';
-import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
-import { DEFAULT_FEATURE, getNamespaceByAction } from '@redux-tools/namespaces';
 import { isArray, isFunction } from 'ramda-extension';
 import invariant from 'invariant';
+
+import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
+import { DEFAULT_FEATURE, getNamespaceByAction } from '@redux-tools/namespaces';
 
 import combineReducerEntries from './combineReducerEntries';
 import composeReducers from './composeReducers';

@@ -3,6 +3,7 @@ import * as R from 'ramda';
 import * as R_ from 'ramda-extension';
 import { mount } from 'enzyme';
 import { createStore } from 'redux';
+
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import namespacedConnect, {

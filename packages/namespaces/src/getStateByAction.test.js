@@ -1,5 +1,4 @@
 import { DEFAULT_FEATURE } from './constants';
-
 import getStateByAction from './getStateByAction';
 
 const state = {

@@ -1,5 +1,6 @@
 import { map } from 'rxjs/operators';
 import { prop } from 'ramda';
+
 import { DEFAULT_FEATURE, getStateByNamespace } from '@redux-tools/namespaces';
 
 /**

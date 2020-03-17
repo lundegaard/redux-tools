@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { toPascalCase, isObject } from 'ramda-extension';
-import { getDisplayName } from '@redux-tools/utils-react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
-import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import invariant from 'invariant';
 
+import { getDisplayName } from '@redux-tools/utils-react';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import { useNamespace } from '@redux-tools/namespaces-react';
 
 const makeDecorator = (storeInterface, useInjectables) => {

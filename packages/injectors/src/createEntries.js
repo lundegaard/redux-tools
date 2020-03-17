@@ -1,5 +1,6 @@
 import { applySpec, nth, map, toPairs, compose, merge, ifElse } from 'ramda';
 import { isFunction, rejectNil } from 'ramda-extension';
+
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import { FUNCTION_KEY } from './constants';
@@ -23,11 +24,7 @@ const createEntries = (injectables, { feature, ...otherProps } = {}) => {
 		feature: feature || DEFAULT_FEATURE,
 	});
 
-	const createEntriesFromObject = compose(
-		map(merge(sanitizedProps)),
-		map(createEntry),
-		toPairs
-	);
+	const createEntriesFromObject = compose(map(merge(sanitizedProps)), map(createEntry), toPairs);
 
 	const createEntriesFromFunction = injectable => [
 		{

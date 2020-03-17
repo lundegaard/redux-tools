@@ -1,5 +1,6 @@
 import { __, identity } from 'ramda';
 import { alwaysNull } from 'ramda-extension';
+
 import makeActionCreator from './makeActionCreator';
 
 /**

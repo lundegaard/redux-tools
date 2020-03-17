@@ -1,5 +1,6 @@
 import { prop, identity } from 'ramda';
 import { alwaysNull } from 'ramda-extension';
+
 import makeActionCreator from './makeActionCreator';
 
 describe('makeActionCreator', () => {
@@ -13,7 +14,11 @@ describe('makeActionCreator', () => {
 	});
 
 	it('creates variadic action creator', () => {
-		const actionCreator = makeActionCreator('TYPE', x => x, (_, y) => y);
+		const actionCreator = makeActionCreator(
+			'TYPE',
+			x => x,
+			(_, y) => y
+		);
 
 		expect(actionCreator({ foo: 'Foo', bar: 'Bar' }, 'Baz')).toEqual({
 			type: 'TYPE',

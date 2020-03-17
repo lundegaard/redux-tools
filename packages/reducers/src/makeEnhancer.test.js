@@ -1,7 +1,8 @@
 import { identity } from 'ramda';
+import { createStore as createStoreRedux } from 'redux';
+
 import { FUNCTION_KEY } from '@redux-tools/injectors';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
-import { createStore as createStoreRedux } from 'redux';
 
 import makeEnhancer, { storeInterface } from './makeEnhancer';
 

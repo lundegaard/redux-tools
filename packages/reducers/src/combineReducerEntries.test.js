@@ -1,4 +1,5 @@
 import { o, inc, dec, defaultTo } from 'ramda';
+
 import { FUNCTION_KEY } from '@redux-tools/injectors';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 

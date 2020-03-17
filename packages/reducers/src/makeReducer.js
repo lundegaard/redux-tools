@@ -51,6 +51,7 @@ const mergeReducers = ([typePredicate, reducer, errorReducer]) => {
  */
 const makeReducer = (tuples, initialState) =>
 	compose(
+		// eslint-disable-next-line react-hooks/rules-of-hooks
 		useWith(__, [defaultTo(initialState), identity]),
 		cond,
 		map(mergeReducers),

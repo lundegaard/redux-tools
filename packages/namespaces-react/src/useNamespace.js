@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { alwaysNull } from 'ramda-extension';
+
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import { NamespaceContext } from './contexts';

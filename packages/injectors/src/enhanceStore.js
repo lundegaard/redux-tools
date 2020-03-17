@@ -1,7 +1,8 @@
 import { noop, isObject, toScreamingSnakeCase } from 'ramda-extension';
 import { keys, concat, forEach } from 'ramda';
-import { withoutOnce } from '@redux-tools/utils';
 import invariant from 'invariant';
+
+import { withoutOnce } from '@redux-tools/utils';
 
 import createEntries from './createEntries';
 

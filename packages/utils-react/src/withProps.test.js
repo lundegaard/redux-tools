@@ -1,6 +1,6 @@
-import React from 'react';
-import { noop } from 'ramda-extension';
 import { shallow } from 'enzyme';
+import { noop } from 'ramda-extension';
+import React from 'react';
 
 import withProps from './withProps';
 

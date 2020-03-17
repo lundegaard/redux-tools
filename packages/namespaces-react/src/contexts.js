@@ -1,5 +1,5 @@
-import { createContext } from 'react';
 import { alwaysNull } from 'ramda-extension';
+import { createContext } from 'react';
 
 export const NamespaceContext = createContext({
 	namespaces: {},

@@ -1,6 +1,6 @@
+import invariant from 'invariant';
 import { curry, o, path } from 'ramda';
 import { defaultToEmptyArray, toPascalCase } from 'ramda-extension';
-import invariant from 'invariant';
 
 const makeStoreInterface = type => {
 	invariant(type, 'The type of the injectables must be defined.');

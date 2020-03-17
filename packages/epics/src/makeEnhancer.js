@@ -1,10 +1,10 @@
+import { equals, includes } from 'ramda';
 import { Subject } from 'rxjs';
 import * as Rx from 'rxjs/operators';
-import { equals, includes } from 'ramda';
 
+import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
 import { isActionFromNamespace, defaultNamespace } from '@redux-tools/namespaces';
 import { includesTimes } from '@redux-tools/utils';
-import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
 
 export const storeInterface = makeStoreInterface('epics');
 

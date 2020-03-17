@@ -1,16 +1,16 @@
-import React from 'react';
+import { mount } from 'enzyme';
 import * as R from 'ramda';
 import * as R_ from 'ramda-extension';
-import { mount } from 'enzyme';
+import React from 'react';
 import { createStore } from 'redux';
 
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
+import NamespaceProvider from './NamespaceProvider';
 import namespacedConnect, {
 	wrapMapStateToProps,
 	wrapMapDispatchToProps,
 } from './namespacedConnect';
-import NamespaceProvider from './NamespaceProvider';
 
 const state = {
 	[DEFAULT_FEATURE]: {

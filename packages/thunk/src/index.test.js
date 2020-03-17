@@ -1,5 +1,5 @@
-import { createStore, applyMiddleware } from 'redux';
 import { identity } from 'ramda';
+import { createStore, applyMiddleware } from 'redux';
 
 import { attachNamespace, getNamespaceByAction } from '@redux-tools/namespaces';
 

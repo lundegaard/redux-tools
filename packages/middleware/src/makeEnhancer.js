@@ -1,5 +1,5 @@
-import { map, compose, uniq, forEach, o } from 'ramda';
 import invariant from 'invariant';
+import { map, compose, uniq, forEach, o } from 'ramda';
 
 import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
 import {

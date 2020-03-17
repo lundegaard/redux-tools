@@ -1,8 +1,8 @@
-import * as Rx from 'rxjs/operators';
-import { createStore, applyMiddleware } from 'redux';
 import { identity, compose } from 'ramda';
+import { createStore, applyMiddleware } from 'redux';
 import { createEpicMiddleware, ofType } from 'redux-observable';
 import { Subject, Observable } from 'rxjs';
+import * as Rx from 'rxjs/operators';
 
 import makeEnhancer from './makeEnhancer';
 
@@ -31,10 +31,7 @@ describe('makeEnhancer', () => {
 		epicMiddleware = createEpicMiddleware({ dependencies });
 		store = createStore(
 			identity,
-			compose(
-				makeEnhancer({ epicMiddleware }),
-				applyMiddleware(epicMiddleware, loggerMiddleware)
-			)
+			compose(makeEnhancer({ epicMiddleware }), applyMiddleware(epicMiddleware, loggerMiddleware))
 		);
 	});
 
@@ -126,10 +123,7 @@ describe('makeEnhancer', () => {
 
 		store = createStore(
 			identity,
-			compose(
-				enhancer,
-				applyMiddleware(epicMiddleware, loggerMiddleware)
-			)
+			compose(enhancer, applyMiddleware(epicMiddleware, loggerMiddleware))
 		);
 
 		const epic = jest.fn(() => new Subject());

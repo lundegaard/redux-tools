@@ -1,12 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { toPascalCase, isObject } from 'ramda-extension';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 import invariant from 'invariant';
+import PropTypes from 'prop-types';
+import { toPascalCase, isObject } from 'ramda-extension';
+import React from 'react';
 
-import { getDisplayName } from '@redux-tools/utils-react';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import { useNamespace } from '@redux-tools/namespaces-react';
+import { getDisplayName } from '@redux-tools/utils-react';
 
 const makeDecorator = (storeInterface, useInjectables) => {
 	invariant(isObject(storeInterface), 'The store interface is undefined.');

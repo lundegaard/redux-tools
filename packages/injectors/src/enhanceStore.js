@@ -1,6 +1,6 @@
-import { noop, isObject, toScreamingSnakeCase } from 'ramda-extension';
-import { keys, concat, forEach } from 'ramda';
 import invariant from 'invariant';
+import { keys, concat, forEach } from 'ramda';
+import { noop, isObject, toScreamingSnakeCase } from 'ramda-extension';
 
 import { withoutOnce } from '@redux-tools/utils';
 

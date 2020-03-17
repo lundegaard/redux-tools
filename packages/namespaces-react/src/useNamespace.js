@@ -1,5 +1,5 @@
-import { useContext } from 'react';
 import { alwaysNull } from 'ramda-extension';
+import { useContext } from 'react';
 
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 

@@ -1,6 +1,6 @@
-import React from 'react';
-import { noop } from 'ramda-extension';
 import { mount } from 'enzyme';
+import { noop } from 'ramda-extension';
+import React from 'react';
 
 import { makeStoreInterface } from '@redux-tools/injectors';
 import { NamespaceProvider } from '@redux-tools/namespaces-react';

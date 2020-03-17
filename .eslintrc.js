@@ -39,6 +39,10 @@ module.exports = {
 					},
 				],
 				pathGroupsExcludedImportTypes: ['builtin'],
+				alphabetize: {
+					order: 'asc',
+					caseInsensitive: false,
+				},
 			},
 		],
 		'react-hooks/rules-of-hooks': 'error',

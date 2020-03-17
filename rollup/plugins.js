@@ -5,18 +5,7 @@ import babelPlugin from 'rollup-plugin-babel';
 
 const { LERNA_ROOT_PATH } = process.env;
 
-export const cjs = cjsPlugin({
-	include: /node_modules/,
-	namedExports: {
-		'../../node_modules/react/index.js': [
-			'Children',
-			'Component',
-			'createElement',
-			'createContext',
-		],
-		'../../node_modules/react-is/index.js': ['isValidElementType'],
-	},
-});
+export const cjs = cjsPlugin();
 
 export const terser = terserPlugin({
 	compress: {

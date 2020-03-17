@@ -9,43 +9,22 @@ const { LERNA_PACKAGE_NAME } = process.env;
 const PACKAGE_ROOT_PATH = process.cwd();
 const INPUT_FILE = path.join(PACKAGE_ROOT_PATH, 'src/index.js');
 
+// NOTE: Packages which are meant to be "plug and play" for prototyping using unpkg.
+const presets = ['@redux-tools/react'];
+
+// NOTE: Only add globals which must be loaded manually when prototyping with a preset.
 const globals = {
-	'@redux-tools/actions': 'ReduxToolsActions',
-	'@redux-tools/epics': 'ReduxToolsEpics',
-	'@redux-tools/epics-react': 'ReduxToolsEpicsReact',
-	'@redux-tools/injectors': 'ReduxToolsInjectors',
-	'@redux-tools/injectors-react': 'ReduxToolsInjectorsReact',
-	'@redux-tools/middleware': 'ReduxToolsMiddleware',
-	'@redux-tools/middleware-react': 'ReduxToolsMiddlewareReact',
-	'@redux-tools/namespaces': 'ReduxToolsNamespaces',
-	'@redux-tools/namespaces-react': 'ReduxToolsNamespacesReact',
-	'@redux-tools/react': 'ReduxToolsReact',
-	'@redux-tools/reducers': 'ReduxToolsReducers',
-	'@redux-tools/reducers-react': 'ReduxToolsReducersReact',
-	'@redux-tools/stream-creators': 'ReduxToolsStreamCreators',
-	'@redux-tools/thunk': 'ReduxToolsThunk',
-	'@redux-tools/utils': 'ReduxToolsUtils',
-	'@redux-tools/utils-react': 'ReduxToolsUtilsReact',
-	'hoist-non-react-statics': 'HoistNonReactStatics',
-	invariant: 'invariant',
-	'prop-types': 'PropTypes',
-	ramda: 'R',
-	'ramda-extension': 'R_',
 	react: 'React',
 	'react-dom': 'ReactDOM',
 	'react-redux': 'ReactRedux',
-	'react-union': 'ReactUnion',
 	redux: 'Redux',
-	'redux-observable': 'ReduxObservable',
-	rxjs: 'rxjs',
-	'rxjs/operators': 'Rx.Operators',
 };
 
 const globalName = getGlobalName(LERNA_PACKAGE_NAME);
 const fileName = getFileName(LERNA_PACKAGE_NAME);
 
 export default [
-	// CJS
+	// NOTE: CJS
 	{
 		input: INPUT_FILE,
 		output: {
@@ -59,7 +38,7 @@ export default [
 		plugins: [autoExternal(), plugins.nodeResolve, plugins.babel, plugins.cjs],
 	},
 
-	// ES
+	// NOTE: ES
 	{
 		input: INPUT_FILE,
 		output: {
@@ -67,48 +46,54 @@ export default [
 			format: 'es',
 			indent: false,
 		},
+		// HACK: Necessary, because `autoExternal` plugin does not handle deep imports.
+		// https://github.com/stevenbenisek/rollup-plugin-auto-external/issues/7
 		external: ['rxjs/operators'],
 		plugins: [autoExternal(), plugins.nodeResolve, plugins.babel, plugins.cjs],
 	},
 
-	// UMD Development
-	{
-		input: INPUT_FILE,
-		output: {
-			file: path.join(PACKAGE_ROOT_PATH, 'dist', `${fileName}.js`),
-			format: 'umd',
-			name: globalName,
-			indent: false,
-			globals,
-		},
-		external: ['rxjs/operators'],
-		plugins: [
-			autoExternal(),
-			replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
-			plugins.nodeResolve,
-			plugins.babel,
-			plugins.cjs,
-		],
-	},
+	// NOTE: Only build UMD for the presets.
+	// The individual packages are not meant to be used with UMD.
+	...(presets.includes(LERNA_PACKAGE_NAME)
+		? [
+				// NOTE: UMD Development
+				{
+					input: INPUT_FILE,
+					external: Object.keys(globals),
+					output: {
+						file: path.join(PACKAGE_ROOT_PATH, 'dist', `${fileName}.js`),
+						format: 'umd',
+						name: globalName,
+						indent: false,
+						globals,
+					},
+					plugins: [
+						replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
+						plugins.nodeResolve,
+						plugins.babel,
+						plugins.cjs,
+					],
+				},
 
-	// UMD Production
-	{
-		input: INPUT_FILE,
-		output: {
-			file: path.join(PACKAGE_ROOT_PATH, 'dist', `${fileName}.min.js`),
-			format: 'umd',
-			name: globalName,
-			indent: false,
-			globals,
-		},
-		external: ['rxjs/operators'],
-		plugins: [
-			autoExternal(),
-			replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
-			plugins.nodeResolve,
-			plugins.babel,
-			plugins.cjs,
-			plugins.terser,
-		],
-	},
+				// NOTE: UMD Production
+				{
+					input: INPUT_FILE,
+					external: Object.keys(globals),
+					output: {
+						file: path.join(PACKAGE_ROOT_PATH, 'dist', `${fileName}.min.js`),
+						format: 'umd',
+						name: globalName,
+						indent: false,
+						globals,
+					},
+					plugins: [
+						replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
+						plugins.nodeResolve,
+						plugins.babel,
+						plugins.cjs,
+						plugins.terser,
+					],
+				},
+		  ]
+		: []),
 ];

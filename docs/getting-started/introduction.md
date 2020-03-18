@@ -38,9 +38,11 @@ Here are the packages `@redux-tools/react` reexports:
 - [@redux-tools/middleware](/packages/middleware), store enhancer for asynchronous injection of middleware.
 - [@redux-tools/middleware-react](/packages/middleware-react), React bindings for the `middleware` package.
 
+Take a look at the [package index](https://github.com/lundegaard/redux-tools/blob/master/packages/react/src/index.js) to see all the available exports.
+
 Based on your preferred method of handling side effects, install any of the following packages as well:
 
-- [@redux-tools/epics](/packages/epics), store enhancer for asynchronous injection of epics.
+- [@redux-tools/epics](/packages/epics), store enhancer for asynchronous injection of [epics](https://redux-observable.js.org/).
 - [@redux-tools/epics-react](/packages/epics-react), React bindings for the `epics` package.
 - [@redux-tools/stream-creators](/packages/stream-creators), collection of stream creators for the `epics` package.
 - [@redux-tools/thunk](/packages/thunk), custom implementation of [Redux Thunk](https://github.com/reduxjs/redux-thunk) with namespacing support.
@@ -53,7 +55,7 @@ See the [CHANGELOG.md](https://github.com/lundegaard/redux-tools/blob/master/CHA
 
 - [Beyond Simplicity: Using Redux in Dynamic Applications](https://medium.com/@wafflepie/beyond-simplicity-using-redux-in-dynamic-applications-ae9e0aea928c) (published 21 Jan 2019)
 
-## Related projects
+## Related Projects
 
 - [validarium](https://github.com/lundegaard/validarium) – Validations done right.
 - [lundium](https://github.com/lundegaard/lundium) – Beautiful React component library.

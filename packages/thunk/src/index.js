@@ -1,5 +1,6 @@
 import { o } from 'ramda';
 import { isFunction } from 'ramda-extension';
+
 import {
 	getNamespaceByAction,
 	defaultNamespace,

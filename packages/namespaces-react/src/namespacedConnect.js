@@ -1,7 +1,8 @@
 import { compose, cond, apply, __, isNil, T, map, o } from 'ramda';
 import { alwaysEmptyObject, isFunction, isObject } from 'ramda-extension';
-import { defaultNamespace, DEFAULT_FEATURE, getStateByNamespace } from '@redux-tools/namespaces';
 import { connect } from 'react-redux';
+
+import { defaultNamespace, DEFAULT_FEATURE, getStateByNamespace } from '@redux-tools/namespaces';
 import { withProps } from '@redux-tools/utils-react';
 
 import useNamespace from './useNamespace';

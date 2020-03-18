@@ -1,8 +1,9 @@
+import invariant from 'invariant';
 import { o, map, when, reduce, assocPath } from 'ramda';
 import { isPlainObject } from 'ramda-extension';
-import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
+
 import { FUNCTION_KEY } from '@redux-tools/injectors';
-import invariant from 'invariant';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import combineReducers from './combineReducers';
 import filterReducer from './filterReducer';

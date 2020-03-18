@@ -1,6 +1,6 @@
-import React from 'react';
 import { curry } from 'ramda';
 import { isFunction } from 'ramda-extension';
+import React from 'react';
 
 import getDisplayName from './getDisplayName';
 

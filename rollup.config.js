@@ -1,6 +1,7 @@
-import replace from 'rollup-plugin-replace';
-import autoExternal from 'rollup-plugin-auto-external';
 import path from 'path';
+
+import autoExternal from 'rollup-plugin-auto-external';
+import replace from 'rollup-plugin-replace';
 
 import * as plugins from './rollup/plugins';
 import { getGlobalName, getFileName } from './rollup/utils';

@@ -1,3 +1,4 @@
+import invariant from 'invariant';
 import {
 	reduce,
 	dissocPath,
@@ -17,10 +18,10 @@ import {
 	juxt,
 	difference,
 } from 'ramda';
+import { isArray, isFunction } from 'ramda-extension';
+
 import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
 import { DEFAULT_FEATURE, getNamespaceByAction } from '@redux-tools/namespaces';
-import { isArray, isFunction } from 'ramda-extension';
-import invariant from 'invariant';
 
 import combineReducerEntries from './combineReducerEntries';
 import composeReducers from './composeReducers';

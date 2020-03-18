@@ -1,5 +1,4 @@
 import { DEFAULT_FEATURE } from './constants';
-
 import getStateByNamespace from './getStateByNamespace';
 
 const state = {

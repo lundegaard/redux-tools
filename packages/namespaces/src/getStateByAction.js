@@ -1,6 +1,6 @@
 import { path, o, defaultTo } from 'ramda';
-import { DEFAULT_FEATURE } from './constants';
 
+import { DEFAULT_FEATURE } from './constants';
 import getStateByNamespace from './getStateByNamespace';
 
 const getFeature = o(defaultTo(DEFAULT_FEATURE), path(['meta', 'feature']));

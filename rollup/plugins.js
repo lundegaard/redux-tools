@@ -1,7 +1,7 @@
-import cjsPlugin from 'rollup-plugin-commonjs';
-import { terser as terserPlugin } from 'rollup-plugin-terser';
-import nodeResolvePlugin from 'rollup-plugin-node-resolve';
 import babelPlugin from 'rollup-plugin-babel';
+import cjsPlugin from 'rollup-plugin-commonjs';
+import nodeResolvePlugin from 'rollup-plugin-node-resolve';
+import { terser as terserPlugin } from 'rollup-plugin-terser';
 
 const { LERNA_ROOT_PATH } = process.env;
 

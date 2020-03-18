@@ -1,4 +1,5 @@
 import { curry, path } from 'ramda';
+
 import { DEFAULT_FEATURE } from './constants';
 
 /**

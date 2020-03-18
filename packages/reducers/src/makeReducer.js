@@ -1,3 +1,4 @@
+import invariant from 'invariant';
 import {
 	prop,
 	compose,
@@ -13,7 +14,6 @@ import {
 	T,
 } from 'ramda';
 import { overHead } from 'ramda-extension';
-import invariant from 'invariant';
 
 const createTypeEqualsPredicate = type => compose(whereEq({ type }), nthArg(1));
 
@@ -51,6 +51,7 @@ const mergeReducers = ([typePredicate, reducer, errorReducer]) => {
  */
 const makeReducer = (tuples, initialState) =>
 	compose(
+		// eslint-disable-next-line react-hooks/rules-of-hooks
 		useWith(__, [defaultTo(initialState), identity]),
 		cond,
 		map(mergeReducers),

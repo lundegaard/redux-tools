@@ -1,10 +1,11 @@
-import React from 'react';
+import { mount } from 'enzyme';
 import { always } from 'ramda';
 import { alwaysNull } from 'ramda-extension';
-import { mount } from 'enzyme';
-import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
-import { NamespaceContext } from './contexts';
+import React from 'react';
 
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
+
+import { NamespaceContext } from './contexts';
 import useNamespace from './useNamespace';
 
 const Test = ({ children }) => {

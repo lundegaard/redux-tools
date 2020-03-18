@@ -1,7 +1,8 @@
-import React, { useContext, useMemo } from 'react';
-import { mergeDeepWith, flip, or } from 'ramda';
 import PropTypes from 'prop-types';
+import { mergeDeepWith, flip, or } from 'ramda';
+import React, { useContext, useMemo } from 'react';
 import { Provider as ReactReduxProvider } from 'react-redux';
+
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import { NamespaceContext } from './contexts';

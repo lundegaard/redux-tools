@@ -1,11 +1,12 @@
+import invariant from 'invariant';
 import { map, compose, uniq, forEach, o } from 'ramda';
+
 import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
 import {
 	isActionFromNamespace,
 	defaultNamespace,
 	getStateByNamespace,
 } from '@redux-tools/namespaces';
-import invariant from 'invariant';
 
 export const storeInterface = makeStoreInterface('middleware');
 

@@ -4,3 +4,4 @@ export { default as isActionFromNamespace } from './isActionFromNamespace';
 export * from './constants';
 export { default as getStateByAction } from './getStateByAction';
 export { default as getStateByNamespace } from './getStateByNamespace';
+export { default as preventNamespace } from './preventNamespace';

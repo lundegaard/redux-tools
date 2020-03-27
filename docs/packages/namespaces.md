@@ -125,3 +125,15 @@ const state = {
 
 getStateByNamespace('namespaces', 'foo', state); // { value: 'bar' }
 ```
+
+### preventNamespace()
+
+Associates an action with a default namespace, overwriting any previous namespace..
+
+**Arguments**
+
+1. `action` ( _Action_ ): Action to default the namespace of.
+
+**Returns**
+
+( _Action_ ): A new Redux action with a `meta.namespace` property.

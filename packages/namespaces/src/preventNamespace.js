@@ -1,13 +1,11 @@
-import { mergeDeepLeft } from 'ramda';
-
 import { NAMESPACE_PREVENTED } from './constants';
+import mergeNamespace from './mergeNamespace';
 
 /**
- * Associates an action with a default namespace, overwriting any previous namespace.
+ * Associates an action with a "global" namespace, overwriting any previous namespace.
  *
- * @param {Object} action action to add the default namespace to
+ * @param {Object} action action to add the "global" namespace to
  */
-const preventNamespace = action =>
-	mergeDeepLeft({ meta: { namespace: NAMESPACE_PREVENTED } }, action);
+const preventNamespace = action => mergeNamespace(true, NAMESPACE_PREVENTED, action);
 
 export default preventNamespace;

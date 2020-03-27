@@ -6,7 +6,7 @@ import getNamespaceByAction from './getNamespaceByAction';
 /**
  * An action is from a namespace if the passed namespace is nil (it's a global reducer/epic),
  * or if the action's namespace is nil (it's a global action) or if the namespaces match
- * or if the action's namespace is namespace prevented default.
+ * or if the action's namespace has been prevented.
  *
  * @param {?string} namespace namespace to match the action with
  * @param {Object} action action with an optionally defined meta.namespace property

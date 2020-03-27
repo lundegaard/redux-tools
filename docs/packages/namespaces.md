@@ -128,11 +128,12 @@ getStateByNamespace('namespaces', 'foo', state); // { value: 'bar' }
 
 ### preventNamespace()
 
-Associates an action with a default namespace, overwriting any previous namespace..
+Associates an action with a "global" namespace, ensuring that this action's namespace won't be overwritten
+by any namespaced injectables.
 
 **Arguments**
 
-1. `action` ( _Action_ ): Action to default the namespace of.
+1. `action` ( _Action_ ): Action to prevent the namespace of.
 
 **Returns**
 

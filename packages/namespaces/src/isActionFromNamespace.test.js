@@ -3,7 +3,7 @@ import isActionFromNamespace from './isActionFromNamespace';
 
 const fooAction = { meta: { namespace: 'foo' } };
 const barAction = { meta: { namespace: 'bar' } };
-const defaultNamespaceAction = { meta: { namespace: NAMESPACE_PREVENTED } };
+const actionWithPreventedNamespace = { meta: { namespace: NAMESPACE_PREVENTED } };
 
 describe('isActionFromNamespace', () => {
 	it('returns true when action is global and reducer is global', () => {
@@ -26,11 +26,11 @@ describe('isActionFromNamespace', () => {
 		expect(isActionFromNamespace('foo', barAction)).toBe(false);
 	});
 
-	it('returns true when action is namespaced with a default namespace and reducer is namespaced', () => {
-		expect(isActionFromNamespace('foo', defaultNamespaceAction)).toBe(true);
+	it('returns true when action had its namespace prevented and reducer is namespaced', () => {
+		expect(isActionFromNamespace('foo', actionWithPreventedNamespace)).toBe(true);
 	});
 
-	it('returns true when action is namespaced with a default namespace and reducer is global', () => {
-		expect(isActionFromNamespace(undefined, defaultNamespaceAction)).toBe(true);
+	it('returns true when action had its namespace prevented and reducer is global', () => {
+		expect(isActionFromNamespace(undefined, actionWithPreventedNamespace)).toBe(true);
 	});
 });

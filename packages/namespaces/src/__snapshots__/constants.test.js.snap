@@ -3,7 +3,7 @@
 exports[`constants should not be changed 1`] = `
 Object {
   "DEFAULT_FEATURE": "namespaces",
-  "NAMESPACE_PREVENTED": "namespacePrevented",
+  "NAMESPACE_PREVENTED": "NAMESPACE_PREVENTED",
   "__esModule": true,
 }
 `;

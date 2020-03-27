@@ -2,10 +2,8 @@
 	"**/*.js": [
 		"prettier --ignore-path .gitignore --write",
 		"yarn lint --fix",
-		"git add"
 	],
 	"**/*.{mdx,md,html,json}": [
 		"prettier --write",
-		"git add"
 	]
 }

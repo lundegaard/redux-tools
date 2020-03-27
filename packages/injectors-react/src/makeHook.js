@@ -6,7 +6,7 @@ import { ReactReduxContext } from 'react-redux';
 
 import { createEntries } from '@redux-tools/injectors';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
-import { useNamespace } from '@redux-tools/namespaces-react';
+import { useNamespace, NamespaceContext } from '@redux-tools/namespaces-react';
 
 import { IS_SERVER } from './constants';
 
@@ -36,9 +36,11 @@ const makeHook = storeInterface => {
 		const feature = options.feature || DEFAULT_FEATURE;
 		const contextNamespace = useNamespace(feature);
 		const { store } = useContext(ReactReduxContext);
+		const { isUseNamespaceProvided } = useContext(NamespaceContext);
 		const namespace = isGlobal ? null : options.namespace || contextNamespace;
 		const inject = store[injectionKey];
 		const eject = store[ejectionKey];
+		const { isNamespaced } = options;
 		// NOTE: We use a string instead of comparing the objects by reference to avoid remounting
 		// when `useInjectables({ something })` is used (new object with same entries).
 		// TODO: Support partial changes in the `injectables` object.
@@ -99,9 +101,9 @@ const makeHook = storeInterface => {
 				);
 			}
 
-			if (!namespace && !isGlobal) {
+			if (isUseNamespaceProvided && !isGlobal) {
 				warn(
-					`You're injecting ${type} with no namespace!`,
+					`You're injecting ${type} with no scope!`,
 					'They will be injected globally. If this is intended, consider passing',
 					`'isGlobal: true' to the injector, e.g. '${hookName}(${type}, { isGlobal: true })'.`
 				);
@@ -116,6 +118,12 @@ const makeHook = storeInterface => {
 					`'persist: ${options.persist}' is deprecated. Use 'isPersistent: ${options.persist}'.`
 				);
 			}
+
+			const namespaceFlaggedButNotResolved = isNamespaced && !namespace;
+			invariant(
+				!namespaceFlaggedButNotResolved,
+				`used hook is marked as namespaced, but no namespace can be resolved. Please make sure that you provided namespace`
+			);
 
 			invariant(inject, `'store.${injectionKey}' missing. Are you using the enhancer correctly?`);
 			invariant(eject, `'store.${ejectionKey}' missing. Are you using the enhancer correctly?`);

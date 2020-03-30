@@ -1,5 +1,7 @@
 import { curry, compose, o, applySpec, always, ifElse, is, T, reject } from 'ramda';
 
+import alwaysUndefined from './alwaysUndefined';
+
 /**
  * Creates an action creator with supplied type and payload & meta getters.
  *
@@ -21,7 +23,7 @@ const makeActionCreator = curry((type, getPayload, getMeta) =>
 			type: always(type),
 			payload: getPayload,
 			meta: getMeta,
-			error: o(ifElse(is(Error), T, always(undefined)), getPayload),
+			error: o(ifElse(is(Error), T, alwaysUndefined), getPayload),
 		})
 	)
 );

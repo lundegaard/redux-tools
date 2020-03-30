@@ -1,9 +1,8 @@
 import invariant from 'invariant';
-import { o, converge, always, __ } from 'ramda';
+import { o, converge, __ } from 'ramda';
 
+import alwaysUndefined from './alwaysUndefined';
 import makeActionCreator from './makeActionCreator';
-
-const alwaysUndefined = always(undefined);
 
 /**
  * Creates an action creator with supplied type, no payload and no meta.
@@ -19,9 +18,12 @@ const makeConstantActionCreator = type => {
 	return (payload = undefined) => {
 		invariant(
 			payload === undefined,
-			`You passed an argument to an action creator created by "makeConstantActionCreator(${type})".
-			Did you mean to use "makeSimpleActionCreator(${type})?"?
-		`
+			// eslint-disable-next-line prefer-template
+			'You passed an argument to an action creator created by makeConstantActionCreator(' +
+				type +
+				'.Did you mean to use makeSimpleActionCreator(' +
+				type +
+				')?'
 		);
 
 		return actionCreator();

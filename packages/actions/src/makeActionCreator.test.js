@@ -1,5 +1,6 @@
-import { prop, identity, always } from 'ramda';
+import { prop, identity } from 'ramda';
 
+import alwaysUndefined from './alwaysUndefined';
 import makeActionCreator from './makeActionCreator';
 
 describe('makeActionCreator', () => {
@@ -27,7 +28,7 @@ describe('makeActionCreator', () => {
 	});
 
 	it('correctly applies the `error` prop', () => {
-		const actionCreator = makeActionCreator('TYPE', identity, always(undefined));
+		const actionCreator = makeActionCreator('TYPE', identity, alwaysUndefined);
 		const error = new Error();
 		expect(actionCreator(error)).toEqual({ type: 'TYPE', error: true, payload: error });
 	});

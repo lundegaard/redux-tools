@@ -6,8 +6,8 @@ describe('makeConstantActionCreator', () => {
 		expect(actionCreator()).toEqual({ type: 'TYPE' });
 	});
 
-	it('handles a call with 1 argument', () => {
+	it('throws when a payload is received', () => {
 		const actionCreator = makeConstantActionCreator('TYPE');
-		expect(actionCreator('yo')).toEqual({ type: 'TYPE' });
+		expect(() => actionCreator('yo')).toThrow();
 	});
 });

@@ -4,6 +4,12 @@
 
 This package is a collection of utility functions for creating [FSA-compliant](https://github.com/redux-utilities/flux-standard-action) action creators and reducers.
 
+## Best practices to follow
+
+Only use makeConstantActionCreator, makeSimpleActionCreator, makeBinaryActionCreator in your applications. Do not use any other action creator factories in your application code. makeActionCreator is meant to only be used as a "factory for other factories" (i.e. makeActionCreator is used to create the aforementioned action creator factories).
+
+The logic should be left to the reducer. Action creator usage should be transparent: whatever you pass to them ends up in the payload/meta. Use constant/simple/binary to determine how many arguments are expected by the action creator.
+
 ## Usage Example
 
 ```js
@@ -34,21 +40,6 @@ Creates an object with values set to `<prefix>/<type>`.
 
 ( _Object_ ): Object with values set to `<prefix>/<type>`.
 
-### makeActionCreator()
-
-Creates a new unary action creator which will apply the provided functions to an argument, producing
-the `payload` and `meta` properties.
-
-**Arguments**
-
-1. `type` ( _string_ ): The action type.
-2. `getPayload` ( _any –> any_ ): Payload getter.
-3. `getMeta` ( _any -> any_ ): Meta getter.
-
-**Returns**
-
-( _any -> Action_ ): An action creator.
-
 ### makeConstantActionCreator()
 
 Creates a new nullary action creator.
@@ -68,6 +59,33 @@ Creates a new unary action creator which will use the argument as the payload.
 **Arguments**
 
 1. `type` ( _string_ ): The action type.
+
+**Returns**
+
+( _any -> Action_ ): An action creator.
+
+### makeBinaryActionCreator()
+
+Creates a new binary action creator which will use the argument as the payload.
+
+**Arguments**
+
+1. `type` ( _string_ ): The action type.
+
+**Returns**
+
+( _any -> Action_ ): An action creator.
+
+### makeActionCreator()
+
+Creates a new unary action creator which will apply the provided functions to an argument, producing
+the `payload` and `meta` properties.
+
+**Arguments**
+
+1. `type` ( _string_ ): The action type.
+2. `getPayload` ( _any –> any_ ): Payload getter.
+3. `getMeta` ( _any -> any_ ): Meta getter.
 
 **Returns**
 

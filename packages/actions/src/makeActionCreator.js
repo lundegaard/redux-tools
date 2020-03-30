@@ -1,5 +1,4 @@
-import { curry, compose, o, applySpec, always, ifElse, is, T } from 'ramda';
-import { alwaysNull, rejectNil } from 'ramda-extension';
+import { curry, compose, o, applySpec, always, ifElse, is, T, reject } from 'ramda';
 
 /**
  * Creates an action creator with supplied type and payload & meta getters.
@@ -12,14 +11,17 @@ import { alwaysNull, rejectNil } from 'ramda-extension';
  *    const add = makeSimpleActionCreator("ADD");
  *    const fetchItems = makeActionCreator("FETCH_ITEMS", R.prop("items"), R.always({ page: 0 }))
  */
+
+const isUndefined = value => value === undefined;
+
 const makeActionCreator = curry((type, getPayload, getMeta) =>
 	compose(
-		rejectNil,
+		reject(isUndefined),
 		applySpec({
 			type: always(type),
 			payload: getPayload,
 			meta: getMeta,
-			error: o(ifElse(is(Error), T, alwaysNull), getPayload),
+			error: o(ifElse(is(Error), T, always(undefined)), getPayload),
 		})
 	)
 );

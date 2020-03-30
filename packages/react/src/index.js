@@ -2,7 +2,7 @@
 export {
 	isErrorAction,
 	isNotErrorAction,
-	makeActionCreator,
+	configureActionCreator,
 	makeActionTypes,
 	makeConstantActionCreator,
 	makeSimpleActionCreator,

@@ -1,11 +1,11 @@
 import { prop, identity } from 'ramda';
 
 import alwaysUndefined from './alwaysUndefined';
-import makeActionCreator from './makeActionCreator';
+import configureActionCreator from './configureActionCreator';
 
-describe('makeActionCreator', () => {
+describe('configureActionCreator', () => {
 	it('correctly applies getPayload and getMeta', () => {
-		const actionCreator = makeActionCreator('TYPE', prop('foo'), prop('bar'));
+		const actionCreator = configureActionCreator('TYPE', prop('foo'), prop('bar'));
 		expect(actionCreator({ foo: 'Foo', bar: 'Bar' })).toEqual({
 			type: 'TYPE',
 			payload: 'Foo',
@@ -14,7 +14,7 @@ describe('makeActionCreator', () => {
 	});
 
 	it('creates variadic action creator', () => {
-		const actionCreator = makeActionCreator(
+		const actionCreator = configureActionCreator(
 			'TYPE',
 			x => x,
 			(_, y) => y
@@ -28,7 +28,7 @@ describe('makeActionCreator', () => {
 	});
 
 	it('correctly applies the `error` prop', () => {
-		const actionCreator = makeActionCreator('TYPE', identity, alwaysUndefined);
+		const actionCreator = configureActionCreator('TYPE', identity, alwaysUndefined);
 		const error = new Error();
 		expect(actionCreator(error)).toEqual({ type: 'TYPE', error: true, payload: error });
 	});

@@ -11,12 +11,12 @@ import alwaysUndefined from './alwaysUndefined';
  *
  *    const reset = makeConstantActionCreator("RESET")
  *    const add = makeSimpleActionCreator("ADD");
- *    const fetchItems = makeActionCreator("FETCH_ITEMS", R.prop("items"), R.always({ page: 0 }))
+ *    const fetchItems = configureActionCreator("FETCH_ITEMS", R.prop("items"), R.always({ page: 0 }))
  */
 
 const isUndefined = value => value === undefined;
 
-const makeActionCreator = curry((type, getPayload, getMeta) =>
+const configureActionCreator = curry((type, getPayload, getMeta) =>
 	compose(
 		reject(isUndefined),
 		applySpec({
@@ -28,4 +28,4 @@ const makeActionCreator = curry((type, getPayload, getMeta) =>
 	)
 );
 
-export default makeActionCreator;
+export default configureActionCreator;

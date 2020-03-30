@@ -2,7 +2,7 @@ import invariant from 'invariant';
 import { o, converge, __ } from 'ramda';
 
 import alwaysUndefined from './alwaysUndefined';
-import makeActionCreator from './makeActionCreator';
+import configureActionCreator from './configureActionCreator';
 
 /**
  * Creates an action creator with supplied type, no payload and no meta.
@@ -12,7 +12,7 @@ import makeActionCreator from './makeActionCreator';
 const makeConstantActionCreator = type => {
 	const actionCreator = o(
 		converge(__, [alwaysUndefined]),
-		makeActionCreator(__, alwaysUndefined, alwaysUndefined)
+		configureActionCreator(__, alwaysUndefined, alwaysUndefined)
 	)(type);
 
 	return (payload = undefined) => {

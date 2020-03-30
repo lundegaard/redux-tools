@@ -6,7 +6,7 @@ This package is a collection of utility functions for creating [FSA-compliant](h
 
 ## Best practices to follow
 
-Only use makeConstantActionCreator, makeSimpleActionCreator, makePayloadMetaActionCreator in your applications. Do not use any other action creator factories in your application code. makeActionCreator is meant to only be used as a "factory for other factories" (i.e. makeActionCreator is used to create the aforementioned action creator factories).
+Only use makeConstantActionCreator, makeSimpleActionCreator, makePayloadMetaActionCreator in your applications. Do not use any other action creator factories in your application code. configureActionCreator is meant to only be used as a "factory for other factories" (i.e. configureActionCreator is used to create the aforementioned action creator factories).
 
 The logic should be left to the reducer. Action creator usage should be transparent: whatever you pass to them ends up in the payload/meta. Use constant/simple/binary to determine how many arguments are expected by the action creator.
 
@@ -76,7 +76,7 @@ Creates a new binary action creator which will use the argument as the payload.
 
 ( _any -> Action_ ): An action creator.
 
-### makeActionCreator()
+### configureActionCreator()
 
 Creates a new unary action creator which will apply the provided functions to an argument, producing
 the `payload` and `meta` properties.

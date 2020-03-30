@@ -2,7 +2,7 @@ import invariant from 'invariant';
 import { identity } from 'ramda';
 
 import alwaysUndefined from './alwaysUndefined';
-import makeActionCreator from './makeActionCreator';
+import configureActionCreator from './configureActionCreator';
 
 /**
  * Creates an action creator with supplied type. The resulting action payload is the first arg.
@@ -10,7 +10,7 @@ import makeActionCreator from './makeActionCreator';
  * @sig String -> a -> {type: String, payload: a}
  */
 const makeSimpleActionCreator = type => {
-	const actionCreator = makeActionCreator(type, identity, alwaysUndefined);
+	const actionCreator = configureActionCreator(type, identity, alwaysUndefined);
 
 	return payload => {
 		invariant(

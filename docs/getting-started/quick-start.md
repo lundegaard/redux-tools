@@ -12,10 +12,10 @@ _**duck.js**_
 - exports a reducer and an action creator
 
 ```js
-import { makeActionTypes, makeEmptyActionCreator, makeReducer } from '@redux-tools/react';
+import { makeActionTypes, makeConstantActionCreator, makeReducer } from '@redux-tools/react';
 
 export const ActionTypes = makeActionTypes('duck', ['INCREMENT']);
-export const increment = makeEmptyActionCreator(ActionTypes.INCREMENT);
+export const increment = makeConstantActionCreator(ActionTypes.INCREMENT);
 
 export default makeReducer([[ActionTypes.INCREMENT, count => count + 1]], 0);
 ```
@@ -91,10 +91,10 @@ _**duck.js**_
 - exports a reducer and an action creator
 
 ```js
-import { makeActionTypes, makeEmptyActionCreator, makeReducer } from '@redux-tools/react';
+import { makeActionTypes, makeConstantActionCreator, makeReducer } from '@redux-tools/react';
 
 export const ActionTypes = makeActionTypes('duck', ['INCREMENT']);
-export const increment = makeEmptyActionCreator(ActionTypes.INCREMENT);
+export const increment = makeConstantActionCreator(ActionTypes.INCREMENT);
 
 export default makeReducer([[ActionTypes.INCREMENT, count => count + 1]], 0);
 ```

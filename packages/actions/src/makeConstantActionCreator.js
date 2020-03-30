@@ -1,5 +1,4 @@
 import invariant from 'invariant';
-import { o, converge, __ } from 'ramda';
 
 import alwaysUndefined from './alwaysUndefined';
 import configureActionCreator from './configureActionCreator';
@@ -10,10 +9,7 @@ import configureActionCreator from './configureActionCreator';
  * @sig String -> () -> {type: String}
  */
 const makeConstantActionCreator = type => {
-	const actionCreator = o(
-		converge(__, [alwaysUndefined]),
-		configureActionCreator(__, alwaysUndefined, alwaysUndefined)
-	)(type);
+	const actionCreator = configureActionCreator(type, alwaysUndefined, alwaysUndefined);
 
 	return (payload = undefined) => {
 		invariant(
@@ -26,7 +22,7 @@ const makeConstantActionCreator = type => {
 				')?'
 		);
 
-		return actionCreator();
+		return actionCreator(payload);
 	};
 };
 

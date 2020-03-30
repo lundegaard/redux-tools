@@ -1,4 +1,6 @@
-import { __, nthArg } from 'ramda';
+import invariant from 'invariant';
+import { nthArg, isNil } from 'ramda';
+import { isPlainObject } from 'ramda-extension';
 
 import configureActionCreator from './configureActionCreator';
 
@@ -7,6 +9,14 @@ import configureActionCreator from './configureActionCreator';
  *
  * @sig String -> (a, {}) -> {type: String, payload: a, meta: {}}
  */
-const makePayloadMetaActionCreator = configureActionCreator(__, nthArg(0), nthArg(1));
+const makePayloadMetaActionCreator = type => {
+	const actionCreator = configureActionCreator(type, nthArg(0), nthArg(1));
+
+	return (payload, meta) => {
+		invariant(!isNil(meta) && isPlainObject(meta), 'Meta must be an object.');
+
+		return actionCreator(payload, meta);
+	};
+};
 
 export default makePayloadMetaActionCreator;

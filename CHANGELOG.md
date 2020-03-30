@@ -8,11 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- (_actions_): Added `makePayloadMetaActionCreator`.
 - (_namespaces_): Added `preventNamespace`, which always overwrites the original namespace with a "global" namespace.
 - (_namespaces-react_): New package! Existing logic from various packages has been moved here (`useNamespace`, `NamespaceProvider` and `namespacedConnect`).
 
 ### Changed
 
+- (_actions_): `makeActionCreator` has been renamed to `configureActionCreator`.
+- (_actions_): Changed signatures of `makeSimpleActionCreator` and `makeConstantActionCreator`.
 - (_injectors-react_): `Provider` has been renamed to `NamespaceProvider`.
 - (_actions_): `makeReducer` has been moved to the `@redux-tools/reducers` package.
 - (_reducers_): `getStateByAction` and `getStateByNamespace` have been moved to the `@redux-tools/namespaces` package.

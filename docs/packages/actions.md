@@ -8,7 +8,7 @@ This package is a collection of utility functions for creating [FSA-compliant](h
 
 Only use `makeConstantActionCreator`, `makeSimpleActionCreator`, and `makeBinaryActionCreator` in your applications. Do not use any other action creator factories in your own code. Use the appropriate action creator factory based on the number of arguments the action creator should expect (i.e. `Constant` for zero, `Simple` for one, and `Binary` if any metadata can be passed).
 
-The logic should be left to the reducer. Action creator usage should be transparent: whatever you pass to them ends up in the payload/meta. Use constant/simple/binary to determine how many arguments are expected by the action creator.
+Reasoning: any custom logic should be left to the reducer; action creator usage should be transparent. You should be able to rely on your action creators to always use the arguments you pass as `action.payload` or `action.meta` directly.
 
 ## Usage Example
 

@@ -74,7 +74,7 @@ Creates a new binary action creator which will use the argument as the payload.
 
 **Returns**
 
-( _any -> Action_ ): An action creator.
+( _(any, Object) -> Action_ ): An action creator.
 
 ### makeActionCreator()
 

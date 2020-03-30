@@ -4,7 +4,7 @@
 
 This package is a collection of utility functions for creating [FSA-compliant](https://github.com/redux-utilities/flux-standard-action) action creators and reducers.
 
-## Best practices to follow
+## Best Practices
 
 Only use `makeConstantActionCreator`, `makeSimpleActionCreator`, and `makeBinaryActionCreator` in your applications. Do not use any other action creator factories in your own code. Use the appropriate action creator factory based on the number of arguments the action creator should expect (i.e. `Constant` for zero, `Simple` for one, and `Binary` if any metadata can be passed).
 

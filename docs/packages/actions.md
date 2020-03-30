@@ -6,7 +6,7 @@ This package is a collection of utility functions for creating [FSA-compliant](h
 
 ## Best Practices
 
-Only use `makeConstantActionCreator`, `makeSimpleActionCreator`, and `makePayloadMetaActionCreator` in your applications. Do not use any other action creator factories in your own code. Use the appropriate action creator factory based on the number of arguments the action creator should expect (i.e. `Constant` for zero, `Simple` for one, and `PayloadMeta` if any metadata can be passed).
+Only use `makeConstantActionCreator`, `makePayloadActionCreator`, and `makePayloadMetaActionCreator` in your applications. Do not use any other action creator factories in your own code. Use the appropriate action creator factory based on the number of arguments the action creator should expect (i.e. `Constant` for zero, `Simple` for one, and `PayloadMeta` if any metadata can be passed).
 
 Reasoning: any custom logic should be left to the reducer; action creator usage should be transparent. You should be able to rely on your action creators to always use the arguments you pass as `action.payload` or `action.meta` directly.
 
@@ -16,12 +16,12 @@ Reasoning: any custom logic should be left to the reducer; action creator usage 
 import {
 	makeActionTypes,
 	makeConstantActionCreator,
-	makeSimpleActionCreator,
+	makePayloadActionCreator,
 } from '@redux-tools/actions';
 
 export const ActionTypes = makeActionTypes('@counter', ['ADD', 'INCREMENT']);
 
-export const add = makeSimpleActionCreator(ActionTypes.ADD); // 1 arg.
+export const add = makePayloadActionCreator(ActionTypes.ADD); // 1 arg.
 export const increment = makeConstantActionCreator(ActionTypes.INCREMENT); // 0 args.
 ```
 
@@ -52,7 +52,7 @@ Creates a new nullary action creator.
 
 ( _() -> Action_ ): An action creator.
 
-### makeSimpleActionCreator()
+### makePayloadActionCreator()
 
 Creates a new unary action creator which will use the argument as the payload.
 

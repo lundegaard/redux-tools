@@ -5,7 +5,7 @@ export {
 	configureActionCreator,
 	makeActionTypes,
 	makeConstantActionCreator,
-	makeSimpleActionCreator,
+	makePayloadActionCreator,
 } from '@redux-tools/actions';
 
 export { makeEnhancer as makeMiddlewareEnhancer } from '@redux-tools/middleware';

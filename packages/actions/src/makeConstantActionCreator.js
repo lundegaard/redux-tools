@@ -17,7 +17,7 @@ const makeConstantActionCreator = type => {
 			// eslint-disable-next-line prefer-template
 			'You passed an argument to an action creator created by makeConstantActionCreator(' +
 				type +
-				'.Did you mean to use makeSimpleActionCreator(' +
+				'.Did you mean to use makePayloadActionCreator(' +
 				type +
 				')?'
 		);

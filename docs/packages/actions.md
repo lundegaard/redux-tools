@@ -66,7 +66,7 @@ Creates a new unary action creator which will use the argument as the payload.
 
 ### makeBinaryActionCreator()
 
-Creates a new binary action creator which will use the argument as the payload.
+Creates a new binary action creator which will use the first argument as the payload and the second argument as the meta.
 
 **Arguments**
 

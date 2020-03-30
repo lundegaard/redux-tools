@@ -4,11 +4,11 @@
 
 This package is a collection of utility functions for creating [FSA-compliant](https://github.com/redux-utilities/flux-standard-action) action creators and reducers.
 
-## Best practices to follow
+## Best Practices
 
-Only use makeConstantActionCreator, makeSimpleActionCreator, makePayloadMetaActionCreator in your applications. Do not use any other action creator factories in your application code. configureActionCreator is meant to only be used as a "factory for other factories" (i.e. configureActionCreator is used to create the aforementioned action creator factories).
+Only use `makeConstantActionCreator`, `makeSimpleActionCreator`, and `makePayloadMetaActionCreator` in your applications. Do not use any other action creator factories in your own code. Use the appropriate action creator factory based on the number of arguments the action creator should expect (i.e. `Constant` for zero, `Simple` for one, and `PayloadMeta` if any metadata can be passed).
 
-The logic should be left to the reducer. Action creator usage should be transparent: whatever you pass to them ends up in the payload/meta. Use constant/simple/binary to determine how many arguments are expected by the action creator.
+Reasoning: any custom logic should be left to the reducer; action creator usage should be transparent. You should be able to rely on your action creators to always use the arguments you pass as `action.payload` or `action.meta` directly.
 
 ## Usage Example
 
@@ -66,7 +66,7 @@ Creates a new unary action creator which will use the argument as the payload.
 
 ### makePayloadMetaActionCreator()
 
-Creates a new binary action creator which will use the argument as the payload.
+Creates a new binary action creator which will use the first argument as the payload and the second argument as the meta.
 
 **Arguments**
 
@@ -74,7 +74,7 @@ Creates a new binary action creator which will use the argument as the payload.
 
 **Returns**
 
-( _any -> Action_ ): An action creator.
+( _(any, Object) -> Action_ ): An action creator.
 
 ### configureActionCreator()
 

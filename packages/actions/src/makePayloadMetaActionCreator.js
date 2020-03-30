@@ -3,7 +3,7 @@ import { __, nthArg } from 'ramda';
 import configureActionCreator from './configureActionCreator';
 
 /**
- * Creates an action creator with supplied type. The resulting action payload is the first arg.
+ * Creates a new binary action creator which will use the first argument as the payload and the second argument as the meta.
  *
  * @sig String -> (a, {}) -> {type: String, payload: a, meta: {}}
  */

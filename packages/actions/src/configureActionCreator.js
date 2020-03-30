@@ -13,7 +13,7 @@ const isUndefined = value => value === undefined;
  *
  * @example
  *
- *    const reset = makeConstantActionCreator("RESET")
+ *    const reset = makeEmptyActionCreator("RESET")
  *    const add = makePayloadActionCreator("ADD");
  *    const fetchItems = configureActionCreator("FETCH_ITEMS", R.prop("items"), R.always({ page: 0 }))
  */

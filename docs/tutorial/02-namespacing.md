@@ -11,14 +11,14 @@ import React from 'react';
 import { o } from 'ramda';
 import {
 	makeActionTypes,
-	makeConstantActionCreator,
+	makeEmptyActionCreator,
 	makeReducer,
 	withReducers,
 	namespacedConnect,
 } from '@redux-tools/react';
 
 const ActionTypes = makeActionTypes('duck', ['INCREMENT']);
-const increment = makeConstantActionCreator(ActionTypes.INCREMENT);
+const increment = makeEmptyActionCreator(ActionTypes.INCREMENT);
 const reducer = makeReducer([[ActionTypes.INCREMENT, count => count + 1]], 0);
 
 const Counter = ({ count, increment }) => <button onClick={increment}>{count}</button>;

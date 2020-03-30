@@ -18,7 +18,7 @@ const makePayloadActionCreator = type => {
 			// eslint-disable-next-line prefer-template
 			'You did not pass an argument to an action creator created by makePayloadActionCreator(' +
 				type +
-				'. Did you mean to use makeConstantActionCreator(' +
+				'. Did you mean to use makeEmptyActionCreator(' +
 				type +
 				'?'
 		);

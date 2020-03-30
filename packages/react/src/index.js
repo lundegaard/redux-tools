@@ -4,7 +4,7 @@ export {
 	isNotErrorAction,
 	configureActionCreator,
 	makeActionTypes,
-	makeConstantActionCreator,
+	makeEmptyActionCreator,
 	makePayloadActionCreator,
 } from '@redux-tools/actions';
 

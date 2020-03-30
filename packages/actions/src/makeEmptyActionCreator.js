@@ -8,14 +8,14 @@ import configureActionCreator from './configureActionCreator';
  *
  * @sig String -> () -> {type: String}
  */
-const makeConstantActionCreator = type => {
+const makeEmptyActionCreator = type => {
 	const actionCreator = configureActionCreator(type, alwaysUndefined, alwaysUndefined);
 
 	return (payload = undefined) => {
 		invariant(
 			payload === undefined,
 			// eslint-disable-next-line prefer-template
-			'You passed an argument to an action creator created by makeConstantActionCreator(' +
+			'You passed an argument to an action creator created by makeEmptyActionCreator(' +
 				type +
 				'.Did you mean to use makePayloadActionCreator(' +
 				type +
@@ -26,4 +26,4 @@ const makeConstantActionCreator = type => {
 	};
 };
 
-export default makeConstantActionCreator;
+export default makeEmptyActionCreator;

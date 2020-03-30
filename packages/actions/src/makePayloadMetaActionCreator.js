@@ -7,6 +7,6 @@ import makeActionCreator from './makeActionCreator';
  *
  * @sig String -> (a, {}) -> {type: String, payload: a, meta: {}}
  */
-const makeBinaryActionCreator = makeActionCreator(__, nthArg(0), nthArg(1));
+const makePayloadMetaActionCreator = makeActionCreator(__, nthArg(0), nthArg(1));
 
-export default makeBinaryActionCreator;
+export default makePayloadMetaActionCreator;

@@ -65,4 +65,9 @@ describe('makeReducer', () => {
 		expect(reducer(undefined, { type: 'TEST' })).toBe('ok');
 		expect(reducer(undefined, { type: 'TEST', error: true })).toBe('nope');
 	});
+
+	it('throws with wrong action type condition', () => {
+		const reducer = makeReducer([[5, () => 'ok', () => 'nope']]);
+		expect(() => reducer('something', { type: 5 })).toThrow();
+	});
 });

@@ -41,10 +41,28 @@ describe('makeReducer', () => {
 		const reducer = makeReducer([[['TEST', 'SECOND'], () => 'ok', () => 'nope']]);
 		expect(reducer('something', { type: 'TEST' })).toBe('ok');
 		expect(reducer('something', { type: 'SECOND' })).toBe('ok');
+		expect(reducer('something', { type: 'TEST', error: true })).toBe('nope');
+		expect(reducer('something', { type: 'UNKNOWN' })).toBe('something');
+	});
+
+	it('handles initialState and an array as an action type', () => {
+		const reducer = makeReducer([[['TEST', 'SECOND'], () => 'ok', () => 'nope']], 'initialState');
+		expect(reducer(undefined, { type: 'UNKNOWN' })).toBe('initialState');
+		expect(reducer(undefined, { type: 'TEST' })).toBe('ok');
+		expect(reducer(undefined, { type: 'TEST', error: true })).toBe('nope');
 	});
 
 	it('handles function as an action type', () => {
 		const reducer = makeReducer([[equals('TEST'), () => 'ok', () => 'nope']]);
 		expect(reducer('something', { type: 'TEST' })).toBe('ok');
+		expect(reducer('something', { type: 'TEST', error: true })).toBe('nope');
+		expect(reducer('something', { type: 'UNKNOWN' })).toBe('something');
+	});
+
+	it('handles initialState and a function as an action type', () => {
+		const reducer = makeReducer([[equals('TEST'), () => 'ok', () => 'nope']], 'initialState');
+		expect(reducer(undefined, { type: 'UNKNOWN' })).toBe('initialState');
+		expect(reducer(undefined, { type: 'TEST' })).toBe('ok');
+		expect(reducer(undefined, { type: 'TEST', error: true })).toBe('nope');
 	});
 });

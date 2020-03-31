@@ -4,8 +4,11 @@ export {
 	isNotErrorAction,
 	configureActionCreator,
 	makeActionTypes,
-	makeEmptyActionCreator as makeConstantActionCreator,
-	makePayloadActionCreator as makeSimpleActionCreator,
+	makeEmptyActionCreator,
+	makePayloadActionCreator,
+	makeConstantActionCreator,
+	makeSimpleActionCreator,
+	makePayloadMetaActionCreator,
 } from '@redux-tools/actions';
 
 export { makeEnhancer as makeMiddlewareEnhancer } from '@redux-tools/middleware';

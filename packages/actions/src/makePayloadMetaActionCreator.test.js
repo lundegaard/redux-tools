@@ -19,6 +19,11 @@ describe('makePayloadMetaActionCreator', () => {
 		expect(() => actionCreator(undefined, [])).toThrow();
 	});
 
+	it('throws when called with payload and no meta', () => {
+		const actionCreator = makePayloadMetaActionCreator('TYPE');
+		expect(() => actionCreator('yo')).toThrow();
+	});
+
 	it('handles a call with 1 argument', () => {
 		const actionCreator = makePayloadMetaActionCreator('TYPE');
 		expect(actionCreator(undefined, {})).toEqual({

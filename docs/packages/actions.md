@@ -79,7 +79,6 @@ Creates a new binary action creator which will use the first argument as the pay
 ### configureActionCreator()
 
 !> This action creator factory is only meant to be used to create other action creator factories. We do not recommend using makeActionCreator in your application code.
-!>
 
 Creates a new unary action creator which will apply the provided functions to an argument, producing
 the `payload` and `meta` properties.

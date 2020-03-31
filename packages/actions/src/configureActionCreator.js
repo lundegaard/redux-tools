@@ -31,7 +31,7 @@ const configureActionCreator = curry((type, getPayload, getMeta) => {
 		})
 	);
 
-	return (getPayload, getMeta) => actionCreator(getPayload, getMeta);
+	return actionCreator;
 });
 
 export default configureActionCreator;

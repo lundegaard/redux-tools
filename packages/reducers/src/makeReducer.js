@@ -1,4 +1,3 @@
-import invariant from 'invariant';
 import {
 	prop,
 	compose,
@@ -20,9 +19,9 @@ const createTypeEqualsPredicate = type => compose(whereEq({ type }), nthArg(1));
 const mergeReducers = ([typePredicate, reducer, errorReducer]) => {
 	const newReducer = (state, action) => {
 		if (prop('error', action)) {
-			invariant(errorReducer, `You haven't supplied an error reducer for action ${action.type}`);
-
-			return errorReducer(state, action);
+			if (errorReducer) {
+				return errorReducer(state, action);
+			}
 		}
 
 		return reducer(state, action);

@@ -7,6 +7,11 @@ describe('makeReducer', () => {
 		expect(reducer('something', { type: 'TEST', error: true })).toBe('nope');
 	});
 
+	it('handles actions with error: true and missing error reducer', () => {
+		const reducer = makeReducer([['TEST', () => 'ok']]);
+		expect(reducer('something', { type: 'TEST', error: true })).toBe('ok');
+	});
+
 	it('handles initialState', () => {
 		const reducer = makeReducer([['TEST', () => 'ok', () => 'nope']], 'initialState');
 		expect(reducer(undefined, { type: 'UNKNOWN' })).toBe('initialState');

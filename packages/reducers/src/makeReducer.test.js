@@ -1,3 +1,5 @@
+import { equals } from 'ramda';
+
 import makeReducer from './makeReducer';
 
 describe('makeReducer', () => {
@@ -33,5 +35,16 @@ describe('makeReducer', () => {
 	it('handles reducers which depend on actions', () => {
 		const reducer = makeReducer([['ADD', (state, { payload }) => state + payload]]);
 		expect(reducer(5, { type: 'ADD', payload: 3 })).toBe(8);
+	});
+
+	it('handles array as an action type', () => {
+		const reducer = makeReducer([[['TEST', 'SECOND'], () => 'ok', () => 'nope']]);
+		expect(reducer('something', { type: 'TEST' })).toBe('ok');
+		expect(reducer('something', { type: 'SECOND' })).toBe('ok');
+	});
+
+	it('handles function as an action type', () => {
+		const reducer = makeReducer([[equals('TEST'), () => 'ok', () => 'nope']]);
+		expect(reducer('something', { type: 'TEST' })).toBe('ok');
 	});
 });

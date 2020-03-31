@@ -19,7 +19,7 @@ describe('makePayloadMetaActionCreator', () => {
 		expect(() => actionCreator(undefined, [])).toThrow();
 	});
 
-	it('handles a call with 1 argument', () => {
+	it('handles a call with missing payload', () => {
 		const actionCreator = makePayloadMetaActionCreator('TYPE');
 		expect(actionCreator(undefined, {})).toEqual({
 			type: 'TYPE',

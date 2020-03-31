@@ -87,7 +87,7 @@ the `payload` and `meta` properties.
 **Arguments**
 
 1. `type` ( _string_ ): The action type.
-2. `getPayload` ( _any –> any_ ): Payload getter.
+2. `getPayload` ( _(...any) –> any_ ): Payload getter.
 3. `getMeta` ( _(...any) -> any_ ): Meta getter.
 
 **Returns**

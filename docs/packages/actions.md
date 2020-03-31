@@ -6,7 +6,7 @@ This package is a collection of utility functions for creating [FSA-compliant](h
 
 ## Best Practices
 
-Only use `makeEmptyActionCreator`, `makePayloadActionCreator`, and `makePayloadMetaActionCreator` in your applications. Do not use any other action creator factories in your own code. Use the appropriate action creator factory based on the number of arguments the action creator should expect (i.e. `Constant` for zero, `Simple` for one, and `PayloadMeta` if any metadata can be passed).
+Only use `makeEmptyActionCreator`, `makePayloadActionCreator`, and `makePayloadMetaActionCreator` in your applications. Do not use any other action creator factories in your own code. Use the appropriate action creator factory based on the number of arguments the action creator should expect (i.e. `Empty` for zero, `Payload` for one, and `PayloadMeta` if any metadata can be passed).
 
 Reasoning: any custom logic should be left to the reducer; action creator usage should be transparent. You should be able to rely on your action creators to always use the arguments you pass as `action.payload` or `action.meta` directly.
 
@@ -86,8 +86,8 @@ the `payload` and `meta` properties.
 **Arguments**
 
 1. `type` ( _string_ ): The action type.
-2. `getPayload` ( _any –> any_ ): Payload getter.
-3. `getMeta` ( _any -> any_ ): Meta getter.
+2. `getPayload` ( _(...any) –> any_ ): Payload getter.
+3. `getMeta` ( _(...any) -> any_ ): Meta getter.
 
 **Returns**
 

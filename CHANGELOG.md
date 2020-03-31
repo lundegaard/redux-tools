@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- (_reducers_): `makeReducer` now uses the default reducer for error actions if the error reducer is missing.
 - (_actions_): Changed signatures of `makePayloadActionCreator` and `makeEmptyActionCreator`.
 - (_actions_): `makeConstantActionCreator` has been renamed to `makeEmptyActionCreator`.
 - (_actions_): `makeSimpleActionCreator` has been renamed to `makePayloadActionCreator`.

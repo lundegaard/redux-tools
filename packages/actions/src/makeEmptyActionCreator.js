@@ -17,7 +17,7 @@ const makeEmptyActionCreator = type => {
 			// eslint-disable-next-line prefer-template
 			'You passed an argument to an action creator created by makeEmptyActionCreator(' +
 				type +
-				'.Did you mean to use makePayloadActionCreator(' +
+				'. Did you mean to use makePayloadActionCreator(' +
 				type +
 				')?'
 		);

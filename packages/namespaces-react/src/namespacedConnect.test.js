@@ -25,28 +25,42 @@ const state = {
 describe('wrapMapStateToProps', () => {
 	it('gets correct state slice', () => {
 		const mapStateToProps = wrapMapStateToProps(R.identity);
-		expect(mapStateToProps(state, { feature: DEFAULT_FEATURE, namespace: 'foo' })).toEqual({
+		expect(
+			mapStateToProps(state, {
+				namespacedConnectProps: { feature: DEFAULT_FEATURE, namespace: 'foo' },
+			})
+		).toEqual({
 			value: 'Foo',
 		});
 	});
 
 	it('gets correct state slice if feature is set', () => {
 		const mapStateToProps = wrapMapStateToProps(R.identity);
-		expect(mapStateToProps(state, { feature: 'grids', namespace: 'baz' })).toEqual({
+		expect(
+			mapStateToProps(state, { namespacedConnectProps: { feature: 'grids', namespace: 'baz' } })
+		).toEqual({
 			value: 'Baz',
 		});
 	});
 
 	it('applies passed mapStateToProps', () => {
 		const mapStateToProps = wrapMapStateToProps(R.prop('qux'));
-		expect(mapStateToProps(state, { feature: DEFAULT_FEATURE, namespace: 'bar' })).toEqual({
+		expect(
+			mapStateToProps(state, {
+				namespacedConnectProps: { feature: DEFAULT_FEATURE, namespace: 'bar' },
+			})
+		).toEqual({
 			value: 'Qux',
 		});
 	});
 
 	it('returns an object when mapStateToProps is undefined', () => {
 		const mapStateToProps = wrapMapStateToProps(null);
-		expect(mapStateToProps(state, { feature: DEFAULT_FEATURE, namespace: 'foo' })).toEqual({});
+		expect(
+			mapStateToProps(state, {
+				namespacedConnectProps: { feature: DEFAULT_FEATURE, namespace: 'foo' },
+			})
+		).toEqual({});
 	});
 });
 
@@ -59,8 +73,7 @@ describe('wrapMapDispatchToProps', () => {
 		const dispatch = jest.fn();
 
 		const { actionCreator } = mapDispatchToProps(dispatch, {
-			feature: DEFAULT_FEATURE,
-			namespace: 'foo',
+			namespacedConnectProps: { feature: DEFAULT_FEATURE, namespace: 'foo' },
 		});
 		actionCreator();
 		expect(dispatch).toHaveBeenCalledWith({
@@ -77,8 +90,7 @@ describe('wrapMapDispatchToProps', () => {
 		const dispatch = jest.fn();
 
 		const { actionCreator } = mapDispatchToProps(dispatch, {
-			feature: DEFAULT_FEATURE,
-			namespace: 'foo',
+			namespacedConnectProps: { feature: DEFAULT_FEATURE, namespace: 'foo' },
 		});
 		actionCreator();
 		expect(dispatch).toHaveBeenCalledWith({
@@ -90,7 +102,7 @@ describe('wrapMapDispatchToProps', () => {
 	it('handles nil', () => {
 		const mapDispatchToProps = wrapMapDispatchToProps(null);
 		const dispatch = jest.fn();
-		const props = mapDispatchToProps(dispatch, { namespace: 'foo' });
+		const props = mapDispatchToProps(dispatch, { namespacedConnectProps: { namespace: 'foo' } });
 		expect(props).toEqual({});
 	});
 
@@ -138,5 +150,39 @@ describe('namespacedConnect', () => {
 			type: 'TEST',
 			meta: { namespace: 'bar' },
 		});
+	});
+
+	it('applies mapProps', () => {
+		const connector = namespacedConnect(R.identity);
+		const store = createStore(R.always(state));
+
+		const Root = R_.noop;
+		const ConnectedRoot = connector(Root);
+
+		const wrapper = mount(
+			<NamespaceProvider store={store} namespace="bar">
+				<ConnectedRoot />
+			</NamespaceProvider>
+		);
+
+		expect(wrapper.find(Root).prop('namespacedConnectProps')).toBe(undefined);
+	});
+
+	it('applies namespace from the root component', () => {
+		const Root = R_.noop;
+		const ConnectedRoot = namespacedConnect(undefined, undefined, undefined, {
+			namespace: 'foo',
+		})(Root);
+
+		const store = createStore(R.always(state));
+		store.dispatch = jest.fn();
+
+		const wrapper = mount(
+			<NamespaceProvider store={store}>
+				<ConnectedRoot namespace="bar" />
+			</NamespaceProvider>
+		);
+		expect(wrapper.find(Root).prop('namespace')).toBe('bar');
+		expect(wrapper.find(Root).prop('namespacedConnectProps')).toBe(undefined);
 	});
 });

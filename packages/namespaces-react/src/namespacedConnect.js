@@ -1,16 +1,22 @@
-import { compose, cond, apply, __, isNil, T, map, o } from 'ramda';
+import { compose, cond, apply, __, isNil, T, map, o, dissoc } from 'ramda';
 import { alwaysEmptyObject, isFunction, isObject } from 'ramda-extension';
 import { connect } from 'react-redux';
 
 import { defaultNamespace, DEFAULT_FEATURE, getStateByNamespace } from '@redux-tools/namespaces';
-import { withProps } from '@redux-tools/utils-react';
+import { withProps, mapProps } from '@redux-tools/utils-react';
 
 import useNamespace from './useNamespace';
+
+const NAMESPACED_CONNECT_PROPS = 'namespacedConnectProps';
 
 export const wrapMapStateToProps = mapStateToProps => (state, ownProps) =>
 	mapStateToProps
 		? mapStateToProps(
-				getStateByNamespace(ownProps.feature, ownProps.namespace, state),
+				getStateByNamespace(
+					ownProps[NAMESPACED_CONNECT_PROPS].feature,
+					ownProps[NAMESPACED_CONNECT_PROPS].namespace,
+					state
+				),
 				ownProps,
 				state
 		  )
@@ -24,7 +30,10 @@ const throwTypeError = () => {
 };
 
 export const wrapMapDispatchToProps = mapDispatchToProps => (dispatch, ownProps) => {
-	const wrappedDispatch = o(dispatch, defaultNamespace(ownProps.namespace));
+	const wrappedDispatch = o(
+		dispatch,
+		defaultNamespace(ownProps[NAMESPACED_CONNECT_PROPS].namespace)
+	);
 
 	return cond([
 		[isNil, alwaysEmptyObject],
@@ -47,17 +56,20 @@ const namespacedConnect = (
 	mergeProps,
 	{ feature: optionFeature, namespace: optionNamespace, ...options } = {}
 ) =>
-	o(
+	compose(
 		withProps(({ feature: propFeature, namespace: propNamespace }) => {
 			const feature = optionFeature || propFeature || DEFAULT_FEATURE;
 			const contextNamespace = useNamespace(feature);
 
 			return {
-				feature,
-				namespace: optionNamespace || propNamespace || contextNamespace,
+				[NAMESPACED_CONNECT_PROPS]: {
+					feature,
+					namespace: optionNamespace || propNamespace || contextNamespace,
+				},
 			};
 		}),
-		rawNamespacedConnect(mapStateToProps, mapDispatchToProps, mergeProps, options)
+		rawNamespacedConnect(mapStateToProps, mapDispatchToProps, mergeProps, options),
+		mapProps(dissoc(NAMESPACED_CONNECT_PROPS))
 	);
 
 export default namespacedConnect;

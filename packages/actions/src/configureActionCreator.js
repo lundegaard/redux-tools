@@ -19,7 +19,7 @@ const isUndefined = value => value === undefined;
  */
 
 const configureActionCreator = curry((type, getPayload, getMeta) => {
-	invariant(!isNilOrEmptyString(type), 'Type must be a string');
+	invariant(!isNilOrEmptyString(type), `Action type must be a non-empty string (received ${type})`);
 
 	const actionCreator = compose(
 		reject(isUndefined),

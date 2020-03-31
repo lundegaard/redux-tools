@@ -20,7 +20,7 @@ const makePayloadActionCreator = type => {
 				type +
 				'. Did you mean to use makeEmptyActionCreator(' +
 				type +
-				'?'
+				')?'
 		);
 
 		return actionCreator(payload);

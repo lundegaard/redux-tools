@@ -2,8 +2,6 @@ import invariant from 'invariant';
 import {
 	prop,
 	compose,
-	whereEq,
-	nthArg,
 	useWith,
 	__,
 	defaultTo,
@@ -12,10 +10,19 @@ import {
 	map,
 	append,
 	T,
+	includes,
 } from 'ramda';
-import { overHead } from 'ramda-extension';
+import { overHead, isString, isFunction, isArray } from 'ramda-extension';
 
-const createTypeEqualsPredicate = type => compose(whereEq({ type }), nthArg(1));
+const createTypeEqualsPredicate = condition => (state, action) => {
+	if (isString(condition)) {
+		return action.type === condition;
+	} else if (isArray(condition)) {
+		return includes(action.type, condition);
+	} else if (isFunction(condition)) {
+		return true;
+	}
+};
 
 const mergeReducers = ([typePredicate, reducer, errorReducer]) => {
 	const newReducer = (state, action) => {

@@ -8,13 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- (_reducers_): `makeReducer` now supports arrays of strings and predicates.
 - (_actions_): Added `makePayloadMetaActionCreator`.
 - (_namespaces_): Added `preventNamespace`, which always overwrites the original namespace with a "global" namespace.
 - (_namespaces-react_): New package! Existing logic from various packages has been moved here (`useNamespace`, `NamespaceProvider` and `namespacedConnect`).
 
 ### Changed
 
-- (_reducers_): `makeReducer` now supports arrays of strings and predicates.
 - (_reducers_): `makeReducer` now uses the default reducer for error actions if the error reducer is missing.
 - (_actions_): Changed signatures of `makePayloadActionCreator` and `makeEmptyActionCreator`.
 - (_actions_): `makeConstantActionCreator` has been renamed to `makeEmptyActionCreator`.

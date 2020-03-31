@@ -19,11 +19,12 @@ const createTypeEqualsPredicate = condition => (state, action) => {
 	} else if (isArray(condition)) {
 		return includes(action.type, condition);
 	} else if (isFunction(condition)) {
-		return condition(action.type);
+		return condition(action);
 	} else {
 		throw new TypeError(
 			// eslint-disable-next-line prefer-template
-			'The condition passed to makeReducer must be a string, an array of strings, or a predicate. Instead, it received ' +
+			'The condition passed to makeReducer must be a string, an array of strings, or a predicate. ' +
+				'Instead, it received ' +
 				condition +
 				'.'
 		);

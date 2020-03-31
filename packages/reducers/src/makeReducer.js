@@ -19,7 +19,7 @@ const createTypeEqualsPredicate = condition => (state, action) => {
 	} else if (isArray(condition)) {
 		return includes(action.type, condition);
 	} else if (isFunction(condition)) {
-		return true;
+		return condition(action);
 	}
 };
 

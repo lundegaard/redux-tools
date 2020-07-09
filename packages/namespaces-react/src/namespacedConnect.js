@@ -7,7 +7,7 @@ import { withProps, mapProps } from '@redux-tools/utils-react';
 
 import useNamespace from './useNamespace';
 
-export const NAMESPACED_CONNECT_PROPS = 'namespacedConnectProps';
+export const NAMESPACED_CONNECT_PROPS = 'NAMESPACED_CONNECT_PROPS';
 
 export const wrapMapStateToProps = mapStateToProps => (state, ownProps) =>
 	mapStateToProps

@@ -2,10 +2,13 @@
 export {
 	isErrorAction,
 	isNotErrorAction,
-	makeActionCreator,
+	configureActionCreator,
 	makeActionTypes,
+	makeEmptyActionCreator,
+	makePayloadActionCreator,
 	makeConstantActionCreator,
 	makeSimpleActionCreator,
+	makePayloadMetaActionCreator,
 } from '@redux-tools/actions';
 
 export { makeEnhancer as makeMiddlewareEnhancer } from '@redux-tools/middleware';

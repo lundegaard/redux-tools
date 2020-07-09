@@ -38,10 +38,7 @@ const Counter = ({ count, increment }) => <button onClick={increment}>{count}</b
 
 const enhance = o(
 	withReducers({ count: countReducer }, { isGlobal: true }),
-	connect(
-		state => ({ count: state.count }),
-		{ increment }
-	)
+	connect(state => ({ count: state.count }), { increment })
 );
 
 export default enhance(Counter);

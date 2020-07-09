@@ -6,23 +6,21 @@ import { NamespaceContext } from './contexts';
 import withNamespaceProvider from './withNamespaceProvider';
 
 describe('withNamespaceProvider', () => {
-	const renderProp = jest.fn(alwaysNull);
-
 	beforeEach(() => jest.resetAllMocks());
 
-	const ComponentWithProvider = withNamespaceProvider({ namespace: 'foo', feature: 'fooFeature' })(
-		NamespaceContext.Consumer
-	);
+	it('configures NamespaceContext with options having priority over props', () => {
+		const Test = withNamespaceProvider({ namespace: 'foo' })(NamespaceContext.Consumer);
+		const renderProp = jest.fn(alwaysNull);
 
-	it('passes props to NamespaceContext correctly with option props taking priority over props', () => {
 		mount(
-			<ComponentWithProvider namespace="bar" feature="barFeature">
+			<Test namespace="bar" feature="bar">
 				{renderProp}
-			</ComponentWithProvider>
+			</Test>
 		);
 
 		expect(renderProp).toHaveBeenCalledWith({
-			namespaces: { ['fooFeature']: 'foo' },
+			isUseNamespaceProvided: false,
+			namespaces: { bar: 'foo' },
 			useNamespace: alwaysNull,
 		});
 	});

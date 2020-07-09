@@ -1,13 +1,10 @@
 import { curry } from 'ramda';
-import { isFunction } from 'ramda-extension';
 import React from 'react';
 
 import getDisplayName from './getDisplayName';
 
-const mapProps = curry((otherProps, NextComponent) => {
-	const MapProps = props => (
-		<NextComponent {...(isFunction(otherProps) ? otherProps(props) : otherProps)} />
-	);
+const mapProps = curry((getProps, NextComponent) => {
+	const MapProps = props => <NextComponent {...getProps(props)} />;
 
 	MapProps.displayName = `MapProps(${getDisplayName(NextComponent)})`;
 

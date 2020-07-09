@@ -14,6 +14,7 @@
     "Sergey Dunaevskiy <sergey.dunaevskiy@lundegaard.eu>"
   ],
   "dependencies": {
+    "hoist-non-react-statics": "^3.3.0",
     "ramda": ">=0.26.1",
     "ramda-extension": ">=0.8.0"
   },

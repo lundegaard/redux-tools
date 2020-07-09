@@ -18,7 +18,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
-- (_namespaces-react_): Inner decorators are no longer overridden by static namespace in `namespacedConnect`.
 - (_reducers_): `makeReducer` now uses the default reducer for error actions if the error reducer is missing.
 - (_actions_): Changed signatures of `makePayloadActionCreator` and `makeEmptyActionCreator`.
 - (_actions_): `makeConstantActionCreator` has been renamed to `makeEmptyActionCreator` (original export still present).
@@ -30,6 +29,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - (_actions_): `makeReducer` has been moved to the `@redux-tools/reducers` package.
 - (_reducers_): `getStateByAction` and `getStateByNamespace` have been moved to the `@redux-tools/namespaces` package.
 - (_injectors-react_): It is no longer necessary to pass `isGlobal: true` when not using the namespacing mechanism.
+
+### Fixed
+
+- (_namespaces-react_): Static namespace and feature in `namespacedConnect` is no longer passed down to inner components.
 
 ### Removed
 

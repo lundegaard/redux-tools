@@ -152,7 +152,7 @@ describe('namespacedConnect', () => {
 		});
 	});
 
-	it('applies mapProps', () => {
+	it('does not pass the static options down as props', () => {
 		const connector = namespacedConnect(R.identity);
 		const store = createStore(R.always(state));
 
@@ -168,7 +168,7 @@ describe('namespacedConnect', () => {
 		expect(wrapper.find(Root).prop('namespacedConnectProps')).toBe(undefined);
 	});
 
-	it('applies namespace from the root component', () => {
+	it('does not pass the static namespace down as a prop', () => {
 		const Root = R_.noop;
 		const ConnectedRoot = namespacedConnect(undefined, undefined, undefined, {
 			namespace: 'foo',
@@ -182,7 +182,7 @@ describe('namespacedConnect', () => {
 				<ConnectedRoot namespace="bar" />
 			</NamespaceProvider>
 		);
+
 		expect(wrapper.find(Root).prop('namespace')).toBe('bar');
-		expect(wrapper.find(Root).prop('namespacedConnectProps')).toBe(undefined);
 	});
 });

@@ -168,14 +168,17 @@ describe('namespacedConnect', () => {
 	});
 
 	it('does not pass the static options down as props', () => {
-		const connector = namespacedConnect(R.identity);
+		const connector = namespacedConnect(undefined, undefined, undefined, {
+			namespace: 'foo',
+		});
+
 		const store = createStore(R.always(state));
 
 		const Root = R_.noop;
 		const ConnectedRoot = connector(Root);
 
 		const wrapper = mount(
-			<NamespaceProvider store={store} namespace="bar">
+			<NamespaceProvider store={store}>
 				<ConnectedRoot />
 			</NamespaceProvider>
 		);

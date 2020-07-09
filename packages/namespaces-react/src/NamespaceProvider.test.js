@@ -26,6 +26,7 @@ describe('NamespaceProvider', () => {
 		expect(renderProp).toHaveBeenCalledWith({
 			namespaces: { [DEFAULT_FEATURE]: 'ns' },
 			useNamespace: alwaysFoo,
+			isUseNamespaceProvided: true,
 		});
 	});
 
@@ -43,6 +44,7 @@ describe('NamespaceProvider', () => {
 		expect(renderProp).toHaveBeenCalledWith({
 			namespaces: { [DEFAULT_FEATURE]: 'yo' },
 			useNamespace: alwaysFoo,
+			isUseNamespaceProvided: true,
 		});
 	});
 
@@ -60,6 +62,7 @@ describe('NamespaceProvider', () => {
 		expect(renderProp).toHaveBeenCalledWith({
 			namespaces: { [DEFAULT_FEATURE]: 'yo', grids: 'ns' },
 			useNamespace: alwaysFoo,
+			isUseNamespaceProvided: true,
 		});
 	});
 
@@ -71,5 +74,21 @@ describe('NamespaceProvider', () => {
 		);
 
 		expect(renderProp.mock.calls[0][0].store).toBe(store);
+	});
+
+	it('defaults isUseNamespaceProvided to false', () => {
+		mount(
+			<NamespaceProvider namespace="ns" feature="grids">
+				<NamespaceProvider namespace="yo">
+					<NamespaceContext.Consumer>{renderProp}</NamespaceContext.Consumer>
+				</NamespaceProvider>
+			</NamespaceProvider>
+		);
+
+		expect(renderProp).toHaveBeenCalledWith({
+			namespaces: { [DEFAULT_FEATURE]: 'yo', grids: 'ns' },
+			useNamespace: alwaysNull,
+			isUseNamespaceProvided: false,
+		});
 	});
 });

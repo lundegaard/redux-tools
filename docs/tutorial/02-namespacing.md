@@ -4,6 +4,8 @@ Let's assume that we have to develop a widget that can be used multiple times on
 
 Enter namespaces.
 
+## Basic Concepts
+
 The simplest example we could think of is a click counter.
 
 ```js
@@ -11,14 +13,14 @@ import React from 'react';
 import { o } from 'ramda';
 import {
 	makeActionTypes,
-	makeConstantActionCreator,
+	makeEmptyActionCreator,
 	makeReducer,
 	withReducers,
 	namespacedConnect,
 } from '@redux-tools/react';
 
 const ActionTypes = makeActionTypes('duck', ['INCREMENT']);
-const increment = makeConstantActionCreator(ActionTypes.INCREMENT);
+const increment = makeEmptyActionCreator(ActionTypes.INCREMENT);
 const reducer = makeReducer([[ActionTypes.INCREMENT, count => count + 1]], 0);
 
 const Counter = ({ count, increment }) => <button onClick={increment}>{count}</button>;
@@ -75,11 +77,13 @@ The `meta.namespace` attribute was added automatically by `namespacedConnect`. W
 
 Because our counter was mounted three times, there are three instances of our reducers injected as well, each with a different namespace. If an action has a different namespace than the reducer, **it will be ignored**.
 
-!> Avoid using multiple namespaces within a single widget or module.
+!> For this reason, avoid using multiple namespaces within a single widget or module. Mixing namespaces may result in unexpected behavior and hard-to-track bugs due to actions being ignored.
+
+Remember that if you need to opt out of the namespacing mechanism, just use the regular `connect`/`useSelector`/`useDispatch` functions from `react-redux` and pass `isGlobal: true` to any injection decorators.
 
 Using the `namespace` prop is pretty simple, but it doesn't scale well if you need to use `withReducers` deeper in the React component tree. That's when the namespace provider comes in handy.
 
-## The Namespace Provider
+## Namespace Provider
 
 There are two approaches to using this component, let's start with the simpler one.
 
@@ -132,17 +136,15 @@ const CounterExample = () => (
 
 Any Redux Tools decorator inside a widget will now access the appropriate namespace without the need to wrap each widget in a separate provider.
 
-## Inter-Namespace Communication
+## Usage Guidelines for Standard SPAs
 
-If you need to dispatch an action to a foreign namespace, use `attachNamespace` from [@redux-tools/namespaces](/packages/namespaces?id=attachNamespace). Simple enough, right?
+Namespaces are awesome for developing widgets that can be mounted multiple times in a single page. That being said, if you are developing a standard React application, namespaces might not be the best choice for you. Only use them for developing [custom reusable multi-instance components](/tutorial/03-multi-instance-components).
 
-## Usage Guidelines
+However, if your application is clearly split into isolated modules that rarely need to communicate with one another, namespaces might come in handy. There is one main rule you should follow: **never use multiple namespaces within a single module**. Mixing namespaces may result in some application logic not being triggered due to the actions being rejected by the namespacing mechanism.
 
-Namespaces are awesome for developing widgets that can be mounted multiple times in a single page. That being said, if you are developing a standard React application, don't bother with namespaces in your application code. Only use them for developing [custom reusable multi-instance components](/tutorial/03-multi-instance-components).
+> The main reason for not using multiple namespaces within a single module is to avoid issues with namespace mixing. Therefore, it is fine to use multi-instance components inside your namespaced widgets/modules as these components should never interact with their surroundings. Of course, Redux Tools fully support arbitrary mixing and nesting of namespaces via the `feature` prop of the namespace provider.
 
-However, if your application is clearly split into isolated modules that rarely need to communicate with one another, namespaces might be a good choice for you. There is one main rule you should follow: **never use multiple namespaces within a single module**. Seriously.
-
-Compare these two state structures:
+The main reason for using namespaces even if you don't need to mount a module multiple times is implicit selector scoping. Compare the following state structures:
 
 ```json
 {
@@ -160,9 +162,12 @@ Compare these two state structures:
 }
 ```
 
-The second approach will allow you to omit specifying `someModule` and `otherModule` in your selectors – the state slice will be resolved by the namespacing mechanism. However, you'll also have to deal with yet another architectural concept, which might make it difficult for developers who only know the basics of React or Redux.
+The second approach will allow you to omit specifying `someModule` and `otherModule` in your selectors – the state slice will be resolved by the namespacing mechanism via React context, assuming that your modules are wrapped in a namespace provider.
 
-If you do decide to use namespaces in a standard React application:
+That being said, you'll also have to deal with yet another architectural concept, which might make it difficult for developers who only know the basics of React or Redux.
+
+In conclusion, if you do decide to use namespaces in a standard React application:
 
 - Make sure all of your modules are wrapped in a namespace provider.
 - Make sure any common state is managed by a globally injected reducer.
+- Make sure you're not accidentally mixing namespaces.

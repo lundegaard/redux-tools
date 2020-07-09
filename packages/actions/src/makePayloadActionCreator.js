@@ -12,15 +12,21 @@ import configureActionCreator from './configureActionCreator';
 const makePayloadActionCreator = type => {
 	const actionCreator = configureActionCreator(type, identity, alwaysUndefined);
 
-	return payload => {
+	return function(payload) {
 		invariant(
-			payload !== undefined,
-			// eslint-disable-next-line prefer-template
+			arguments.length !== 0,
 			'You did not pass an argument to an action creator created by makePayloadActionCreator(' +
 				type +
-				'. Did you mean to use makeEmptyActionCreator(' +
+				'). Did you mean to use makeEmptyActionCreator(' +
 				type +
 				')?'
+		);
+
+		invariant(
+			arguments.length <= 1,
+			'You passed more than one argument to an action creator created by makePayloadActionCreator(' +
+				type +
+				').'
 		);
 
 		return actionCreator(payload);

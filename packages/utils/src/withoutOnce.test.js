@@ -8,4 +8,8 @@ describe('withoutOnce', () => {
 	it('removes each item exactly once', () => {
 		expect(withoutOnce([a, b, c], [a, b, c, a, b, c, a, b, c])).toEqual([a, b, c, a, b, c]);
 	});
+
+	it('removes each item exactly once for multiple occurrences', () => {
+		expect(withoutOnce([a, b, c, a, b, c], [a, b, c, a, b, c, a, b, c])).toEqual([a, b, c]);
+	});
 });

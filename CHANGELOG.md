@@ -10,19 +10,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - (_reducers_): `makeReducer` now supports arrays of strings and predicates.
 - (_actions_): Added `makePayloadMetaActionCreator`.
+- (_actions_): Added invariant to action creator factories which checks that the type is a non-empty string.
 - (_namespaces_): Added `preventNamespace`, which always overwrites the original namespace with a "global" namespace.
 - (_namespaces-react_): New package! Existing logic from various packages has been moved here (`useNamespace`, `NamespaceProvider` and `namespacedConnect`).
+- (_injectors-react_): Added `isNamespaced` prop for all injector hooks and decorators. Use this option to indicate that an injectable must always be injected under a namespace.
 
 ### Changed
 
 - (_reducers_): `makeReducer` now uses the default reducer for error actions if the error reducer is missing.
 - (_actions_): Changed signatures of `makePayloadActionCreator` and `makeEmptyActionCreator`.
-- (_actions_): `makeConstantActionCreator` has been renamed to `makeEmptyActionCreator`.
-- (_actions_): `makeSimpleActionCreator` has been renamed to `makePayloadActionCreator`.
+- (_actions_): `makeConstantActionCreator` has been renamed to `makeEmptyActionCreator` (original export still present).
+- (_actions_): `makeSimpleActionCreator` has been renamed to `makePayloadActionCreator` (original export still present).
+- (_react_): The unpkg bundle now includes all dependencies except for React, Redux, and React Redux.
+- (_actions_): Added invariant to `makePayloadActionCreator` and `makeEmptyActionCreator` for checking the correct number of arguments.
 - (_actions_): `makeActionCreator` has been renamed to `configureActionCreator`.
 - (_injectors-react_): `Provider` has been renamed to `NamespaceProvider`.
 - (_actions_): `makeReducer` has been moved to the `@redux-tools/reducers` package.
 - (_reducers_): `getStateByAction` and `getStateByNamespace` have been moved to the `@redux-tools/namespaces` package.
+- (_injectors-react_): It is no longer necessary to pass `isGlobal: true` when not using the namespacing mechanism.
+
+### Removed
+
+- The unpkg bundle is no longer created for non-preset packages.
 
 ## [0.8.2] – 2020-03-05
 

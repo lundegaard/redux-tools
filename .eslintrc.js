@@ -52,5 +52,7 @@ module.exports = {
 			'error',
 			{ devDependencies: ['packages/**/*.test.js', '*.js', 'rollup/*.js', 'tests/*.js'] },
 		],
+		// TODO: Look at `common-tags` to solve indentation issues with multiline template strings.
+		'prefer-template': 'off',
 	},
 };

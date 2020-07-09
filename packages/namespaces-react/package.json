@@ -18,6 +18,7 @@
     "@redux-tools/namespaces": "^0.8.2",
     "@redux-tools/reducers": "^0.8.2",
     "@redux-tools/utils-react": "^0.8.2",
+    "hoist-non-react-statics": "^3.3.0",
     "prop-types": "^15.7.2",
     "ramda": ">=0.26.1",
     "ramda-extension": ">=0.8.0"

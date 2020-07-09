@@ -11,10 +11,11 @@ import configureActionCreator from './configureActionCreator';
 const makeEmptyActionCreator = type => {
 	const actionCreator = configureActionCreator(type, alwaysUndefined, alwaysUndefined);
 
-	return (payload = undefined) => {
+	// NOTE: Regular function so we can use `arguments` without entering any parameters.
+	// An arrow function allows us to do `...args`, but that hurts autocompletion.
+	return function() {
 		invariant(
-			payload === undefined,
-			// eslint-disable-next-line prefer-template
+			arguments.length === 0,
 			'You passed an argument to an action creator created by makeEmptyActionCreator(' +
 				type +
 				'). Did you mean to use makePayloadActionCreator(' +
@@ -22,7 +23,7 @@ const makeEmptyActionCreator = type => {
 				')?'
 		);
 
-		return actionCreator(payload);
+		return actionCreator(undefined);
 	};
 };
 

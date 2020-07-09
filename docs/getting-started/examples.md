@@ -2,6 +2,8 @@
 
 !> Unfortunately, the examples section is not quite ready yet :(
 
+<!--
+
 All examples with descriptions are located in the [examples directory](https://github.com/lundegaard/redux-tools/tree/master/examples) of the Redux Tools repository.
 
 ## Simple Examples
@@ -20,3 +22,5 @@ All examples with descriptions are located in the [examples directory](https://g
 ## Advanced Integration Examples
 
 - [Integration with React Union]()
+
+-->

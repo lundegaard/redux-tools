@@ -6,7 +6,7 @@ import { ReactReduxContext } from 'react-redux';
 
 import { createEntries } from '@redux-tools/injectors';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
-import { useNamespace } from '@redux-tools/namespaces-react';
+import { useNamespace, NamespaceContext } from '@redux-tools/namespaces-react';
 
 import { IS_SERVER } from './constants';
 
@@ -33,9 +33,11 @@ const makeHook = storeInterface => {
 		// NOTE: `options.global` and `options.persist` are deprecated.
 		const isGlobal = options.isGlobal || options.global || false;
 		const isPersistent = options.isPersistent || options.persist || false;
+		const isNamespaced = options.isNamespaced || false;
 		const feature = options.feature || DEFAULT_FEATURE;
 		const contextNamespace = useNamespace(feature);
 		const { store } = useContext(ReactReduxContext);
+		const { isUseNamespaceProvided } = useContext(NamespaceContext);
 		const namespace = isGlobal ? null : options.namespace || contextNamespace;
 		const inject = store[injectionKey];
 		const eject = store[ejectionKey];
@@ -99,9 +101,9 @@ const makeHook = storeInterface => {
 				);
 			}
 
-			if (!namespace && !isGlobal) {
+			if (isUseNamespaceProvided && !namespace && !isGlobal) {
 				warn(
-					`You're injecting ${type} with no namespace!`,
+					`You're injecting ${type}, but the namespace could not be resolved from React context!`,
 					'They will be injected globally. If this is intended, consider passing',
 					`'isGlobal: true' to the injector, e.g. '${hookName}(${type}, { isGlobal: true })'.`
 				);
@@ -116,6 +118,11 @@ const makeHook = storeInterface => {
 					`'persist: ${options.persist}' is deprecated. Use 'isPersistent: ${options.persist}'.`
 				);
 			}
+
+			invariant(
+				!isNamespaced || namespace,
+				`You're injecting ${type} marked as namespaced, but no namespace could be resolved.`
+			);
 
 			invariant(inject, `'store.${injectionKey}' missing. Are you using the enhancer correctly?`);
 			invariant(eject, `'store.${ejectionKey}' missing. Are you using the enhancer correctly?`);

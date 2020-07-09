@@ -8,7 +8,7 @@ This package provides React bindings for the [@redux-tools/namespaces](/packages
 
 ### \<NamespaceProvider />
 
-Provides a namespacing strategy to its children. See the [tutorial](/tutorial/02-namespacing?id=the-namespace-provider) for more information about the usage.
+Provides a namespacing strategy to its children. See the [tutorial](/tutorial/02-namespacing?id=namespace-provider) for more information about the usage.
 
 #### Props
 
@@ -23,3 +23,7 @@ Works just like `connect()` from React Redux, except it accesses namespaced stat
 Passes global state as the third argument to `mapStateToProps`.
 
 See [react-redux docs](https://react-redux.js.org/docs/api) for more info.
+
+### withNamespaceProvider()
+
+A decorator that wraps a component in a namespace provider. Accepts the same props as `<NamespaceProvider />`. See the [multi-instance components tutorial](/tutorial/03-multi-instance-components) to learn more about the usage.

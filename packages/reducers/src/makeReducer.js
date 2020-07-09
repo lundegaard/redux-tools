@@ -1,9 +1,6 @@
-import invariant from 'invariant';
 import {
 	prop,
 	compose,
-	whereEq,
-	nthArg,
 	useWith,
 	__,
 	defaultTo,
@@ -12,16 +9,31 @@ import {
 	map,
 	append,
 	T,
+	includes,
 } from 'ramda';
-import { overHead } from 'ramda-extension';
+import { overHead, isString, isFunction, isArray } from 'ramda-extension';
 
-const createTypeEqualsPredicate = type => compose(whereEq({ type }), nthArg(1));
+const createTypeEqualsPredicate = condition => (state, action) => {
+	if (isString(condition)) {
+		return action.type === condition;
+	} else if (isArray(condition)) {
+		return includes(action.type, condition);
+	} else if (isFunction(condition)) {
+		return condition(action);
+	} else {
+		throw new TypeError(
+			// eslint-disable-next-line prefer-template
+			'The condition passed to makeReducer must be a string, an array of strings, or a predicate. ' +
+				'Instead, it received ' +
+				condition +
+				'.'
+		);
+	}
+};
 
 const mergeReducers = ([typePredicate, reducer, errorReducer]) => {
 	const newReducer = (state, action) => {
-		if (prop('error', action)) {
-			invariant(errorReducer, `You haven't supplied an error reducer for action ${action.type}`);
-
+		if (prop('error', action) && errorReducer) {
 			return errorReducer(state, action);
 		}
 

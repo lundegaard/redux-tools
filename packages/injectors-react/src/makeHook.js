@@ -33,6 +33,7 @@ const makeHook = storeInterface => {
 		// NOTE: `options.global` and `options.persist` are deprecated.
 		const isGlobal = options.isGlobal || options.global || false;
 		const isPersistent = options.isPersistent || options.persist || false;
+		const isNamespaced = options.isNamespaced || false;
 		const feature = options.feature || DEFAULT_FEATURE;
 		const contextNamespace = useNamespace(feature);
 		const { store } = useContext(ReactReduxContext);
@@ -40,7 +41,6 @@ const makeHook = storeInterface => {
 		const namespace = isGlobal ? null : options.namespace || contextNamespace;
 		const inject = store[injectionKey];
 		const eject = store[ejectionKey];
-		const { isNamespaced } = options;
 		// NOTE: We use a string instead of comparing the objects by reference to avoid remounting
 		// when `useInjectables({ something })` is used (new object with same entries).
 		// TODO: Support partial changes in the `injectables` object.

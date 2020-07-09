@@ -84,7 +84,7 @@ describe('makeHook', () => {
 		expect(warn).toHaveBeenCalledTimes(0);
 	});
 
-	it('warns if isNamespaced is passed, but no namespace could be resolved', () => {
+	it('throws if isNamespaced is passed, but no namespace could be resolved', () => {
 		jest.spyOn(global.console, 'error').mockImplementation(() => {});
 
 		expect(() => {

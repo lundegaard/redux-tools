@@ -2,7 +2,7 @@
 
   - [Introduction](/)
   - [Quick Start](/getting-started/quick-start)
-  - [Examples](/getting-started/examples)
+  - [Examples (WIP)](/getting-started/examples)
 
 - Tutorial
 

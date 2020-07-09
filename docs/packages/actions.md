@@ -6,9 +6,15 @@ This package is a collection of utility functions for creating [FSA-compliant](h
 
 ## Best Practices
 
-Only use `makeEmptyActionCreator`, `makePayloadActionCreator`, and `makePayloadMetaActionCreator` in your applications. Do not use any other action creator factories in your own code. Use the appropriate action creator factory based on the number of arguments the action creator should expect (i.e. `Empty` for zero, `Payload` for one, and `PayloadMeta` if any metadata can be passed).
+Only use `makeEmptyActionCreator`, `makePayloadActionCreator`, and `makePayloadMetaActionCreator` in your applications. Do not use any other action creator factories in your own code.
 
-Reasoning: any custom logic should be left to the reducer; action creator usage should be transparent. You should be able to rely on your action creators to always use the arguments you pass as `action.payload` or `action.meta` directly.
+Use the appropriate action creator factory based on the number of arguments the action creator should expect:
+
+- `makeEmptyActionCreator` for actions without parameters.
+- `makePayloadActionCreator` for parameterized actions.
+- `makePayloadMetaActionCreator` if you need to pass any metadata.
+
+_REASONING_: Any custom logic should be left to the reducer; action creator usage should be transparent. You should be able to rely on your action creators to always use the arguments directly as `action.payload` or `action.meta`.
 
 ## Usage Example
 
@@ -42,7 +48,7 @@ Creates an object with values set to `<prefix>/<type>`.
 
 ### makeEmptyActionCreator()
 
-Creates a new nullary action creator.
+Creates a new nullary action creator. Also reexported as `makeConstantActionCreator` for backwards compatibility.
 
 **Arguments**
 
@@ -54,7 +60,7 @@ Creates a new nullary action creator.
 
 ### makePayloadActionCreator()
 
-Creates a new unary action creator which will use the argument as the payload.
+Creates a new unary action creator which will use the argument as the payload. Also reexported as `makeSimpleActionCreator` for backwards compatibility.
 
 **Arguments**
 
@@ -78,7 +84,7 @@ Creates a new binary action creator which will use the first argument as the pay
 
 ### configureActionCreator()
 
-!> This action creator factory is only meant to be used to create other action creator factories. We do not recommend using makeActionCreator in your application code.
+!> This action creator factory is only meant to be used to create other action creator factories. We do not recommend using `configureActionCreator` in your application code. See [best practices](#best-practices).
 
 Creates a new unary action creator which will apply the provided functions to an argument, producing
 the `payload` and `meta` properties.
@@ -91,4 +97,4 @@ the `payload` and `meta` properties.
 
 **Returns**
 
-( _any -> Action_ ): An action creator.
+( _(...any) -> Action_ ): An action creator.

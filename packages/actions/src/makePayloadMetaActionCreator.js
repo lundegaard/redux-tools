@@ -15,7 +15,6 @@ const makePayloadMetaActionCreator = type => {
 	return (payload, meta) => {
 		invariant(
 			!isNil(meta),
-			// eslint-disable-next-line prefer-template
 			'You did not pass the meta object to an action creator created by makePayloadMetaActionCreator(' +
 				type +
 				').'
@@ -23,7 +22,6 @@ const makePayloadMetaActionCreator = type => {
 
 		invariant(
 			isPlainObject(meta),
-			// eslint-disable-next-line prefer-template
 			'Action creator created by makePayloadMetaActionCreator(' +
 				type +
 				') expects the meta argument to be a plain object. Instead, it received ' +

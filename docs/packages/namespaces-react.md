@@ -8,7 +8,7 @@ This package provides React bindings for the [@redux-tools/namespaces](/packages
 
 ### \<NamespaceProvider />
 
-Provides a namespacing strategy to its children. See the [tutorial](/tutorial/02-namespacing?id=the-namespace-provider) for more information about the usage.
+Provides a namespacing strategy to its children. See the [tutorial](/tutorial/02-namespacing?id=namespace-provider) for more information about the usage.
 
 #### Props
 

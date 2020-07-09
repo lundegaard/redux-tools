@@ -10,6 +10,7 @@ import NamespaceProvider from './NamespaceProvider';
 import namespacedConnect, {
 	wrapMapStateToProps,
 	wrapMapDispatchToProps,
+	NAMESPACED_CONNECT_PROPS,
 } from './namespacedConnect';
 
 const state = {
@@ -25,9 +26,10 @@ const state = {
 describe('wrapMapStateToProps', () => {
 	it('gets correct state slice', () => {
 		const mapStateToProps = wrapMapStateToProps(R.identity);
+
 		expect(
 			mapStateToProps(state, {
-				namespacedConnectProps: { feature: DEFAULT_FEATURE, namespace: 'foo' },
+				[NAMESPACED_CONNECT_PROPS]: { feature: DEFAULT_FEATURE, namespace: 'foo' },
 			})
 		).toEqual({
 			value: 'Foo',
@@ -36,8 +38,11 @@ describe('wrapMapStateToProps', () => {
 
 	it('gets correct state slice if feature is set', () => {
 		const mapStateToProps = wrapMapStateToProps(R.identity);
+
 		expect(
-			mapStateToProps(state, { namespacedConnectProps: { feature: 'grids', namespace: 'baz' } })
+			mapStateToProps(state, {
+				[NAMESPACED_CONNECT_PROPS]: { feature: 'grids', namespace: 'baz' },
+			})
 		).toEqual({
 			value: 'Baz',
 		});
@@ -45,9 +50,10 @@ describe('wrapMapStateToProps', () => {
 
 	it('applies passed mapStateToProps', () => {
 		const mapStateToProps = wrapMapStateToProps(R.prop('qux'));
+
 		expect(
 			mapStateToProps(state, {
-				namespacedConnectProps: { feature: DEFAULT_FEATURE, namespace: 'bar' },
+				[NAMESPACED_CONNECT_PROPS]: { feature: DEFAULT_FEATURE, namespace: 'bar' },
 			})
 		).toEqual({
 			value: 'Qux',
@@ -56,9 +62,10 @@ describe('wrapMapStateToProps', () => {
 
 	it('returns an object when mapStateToProps is undefined', () => {
 		const mapStateToProps = wrapMapStateToProps(null);
+
 		expect(
 			mapStateToProps(state, {
-				namespacedConnectProps: { feature: DEFAULT_FEATURE, namespace: 'foo' },
+				[NAMESPACED_CONNECT_PROPS]: { feature: DEFAULT_FEATURE, namespace: 'foo' },
 			})
 		).toEqual({});
 	});
@@ -73,9 +80,11 @@ describe('wrapMapDispatchToProps', () => {
 		const dispatch = jest.fn();
 
 		const { actionCreator } = mapDispatchToProps(dispatch, {
-			namespacedConnectProps: { feature: DEFAULT_FEATURE, namespace: 'foo' },
+			[NAMESPACED_CONNECT_PROPS]: { feature: DEFAULT_FEATURE, namespace: 'foo' },
 		});
+
 		actionCreator();
+
 		expect(dispatch).toHaveBeenCalledWith({
 			type: 'TEST',
 			meta: { namespace: 'foo' },
@@ -90,9 +99,11 @@ describe('wrapMapDispatchToProps', () => {
 		const dispatch = jest.fn();
 
 		const { actionCreator } = mapDispatchToProps(dispatch, {
-			namespacedConnectProps: { feature: DEFAULT_FEATURE, namespace: 'foo' },
+			[NAMESPACED_CONNECT_PROPS]: { feature: DEFAULT_FEATURE, namespace: 'foo' },
 		});
+
 		actionCreator();
+
 		expect(dispatch).toHaveBeenCalledWith({
 			type: 'TEST',
 			meta: { namespace: 'foo' },
@@ -102,7 +113,11 @@ describe('wrapMapDispatchToProps', () => {
 	it('handles nil', () => {
 		const mapDispatchToProps = wrapMapDispatchToProps(null);
 		const dispatch = jest.fn();
-		const props = mapDispatchToProps(dispatch, { namespacedConnectProps: { namespace: 'foo' } });
+
+		const props = mapDispatchToProps(dispatch, {
+			[NAMESPACED_CONNECT_PROPS]: { namespace: 'foo' },
+		});
+
 		expect(props).toEqual({});
 	});
 
@@ -165,7 +180,7 @@ describe('namespacedConnect', () => {
 			</NamespaceProvider>
 		);
 
-		expect(wrapper.find(Root).prop('namespacedConnectProps')).toBe(undefined);
+		expect(wrapper.find(Root).prop(NAMESPACED_CONNECT_PROPS)).toBe(undefined);
 	});
 
 	it('does not pass the static namespace down as a prop', () => {

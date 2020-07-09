@@ -10,6 +10,7 @@ import NamespaceProvider from './NamespaceProvider';
 import namespacedConnect, {
 	wrapMapStateToProps,
 	wrapMapDispatchToProps,
+	NAMESPACED_CONNECT_PROPS,
 } from './namespacedConnect';
 
 const state = {
@@ -25,28 +26,48 @@ const state = {
 describe('wrapMapStateToProps', () => {
 	it('gets correct state slice', () => {
 		const mapStateToProps = wrapMapStateToProps(R.identity);
-		expect(mapStateToProps(state, { feature: DEFAULT_FEATURE, namespace: 'foo' })).toEqual({
+
+		expect(
+			mapStateToProps(state, {
+				[NAMESPACED_CONNECT_PROPS]: { feature: DEFAULT_FEATURE, namespace: 'foo' },
+			})
+		).toEqual({
 			value: 'Foo',
 		});
 	});
 
 	it('gets correct state slice if feature is set', () => {
 		const mapStateToProps = wrapMapStateToProps(R.identity);
-		expect(mapStateToProps(state, { feature: 'grids', namespace: 'baz' })).toEqual({
+
+		expect(
+			mapStateToProps(state, {
+				[NAMESPACED_CONNECT_PROPS]: { feature: 'grids', namespace: 'baz' },
+			})
+		).toEqual({
 			value: 'Baz',
 		});
 	});
 
 	it('applies passed mapStateToProps', () => {
 		const mapStateToProps = wrapMapStateToProps(R.prop('qux'));
-		expect(mapStateToProps(state, { feature: DEFAULT_FEATURE, namespace: 'bar' })).toEqual({
+
+		expect(
+			mapStateToProps(state, {
+				[NAMESPACED_CONNECT_PROPS]: { feature: DEFAULT_FEATURE, namespace: 'bar' },
+			})
+		).toEqual({
 			value: 'Qux',
 		});
 	});
 
 	it('returns an object when mapStateToProps is undefined', () => {
 		const mapStateToProps = wrapMapStateToProps(null);
-		expect(mapStateToProps(state, { feature: DEFAULT_FEATURE, namespace: 'foo' })).toEqual({});
+
+		expect(
+			mapStateToProps(state, {
+				[NAMESPACED_CONNECT_PROPS]: { feature: DEFAULT_FEATURE, namespace: 'foo' },
+			})
+		).toEqual({});
 	});
 });
 
@@ -59,10 +80,11 @@ describe('wrapMapDispatchToProps', () => {
 		const dispatch = jest.fn();
 
 		const { actionCreator } = mapDispatchToProps(dispatch, {
-			feature: DEFAULT_FEATURE,
-			namespace: 'foo',
+			[NAMESPACED_CONNECT_PROPS]: { feature: DEFAULT_FEATURE, namespace: 'foo' },
 		});
+
 		actionCreator();
+
 		expect(dispatch).toHaveBeenCalledWith({
 			type: 'TEST',
 			meta: { namespace: 'foo' },
@@ -77,10 +99,11 @@ describe('wrapMapDispatchToProps', () => {
 		const dispatch = jest.fn();
 
 		const { actionCreator } = mapDispatchToProps(dispatch, {
-			feature: DEFAULT_FEATURE,
-			namespace: 'foo',
+			[NAMESPACED_CONNECT_PROPS]: { feature: DEFAULT_FEATURE, namespace: 'foo' },
 		});
+
 		actionCreator();
+
 		expect(dispatch).toHaveBeenCalledWith({
 			type: 'TEST',
 			meta: { namespace: 'foo' },
@@ -90,7 +113,11 @@ describe('wrapMapDispatchToProps', () => {
 	it('handles nil', () => {
 		const mapDispatchToProps = wrapMapDispatchToProps(null);
 		const dispatch = jest.fn();
-		const props = mapDispatchToProps(dispatch, { namespace: 'foo' });
+
+		const props = mapDispatchToProps(dispatch, {
+			[NAMESPACED_CONNECT_PROPS]: { namespace: 'foo' },
+		});
+
 		expect(props).toEqual({});
 	});
 
@@ -138,5 +165,42 @@ describe('namespacedConnect', () => {
 			type: 'TEST',
 			meta: { namespace: 'bar' },
 		});
+	});
+
+	it('does not pass the static options down as props', () => {
+		const connector = namespacedConnect(undefined, undefined, undefined, {
+			namespace: 'foo',
+		});
+
+		const store = createStore(R.always(state));
+
+		const Root = R_.noop;
+		const ConnectedRoot = connector(Root);
+
+		const wrapper = mount(
+			<NamespaceProvider store={store}>
+				<ConnectedRoot />
+			</NamespaceProvider>
+		);
+
+		expect(wrapper.find(Root).prop(NAMESPACED_CONNECT_PROPS)).toBe(undefined);
+	});
+
+	it('does not pass the static namespace down as a prop', () => {
+		const Root = R_.noop;
+		const ConnectedRoot = namespacedConnect(undefined, undefined, undefined, {
+			namespace: 'foo',
+		})(Root);
+
+		const store = createStore(R.always(state));
+		store.dispatch = jest.fn();
+
+		const wrapper = mount(
+			<NamespaceProvider store={store}>
+				<ConnectedRoot namespace="bar" />
+			</NamespaceProvider>
+		);
+
+		expect(wrapper.find(Root).prop('namespace')).toBe('bar');
 	});
 });

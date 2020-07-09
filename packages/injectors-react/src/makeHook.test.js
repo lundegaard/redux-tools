@@ -13,13 +13,6 @@ const useThings = makeHook(storeInterface);
 
 jest.mock('./constants', () => ({ IS_SERVER: false }));
 
-const consoleWarningContent = [
-	'@redux-tools: This warning happened while injecting the following things: foo.',
-	"You're injecting things with no scope!",
-	'They will be injected globally. If this is intended, consider passing',
-	"'isGlobal: true' to the injector, e.g. 'useThings(things, { isGlobal: true })'.",
-];
-
 const Test = ({ children }) => {
 	children();
 
@@ -50,19 +43,24 @@ describe('makeHook', () => {
 		expect(store.injectThings.mock.calls[0][0]).toEqual({ foo: noop }, { namespace: 'yolo' });
 	});
 
-	it('throws warning if useNamespace is provided, but isGlobal flag is not', () => {
-		const warn = jest.spyOn(global.console, 'warn');
+	it('warns if useNamespace is provided, but the namespace could not be resolved and isGlobal is not passed', () => {
+		const warn = jest.spyOn(global.console, 'warn').mockImplementation(() => {});
 
 		mount(
-			<NamespaceProvider store={store} useNamespace={always('yolo')}>
+			<NamespaceProvider store={store} useNamespace={always(undefined)}>
 				<Test>{() => useThings({ foo: noop })}</Test>
 			</NamespaceProvider>
 		);
 
-		expect(warn).toHaveBeenCalledWith(...consoleWarningContent);
+		expect(warn).toHaveBeenCalledWith(
+			'@redux-tools: This warning happened while injecting the following things: foo.',
+			"You're injecting things, but the namespace could not be resolved from React context!",
+			'They will be injected globally. If this is intended, consider passing',
+			"'isGlobal: true' to the injector, e.g. 'useThings(things, { isGlobal: true })'."
+		);
 	});
 
-	it('does not throw warning if isGlobal is not provided', () => {
+	it('does not warn if namespace is missing and isGlobal is not passed', () => {
 		const warn = jest.spyOn(global.console, 'warn');
 
 		mount(
@@ -74,21 +72,29 @@ describe('makeHook', () => {
 		expect(warn).toHaveBeenCalledTimes(0);
 	});
 
-	it('does throw warning if has isNamespaced flag, no namespace is resolved, and isGlobal is not provided', () => {
-		const testRenderer = () => {
-			try {
-				mount(
-					<NamespaceProvider store={store}>
-						<Test>{() => useThings({ foo: noop }, { isNamespaced: true })}</Test>
-					</NamespaceProvider>
-				);
-			} catch (error) {
-				throw new Error(error);
-			}
-		};
+	it('does not warn if namespace is passed and isGlobal is not passed', () => {
+		const warn = jest.spyOn(global.console, 'warn');
 
-		expect(testRenderer).toThrowError(
-			'Invariant Violation: used hook is marked as namespaced, but no namespace can be resolved. Please make sure that you provided namespace'
+		mount(
+			<NamespaceProvider store={store} namespace="yolo">
+				<Test>{() => useThings({ foo: noop })}</Test>
+			</NamespaceProvider>
+		);
+
+		expect(warn).toHaveBeenCalledTimes(0);
+	});
+
+	it('warns if isNamespaced is passed, but no namespace could be resolved', () => {
+		jest.spyOn(global.console, 'error').mockImplementation(() => {});
+
+		expect(() => {
+			mount(
+				<NamespaceProvider store={store}>
+					<Test>{() => useThings({ foo: noop }, { isNamespaced: true })}</Test>
+				</NamespaceProvider>
+			);
+		}).toThrowError(
+			"You're injecting things marked as namespaced, but no namespace could be resolved."
 		);
 	});
 });

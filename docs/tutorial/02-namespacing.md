@@ -79,7 +79,7 @@ Because our counter was mounted three times, there are three instances of our re
 
 !> For this reason, avoid using multiple namespaces within a single widget or module. Mixing namespaces may result in unexpected behavior and hard-to-track bugs due to actions being ignored.
 
-Remember that if you need to opt out of the namespacing mechanism, just use the regular `connect`/`useSelector`/`useDispatch` functions from `react-redux` and pass the `isGlobal: true` to any injection decorators.
+Remember that if you need to opt out of the namespacing mechanism, just use the regular `connect`/`useSelector`/`useDispatch` functions from `react-redux` and pass `isGlobal: true` to any injection decorators.
 
 Using the `namespace` prop is pretty simple, but it doesn't scale well if you need to use `withReducers` deeper in the React component tree. That's when the namespace provider comes in handy.
 

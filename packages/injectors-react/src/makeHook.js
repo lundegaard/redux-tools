@@ -101,9 +101,9 @@ const makeHook = storeInterface => {
 				);
 			}
 
-			if (isUseNamespaceProvided && !isGlobal) {
+			if (isUseNamespaceProvided && !namespace && !isGlobal) {
 				warn(
-					`You're injecting ${type} with no scope!`,
+					`You're injecting ${type}, but the namespace could not be resolved from React context!`,
 					'They will be injected globally. If this is intended, consider passing',
 					`'isGlobal: true' to the injector, e.g. '${hookName}(${type}, { isGlobal: true })'.`
 				);
@@ -119,10 +119,9 @@ const makeHook = storeInterface => {
 				);
 			}
 
-			const namespaceFlaggedButNotResolved = isNamespaced && !namespace;
 			invariant(
-				!namespaceFlaggedButNotResolved,
-				`used hook is marked as namespaced, but no namespace can be resolved. Please make sure that you provided namespace`
+				!isNamespaced || namespace,
+				`You're injecting ${type} marked as namespaced, but no namespace could be resolved.`
 			);
 
 			invariant(inject, `'store.${injectionKey}' missing. Are you using the enhancer correctly?`);

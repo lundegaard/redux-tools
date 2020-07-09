@@ -37,7 +37,7 @@ import countReducer, { increment } from './duck';
 const Counter = ({ count, increment }) => <button onClick={increment}>{count}</button>;
 
 const enhance = o(
-	withReducers({ count: countReducer }, { isGlobal: true }),
+	withReducers({ count: countReducer }),
 	connect(state => ({ count: state.count }), { increment })
 );
 

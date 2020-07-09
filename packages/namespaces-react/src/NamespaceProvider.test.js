@@ -76,7 +76,7 @@ describe('NamespaceProvider', () => {
 		expect(renderProp.mock.calls[0][0].store).toBe(store);
 	});
 
-	it('default isUseNamespaceProvided flag is falsy', () => {
+	it('defaults isUseNamespaceProvided to false', () => {
 		mount(
 			<NamespaceProvider namespace="ns" feature="grids">
 				<NamespaceProvider namespace="yo">

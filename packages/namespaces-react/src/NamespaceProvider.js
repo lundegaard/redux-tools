@@ -20,7 +20,7 @@ const NamespaceProvider = ({ children, feature, namespace, store, useNamespace }
 				// because passing `null` would not result in a fallback to `DEFAULT_FEATURE`.
 				namespaces: { [feature || DEFAULT_FEATURE]: namespace },
 				useNamespace,
-				isUseNamespaceProvided: Boolean(useNamespace) || context.isUseNamespaceProvided,
+				isUseNamespaceProvided: Boolean(useNamespace),
 			}),
 		[context, feature, namespace, useNamespace]
 	);

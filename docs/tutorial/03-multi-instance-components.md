@@ -1,4 +1,4 @@
-# Multi-Instance Components
+# Multi-Instance Components {docsify-ignore-all}
 
 Redux Tools allow you to use the injection mechanism for generic multi-instance components too. This includes cool stuff like data grids, multi-step forms, and carousels.
 

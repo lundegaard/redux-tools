@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - (_injectors-react_): `Provider` has been renamed to `NamespaceProvider`.
 - (_actions_): `makeReducer` has been moved to the `@redux-tools/reducers` package.
 - (_reducers_): `getStateByAction` and `getStateByNamespace` have been moved to the `@redux-tools/namespaces` package.
+- (_injectors-react_): It is no longer necessary to pass `isGlobal: true` when not using the namespacing mechanism.
 
 ### Removed
 

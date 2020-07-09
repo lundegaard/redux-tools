@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - (_namespaces_): Added `preventNamespace`, which always overwrites the original namespace with a "global" namespace.
 - (_namespaces-react_): New package! Existing logic from various packages has been moved here (`useNamespace`, `NamespaceProvider` and `namespacedConnect`).
 - (_injectors-react_): Added `isNamespaced` prop for all injector hooks and decorators. Use this option to indicate that an injectable must always be injected under a namespace.
+- (_namespaces-react_): `withNamespaceProvider` can now be used to create complex multi-instance components more easily.
 
 ### Changed
 

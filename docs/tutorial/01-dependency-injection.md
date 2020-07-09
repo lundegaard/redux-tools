@@ -90,13 +90,11 @@ const UserManagement = () => {
 	return <UserGrid users={users} />;
 };
 
-const enhance = withReducers({ userManagement: reducer }, { isGlobal: true });
+const enhance = withReducers({ userManagement: reducer });
 
 export default enhance(UserManagement);
 ```
 
 Looks easy enough, right? When the user management module is mounted, its reducer will be injected as well. Furthermore, when this module is unmounted, the reducer gets ejected too!
-
-!> Redux Tools injectors currently produce a warning if you don't pass `isGlobal: true`. Historically, namespaced usage was the preferred method for all types of applications – this is no longer the case. This behaviour will likely be changed soon.
 
 Because we no longer reference all the reducers in the root of the application, [code splitting](https://reactjs.org/docs/code-splitting.html) is now possible. All your module-specific Redux code can thus be fetched alongside the React code, which is invaluable for ultra-large applications.

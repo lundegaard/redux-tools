@@ -12,10 +12,10 @@ _**duck.js**_
 - exports a reducer and an action creator
 
 ```js
-import { makeActionTypes, makeConstantActionCreator, makeReducer } from '@redux-tools/react';
+import { makeActionTypes, makeEmptyActionCreator, makeReducer } from '@redux-tools/react';
 
 export const ActionTypes = makeActionTypes('duck', ['INCREMENT']);
-export const increment = makeConstantActionCreator(ActionTypes.INCREMENT);
+export const increment = makeEmptyActionCreator(ActionTypes.INCREMENT);
 
 export default makeReducer([[ActionTypes.INCREMENT, count => count + 1]], 0);
 ```
@@ -37,11 +37,8 @@ import countReducer, { increment } from './duck';
 const Counter = ({ count, increment }) => <button onClick={increment}>{count}</button>;
 
 const enhance = o(
-	withReducers({ count: countReducer }, { isGlobal: true }),
-	connect(
-		state => ({ count: state.count }),
-		{ increment }
-	)
+	withReducers({ count: countReducer }),
+	connect(state => ({ count: state.count }), { increment })
 );
 
 export default enhance(Counter);
@@ -94,10 +91,10 @@ _**duck.js**_
 - exports a reducer and an action creator
 
 ```js
-import { makeActionTypes, makeConstantActionCreator, makeReducer } from '@redux-tools/react';
+import { makeActionTypes, makeEmptyActionCreator, makeReducer } from '@redux-tools/react';
 
 export const ActionTypes = makeActionTypes('duck', ['INCREMENT']);
-export const increment = makeConstantActionCreator(ActionTypes.INCREMENT);
+export const increment = makeEmptyActionCreator(ActionTypes.INCREMENT);
 
 export default makeReducer([[ActionTypes.INCREMENT, count => count + 1]], 0);
 ```

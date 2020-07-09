@@ -26,7 +26,8 @@ Creates a component decorator which handles the lifecycle of passed reducers, mo
 
 1. `reducers` ( _Object_ ): The reducers to use.
 2. [`options`] \( _Object_ ): Options for the decorator.
-   - [`isGlobal`] \( _boolean_ ): Should be `true` if no namespace is provided.
+   - [`isGlobal`] \( _boolean_ ): Pass `true` if the reducers shouldn't be namespaced
+   - [`isNamespaced`] \( _boolean_ ): Pass `true` if the reducers must be namespaced
    - [`isPersistent`] \( _boolean_ ): Define whether reducer should be auto-ejected after unmount.
    - [`feature`] \( _string_ ): Namespace to inject the reducer under. If passed, the reducer
      will not handle actions from other namespaces.

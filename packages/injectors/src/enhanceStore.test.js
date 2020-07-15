@@ -29,7 +29,7 @@ describe('enhanceStore', () => {
 		const store = enhanceStore({}, storeInterface);
 		store.injectThings({ foo: noop }, { namespace: 'bar' });
 		expect(store.entries.things).toEqual([
-			{ key: 'foo', value: noop, namespace: 'bar', feature: DEFAULT_FEATURE },
+			{ path: ['foo'], value: noop, namespace: 'bar', feature: DEFAULT_FEATURE },
 		]);
 
 		store.ejectThings({ foo: noop }, { namespace: 'bar' });
@@ -43,14 +43,14 @@ describe('enhanceStore', () => {
 		expect(dispatch).toHaveBeenCalledTimes(1);
 		const injectedAction = dispatch.mock.calls[0][0];
 		expect(injectedAction.type).toBe('@redux-tools/THINGS_INJECTED');
-		expect(injectedAction.payload).toEqual(['foo']);
+		expect(injectedAction.payload).toEqual([['foo']]);
 		expect(injectedAction.meta).toEqual({ namespace: 'bar' });
 		jest.clearAllMocks();
 		store.ejectThings({ foo: noop }, { namespace: 'bar' });
 		expect(dispatch).toHaveBeenCalledTimes(1);
 		const ejectedAction = dispatch.mock.calls[0][0];
 		expect(ejectedAction.type).toBe('@redux-tools/THINGS_EJECTED');
-		expect(ejectedAction.payload).toEqual(['foo']);
+		expect(ejectedAction.payload).toEqual([['foo']]);
 		expect(ejectedAction.meta).toEqual({ namespace: 'bar' });
 	});
 
@@ -65,10 +65,5 @@ describe('enhanceStore', () => {
 		store.ejectThings({ foo: noop }, { namespace: 'bar' });
 		expect(onEjected).toHaveBeenCalledTimes(1);
 		expect(onInjected).not.toHaveBeenCalled();
-	});
-
-	it('throws when the value is not a function', () => {
-		const store = enhanceStore({}, storeInterface, {});
-		expect(() => store.injectThings({ foo: null }, { namespace: 'bar' })).toThrow();
 	});
 });

@@ -1,5 +1,5 @@
 import invariant from 'invariant';
-import { keys, all, includes, omit } from 'ramda';
+import { all, includes, omit } from 'ramda';
 import { toPascalCase, isNotNil, rejectNil, isObject } from 'ramda-extension';
 import { useLayoutEffect, useState, useEffect, useDebugValue, useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
@@ -22,29 +22,21 @@ const makeHook = storeInterface => {
 	const hookName = `use${pascalCaseType}`;
 
 	const useInjectables = (injectables, options = {}) => {
-		const injectableKeys = keys(injectables);
+		const locationMessages = [`@redux-tools ${type}`, injectables];
 
-		const locationMessage =
-			`@redux-tools: This warning happened while injecting the following ${type}: ` +
-			`${injectableKeys}.`;
-
-		const warn = (...args) => console.warn(locationMessage, ...args);
+		const warn = (...args) => console.warn(...locationMessages, ...args);
 
 		// NOTE: `options.global` and `options.persist` are deprecated.
-		const isGlobal = options.isGlobal || options.global || false;
-		const isPersistent = options.isPersistent || options.persist || false;
-		const isNamespaced = options.isNamespaced || false;
-		const feature = options.feature || DEFAULT_FEATURE;
+		const isGlobal = options.isGlobal ?? options.global ?? false;
+		const isPersistent = options.isPersistent ?? options.persist ?? false;
+		const isNamespaced = options.isNamespaced ?? false;
+		const feature = options.feature ?? null;
 		const contextNamespace = useNamespace(feature);
 		const { store } = useContext(ReactReduxContext);
 		const { isUseNamespaceProvided } = useContext(NamespaceContext);
-		const namespace = isGlobal ? null : options.namespace || contextNamespace;
+		const namespace = isGlobal ? null : options.namespace ?? contextNamespace;
 		const inject = store[injectionKey];
 		const eject = store[ejectionKey];
-		// NOTE: We use a string instead of comparing the objects by reference to avoid remounting
-		// when `useInjectables({ something })` is used (new object with same entries).
-		// TODO: Support partial changes in the `injectables` object.
-		const injectablesHash = JSON.stringify(injectableKeys);
 
 		// NOTE: On the server, the injectables should be injected beforehand.
 		const [isInitialized, setIsInitialized] = useState(IS_SERVER);
@@ -60,7 +52,7 @@ const makeHook = storeInterface => {
 			String([
 				`Namespace: ${namespace}`,
 				`Feature: ${feature}`,
-				`${pascalCaseType}: ${injectableKeys}`,
+				`Type: ${pascalCaseType}`,
 				`Initialized: ${isInitialized}`,
 			])
 		);
@@ -89,7 +81,7 @@ const makeHook = storeInterface => {
 			isPersistent,
 			inject,
 			eject,
-			injectablesHash,
+			injectables,
 		];
 
 		// NOTE: This doesn't run on the server, but won't trigger `useLayoutEffect` warnings either.

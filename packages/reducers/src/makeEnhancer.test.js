@@ -1,7 +1,6 @@
 import { identity } from 'ramda';
 import { createStore as createStoreRedux } from 'redux';
 
-import { FUNCTION_KEY } from '@redux-tools/injectors';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import makeEnhancer, { storeInterface } from './makeEnhancer';
@@ -39,7 +38,7 @@ describe('makeEnhancer', () => {
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(1);
 		expect(getEntries(store)).toEqual([
-			{ key: FUNCTION_KEY, value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
+			{ path: [], value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
 		]);
 
 		store.ejectReducers(identity, { namespace: 'ns' });

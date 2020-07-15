@@ -1,27 +1,21 @@
 import invariant from 'invariant';
 import {
-	reduce,
-	dissocPath,
 	identity,
-	isEmpty,
-	when,
-	o,
-	T,
-	append,
-	pathOr,
-	isNil,
-	lensPath,
-	view,
-	over,
-	dissoc,
 	pluck,
 	juxt,
 	difference,
+	reduce,
+	dissocPath,
+	head,
+	isEmpty,
+	path,
+	reduced,
+	tail,
 } from 'ramda';
-import { isArray, isFunction } from 'ramda-extension';
+import { isFunction } from 'ramda-extension';
 
 import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
-import { DEFAULT_FEATURE, getNamespaceByAction } from '@redux-tools/namespaces';
+import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import combineReducerEntries from './combineReducerEntries';
 import composeReducers from './composeReducers';
@@ -33,32 +27,38 @@ const cleanupReducer = (state, action) => {
 		return state;
 	}
 
-	const feature = pathOr(DEFAULT_FEATURE, ['meta', 'feature'], action);
-	const pathToNamespace = [feature, getNamespaceByAction(action)];
-	const pathToSliceRoot = getNamespaceByAction(action) ? pathToNamespace : [];
+	return reduce(
+		(previousState, pathDefinition) => {
+			const fullPathDefinition = [
+				...(action.meta.namespace ? [action.meta.feature ?? DEFAULT_FEATURE] : []),
+				...(action.meta.namespace ? [action.meta.namespace] : []),
+				...pathDefinition,
+			];
 
-	const removeEjectedState = prevState =>
-		isArray(action.payload)
-			? reduce(
-					(nextState, reducerKey) => dissocPath(append(reducerKey, pathToSliceRoot), nextState),
-					prevState,
-					action.payload
-			  )
-			: prevState;
+			// GIVEN: fullPathDefinition: ['a', 'b', 'c']
+			// THEN: partialPathDefinitions: [['a', 'b', 'c'], ['a', 'b'], ['a']]
+			const partialPathDefinitions = reduce(
+				(previousPartialPathDefinitions, key) => [
+					[...(head(previousPartialPathDefinitions) ?? []), key],
+					...previousPartialPathDefinitions,
+				],
+				[],
+				fullPathDefinition
+			);
 
-	const lensForFeature = lensPath([feature]);
-	const lensForNamespace = lensPath(pathToNamespace);
-
-	const cleanEmptyNamespace = when(
-		// NOTE: Clean if ejecting a function or if all keys have been already ejected.
-		isNil(action.payload) ? T : o(isEmpty, view(lensForNamespace)),
-		over(lensForFeature, dissoc(getNamespaceByAction(action)))
+			return reduce(
+				(populatedState, partialPathDefinition) =>
+					isEmpty(path(partialPathDefinition, populatedState))
+						? dissocPath(partialPathDefinition, populatedState)
+						: reduced(populatedState),
+				// NOTE: `dissocPath` and `tail` are used here to kick-start the cascading process.
+				dissocPath(fullPathDefinition, previousState),
+				tail(partialPathDefinitions)
+			);
+		},
+		state,
+		action.payload
 	);
-
-	const cleanEmptyFeature = when(o(isEmpty, view(lensForFeature)), dissoc(feature));
-	const cleanEmptyStateSlices = o(cleanEmptyFeature, cleanEmptyNamespace);
-
-	return o(cleanEmptyStateSlices, removeEjectedState)(state);
 };
 
 const makeEnhancer = ({ initialReducers } = {}) => createStore => (reducer = identity, ...args) => {
@@ -79,14 +79,13 @@ const makeEnhancer = ({ initialReducers } = {}) => createStore => (reducer = ide
 		);
 	};
 
-	const handleEjected = ({ injectables, entries, props }) => {
+	const handleEjected = ({ entries, props }) => {
 		const nextEntries = storeInterface.getEntries(nextStore);
 		const fullyEjectedEntries = difference(entries, nextEntries);
 
 		nextStore.dispatch({
 			type: '@redux-tools/CLEAN_UP_STATE',
-			// TODO: This weird logic is to preserve the original mechanism of `cleanupReducer`.
-			payload: typeof injectables === 'function' ? null : pluck('key', fullyEjectedEntries),
+			payload: pluck('path', fullyEjectedEntries),
 			meta: props,
 		});
 	};

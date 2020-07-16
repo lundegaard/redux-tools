@@ -1,4 +1,3 @@
-import invariant from 'invariant';
 import {
 	identity,
 	pluck,
@@ -12,7 +11,6 @@ import {
 	reduced,
 	tail,
 } from 'ramda';
-import { isFunction } from 'ramda-extension';
 
 import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
@@ -35,8 +33,8 @@ const cleanupReducer = (state, action) => {
 				...pathDefinition,
 			];
 
-			// GIVEN: fullPathDefinition: ['a', 'b', 'c']
-			// THEN: partialPathDefinitions: [['a', 'b', 'c'], ['a', 'b'], ['a']]
+			// GIVEN: fullPathDefinition = ['a', 'b', 'c']
+			// THEN: partialPathDefinitions = [['a', 'b', 'c'], ['a', 'b'], ['a']]
 			const partialPathDefinitions = reduce(
 				(previousPartialPathDefinitions, key) => [
 					[...(head(previousPartialPathDefinitions) ?? []), key],
@@ -64,12 +62,7 @@ const cleanupReducer = (state, action) => {
 const makeEnhancer = ({ initialReducers } = {}) => createStore => (reducer = identity, ...args) => {
 	const prevStore = createStore(reducer, ...args);
 
-	const handleEntriesChanged = ({ props, injectables }) => {
-		invariant(
-			props.namespace || !isFunction(injectables),
-			'You can only inject reducers as functions if you specify a namespace.'
-		);
-
+	const handleEntriesChanged = () =>
 		nextStore.replaceReducer(
 			composeReducers(
 				reducer,
@@ -77,7 +70,6 @@ const makeEnhancer = ({ initialReducers } = {}) => createStore => (reducer = ide
 				cleanupReducer
 			)
 		);
-	};
 
 	const handleEjected = ({ entries, props }) => {
 		const nextEntries = storeInterface.getEntries(nextStore);

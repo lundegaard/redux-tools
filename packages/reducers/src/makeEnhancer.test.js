@@ -33,7 +33,7 @@ describe('makeEnhancer', () => {
 		expect(store.replaceReducer).toHaveBeenCalledTimes(2);
 	});
 
-	it('handles injecting and ejecting functions', () => {
+	it('handles injecting and ejecting namespaced reducers as functions', () => {
 		store.injectReducers(identity, { namespace: 'ns' });
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(1);
@@ -47,8 +47,16 @@ describe('makeEnhancer', () => {
 		expect(getEntries(store)).toEqual([]);
 	});
 
-	it('throws when injecting a function without a namespace', () => {
-		expect(() => store.injectReducers(identity)).toThrow();
+	it('handles injecting and ejecting global reducers as functions', () => {
+		store.injectReducers(identity);
+
+		expect(store.replaceReducer).toHaveBeenCalledTimes(1);
+		expect(getEntries(store)).toEqual([{ path: [], value: identity }]);
+
+		store.ejectReducers(identity);
+
+		expect(store.replaceReducer).toHaveBeenCalledTimes(2);
+		expect(getEntries(store)).toEqual([]);
 	});
 
 	it('removes data from state after ejecting (object reducers without preloaded state)', () => {

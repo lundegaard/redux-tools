@@ -20,10 +20,7 @@ const someMiddleware = () => next => action =>
 const middlewareEnhancer = makeEnhancerMiddleware();
 const { injectedMiddleware } = middlewareEnhancer;
 
-const enhancers = compose(
-	applyMiddleware(injectedMiddleware),
-	middlewareEnhancer
-);
+const enhancers = compose(applyMiddleware(injectedMiddleware), middlewareEnhancer);
 
 const store = createStore(state => state, enhancers);
 
@@ -63,3 +60,15 @@ not be removed.
 2. `options` ( _Object_ ): Ejection options. The following keys are supported:
    - [`namespace`] \( _string_ ): Namespace the middleware were injected under.
    - [`feature`] \( _string_ ): Feature the middleware were injected under.
+
+### composeMiddleware()
+
+Composes multiple middleware into a single middleware. The former middleware always wrap around the latter middleware, meaning that code called before `next(action)` will get executed sooner in the first middleware than the last, but vice versa when the code is called after `next(action)`.
+
+**Arguments**
+
+1. `middleware` ( _...Middleware_ ): Middleware to compose.
+
+**Returns**
+
+( _Middleware_ ): Composed middleware.

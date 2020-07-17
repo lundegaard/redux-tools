@@ -11,7 +11,7 @@ export {
 	makePayloadMetaActionCreator,
 } from '@redux-tools/actions';
 
-export { makeEnhancer as makeMiddlewareEnhancer } from '@redux-tools/middleware';
+export { makeEnhancer as makeMiddlewareEnhancer, composeMiddleware } from '@redux-tools/middleware';
 
 export { useMiddleware, withMiddleware } from '@redux-tools/middleware-react';
 

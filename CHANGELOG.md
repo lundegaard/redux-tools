@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - (_actions_): Added invariant to `makePayloadActionCreator` and `makeEmptyActionCreator` for checking the correct number of arguments.
 - (_injectors-react_): Added `isNamespaced` prop for all injector hooks and decorators. Use this option to indicate that an injectable must always be injected under a namespace.
 - (_injectors-react_): It is now possible to reliably inject functions, arrays, and complex objects.
+- (_middleware_): Added `composeMiddleware`.
 - (_namespaces_): Added `preventNamespace`, which always overwrites the original namespace with a "global" namespace.
 - (_namespaces-react_): New package! Existing logic from various packages has been moved here (`useNamespace`, `NamespaceProvider` and `namespacedConnect`).
 - (_namespaces-react_): `withNamespaceProvider` can now be used to create complex multi-instance components more easily.

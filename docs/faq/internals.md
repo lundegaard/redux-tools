@@ -32,16 +32,16 @@ This call will create the following entries under the hood:
 ```js
 const entries = [
 	{
-		feature: 'bar',
+		value: someEpic,
+		path: ['someEpic'],
 		namespace: 'foo',
-		key: 'someEpic',
-		value: someEpic, // The epic itself.
+		feature: 'bar',
 	},
 	{
-		feature: 'bar',
+		value: anotherEpic,
+		path: ['anotherEpic'],
 		namespace: 'foo',
-		key: 'anotherEpic',
-		value: anotherEpic, // The epic itself.
+		feature: 'bar',
 	},
 ];
 ```
@@ -54,6 +54,21 @@ New entries are processed differently based on the type of the injectable.
 - Reducers: the root reducer is assembled from `store.entries.reducers` directly.
 - Middleware: the root middleware essentially iterates over current `store.entries.middleware` per each action.
 
-Here is a visual representation as well.
+The `path` property is mainly useful for reducers, allowing deep reducer injection for a [view-based state structure](/tutorial/04-view-state-management). Additionally, Redux Tools allow us to inject epics and middleware as functions or within an array.
 
-![](lifecycle.png)
+```js
+store.injectEpics([someEpic, anotherEpic]);
+store.injectEpics(someEpic);
+```
+
+The calls above will result in 3 entries being stored:
+
+```js
+const entries = [
+	{ value: someEpic, path: [] },
+	{ value: anotherEpic, path: [] },
+	{ value: someEpic, path: [] },
+];
+```
+
+Because the `path` of both `someEpic` entries is the same, the epic will only be run once. However, in order to fully eject `someEpic`, `store.ejectEpics(someEpic)` has to be called twice.

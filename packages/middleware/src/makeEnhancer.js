@@ -11,7 +11,7 @@ import {
 export const storeInterface = makeStoreInterface('middleware');
 
 const noopEntry = {
-	key: '@redux-tools/NOOP_MIDDLEWARE',
+	path: ['@redux-tools/NOOP_MIDDLEWARE'],
 	value: () => next => action => next(action),
 };
 

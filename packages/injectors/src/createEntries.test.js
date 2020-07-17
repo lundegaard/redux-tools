@@ -1,59 +1,66 @@
-import { noop } from 'ramda-extension';
-
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
-import { FUNCTION_KEY } from './constants';
 import createEntries from './createEntries';
 
+const foo = () => {};
+
+const bar = () => {};
+
 describe('createEntries', () => {
-	it('correctly creates an array of entries', () => {
-		expect(
-			createEntries(
-				{
-					foo: 'bar',
-					bar: 'baz',
-				},
-				{
-					namespace: 'ns',
-					feature: 'grid',
-				}
-			)
-		).toEqual([
-			{ key: 'foo', value: 'bar', namespace: 'ns', feature: 'grid' },
-			{ key: 'bar', value: 'baz', namespace: 'ns', feature: 'grid' },
-		]);
-	});
-
 	it('handles functions', () => {
-		expect(
-			createEntries(noop, {
-				namespace: 'ns',
-				feature: 'grid',
-			})
-		).toEqual([
-			{
-				key: FUNCTION_KEY,
-				value: noop,
-				namespace: 'ns',
-				feature: 'grid',
-			},
+		expect(createEntries(foo)).toEqual([{ path: [], value: foo }]);
+	});
+
+	it('handles arrays', () => {
+		expect(createEntries([foo, bar])).toEqual([
+			{ path: [], value: foo },
+			{ path: [], value: bar },
 		]);
 	});
 
-	it('defaults feature', () => {
-		expect(
-			createEntries(
-				{
-					foo: 'bar',
-					bar: 'baz',
-				},
-				{
-					namespace: 'ns',
-				}
-			)
-		).toEqual([
-			{ key: 'foo', value: 'bar', namespace: 'ns', feature: DEFAULT_FEATURE },
-			{ key: 'bar', value: 'baz', namespace: 'ns', feature: DEFAULT_FEATURE },
+	it('handles simple objects', () => {
+		expect(createEntries({ foo, bar })).toEqual([
+			{ path: ['foo'], value: foo },
+			{ path: ['bar'], value: bar },
+		]);
+	});
+
+	it('handles nested objects', () => {
+		expect(createEntries({ a: { foo }, b: { bar } })).toEqual([
+			{ path: ['a', 'foo'], value: foo },
+			{ path: ['b', 'bar'], value: bar },
+		]);
+	});
+
+	it('handles complex objects', () => {
+		expect(createEntries({ a: { foo }, b: bar, c: [foo, bar] })).toEqual([
+			{ path: ['a', 'foo'], value: foo },
+			{ path: ['b'], value: bar },
+			{ path: ['c'], value: foo },
+			{ path: ['c'], value: bar },
+		]);
+	});
+
+	it('handles complex arrays', () => {
+		expect(createEntries([{ a: { foo } }, { b: bar }, { c: [foo, bar] }, foo])).toEqual([
+			{ path: ['a', 'foo'], value: foo },
+			{ path: ['b'], value: bar },
+			{ path: ['c'], value: foo },
+			{ path: ['c'], value: bar },
+			{ path: [], value: foo },
+		]);
+	});
+
+	it('supplies additional props to the entries', () => {
+		expect(createEntries({ a: { foo, bar } }, { namespace: 'foo', feature: 'bar' })).toEqual([
+			{ path: ['a', 'foo'], value: foo, namespace: 'foo', feature: 'bar' },
+			{ path: ['a', 'bar'], value: bar, namespace: 'foo', feature: 'bar' },
+		]);
+	});
+
+	it('supplies the default feature if the namespace is defined', () => {
+		expect(createEntries({ a: { foo } }, { namespace: 'foo' })).toEqual([
+			{ path: ['a', 'foo'], value: foo, namespace: 'foo', feature: DEFAULT_FEATURE },
 		]);
 	});
 });

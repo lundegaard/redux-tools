@@ -1,42 +1,27 @@
-import invariant from 'invariant';
-import { o, map, when, reduce, assocPath } from 'ramda';
-import { isPlainObject } from 'ramda-extension';
+import { reduce, o, assocPath, path } from 'ramda';
 
-import { FUNCTION_KEY } from '@redux-tools/injectors';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
-import combineReducers from './combineReducers';
+import combineReducerSchema from './combineReducerSchema';
+import { ROOT_KEY } from './constants';
 import filterReducer from './filterReducer';
 
-export const deepCombineReducers = o(
-	combineReducers,
-	map(when(isPlainObject, object => deepCombineReducers(object)))
+const combineReducerEntries = o(
+	combineReducerSchema,
+	reduce((schema, entry) => {
+		const pathDefinition = [
+			...(entry.namespace ? [entry.feature ?? DEFAULT_FEATURE] : []),
+			...(entry.namespace ? [entry.namespace] : []),
+			...entry.path,
+			ROOT_KEY,
+		];
+
+		return assocPath(
+			pathDefinition,
+			[...(path(pathDefinition, schema) ?? []), filterReducer(entry.value, entry.namespace)],
+			schema
+		);
+	}, {})
 );
-
-const getReducerPath = (feature, namespace, key) => {
-	invariant(
-		namespace || key !== FUNCTION_KEY,
-		'You can only inject reducers as functions if you specify a namespace.'
-	);
-
-	if (!namespace) {
-		return [key];
-	}
-
-	if (key === FUNCTION_KEY) {
-		return [feature, namespace];
-	}
-
-	return [feature, namespace, key];
-};
-
-const entryReducer = (schema, { value, key, namespace, feature }) =>
-	assocPath(
-		getReducerPath(feature || DEFAULT_FEATURE, namespace, key),
-		filterReducer(value, namespace),
-		schema
-	);
-
-const combineReducerEntries = o(deepCombineReducers, reduce(entryReducer, {}));
 
 export default combineReducerEntries;

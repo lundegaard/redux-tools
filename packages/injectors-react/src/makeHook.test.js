@@ -13,6 +13,8 @@ const useThings = makeHook(storeInterface);
 
 jest.mock('./constants', () => ({ IS_SERVER: false }));
 
+const injectables = { foo: noop };
+
 const Test = ({ children }) => {
 	children();
 
@@ -35,7 +37,7 @@ describe('makeHook', () => {
 	it('calls proper store methods', () => {
 		mount(
 			<NamespaceProvider store={store} namespace="yolo">
-				<Test>{() => useThings({ foo: noop })}</Test>
+				<Test>{() => useThings(injectables)}</Test>
 			</NamespaceProvider>
 		);
 
@@ -48,16 +50,11 @@ describe('makeHook', () => {
 
 		mount(
 			<NamespaceProvider store={store} useNamespace={always(undefined)}>
-				<Test>{() => useThings({ foo: noop })}</Test>
+				<Test>{() => useThings(injectables)}</Test>
 			</NamespaceProvider>
 		);
 
-		expect(warn).toHaveBeenCalledWith(
-			'@redux-tools: This warning happened while injecting the following things: foo.',
-			"You're injecting things, but the namespace could not be resolved from React context!",
-			'They will be injected globally. If this is intended, consider passing',
-			"'isGlobal: true' to the injector, e.g. 'useThings(things, { isGlobal: true })'."
-		);
+		expect(warn).toHaveBeenCalled();
 	});
 
 	it('does not warn if namespace is missing and isGlobal is not passed', () => {
@@ -65,7 +62,7 @@ describe('makeHook', () => {
 
 		mount(
 			<NamespaceProvider store={store}>
-				<Test>{() => useThings({ foo: noop })}</Test>
+				<Test>{() => useThings(injectables)}</Test>
 			</NamespaceProvider>
 		);
 
@@ -77,7 +74,7 @@ describe('makeHook', () => {
 
 		mount(
 			<NamespaceProvider store={store} namespace="yolo">
-				<Test>{() => useThings({ foo: noop })}</Test>
+				<Test>{() => useThings(injectables)}</Test>
 			</NamespaceProvider>
 		);
 
@@ -90,7 +87,7 @@ describe('makeHook', () => {
 		expect(() => {
 			mount(
 				<NamespaceProvider store={store}>
-					<Test>{() => useThings({ foo: noop }, { isNamespaced: true })}</Test>
+					<Test>{() => useThings(injectables, { isNamespaced: true })}</Test>
 				</NamespaceProvider>
 			);
 		}).toThrowError(

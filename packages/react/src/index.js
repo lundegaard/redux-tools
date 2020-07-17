@@ -28,8 +28,14 @@ export {
 	composeReducers,
 	makeEnhancer as makeReducersEnhancer,
 	makeReducer,
+	combineReducers,
 } from '@redux-tools/reducers';
 
 export { useReducers, withReducers } from '@redux-tools/reducers-react';
 
-export { namespacedConnect, useNamespace, NamespaceProvider } from '@redux-tools/namespaces-react';
+export {
+	namespacedConnect,
+	useNamespace,
+	NamespaceProvider,
+	withNamespaceProvider,
+} from '@redux-tools/namespaces-react';

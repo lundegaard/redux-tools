@@ -1,7 +1,6 @@
 import { identity } from 'ramda';
 import { createStore as createStoreRedux } from 'redux';
 
-import { FUNCTION_KEY } from '@redux-tools/injectors';
 import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 
 import makeEnhancer, { storeInterface } from './makeEnhancer';
@@ -34,12 +33,12 @@ describe('makeEnhancer', () => {
 		expect(store.replaceReducer).toHaveBeenCalledTimes(2);
 	});
 
-	it('handles injecting and ejecting functions', () => {
+	it('handles injecting and ejecting namespaced reducers as functions', () => {
 		store.injectReducers(identity, { namespace: 'ns' });
 
 		expect(store.replaceReducer).toHaveBeenCalledTimes(1);
 		expect(getEntries(store)).toEqual([
-			{ key: FUNCTION_KEY, value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
+			{ path: [], value: identity, namespace: 'ns', feature: DEFAULT_FEATURE },
 		]);
 
 		store.ejectReducers(identity, { namespace: 'ns' });
@@ -48,8 +47,16 @@ describe('makeEnhancer', () => {
 		expect(getEntries(store)).toEqual([]);
 	});
 
-	it('throws when injecting a function without a namespace', () => {
-		expect(() => store.injectReducers(identity)).toThrow();
+	it('handles injecting and ejecting global reducers as functions', () => {
+		store.injectReducers(identity);
+
+		expect(store.replaceReducer).toHaveBeenCalledTimes(1);
+		expect(getEntries(store)).toEqual([{ path: [], value: identity }]);
+
+		store.ejectReducers(identity);
+
+		expect(store.replaceReducer).toHaveBeenCalledTimes(2);
+		expect(getEntries(store)).toEqual([]);
 	});
 
 	it('removes data from state after ejecting (object reducers without preloaded state)', () => {

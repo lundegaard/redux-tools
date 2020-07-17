@@ -48,9 +48,7 @@ const epic = (action$, state$, { namespacedState$, globalAction$ }) =>
 
 ### namespacedState\$
 
-A stream creator for namespaced state. Similar to `state$`, except it will always be the state
-associated with the epic. Therefore, if you have an epic injected under the `foo` namespace,
-`namespacedState$` will use `state.namespaces.foo`.
+A stream creator for namespaced state. Similar to `state$`, except it will always be the state associated with the epic. Therefore, if you have an epic injected under the `foo` namespace, `namespacedState$` will use `state.namespaces.foo`.
 
 **Arguments**
 

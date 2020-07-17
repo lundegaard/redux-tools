@@ -20,8 +20,7 @@ export default withMiddleware(someMiddleware)(Container);
 
 ### withMiddleware()
 
-Creates a component decorator which handles the lifecycle of passed middleware, injecting and
-ejecting them automatically. The namespace of the middleware is determined based on React context.
+Creates a component decorator which handles the lifecycle of passed middleware, injecting and ejecting them automatically. The namespace of the middleware is determined based on React context.
 
 **Arguments**
 
@@ -30,8 +29,7 @@ ejecting them automatically. The namespace of the middleware is determined based
    - [`isGlobal`] \( _boolean_ ): Pass `true` if the middleware shouldn't be namespaced.
    - [`isNamespaced`] \( _boolean_ ): Pass `true` if the middleware must be namespaced.
    - [`isPersistent`] \( _boolean_ ): Whether the middleware should be automatically ejected after the component is unmounted.
-   - [`namespace`] \( _string_ ): Namespace to inject the middleware under. If passed, the middleware
-     will not handle actions from other namespaces.
+   - [`namespace`] \( _string_ ): Namespace to inject the middleware under. If passed, the middleware will not handle actions from other namespaces.
    - [`feature`] \( _string_ ): Feature to resolve the namespace by (if using namespace providers).
 
 **Returns**

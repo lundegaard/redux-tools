@@ -56,7 +56,7 @@ Opposite to `store.injectEpics`. This function will stop the passed epics. Make 
 
 **Arguments**
 
-1. `epics` ( _Function|Array|Object_ ): Epics to eject. Make sure that both the keys and values match the injected ones!
+1. `epics` ( _Function|Array|Object_ ): Epics to eject. Make sure that both the keys and values match the injected ones.
 2. `options` ( _Object_ ): Ejection options. The following keys are supported:
    - [`namespace`] \( _string_ ): Namespace the epics were injected under.
    - [`feature`] \( _string_ ): Feature the epics were injected under.

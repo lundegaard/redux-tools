@@ -14,7 +14,7 @@ Use the appropriate action creator factory based on the number of arguments the 
 - `makePayloadActionCreator` for parameterized actions.
 - `makePayloadMetaActionCreator` if you need to pass any metadata.
 
-_REASONING_: Any custom logic should be left to the reducer; action creator usage should be transparent. You should be able to rely on your action creators to always use the arguments directly as `action.payload` or `action.meta`.
+!> Any custom logic should be left to the reducer; action creator usage should be transparent. You should be able to rely on your action creators to always use the arguments directly as `action.payload` or `action.meta`.
 
 ## Usage Example
 
@@ -86,8 +86,7 @@ Creates a new binary action creator which will use the first argument as the pay
 
 !> This action creator factory is only meant to be used to create other action creator factories. We do not recommend using `configureActionCreator` in your application code. See [best practices](#best-practices).
 
-Creates a new unary action creator which will apply the provided functions to an argument, producing
-the `payload` and `meta` properties.
+Creates a new unary action creator which will apply the provided functions to an argument, producing the `payload` and `meta` properties.
 
 **Arguments**
 

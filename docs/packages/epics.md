@@ -17,10 +17,7 @@ const epicMiddleware = createEpicMiddleware();
 
 const store = createStore(
 	identity,
-	compose(
-		makeEnhancer({ epicMiddleware }),
-		applyMiddleware(epicMiddleware)
-	)
+	compose(makeEnhancer({ epicMiddleware }), applyMiddleware(epicMiddleware))
 );
 
 store.injectEpics({ epicA, epicB });

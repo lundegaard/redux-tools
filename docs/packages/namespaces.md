@@ -14,8 +14,7 @@ There are essentially two edge cases:
 
 - If the action has no namespace, it is a global action and therefore affects **all** namespaces.
 - If the tested namespace is undefined, it is a global namespace and is therefore affected by **all** actions.
-  - This allows easier usage of other packages (notably using `namespacedConnect` for dispatching
-    actions affecting global reducers and epics, instead of having to use `connect` separately).
+  - This allows easier usage of other packages (notably using `namespacedConnect` for dispatching actions affecting global reducers and epics, instead of having to use `connect` separately).
 
 **Arguments**
 
@@ -128,8 +127,7 @@ getStateByNamespace('namespaces', 'foo', state); // { value: 'bar' }
 
 ### preventNamespace()
 
-Associates an action with a "global" namespace, ensuring that this action's namespace won't be overwritten
-by any namespaced injectables.
+Associates an action with a "global" namespace, ensuring that this action's namespace won't be overwritten by any namespaced injectables.
 
 **Arguments**
 

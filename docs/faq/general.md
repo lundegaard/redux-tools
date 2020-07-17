@@ -16,9 +16,11 @@ import { composeWithDevTools } from 'redux-devtools-extension/logOnlyInProductio
 
 const composeEnhancers = composeWithDevTools({
 	latency: 0,
-	// NOTE: This might help in some versions of Redux DevTools.
-	// shouldHotReload: false,
 });
 ```
+
+If you're having issues with infinite loops outside production environments, passing `shouldHotReload: false` might help you get around this issue.
+
+> `store.replaceReducer` will otherwise cause all prior actions to be redispatched to the new reducer, updating the state. This might cause a rerender of some of your components. However, if you are creating components dynamically without proper memoization, they will be completely remounted. Whenever a Redux Tools decorator is remounted, the injectables are reinjected accordingly. This will cause another `store.replaceReducer` call and an infinite loop.
 
 See the [API Documentation](https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md) for more info.

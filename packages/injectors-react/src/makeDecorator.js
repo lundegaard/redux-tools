@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { toPascalCase, isObject } from 'ramda-extension';
 import React from 'react';
 
-import { DEFAULT_FEATURE } from '@redux-tools/namespaces';
 import { useNamespace } from '@redux-tools/namespaces-react';
 import { getDisplayName } from '@redux-tools/utils-react';
 
@@ -15,21 +14,16 @@ const makeDecorator = (storeInterface, useInjectables) => {
 	const decoratorName = type ? `With${toPascalCase(type)}` : 'Injector';
 
 	return (injectables, options = {}) => NextComponent => {
-		const Injector = ({ feature: propFeature, namespace: propNamespace, ...otherProps }) => {
-			const feature = options.feature || propFeature || DEFAULT_FEATURE;
+		const Injector = props => {
+			// eslint-disable-next-line react/destructuring-assignment
+			const feature = options.feature ?? props.feature ?? null;
 			const contextNamespace = useNamespace(feature);
-			const namespace = options.namespace || propNamespace || contextNamespace;
+			// eslint-disable-next-line react/destructuring-assignment
+			const namespace = options.namespace ?? props.namespace ?? contextNamespace ?? null;
 			const isInitialized = useInjectables(injectables, { ...options, feature, namespace });
 
 			if (isInitialized) {
-				return (
-					<NextComponent
-						feature={feature}
-						key={String([feature, namespace])}
-						namespace={namespace}
-						{...otherProps}
-					/>
-				);
+				return <NextComponent key={String([feature, namespace])} {...props} />;
 			}
 
 			return null;

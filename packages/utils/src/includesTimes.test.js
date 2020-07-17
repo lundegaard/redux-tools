@@ -1,9 +1,9 @@
 import includesTimes from './includesTimes';
 
 const entries = [
-	{ key: 'foo', value: 'bar', namespace: 'ns' },
-	{ key: 'foo', value: 'bar', namespace: 'ns' },
-	{ key: 'bar', value: 'baz', namespace: 'ns' },
+	{ path: ['foo'], value: 'bar', namespace: 'ns' },
+	{ path: ['foo'], value: 'bar', namespace: 'ns' },
+	{ path: ['bar'], value: 'baz', namespace: 'ns' },
 ];
 
 describe('includesTimes', () => {
@@ -12,7 +12,7 @@ describe('includesTimes', () => {
 			includesTimes(
 				2,
 				{
-					key: 'foo',
+					path: ['foo'],
 					value: 'bar',
 					namespace: 'ns',
 				},
@@ -26,7 +26,7 @@ describe('includesTimes', () => {
 			includesTimes(
 				0,
 				{
-					key: 'bar',
+					path: ['bar'],
 					value: 'baz',
 					namespace: 'ns',
 				},
@@ -40,7 +40,7 @@ describe('includesTimes', () => {
 			includesTimes(
 				1,
 				{
-					key: 'LOL',
+					path: ['LOL'],
 					value: 'NOPE',
 					namespace: 'ns',
 				},

@@ -9,6 +9,7 @@
   - [Dependency Injection](/tutorial/01-dependency-injection)
   - [Namespacing](/tutorial/02-namespacing)
   - [Multi-Instance Components](/tutorial/03-multi-instance-components)
+  - [View State Management](/tutorial/04-view-state-management)
 
 - FAQ
 

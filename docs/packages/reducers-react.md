@@ -24,7 +24,7 @@ Creates a component decorator which handles the lifecycle of passed reducers, mo
 
 **Arguments**
 
-1. `reducers` ( _Object_ ): The reducers to use.
+1. `reducers` ( _Function|Array|Object_ ): The reducers to use.
 2. [`options`] \( _Object_ ): Options for the decorator. The following keys are supported:
    - [`isGlobal`] \( _boolean_ ): Pass `true` if the reducers shouldn't be namespaced.
    - [`isNamespaced`] \( _boolean_ ): Pass `true` if the reducers must be namespaced.

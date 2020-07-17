@@ -1,5 +1,5 @@
 import invariant from 'invariant';
-import { keys, concat, forEach } from 'ramda';
+import { pluck, concat } from 'ramda';
 import { noop, isObject, toScreamingSnakeCase } from 'ramda-extension';
 
 import { withoutOnce } from '@redux-tools/utils';
@@ -24,23 +24,13 @@ const enhanceStore = (prevStore, storeInterface, { onEjected = noop, onInjected 
 	const inject = (injectables, props = {}) => {
 		const entries = createEntries(injectables, props);
 
-		forEach(
-			entry =>
-				invariant(
-					// NOTE: `isFunction` from ramda-extension returns `false` for `jest.fn()`.
-					typeof entry.value === 'function',
-					`Injecting ${type}, but the value of ${JSON.stringify(entry)} is not a function.`
-				),
-			entries
-		);
-
 		const nextEntries = concat(getEntries(nextStore), entries);
 		setEntries(nextEntries, nextStore);
 		onInjected({ injectables, props, entries });
 
 		dispatch({
 			type: `@redux-tools/${actionType}_INJECTED`,
-			payload: keys(injectables),
+			payload: pluck('path', entries),
 			meta: props,
 		});
 	};
@@ -53,7 +43,7 @@ const enhanceStore = (prevStore, storeInterface, { onEjected = noop, onInjected 
 
 		dispatch({
 			type: `@redux-tools/${actionType}_EJECTED`,
-			payload: typeof injectables === 'function' ? null : keys(injectables),
+			payload: pluck('path', entries),
 			meta: props,
 		});
 	};

@@ -7,8 +7,8 @@ import { DEFAULT_FEATURE, getStateByNamespace } from '@redux-tools/namespaces';
  * Stream creator to pass as `streamCreator` to the enhancer. Adds a `namespacedState$` argument
  * to each epic, allowing access to state based on the namespace of the epic.
  */
-export const namespacedState$ = ({ feature = DEFAULT_FEATURE, namespace, state$ }) =>
-	state$.pipe(map(getStateByNamespace(feature, namespace)));
+export const namespacedState$ = ({ feature, namespace, state$ }) =>
+	state$.pipe(map(getStateByNamespace(feature ?? DEFAULT_FEATURE, namespace)));
 
 /**
  * Stream creator to pass as `streamCreator` to the enhancer. Adds a `globalAction$` argument

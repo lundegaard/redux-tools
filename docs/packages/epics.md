@@ -31,7 +31,7 @@ A function which creates an enhancer to pass to `createStore()`.
 
 **Arguments**
 
-1. `options` ( _Object_ ):
+1. `options` ( _Function|Array|Object_ ):
    - `epicMiddleware` ( _Middleware_ ): Return value of `createEpicMiddleware()`. Note that you must mount this middleware yourself (using the `applyMiddleware(epicMiddleware)` enhancer).
    - `streamCreator` ( _Function_ ): [Stream creator](/packages/stream-creators), the return value of which will be passed as the 3rd argument to all injected epics.
 
@@ -45,7 +45,7 @@ This function will store passed epics internally and start them if they're not r
 
 **Arguments**
 
-1. `epics` ( _Object_ ): Epics to inject.
+1. `epics` ( _Function|Array|Object_ ): Epics to inject.
 2. `options` ( _Object_ ): Injection options. The following keys are supported:
    - [`namespace`] \( _string_ ): Namespace to inject the epic under. If passed, the epic will not handle actions from other namespaces and will always include the namespace in all returned actions.
    - [`feature`] \( _string_ ): Feature to resolve the namespace by (if using namespace providers).
@@ -56,7 +56,7 @@ Opposite to `store.injectEpics`. This function will stop the passed epics. Make 
 
 **Arguments**
 
-1. `epics` ( _Object_ ): Epics to eject. Make sure that both the keys and values match the injected ones!
+1. `epics` ( _Function|Array|Object_ ): Epics to eject. Make sure that both the keys and values match the injected ones.
 2. `options` ( _Object_ ): Ejection options. The following keys are supported:
    - [`namespace`] \( _string_ ): Namespace the epics were injected under.
    - [`feature`] \( _string_ ): Feature the epics were injected under.

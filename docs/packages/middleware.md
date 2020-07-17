@@ -40,7 +40,7 @@ This function will store passed middleware internally and replace the existing m
 
 **Arguments**
 
-1. `middleware` ( _Object_ ): Middleware to inject
+1. `middleware` ( _Function|Array|Object_ ): Middleware to inject
 2. `options` ( _Object_ ): Injection options. The following keys are supported:
    - [`namespace`] \( _string_ ): Namespace to inject the middleware under. If passed, the middleware will not handle actions from other namespaces.
    - [`feature`] \( _string_ ): Feature to resolve the namespace by (if using namespace providers).
@@ -51,7 +51,7 @@ Opposite to `store.injectMiddleware`. This function will remove the injected mid
 
 **Arguments**
 
-1. `middleware` ( _Object_ ): Middleware to eject. Make sure that both the keys and values match the injected ones.
+1. `middleware` ( _Function|Array|Object_ ): Middleware to eject. Make sure that both the keys and values match the injected ones.
 2. `options` ( _Object_ ): Ejection options. The following keys are supported:
    - [`namespace`] \( _string_ ): Namespace the middleware were injected under.
    - [`feature`] \( _string_ ): Feature the middleware were injected under.

@@ -36,7 +36,7 @@ This function will store passed reducers internally and replace the existing red
 
 **Arguments**
 
-1. `reducers` ( _Object_ ): Reducers to inject
+1. `reducers` ( _Function|Array|Object_ ): Reducers to inject
 2. `options` ( _Object_ ): Injection options. The following keys are supported:
    - [`namespace`] \( _string_ ): Namespace to inject the reducer under. If passed, the reducer will not handle actions from other namespaces and will store its state in `state.namespaces[namespace]` instead of in the root.
    - [`feature`] \( _string_ ): This string will be used instead of the default `namespaces` key to store the reducer state, allowing you to use Redux Tools for feature-based store structure (similar to Redux Form, e.g. `state.form.contact.values`).
@@ -47,7 +47,7 @@ Opposite to `store.injectReducers`. This function will remove the injected reduc
 
 **Arguments**
 
-1. `reducers` ( _Object_ ): Reducers to eject. Make sure that both the keys and values match the injected ones.
+1. `reducers` ( _Function|Array|Object_ ): Reducers to eject. Make sure that both the keys and values match the injected ones.
 2. `options` ( _Object_ ): Ejection options. The following keys are supported:
    - [`namespace`] \( _string_ ): Namespace the reducers were injected under.
    - [`feature`] \( _string_ ): Namespace the reducers were injected under.

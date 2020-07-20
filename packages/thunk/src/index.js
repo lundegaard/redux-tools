@@ -4,18 +4,22 @@ import { isFunction } from 'ramda-extension';
 import {
 	getNamespaceByAction,
 	defaultNamespace,
-	getStateByNamespace,
+	getStateByFeatureAndNamespace,
+	DEFAULT_FEATURE,
 } from '@redux-tools/namespaces';
 
 const makeThunkMiddleware = dependencies => ({ dispatch, getState }) => next => action => {
 	if (isFunction(action)) {
 		const namespace = getNamespaceByAction(action);
 
+		const getNamespacedState = (feature = DEFAULT_FEATURE) =>
+			getStateByFeatureAndNamespace(feature, namespace, getState());
+
 		return action({
 			dispatch: o(dispatch, defaultNamespace(namespace)),
 			getState,
-			getNamespacedState: feature => getStateByNamespace(feature, namespace, getState()),
 			namespace,
+			getNamespacedState,
 			...dependencies,
 		});
 	}

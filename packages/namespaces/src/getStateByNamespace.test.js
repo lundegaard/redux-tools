@@ -8,17 +8,15 @@ const state = {
 };
 
 describe('getStateByNamespace', () => {
-	it('retrieves correct state slice when namespace matches', () => {
-		expect(getStateByNamespace(DEFAULT_FEATURE, 'foo', state)).toEqual({
-			value: 'Wassup',
-		});
+	it('retrieves correct state slice an existing namespace is passed', () => {
+		expect(getStateByNamespace('foo', state)).toBe(state[DEFAULT_FEATURE].foo);
 	});
 
 	it('returns undefined when a nonexistent namespace is passed', () => {
-		expect(getStateByNamespace(DEFAULT_FEATURE, 'bar', state)).toBeUndefined();
+		expect(getStateByNamespace('bar', state)).toBeUndefined();
 	});
 
 	it('returns undefined when no namespace is passed', () => {
-		expect(getStateByNamespace(DEFAULT_FEATURE, undefined, state)).toBeUndefined();
+		expect(getStateByNamespace(undefined, state)).toBeUndefined();
 	});
 });

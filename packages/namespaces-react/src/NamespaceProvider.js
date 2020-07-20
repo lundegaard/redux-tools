@@ -18,7 +18,7 @@ const NamespaceProvider = ({ children, feature, namespace, store, useNamespace }
 			mergeContextValues(context, {
 				// NOTE: Defaulting here is safer than using `Provider.defaultProps`,
 				// because passing `null` would not result in a fallback to `DEFAULT_FEATURE`.
-				namespaces: { [feature || DEFAULT_FEATURE]: namespace },
+				namespaces: { [feature ?? DEFAULT_FEATURE]: namespace },
 				useNamespace,
 				isUseNamespaceProvided: Boolean(useNamespace),
 			}),

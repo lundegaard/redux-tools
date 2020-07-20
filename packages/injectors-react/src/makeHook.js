@@ -1,5 +1,5 @@
 import invariant from 'invariant';
-import { all, includes, omit } from 'ramda';
+import { all, includes, omit, isNil } from 'ramda';
 import { toPascalCase, isNotNil, rejectNil, isObject } from 'ramda-extension';
 import { useLayoutEffect, useState, useEffect, useDebugValue, useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
@@ -86,14 +86,14 @@ const makeHook = storeInterface => {
 
 		// NOTE: This doesn't run on the server, but won't trigger `useLayoutEffect` warnings either.
 		useUniversalLayoutEffect(() => {
-			if (isGlobal && feature !== DEFAULT_FEATURE) {
+			if (isGlobal && isNotNil(feature) && feature !== DEFAULT_FEATURE) {
 				warn(
 					`You are using a feature (${feature}) with global ${type}.`,
 					'This will have no effect.'
 				);
 			}
 
-			if (isUseNamespaceProvided && !namespace && !isGlobal) {
+			if (isUseNamespaceProvided && isNil(namespace) && !isGlobal) {
 				warn(
 					`You're injecting ${type}, but the namespace could not be resolved from React context!`,
 					'They will be injected globally. If this is intended, consider passing',
@@ -112,7 +112,7 @@ const makeHook = storeInterface => {
 			}
 
 			invariant(
-				!isNamespaced || namespace,
+				!isNamespaced || isNotNil(namespace),
 				`You're injecting ${type} marked as namespaced, but no namespace could be resolved.`
 			);
 

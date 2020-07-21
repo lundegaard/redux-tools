@@ -92,8 +92,12 @@ const makeEnhancer = () => {
 							dispatch: o(dispatch, defaultNamespace(namespace)),
 							getState: nextStore.getState,
 							getNamespacedState: namespace
-								? (feature = entry.feature) =>
-										getStateByFeatureAndNamespace(feature ?? DEFAULT_FEATURE, namespace, getState())
+								? feature =>
+										getStateByFeatureAndNamespace(
+											feature ?? entry.feature ?? DEFAULT_FEATURE,
+											namespace,
+											getState()
+										)
 								: null,
 						})
 				);

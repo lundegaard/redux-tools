@@ -12,8 +12,8 @@ const makeThunkMiddleware = dependencies => ({ dispatch, getState }) => next => 
 	if (isFunction(action)) {
 		const namespace = getNamespaceByAction(action);
 
-		const getNamespacedState = (feature = DEFAULT_FEATURE) =>
-			getStateByFeatureAndNamespace(feature, namespace, getState());
+		const getNamespacedState = feature =>
+			getStateByFeatureAndNamespace(feature ?? DEFAULT_FEATURE, namespace, getState());
 
 		return action({
 			dispatch: o(dispatch, defaultNamespace(namespace)),

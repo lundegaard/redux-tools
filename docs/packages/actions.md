@@ -37,7 +37,7 @@ export const increment = makeEmptyActionCreator(ActionTypes.INCREMENT); // 0 arg
 
 Creates an object with values set to `<prefix>/<type>`.
 
-**Arguments**
+**Parameters**
 
 1. `prefix` ( _string_ ): The action prefix.
 2. `actionTypes` ( _Array_ ): Array of values to mirror as keys.
@@ -50,7 +50,7 @@ Creates an object with values set to `<prefix>/<type>`.
 
 Creates a new nullary action creator. Also reexported as `makeConstantActionCreator` for backwards compatibility.
 
-**Arguments**
+**Parameters**
 
 1. `type` ( _string_ ): The action type.
 
@@ -62,7 +62,7 @@ Creates a new nullary action creator. Also reexported as `makeConstantActionCrea
 
 Creates a new unary action creator which will use the argument as the payload. Also reexported as `makeSimpleActionCreator` for backwards compatibility.
 
-**Arguments**
+**Parameters**
 
 1. `type` ( _string_ ): The action type.
 
@@ -74,7 +74,7 @@ Creates a new unary action creator which will use the argument as the payload. A
 
 Creates a new binary action creator which will use the first argument as the payload and the second argument as the meta.
 
-**Arguments**
+**Parameters**
 
 1. `type` ( _string_ ): The action type.
 
@@ -88,7 +88,7 @@ Creates a new binary action creator which will use the first argument as the pay
 
 Creates a new unary action creator which will apply the provided functions to an argument, producing the `payload` and `meta` properties.
 
-**Arguments**
+**Parameters**
 
 1. `type` ( _string_ ): The action type.
 2. `getPayload` ( _(...any) –> any_ ): Payload getter.

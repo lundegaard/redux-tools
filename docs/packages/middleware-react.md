@@ -22,7 +22,7 @@ export default withMiddleware(someMiddleware)(Container);
 
 Creates a component decorator which handles the lifecycle of passed middleware, injecting and ejecting them automatically. The namespace of the middleware is determined based on React context.
 
-**Arguments**
+**Parameters**
 
 1. `middleware` ( _Function|Array|Object_ ): The middleware to use.
 2. [`options`] \( _Object_ ): Options for the decorator. The following keys are supported:
@@ -34,4 +34,4 @@ Creates a component decorator which handles the lifecycle of passed middleware, 
 
 **Returns**
 
-(_Function_): A component decorator.
+( _Function_ ): A component decorator.

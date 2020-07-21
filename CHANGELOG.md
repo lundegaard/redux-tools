@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - (_namespaces_): Added `getStateByAction` and `getStateByNamespace` which always use the default feature.
 - (_namespaces-react_): New package! Existing logic from various packages has been moved here (`useNamespace`, `NamespaceProvider` and `namespacedConnect`).
 - (_namespaces-react_): `withNamespaceProvider` can now be used to create complex multi-instance components more easily.
+- (_namespaces-react_): Added `useNamespacedDispatch` and `useNamespacedSelector` hooks.
 - (_reducers_): `makeReducer` now supports arrays of strings and predicates.
 - (_reducers_): It is now possible to inject deep reducer structures, allowing for view-based state management.
 

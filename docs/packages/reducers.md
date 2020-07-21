@@ -34,7 +34,7 @@ A function which creates an enhancer to pass to `createStore()`.
 
 This function will store passed reducers internally and replace the existing reducer with a fresh one.
 
-**Arguments**
+**Parameters**
 
 1. `reducers` ( _Function|Array|Object_ ): Reducers to inject
 2. `options` ( _Object_ ): Injection options. The following keys are supported:
@@ -45,7 +45,7 @@ This function will store passed reducers internally and replace the existing red
 
 Opposite to `store.injectReducers`. This function will remove the injected reducers. Make sure that you pass the correct namespace and reducers (keys and values), otherwise the reducers will not be removed.
 
-**Arguments**
+**Parameters**
 
 1. `reducers` ( _Function|Array|Object_ ): Reducers to eject. Make sure that both the keys and values match the injected ones.
 2. `options` ( _Object_ ): Ejection options. The following keys are supported:

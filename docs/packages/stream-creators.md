@@ -50,7 +50,7 @@ const epic = (action$, state$, { namespacedState$, globalAction$ }) =>
 
 A stream creator for namespaced state. Similar to `state$`, except it will always be the state associated with the epic. Therefore, if you have an epic injected under the `foo` namespace, `namespacedState$` will use `state.namespaces.foo`.
 
-**Arguments**
+**Parameters**
 
 1. `bag` ( _Object_ ): Provided by the enhancer. Contains `namespace`, `feature`, `action$`, `globalAction$`, and `state$`.
 
@@ -62,7 +62,7 @@ A stream creator for namespaced state. Similar to `state$`, except it will alway
 
 A stream creator for global actions. By default, every injected epic only accepts actions matching its namespace (see [@redux-tools/namespaces](/packages/namespaces) for more info). This stream creator allows you to react to actions from other namespaces if you need to.
 
-**Arguments**
+**Parameters**
 
 1. `bag` ( _Object_ ): Provided by the enhancer. Contains `namespace`, `feature`, `action$`, `globalAction$`, and `state$`.
 

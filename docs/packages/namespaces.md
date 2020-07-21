@@ -16,9 +16,9 @@ There are essentially two edge cases:
 - If the tested namespace is undefined, it is a global namespace and is therefore affected by **all** actions.
   - This allows easier usage of other packages (notably using `namespacedConnect` for dispatching actions affecting global reducers and epics, instead of having to use `connect` separately).
 
-**Arguments**
+**Parameters**
 
-1. [`namespace`] \(_string_): The namespace to check against.
+1. [`namespace`] \( _string_ ): The namespace to check against.
 2. `action` ( _Action_ ): The Redux action to check. Should have a `meta.namespace` property.
 
 **Returns**
@@ -29,7 +29,7 @@ There are essentially two edge cases:
 
 Returns the namespace of an action.
 
-**Arguments**
+**Parameters**
 
 1. `action` ( _Action_ ): The Redux action to get the namespace of. Should have a `meta.namespace` property.
 
@@ -41,9 +41,9 @@ Returns the namespace of an action.
 
 Associates an action with a namespace, overwriting any previous namespace.
 
-**Arguments**
+**Parameters**
 
-1. [`namespace`] \(_string_): The namespace to attach.
+1. [`namespace`] \( _string_ ): The namespace to attach.
 2. `action` ( _Action_ ): Action to attach the namespace to.
 
 **Returns**
@@ -54,9 +54,9 @@ Associates an action with a namespace, overwriting any previous namespace.
 
 Associates an action with a namespace unless it is already associated with some namespace.
 
-**Arguments**
+**Parameters**
 
-1. [`namespace`] \(_string_): The namespace to default to.
+1. [`namespace`] \( _string_ ): The namespace to default to.
 2. `action` ( _Action_ ): Action to default the namespace of.
 
 **Returns**
@@ -67,7 +67,7 @@ Associates an action with a namespace unless it is already associated with some 
 
 Returns Redux state by feature and action namespace.
 
-**Arguments**
+**Parameters**
 
 1. `feature` ( _string_ ): Feature to retrieve the state by.
 2. `action` ( _Action_ ): Redux action with a `meta.namespace` property.
@@ -101,7 +101,7 @@ getStateByFeatureAndAction('namespaces', action, state); // { value: 'bar' }
 
 Returns Redux state by action namespace.
 
-**Arguments**
+**Parameters**
 
 1. `action` ( _Action_ ): Redux action with a `meta.namespace` property.
 2. `state` ( _Object_ ): Redux state.
@@ -134,7 +134,7 @@ getStateByAction(action, state); // { value: 'bar' }
 
 Returns Redux state by feature and namespace.
 
-**Arguments**
+**Parameters**
 
 1. `feature` ( _string_ ): Feature to retrieve the state by.
 2. `namespace` ( _string_ ): Namespace to retrieve the state by.
@@ -162,7 +162,7 @@ getStateByFeatureNamespace('namespaces', 'foo', state); // { value: 'bar' }
 
 Returns Redux state by namespace.
 
-**Arguments**
+**Parameters**
 
 1. `namespace` ( _string_ ): Namespace to retrieve the state by.
 2. `state` ( _Object_ ): Redux state.
@@ -189,7 +189,7 @@ getStateByNamespace('foo', state); // { value: 'bar' }
 
 Associates an action with a "global" namespace, ensuring that this action's namespace won't be overwritten by any namespaced injectables.
 
-**Arguments**
+**Parameters**
 
 1. `action` ( _Action_ ): Action to prevent the namespace of.
 

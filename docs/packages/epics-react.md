@@ -22,7 +22,7 @@ export default withEpics(someEpic)(Container);
 
 Creates a component decorator which handles the lifecycle of passed epics, injecting and ejecting them automatically. The namespace of the epics is determined based on React context.
 
-**Arguments**
+**Parameters**
 
 1. `epics` ( _Function|Array|Object_ ): The epics to use.
 2. `options` ( _Object_ ): Options for the decorator. The following keys are supported:

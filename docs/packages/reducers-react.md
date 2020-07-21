@@ -22,7 +22,7 @@ export default withReducers({ someReducer })(Container);
 
 Creates a component decorator which handles the lifecycle of passed reducers, mounting and unmounting them automatically. The namespace of the reducers is determined based on React context.
 
-**Arguments**
+**Parameters**
 
 1. `reducers` ( _Function|Array|Object_ ): The reducers to use.
 2. [`options`] \( _Object_ ): Options for the decorator. The following keys are supported:

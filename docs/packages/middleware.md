@@ -38,7 +38,7 @@ A function which creates an enhancer to pass to `createStore()`.
 
 This function will store passed middleware internally and replace the existing middleware with a fresh one.
 
-**Arguments**
+**Parameters**
 
 1. `middleware` ( _Function|Array|Object_ ): Middleware to inject
 2. `options` ( _Object_ ): Injection options. The following keys are supported:
@@ -49,7 +49,7 @@ This function will store passed middleware internally and replace the existing m
 
 Opposite to `store.injectMiddleware`. This function will remove the injected middleware. Make sure that you pass the correct namespace and middleware (keys and values), otherwise the middleware will not be removed.
 
-**Arguments**
+**Parameters**
 
 1. `middleware` ( _Function|Array|Object_ ): Middleware to eject. Make sure that both the keys and values match the injected ones.
 2. `options` ( _Object_ ): Ejection options. The following keys are supported:
@@ -60,7 +60,7 @@ Opposite to `store.injectMiddleware`. This function will remove the injected mid
 
 Composes multiple middleware into a single middleware. The former middleware always wrap around the latter middleware, meaning that code called before `next(action)` will get executed sooner in the first middleware than the last, but vice versa when the code is called after `next(action)`.
 
-**Arguments**
+**Parameters**
 
 1. `middleware` ( _...Middleware_ ): Middleware to compose.
 

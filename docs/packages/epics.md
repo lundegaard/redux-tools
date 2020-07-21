@@ -29,7 +29,7 @@ store.injectEpics({ epicA, epicB });
 
 A function which creates an enhancer to pass to `createStore()`.
 
-**Arguments**
+**Parameters**
 
 1. `options` ( _Function|Array|Object_ ):
    - `epicMiddleware` ( _Middleware_ ): Return value of `createEpicMiddleware()`. Note that you must mount this middleware yourself (using the `applyMiddleware(epicMiddleware)` enhancer).
@@ -37,13 +37,13 @@ A function which creates an enhancer to pass to `createStore()`.
 
 **Returns**
 
-(_Enhancer_): A Redux store enhancer which you can pass to `createStore()`.
+( _Enhancer_ ): A Redux store enhancer which you can pass to `createStore()`.
 
 #### store.injectEpics()
 
 This function will store passed epics internally and start them if they're not running already.
 
-**Arguments**
+**Parameters**
 
 1. `epics` ( _Function|Array|Object_ ): Epics to inject.
 2. `options` ( _Object_ ): Injection options. The following keys are supported:
@@ -54,7 +54,7 @@ This function will store passed epics internally and start them if they're not r
 
 Opposite to `store.injectEpics`. This function will stop the passed epics. Make sure that you pass the correct namespace and epics (keys and values), otherwise the epics will not be stopped.
 
-**Arguments**
+**Parameters**
 
 1. `epics` ( _Function|Array|Object_ ): Epics to eject. Make sure that both the keys and values match the injected ones.
 2. `options` ( _Object_ ): Ejection options. The following keys are supported:

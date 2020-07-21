@@ -21,7 +21,9 @@ export {
 	getNamespaceByAction,
 	isActionFromNamespace,
 	getStateByAction,
+	getStateByFeatureAndAction,
 	getStateByNamespace,
+	getStateByFeatureAndNamespace,
 } from '@redux-tools/namespaces';
 
 export {

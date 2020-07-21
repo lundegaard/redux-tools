@@ -5,7 +5,8 @@ import { enhanceStore, makeStoreInterface } from '@redux-tools/injectors';
 import {
 	isActionFromNamespace,
 	defaultNamespace,
-	getStateByNamespace,
+	getStateByFeatureAndNamespace,
+	DEFAULT_FEATURE,
 } from '@redux-tools/namespaces';
 
 export const storeInterface = makeStoreInterface('middleware');
@@ -91,7 +92,12 @@ const makeEnhancer = () => {
 							dispatch: o(dispatch, defaultNamespace(namespace)),
 							getState: nextStore.getState,
 							getNamespacedState: namespace
-								? (feature = entry.feature) => getStateByNamespace(feature, namespace, getState())
+								? feature =>
+										getStateByFeatureAndNamespace(
+											feature ?? entry.feature ?? DEFAULT_FEATURE,
+											namespace,
+											getState()
+										)
 								: null,
 						})
 				);

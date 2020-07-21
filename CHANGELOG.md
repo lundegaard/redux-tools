@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - (_injectors-react_): It is now possible to reliably inject functions, arrays, and complex objects.
 - (_middleware_): Added `composeMiddleware`.
 - (_namespaces_): Added `preventNamespace`, which always overwrites the original namespace with a "global" namespace.
+- (_namespaces_): Added `getStateByAction` and `getStateByNamespace` which always use the default feature.
 - (_namespaces-react_): New package! Existing logic from various packages has been moved here (`useNamespace`, `NamespaceProvider` and `namespacedConnect`).
 - (_namespaces-react_): `withNamespaceProvider` can now be used to create complex multi-instance components more easily.
 - (_reducers_): `makeReducer` now supports arrays of strings and predicates.
@@ -29,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - (_actions_): `makeReducer` has been moved to the `@redux-tools/reducers` package.
 - (_injectors-react_): `Provider` has been renamed to `NamespaceProvider`.
 - (_injectors-react_): It is no longer necessary to pass `isGlobal: true` when not using the namespacing mechanism.
+- (_namespaces_): Renamed `getStateByAction` and `getStateByNamespace` to `getStateByFeatureAndAction` and `getStateByFeatureAndNamespace`.
 - (_namespaces-react_): `useNamespace` no longer falls back to `DEFAULT_FEATURE` if no namespace could be resolved.
 - (_react_): The unpkg bundle now includes all dependencies except for React, Redux, and React Redux.
 - (_reducers_): `makeReducer` now uses the default reducer for error actions if the error reducer is missing.

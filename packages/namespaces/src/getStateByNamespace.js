@@ -1,21 +1,13 @@
-import { curry, path } from 'ramda';
-
 import { DEFAULT_FEATURE } from './constants';
+import getStateByFeatureAndNamespace from './getStateByFeatureAndNamespace';
 
 /**
- * Returns Redux state by namespace. Returns undefined if namespace is undefined.
+ * Returns Redux state by namespace.
  *
- * @param {?string} feature optional feature name
- * @param {?string} namespace optional namespace
- * @param {Object} state Redux state
- * @returns {?Object} namespaced Redux state
+ * @param {string} namespace
+ * @param {Object} state
+ * @returns {*} state slice
  */
-const getStateByNamespace = curry((feature, namespace, state) => {
-	if (!namespace) {
-		return undefined;
-	}
-
-	return path([feature || DEFAULT_FEATURE, namespace], state);
-});
+const getStateByNamespace = getStateByFeatureAndNamespace(DEFAULT_FEATURE);
 
 export default getStateByNamespace;

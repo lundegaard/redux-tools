@@ -63,23 +63,24 @@ Associates an action with a namespace unless it is already associated with some 
 
 ( _Action_ ): A new Redux action with a `meta.namespace` property.
 
-### getStateByAction()
+### getStateByFeatureAndAction()
 
-Returns Redux state by action namespace.
+Returns Redux state by feature and action namespace.
 
 **Arguments**
 
-1. `action` ( _Object_ ): Action with an optionally defined meta.namespace and meta.feature property.
-2. `state` ( _Object_ ): Redux state.
+1. `feature` ( _string_ ): Feature to retrieve the state by.
+2. `action` ( _Action_ ): Redux action with a `meta.namespace` property.
+3. `state` ( _Object_ ): Redux state.
 
 **Returns**
 
-1. ( _Object_ ): Namespaced Redux state.
+( _any_ ): Redux state slice.
 
 **Example**
 
 ```js
-import { getStateByAction } from '@redux-tools/namespaces';
+import { getStateByFeatureAndAction } from '@redux-tools/namespaces';
 
 const state = {
 	namespaces: {
@@ -89,7 +90,39 @@ const state = {
 
 const action = {
 	meta: {
-		feature: 'namespaces',
+		namespace: 'foo',
+	},
+};
+
+getStateByFeatureAndAction('namespaces', action, state); // { value: 'bar' }
+```
+
+### getStateByAction()
+
+Returns Redux state by action namespace.
+
+**Arguments**
+
+1. `action` ( _Action_ ): Redux action with a `meta.namespace` property.
+2. `state` ( _Object_ ): Redux state.
+
+**Returns**
+
+( _any_ ): Redux state slice.
+
+**Example**
+
+```js
+import { DEFAULT_FEATURE, getStateByAction } from '@redux-tools/namespaces';
+
+const state = {
+	[DEFAULT_FEATURE]: {
+		foo: { value: 'bar' },
+	},
+};
+
+const action = {
+	meta: {
 		namespace: 'foo',
 	},
 };
@@ -97,24 +130,24 @@ const action = {
 getStateByAction(action, state); // { value: 'bar' }
 ```
 
-### getStateByNamespace()
+### getStateByFeatureAndNamespace()
 
-Returns Redux state by namespace. Returns undefined if the namespace is undefined.
+Returns Redux state by feature and namespace.
 
 **Arguments**
 
-1. [`feature`] \( _string_ ): Optional feature name.
-2. [`namespace`] \( _string_ ): Optional namespace.
-3. [`state`] \( _Object_ ): Redux state.
+1. `feature` ( _string_ ): Feature to retrieve the state by.
+2. `namespace` ( _string_ ): Namespace to retrieve the state by.
+3. `state` ( _Object_ ): Redux state.
 
 **Returns**
 
-1. ( _Object_ ): Namespaced Redux state.
+( _any_ ): Redux state slice.
 
 **Example**
 
 ```js
-import { getStateByNamespace } from '@redux-tools/namespaces';
+import { getStateByFeatureNamespace } from '@redux-tools/namespaces';
 
 const state = {
 	namespaces: {
@@ -122,7 +155,34 @@ const state = {
 	},
 };
 
-getStateByNamespace('namespaces', 'foo', state); // { value: 'bar' }
+getStateByFeatureNamespace('namespaces', 'foo', state); // { value: 'bar' }
+```
+
+### getStateByNamespace()
+
+Returns Redux state by namespace.
+
+**Arguments**
+
+1. `namespace` ( _string_ ): Namespace to retrieve the state by.
+2. `state` ( _Object_ ): Redux state.
+
+**Returns**
+
+( _any_ ): Redux state slice.
+
+**Example**
+
+```js
+import { DEFAULT_FEATURE, getStateByNamespace } from '@redux-tools/namespaces';
+
+const state = {
+	[DEFAULT_FEATURE]: {
+		foo: { value: 'bar' },
+	},
+};
+
+getStateByNamespace('foo', state); // { value: 'bar' }
 ```
 
 ### preventNamespace()

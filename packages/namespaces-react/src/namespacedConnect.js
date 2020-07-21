@@ -2,7 +2,11 @@ import { compose, cond, apply, __, isNil, T, map, o, dissoc } from 'ramda';
 import { alwaysEmptyObject, isFunction, isObject } from 'ramda-extension';
 import { connect } from 'react-redux';
 
-import { defaultNamespace, DEFAULT_FEATURE, getStateByNamespace } from '@redux-tools/namespaces';
+import {
+	defaultNamespace,
+	DEFAULT_FEATURE,
+	getStateByFeatureAndNamespace,
+} from '@redux-tools/namespaces';
 import { withProps, mapProps } from '@redux-tools/utils-react';
 
 import useNamespace from './useNamespace';
@@ -12,7 +16,7 @@ export const NAMESPACED_CONNECT_PROPS = 'NAMESPACED_CONNECT_PROPS';
 export const wrapMapStateToProps = mapStateToProps => (state, ownProps) =>
 	mapStateToProps
 		? mapStateToProps(
-				getStateByNamespace(
+				getStateByFeatureAndNamespace(
 					ownProps[NAMESPACED_CONNECT_PROPS].feature,
 					ownProps[NAMESPACED_CONNECT_PROPS].namespace,
 					state

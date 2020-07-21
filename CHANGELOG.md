@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - (_injectors-react_): `Provider` has been renamed to `NamespaceProvider`.
 - (_injectors-react_): It is no longer necessary to pass `isGlobal: true` when not using the namespacing mechanism.
 - (_namespaces_): Renamed `getStateByAction` and `getStateByNamespace` to `getStateByFeatureAndAction` and `getStateByFeatureAndNamespace`.
+- (_namespaces-react_): `useNamespace` no longer falls back to `DEFAULT_FEATURE` if no namespace could be resolved.
 - (_react_): The unpkg bundle now includes all dependencies except for React, Redux, and React Redux.
 - (_reducers_): `makeReducer` now uses the default reducer for error actions if the error reducer is missing.
 - (_reducers_): `getStateByAction` and `getStateByNamespace` have been moved to the `@redux-tools/namespaces` package.

@@ -41,7 +41,7 @@ describe('useNamespace', () => {
 		expect(namespace).toEqual('foo');
 	});
 
-	it('falls back to default namespace if everything fails', () => {
+	it('does not fall back to default feature when no namespace could be resolved', () => {
 		let namespace;
 
 		mount(
@@ -52,6 +52,6 @@ describe('useNamespace', () => {
 			</NamespaceContext.Provider>
 		);
 
-		expect(namespace).toEqual('baz');
+		expect(namespace).toBeFalsy();
 	});
 });

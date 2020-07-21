@@ -62,13 +62,13 @@ const namespacedConnect = (
 ) =>
 	compose(
 		withProps(({ feature: propFeature, namespace: propNamespace }) => {
-			const feature = optionFeature || propFeature || DEFAULT_FEATURE;
+			const feature = optionFeature ?? propFeature ?? DEFAULT_FEATURE;
 			const contextNamespace = useNamespace(feature);
 
 			return {
 				[NAMESPACED_CONNECT_PROPS]: {
 					feature,
-					namespace: optionNamespace || propNamespace || contextNamespace,
+					namespace: optionNamespace ?? propNamespace ?? contextNamespace,
 				},
 			};
 		}),

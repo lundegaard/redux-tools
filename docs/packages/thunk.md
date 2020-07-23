@@ -2,7 +2,7 @@
 
 > yarn add @redux-tools/thunk
 
-A [Redux Thunk](https://github.com/reduxjs/redux-thunk) clone adapted for Redux Tools – it passes the namespace (e.g. from an action made by `namespacedConnect`'s `mapDispatchToProps`) down to all actions dispatched from within the thunk.
+A [Redux Thunk](https://github.com/reduxjs/redux-thunk) clone adapted for Redux Tools: it passes the namespace of a thunk dispatched via `namespacedConnect`'s `mapDispatchToProps` or `useNamespacedDispatch` down to all actions dispatched from within the thunk.
 
 Make sure to inject this middleware before any other middleware.
 

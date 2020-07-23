@@ -18,9 +18,9 @@ const DataGrid = withReducers(dataGridReducer, {
 const Example = () => <DataGrid namespace="DATA_GRID_1" />;
 ```
 
-After the `<DataGrid namespace="DATA_GRID_1" />` element is mounted, `state.grids.DATA_GRID_1.data` will be an empty array. Any actions dispatched via `namespacedConnect` will only affect this data grid instance, same applies to `withEpics` and `withMiddleware`.
+After the `<DataGrid namespace="DATA_GRID_1" />` element is mounted, `state.grids.DATA_GRID_1.data` will be an empty array. Any actions dispatched via `namespacedConnect` or `useNamespacedDispatch` will only affect this data grid instance, same applies to `withEpics` and `withMiddleware`.
 
-If you want to affect this data grid instance by Redux actions from the outside, you will need to associate these actions with its namespace (i.e. set their `meta.namespace` property). The recommended way to do this is to use the `attachNamespace` utility function from [@redux-tools/namespaces](/packages/namespaces?id=attachNamespace).
+If you want to affect this data grid instance by Redux actions from the outside, you will need to associate these actions with its namespace (i.e. set their `meta.namespace` property). The recommended way to do this is to use the `attachNamespace(namespace, action)` utility function from [@redux-tools/namespaces](/packages/namespaces?id=attachNamespace). Alternatively, if dispatching from within a React component, you can also use the `useNamespacedDispatch({ namespace })` hook from [@redux-tools/namespaces-react](/packages/namespaces-react?id=useNamespacedDispatch).
 
 ## Complex Components
 

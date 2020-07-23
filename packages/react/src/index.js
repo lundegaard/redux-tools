@@ -40,4 +40,6 @@ export {
 	useNamespace,
 	NamespaceProvider,
 	withNamespaceProvider,
+	useNamespacedSelector,
+	useNamespacedDispatch,
 } from '@redux-tools/namespaces-react';

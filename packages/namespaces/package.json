@@ -1,6 +1,6 @@
 {
   "name": "@redux-tools/namespaces",
-  "version": "0.8.2",
+  "version": "0.9.0",
   "license": "MIT",
   "main": "lib/redux-tools-namespaces.js",
   "module": "es/redux-tools-namespaces.js",

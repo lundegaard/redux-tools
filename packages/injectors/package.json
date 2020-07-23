@@ -1,6 +1,6 @@
 {
   "name": "@redux-tools/injectors",
-  "version": "0.8.2",
+  "version": "0.9.0",
   "license": "MIT",
   "main": "lib/redux-tools-injectors.js",
   "module": "es/redux-tools-injectors.js",
@@ -14,8 +14,8 @@
     "Sergey Dunaevskiy <sergey.dunaevskiy@lundegaard.eu>"
   ],
   "dependencies": {
-    "@redux-tools/namespaces": "^0.8.2",
-    "@redux-tools/utils": "^0.8.2",
+    "@redux-tools/namespaces": "^0.9.0",
+    "@redux-tools/utils": "^0.9.0",
     "invariant": "^2.2.4",
     "ramda": ">=0.26.1",
     "ramda-extension": ">=0.8.0"

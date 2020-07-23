@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Nothing!
 
-## [0.9.0] – 2020-07-23
+## [0.9.1] – 2020-07-23
 
 ### Added
 
@@ -49,6 +49,10 @@ Nothing!
 ### Removed
 
 - The unpkg bundle is no longer created for non-preset packages.
+
+## [0.9.0] – 2020-07-23
+
+Oops.
 
 ## [0.8.2] – 2020-03-05
 

@@ -37,13 +37,13 @@
     "eslint-plugin-import": "2.20.0",
     "eslint-plugin-react": "7.18.3",
     "eslint-plugin-react-hooks": "2.5.0",
-    "husky": "4.2.3",
+    "husky": "4.3.7",
     "invariant": "2.2.4",
     "jest": "25.1.0",
-    "lerna": "3.20.2",
+    "lerna": "5.5.2",
     "lint-staged": "10.0.8",
     "prettier": "1.19.1",
-    "ramda": "0.27.0",
+    "ramda": "0.27.2",
     "ramda-extension": "0.10.2",
     "react": "16.13.0",
     "react-dom": "16.13.0",
@@ -56,17 +56,22 @@
     "rollup-plugin-commonjs": "10.1.0",
     "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-replace": "2.2.0",
-    "rollup-plugin-terser": "5.2.0",
+    "rollup-plugin-terser": "5.3.1",
     "rxjs": "6.5.4",
     "rxjs-marbles": "5.0.4",
-    "serve": "11.3.0"
+    "serve": "14.1.0"
   },
   "scripts": {
     "test": "jest",
     "lint": "yarn lint:eslint",
     "lint:eslint": "eslint --ext .js ./",
     "build": "lerna exec -- rollup -c=../../rollup.config.js",
-    "prepublish": "yarn build",
-    "docs": "serve docs"
+    "prepublish": "yarn run snyk-protect && yarn build",
+    "docs": "serve docs",
+    "snyk-protect": "snyk-protect"
+  },
+  "snyk": true,
+  "dependencies": {
+    "@snyk/protect": "latest"
   }
 }

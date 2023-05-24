@@ -1,0 +1,40 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - lerna > @lerna/publish > @lerna/version > @lerna/conventional-commits > conventional-changelog-core > lodash:
+        patched: '2023-05-24T20:50:06.361Z'
+    - '@babel/preset-env > @babel/plugin-proposal-async-generator-functions > @babel/helper-remap-async-to-generator > @babel/helper-wrap-function > @babel/traverse > @babel/generator > lodash':
+        patched: '2023-05-24T20:50:06.361Z'
+    - lerna > @lerna/publish > @lerna/version > @lerna/conventional-commits > conventional-changelog-core > conventional-changelog-writer > lodash:
+        patched: '2023-05-24T20:50:06.361Z'
+    - lerna > @lerna/publish > @lerna/version > @lerna/conventional-commits > conventional-changelog-core > conventional-commits-parser > lodash:
+        patched: '2023-05-24T20:50:06.361Z'
+    - lerna > @lerna/publish > @lerna/version > @lerna/conventional-commits > conventional-recommended-bump > conventional-commits-parser > lodash:
+        patched: '2023-05-24T20:50:06.361Z'
+    - '@babel/preset-env > @babel/plugin-proposal-async-generator-functions > @babel/helper-remap-async-to-generator > @babel/helper-wrap-function > @babel/helper-function-name > @babel/helper-get-function-arity > @babel/types > lodash':
+        patched: '2023-05-24T20:50:06.361Z'
+    - jest > @jest/core > @jest/reporters > @jest/environment > @jest/fake-timers > jest-message-util > @jest/test-result > @jest/transform > @babel/core > lodash:
+        patched: '2023-05-24T20:50:06.361Z'
+    - jest > @jest/core > @jest/reporters > jest-runtime > jest-config > @jest/test-sequencer > jest-runner > jest-jasmine2 > @babel/traverse > lodash:
+        patched: '2023-05-24T20:50:06.361Z'
+    - jest > @jest/core > @jest/reporters > jest-runtime > jest-config > jest-environment-jsdom > jsdom > request-promise-native > request-promise-core > lodash:
+        patched: '2023-05-24T20:50:06.361Z'
+    - jest > @jest/core > @jest/reporters > @jest/environment > @jest/fake-timers > jest-message-util > @jest/test-result > @jest/transform > @babel/core > @babel/generator > lodash:
+        patched: '2023-05-24T20:50:06.361Z'
+    - jest > @jest/core > @jest/reporters > jest-runtime > jest-config > @jest/test-sequencer > jest-runner > jest-jasmine2 > @babel/traverse > @babel/generator > lodash:
+        patched: '2023-05-24T20:50:06.361Z'
+    - jest > @jest/core > @jest/reporters > @jest/environment > @jest/fake-timers > jest-message-util > @jest/test-result > @jest/transform > babel-plugin-istanbul > istanbul-lib-instrument > @babel/core > lodash:
+        patched: '2023-05-24T20:50:06.361Z'
+    - jest > @jest/core > @jest/reporters > @jest/environment > @jest/fake-timers > jest-message-util > @jest/test-result > @jest/transform > @babel/core > @babel/generator > @babel/types > lodash:
+        patched: '2023-05-24T20:50:06.361Z'
+    - jest > @jest/core > @jest/reporters > @jest/environment > @jest/fake-timers > jest-message-util > @jest/test-result > @jest/transform > babel-plugin-istanbul > istanbul-lib-instrument > @babel/core > @babel/generator > lodash:
+        patched: '2023-05-24T20:50:06.361Z'
+    - jest > @jest/core > @jest/reporters > @jest/environment > @jest/fake-timers > jest-message-util > @jest/test-result > @jest/transform > babel-plugin-istanbul > istanbul-lib-instrument > @babel/core > @babel/helpers > @babel/traverse > lodash:
+        patched: '2023-05-24T20:50:06.361Z'
+    - jest > @jest/core > @jest/reporters > @jest/environment > @jest/fake-timers > jest-message-util > @jest/test-result > @jest/transform > babel-plugin-istanbul > istanbul-lib-instrument > @babel/core > @babel/helpers > @babel/traverse > @babel/generator > lodash:
+        patched: '2023-05-24T20:50:06.361Z'
+    - jest > @jest/core > @jest/reporters > @jest/environment > @jest/fake-timers > jest-message-util > @jest/test-result > @jest/transform > @babel/core > @babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/helper-get-function-arity > @babel/types > lodash:
+        patched: '2023-05-24T20:50:06.361Z'

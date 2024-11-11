@@ -39,8 +39,8 @@
     "eslint-plugin-react-hooks": "2.5.0",
     "husky": "4.2.3",
     "invariant": "2.2.4",
-    "jest": "25.1.0",
-    "lerna": "3.20.2",
+    "jest": "25.2.0",
+    "lerna": "6.5.0",
     "lint-staged": "10.0.8",
     "prettier": "1.19.1",
     "ramda": "0.27.0",
@@ -59,7 +59,7 @@
     "rollup-plugin-terser": "5.2.0",
     "rxjs": "6.5.4",
     "rxjs-marbles": "5.0.4",
-    "serve": "11.3.0"
+    "serve": "13.0.1"
   },
   "scripts": {
     "test": "jest",

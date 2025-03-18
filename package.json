@@ -16,7 +16,7 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@babel/core": "7.8.6",
+    "@babel/core": "7.26.10",
     "@babel/plugin-proposal-class-properties": "7.8.3",
     "@babel/plugin-proposal-object-rest-spread": "7.8.3",
     "@babel/plugin-transform-modules-commonjs": "7.8.3",
@@ -39,7 +39,7 @@
     "eslint-plugin-react-hooks": "2.5.0",
     "husky": "4.2.3",
     "invariant": "2.2.4",
-    "jest": "25.1.0",
+    "jest": "25.2.0",
     "lerna": "3.20.2",
     "lint-staged": "10.0.8",
     "prettier": "1.19.1",

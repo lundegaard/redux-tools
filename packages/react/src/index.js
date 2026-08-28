@@ -18,12 +18,15 @@ export { useMiddleware, withMiddleware } from '@redux-tools/middleware-react';
 export {
 	attachNamespace,
 	defaultNamespace,
+	preventNamespace,
 	getNamespaceByAction,
 	isActionFromNamespace,
 	getStateByAction,
 	getStateByFeatureAndAction,
 	getStateByNamespace,
 	getStateByFeatureAndNamespace,
+	DEFAULT_FEATURE,
+	NAMESPACE_PREVENTED,
 } from '@redux-tools/namespaces';
 
 export {
@@ -38,6 +41,7 @@ export { useReducers, withReducers } from '@redux-tools/reducers-react';
 export {
 	namespacedConnect,
 	useNamespace,
+	NamespaceContext,
 	NamespaceProvider,
 	withNamespaceProvider,
 	useNamespacedSelector,
